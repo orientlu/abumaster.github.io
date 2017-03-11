@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>zgf blog</title>
+  <title>张国丰</title>
   
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-10T12:40:22.302Z</updated>
+  <updated>2017-03-11T09:07:31.175Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hexo</title>
+    <link href="http://abumaster.com/2017/03/11/Hexo/"/>
+    <id>http://abumaster.com/2017/03/11/Hexo/</id>
+    <published>2017-03-11T08:53:37.000Z</published>
+    <updated>2017-03-11T09:07:31.175Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Hexo-和-Github-Page-配置静态博客"><a href="#Hexo-和-Github-Page-配置静态博客" class="headerlink" title="Hexo 和 Github Page 配置静态博客"></a>Hexo 和 Github Page 配置静态博客</h1><hr>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>Windows 环境<br>** 下载 <a href="https://nodejs.org/en/">Node.js</a>  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Hexo-和-Github-Page-配置静态博客&quot;&gt;&lt;a href=&quot;#Hexo-和-Github-Page-配置静态博客&quot; class=&quot;headerlink&quot; title=&quot;Hexo 和 Github Page 配置静态博客&quot;&gt;&lt;/a&gt;Hexo 和 Gith
+    
+    </summary>
+    
+      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
+    
+    
+      <category term="学习" scheme="http://abumaster.com/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/%E6%8A%80%E5%B7%A7/"/>
+    
+  </entry>
   
   <entry>
     <title>First Article</title>
