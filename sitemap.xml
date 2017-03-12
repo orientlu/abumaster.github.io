@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://abumaster.com/about/index.html</loc>
+    
+    <lastmod>2017-03-12T02:33:42.298Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://abumaster.com/tags/index.html</loc>
     
     <lastmod>2017-03-11T10:04:48.413Z</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://abumaster.com/2017/03/11/Hexo/</loc>
     
     <lastmod>2017-03-11T09:07:31.175Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://abumaster.com/about/index.html</loc>
-    
-    <lastmod>2017-03-11T07:31:32.726Z</lastmod>
     
   </url>
   
