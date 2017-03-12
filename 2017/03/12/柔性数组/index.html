@@ -6,17 +6,45 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Tag: 技巧 | 张国丰</title>
+  <title>柔性数组 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/tags/jq/index.html">
+  <meta name="description" content="C/C++中的0长数组
+
+定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
+作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
+
+
+
+
+用途：根">
+<meta property="og:type" content="article">
+<meta property="og:title" content="柔性数组">
+<meta property="og:url" content="http://abumaster.com/2017/03/12/柔性数组/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="C/C++中的0长数组
+
+定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
+作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
+
+
+
+
+用途：根">
+<meta property="og:updated_time" content="2017-03-12T14:56:24.242Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="柔性数组">
+<meta name="twitter:description" content="C/C++中的0长数组
+
+定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
+作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
+
+
+
+
+用途：根">
   
   
     <link rel="icon" href="/favi.ico">
@@ -152,75 +180,152 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-柔性数组" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/11/Hexo/" class="archive-article-date">
-  	<time datetime="2017-03-11T08:53:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-11</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/11/Hexo/">Hexo</a>
+    <h1 class="article-title" itemprop="name">
+      柔性数组
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/03/12/柔性数组/" class="archive-article-date">
+  	<time datetime="2017-03-12T13:59:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-12</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
+<blockquote>
+<p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
+<h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
+<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
+<li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>强制类型转换，将package类型的指针指向了申请的内存的开始，分为两个部分：前一部分表示字符串的长度，后一部分表示实际的内容。将整个数据包发出去，不会浪费一点额外的空间，在网络中传输节省了流量，提升了速度。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
+        			<a href="/categories/学习/" class="article-tag-list-link color3">学习</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/12/柔性数组/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/03/11/Hexo/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hexo</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -243,9 +348,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

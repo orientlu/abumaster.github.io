@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>张国丰</title>
-  <subtitle>zgf blog</subtitle>
+  <subtitle>张国丰的博客</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-11T09:07:31.175Z</updated>
+  <updated>2017-03-12T14:56:24.242Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,44 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>柔性数组</title>
+    <link href="http://abumaster.com/2017/03/12/%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/"/>
+    <id>http://abumaster.com/2017/03/12/柔性数组/</id>
+    <published>2017-03-12T13:59:48.000Z</published>
+    <updated>2017-03-12T14:56:24.242Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
+<blockquote>
+<p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
+<h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
+<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
+<li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>强制类型转换，将package类型的指针指向了申请的内存的开始，分为两个部分：前一部分表示字符串的长度，后一部分表示实际的内容。将整个数据包发出去，不会浪费一点额外的空间，在网络中传输节省了流量，提升了速度。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;C-C-中的0长数组&quot;&gt;&lt;a href=&quot;#C-C-中的0长数组&quot; class=&quot;headerlink&quot; title=&quot;C/C++中的0长数组&quot;&gt;&lt;/a&gt;C/C++中的0长数组&lt;/h3&gt;&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;定义：柔性数组（Flexible A
+    
+    </summary>
+    
+      <category term="学习" scheme="http://abumaster.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>Hexo</title>
