@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-12T14:56:24.242Z</updated>
+  <updated>2017-03-12T15:00:03.851Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,18 +20,16 @@
     <link href="http://abumaster.com/2017/03/12/%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/"/>
     <id>http://abumaster.com/2017/03/12/柔性数组/</id>
     <published>2017-03-12T13:59:48.000Z</published>
-    <updated>2017-03-12T14:56:24.242Z</updated>
+    <updated>2017-03-12T15:00:03.851Z</updated>
     
     <content type="html"><![CDATA[<h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
-<blockquote>
 <p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
 <h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
-<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<li><p>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 </li>
-</ul>
-</blockquote>
-<ul>
-<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
+<li><p>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></p>
+</li>
 <li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -41,8 +39,7 @@
     <summary type="html">
     
       &lt;h3 id=&quot;C-C-中的0长数组&quot;&gt;&lt;a href=&quot;#C-C-中的0长数组&quot; class=&quot;headerlink&quot; title=&quot;C/C++中的0长数组&quot;&gt;&lt;/a&gt;C/C++中的0长数组&lt;/h3&gt;&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;定义：柔性数组（Flexible A
+&lt;p&gt;定义：柔性数组（Flexible Array）也叫伸缩性数组、
     
     </summary>
     
