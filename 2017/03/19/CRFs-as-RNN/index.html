@@ -6,17 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Archives: 2017/3 | 张国丰</title>
+  <title>Conditional Random Fields as Recurrent Neural Networks | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/archives/2017/03/index.html">
+  <meta name="description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
+
+关键词图像语义分割 
+摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Conditional Random Fields as Recurrent Neural Networks">
+<meta property="og:url" content="http://abumaster.com/2017/03/19/CRFs-as-RNN/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
+
+关键词图像语义分割 
+摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
+<meta property="og:updated_time" content="2017-03-19T12:59:47.038Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="Conditional Random Fields as Recurrent Neural Networks">
+<meta name="twitter:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
+
+关键词图像语义分割 
+摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
   
   
     <link rel="icon" href="/favi.ico">
@@ -152,36 +162,41 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-CRFs-as-RNN" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/19/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-19T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-19</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/19/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
+    <h1 class="article-title" itemprop="name">
+      Conditional Random Fields as Recurrent Neural Networks
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/03/19/CRFs-as-RNN/" class="archive-article-date">
+  	<time datetime="2017-03-19T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
+</blockquote>
+<p><strong>关键词</strong><br>图像语义分割 </p>
+<p><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。<del>为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。</del>为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。  </p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$</p>
+<p><strong>参考文献</strong><br>[1] Zheng S, Jayasumana S, Romera-Paredes B, et al. Conditional random fields as recurrent neural networks[C]//Proceedings of the IEEE International Conference on Computer Vision. 2015: 1529-1537.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -197,7 +212,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -210,146 +225,86 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/19/CRFs-as-RNN/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/12/柔性数组/" class="archive-article-date">
-  	<time datetime="2017-03-12T13:59:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/12/柔性数组/">柔性数组</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/学习/" class="article-tag-list-link color3">学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/12/柔性数组/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">柔性数组</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/11/Hexo/" class="archive-article-date">
-  	<time datetime="2017-03-11T08:53:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/11/Hexo/">Hexo</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/10/First-Article/" class="archive-article-date">
-  	<time datetime="2017-03-10T12:39:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/10/First-Article/">First Article</a>
-    </h1>
+    <div class="duoshuo"></div>
   
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -372,8 +327,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
