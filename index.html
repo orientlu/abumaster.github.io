@@ -167,13 +167,13 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/19/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
+      <a class="article-title" href="/2017/03/21/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
     </h1>
   
 
         
-        <a href="/2017/03/19/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-19T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-19</time>
+        <a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
+  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
       </header>
@@ -183,10 +183,9 @@
         <blockquote>
 <p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
 </blockquote>
-<p><strong>关键词</strong><br>图像语义分割 </p>
-<p><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br>
+<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br>
         
-          <a class="article-more-a" href="/2017/03/19/CRFs-as-RNN/#more">more >></a>
+          <a class="article-more-a" href="/2017/03/21/CRFs-as-RNN/#more">more >></a>
         
       
 
@@ -225,7 +224,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/19/CRFs-as-RNN/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/03/21/CRFs-as-RNN/">展开全文 >></a>
         </p>
       
 
@@ -266,16 +265,11 @@
         <h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
 <p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
 <h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
-<li><p>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-<li><p>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></p>
-</li>
-<li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
-</li>
+<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  </li>
 </ul>
-<p>强制类型转换，将package类型的指针指向了申请的内存的开始，分为两个部分：前一部分表示字符串的长度，后一部分表示实际的内容。将整个数据包发出去，不会浪费一点额外的空间，在网络中传输节省了流量，提升了速度。</p>
-
+        
+          <a class="article-more-a" href="/2017/03/12/柔性数组/#more">more >></a>
+        
       
 
       
@@ -433,15 +427,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
             
             <div class="clearfix"></div>

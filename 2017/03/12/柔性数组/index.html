@@ -11,10 +11,7 @@
   <meta name="description" content="C/C++中的0长数组
 定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
 作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
-用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。
-1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
-
-用途：根据变长">
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="柔性数组">
 <meta property="og:url" content="http://abumaster.com/2017/03/12/柔性数组/index.html">
@@ -22,20 +19,14 @@
 <meta property="og:description" content="C/C++中的0长数组
 定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
 作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
-用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。
-1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
-
-用途：根据变长">
-<meta property="og:updated_time" content="2017-03-12T15:00:03.851Z">
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。">
+<meta property="og:updated_time" content="2017-03-21T08:45:40.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="柔性数组">
 <meta name="twitter:description" content="C/C++中的0长数组
 定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。
 作用 ：放入结构体中，可以存放动态长度的字符串、数组等。
-用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。
-1234struct package &amp;#123;	int len;	char data[0];&amp;#125;;
-
-用途：根据变长">
+用法举例：放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。">
   
   
     <link rel="icon" href="/favi.ico">
@@ -200,11 +191,12 @@
         <h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
 <p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
 <h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
-<li><p>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br></p>
+<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  </li>
+</ul>
+<a id="more"></a>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-<li><p>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></p>
-</li>
+<ul>
+<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
 <li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -303,7 +295,7 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/19/CRFs-as-RNN/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/03/21/CRFs-as-RNN/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -430,15 +422,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
             
             <div class="clearfix"></div>

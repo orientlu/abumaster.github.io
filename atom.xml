@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-20T12:57:41.966Z</updated>
+  <updated>2017-03-21T12:40:34.307Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -17,16 +17,15 @@
   
   <entry>
     <title>Conditional Random Fields as Recurrent Neural Networks</title>
-    <link href="http://abumaster.com/2017/03/19/CRFs-as-RNN/"/>
-    <id>http://abumaster.com/2017/03/19/CRFs-as-RNN/</id>
-    <published>2017-03-19T08:00:18.000Z</published>
-    <updated>2017-03-20T12:57:41.966Z</updated>
+    <link href="http://abumaster.com/2017/03/21/CRFs-as-RNN/"/>
+    <id>http://abumaster.com/2017/03/21/CRFs-as-RNN/</id>
+    <published>2017-03-21T08:00:18.000Z</published>
+    <updated>2017-03-21T12:40:34.307Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
 </blockquote>
-<p><strong>关键词</strong><br>图像语义分割 </p>
-<p><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
+<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
 <ol>
 <li>加入脚本定义，现在用到的是 MathJax 引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
 </li>
@@ -44,7 +43,10 @@
 </ul>
 <ul>
 <li>特征提取和分割分离开的策略。使用CNN提取有意义的图像特征，利用超像素去构造图像的模式。首先从图像中获得超像素，再用特征提取器提取特征。存在着一个致命的缺点，前期如果有误差，后面误差越来越大。与他们的方案不同，此文用典型的图模型CRF可以被作为RNN，指定为深度网络的一部分。结合CNN实现端对端的训练。  </li>
-<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>条件随机场</strong><br>测试图片<br><img src="/photos/me.jpg" alt="tupian"><br><strong>实现</strong></li>
+<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div><br>条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
+
+
+</li>
 </ul>
 <p><strong>参考文献</strong><br>[1] Zheng S, Jayasumana S, Romera-Paredes B, et al. Conditional random fields as recurrent neural networks[C]//Proceedings of the IEEE International Conference on Computer Vision. 2015: 1529-1537.</p>
 ]]></content>
@@ -54,8 +56,7 @@
       &lt;blockquote&gt;
 &lt;p&gt;2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks&lt;sup&gt;[1]&lt;/sup&gt; 的阅读笔记。    &lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;关键词&lt;/strong&gt;&lt;br&gt;图像语义分割 &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;摘要&lt;/strong&gt;&lt;br&gt;像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。&lt;br&gt;
+&lt;p&gt;&lt;strong&gt;关键词&lt;/strong&gt;&lt;br&gt;图像语义分割&lt;br&gt;CRF as RNN&lt;br&gt;&lt;strong&gt;摘要&lt;/strong&gt;&lt;br&gt;像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。&lt;br&gt;
     
     </summary>
     
@@ -73,16 +74,17 @@
     <link href="http://abumaster.com/2017/03/12/%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/"/>
     <id>http://abumaster.com/2017/03/12/柔性数组/</id>
     <published>2017-03-12T13:59:48.000Z</published>
-    <updated>2017-03-12T15:00:03.851Z</updated>
+    <updated>2017-03-21T08:45:40.231Z</updated>
     
     <content type="html"><![CDATA[<h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
 <p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
 <h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
-<li><p>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。<br></p>
+<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  </li>
+</ul>
+<a id="more"></a>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-<li><p>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></p>
-</li>
+<ul>
+<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
 <li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -92,7 +94,10 @@
     <summary type="html">
     
       &lt;h3 id=&quot;C-C-中的0长数组&quot;&gt;&lt;a href=&quot;#C-C-中的0长数组&quot; class=&quot;headerlink&quot; title=&quot;C/C++中的0长数组&quot;&gt;&lt;/a&gt;C/C++中的0长数组&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;定义：柔性数组（Flexible Array）也叫伸缩性数组、
+&lt;p&gt;定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。&lt;br&gt;&lt;/p&gt;
+&lt;h2 id=&quot;作用-：放入结构体中，可以存放动态长度的字符串、数组等。&quot;&gt;&lt;a href=&quot;#作用-：放入结构体中，可以存放动态长度的字符串、数组等。&quot; class=&quot;headerlink&quot; title=&quot;作用 ：放入结构体中，可以存放动态长度的字符串、数组等。&quot;&gt;&lt;/a&gt;作用 ：放入结构体中，可以存放动态长度的字符串、数组等。&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;用法举例：&lt;br&gt;&lt;br&gt;放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  &lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     

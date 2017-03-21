@@ -10,25 +10,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
 
-关键词图像语义分割 
-摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
+关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Conditional Random Fields as Recurrent Neural Networks">
-<meta property="og:url" content="http://abumaster.com/2017/03/19/CRFs-as-RNN/index.html">
+<meta property="og:url" content="http://abumaster.com/2017/03/21/CRFs-as-RNN/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
 
-关键词图像语义分割 
-摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
-<meta property="og:image" content="http://abumaster.com/photos/me.jpg">
-<meta property="og:updated_time" content="2017-03-20T12:57:41.966Z">
+关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
+<meta property="og:image" content="http://abumaster.com/photos/crfs.jpg">
+<meta property="og:image" content="http://abumaster.com/photos/algo.png">
+<meta property="og:updated_time" content="2017-03-21T12:40:34.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Conditional Random Fields as Recurrent Neural Networks">
 <meta name="twitter:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
 
-关键词图像语义分割 
-摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制">
-<meta name="twitter:image" content="http://abumaster.com/photos/me.jpg">
+关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
+<meta name="twitter:image" content="http://abumaster.com/photos/crfs.jpg">
   
   
     <link rel="icon" href="/favi.ico">
@@ -182,8 +180,8 @@
   
 
         
-        <a href="/2017/03/19/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-19T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-19</time>
+        <a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
+  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
 </a>
         
       </header>
@@ -193,8 +191,7 @@
         <blockquote>
 <p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
 </blockquote>
-<p><strong>关键词</strong><br>图像语义分割 </p>
-<p><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
+<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
 <ol>
 <li>加入脚本定义，现在用到的是 MathJax 引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
 </li>
@@ -212,7 +209,10 @@
 </ul>
 <ul>
 <li>特征提取和分割分离开的策略。使用CNN提取有意义的图像特征，利用超像素去构造图像的模式。首先从图像中获得超像素，再用特征提取器提取特征。存在着一个致命的缺点，前期如果有误差，后面误差越来越大。与他们的方案不同，此文用典型的图模型CRF可以被作为RNN，指定为深度网络的一部分。结合CNN实现端对端的训练。  </li>
-<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>条件随机场</strong><br>测试图片<br><img src="/photos/me.jpg" alt="tupian"><br><strong>实现</strong></li>
+<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div><br>条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
+
+
+</li>
 </ul>
 <p><strong>参考文献</strong><br>[1] Zheng S, Jayasumana S, Romera-Paredes B, et al. Conditional random fields as recurrent neural networks[C]//Proceedings of the IEEE International Conference on Computer Vision. 2015: 1529-1537.</p>
 
@@ -299,7 +299,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/19/CRFs-as-RNN/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/21/CRFs-as-RNN/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -436,15 +436,15 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
             
             <div class="clearfix"></div>
