@@ -6,17 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Category: 深度学习 | 张国丰</title>
+  <title>张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
+  <meta name="description" content="title: 卷积神经网络种应该注意的问题date: 2017-03-24 14:28:18categories: 深度学习
+tags: [深度学习,caffe]卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。
+###1.卷积神经网络的几种基本操作卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计">
+<meta property="og:type" content="article">
 <meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/categories/deeplearning/index.html">
+<meta property="og:url" content="http://abumaster.com/2017/03/24/卷积网络应该注意的问题/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="title: 卷积神经网络种应该注意的问题date: 2017-03-24 14:28:18categories: 深度学习
+tags: [深度学习,caffe]卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。
+###1.卷积神经网络的几种基本操作卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计">
+<meta property="og:updated_time" content="2017-03-25T04:43:14.744Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:description" content="title: 卷积神经网络种应该注意的问题date: 2017-03-24 14:28:18categories: 深度学习
+tags: [深度学习,caffe]卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。
+###1.卷积神经网络的几种基本操作卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,75 +165,113 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-卷积网络应该注意的问题" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>title: 卷积神经网络种应该注意的问题<br>date: 2017-03-24 14:28:18<br>categories: 深度学习</p>
+<h2 id="tags-深度学习-caffe"><a href="#tags-深度学习-caffe" class="headerlink" title="tags: [深度学习,caffe]"></a>tags: [深度学习,caffe]</h2><p>卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。</p>
+<p>###1.卷积神经网络的几种基本操作<br><strong>卷积</strong><br>卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;conv1&quot;</div><div class="line">  type: &quot;Convolution&quot;</div><div class="line">  bottom: &quot;data&quot; #上层是数据层</div><div class="line">  top: &quot;conv1&quot;</div><div class="line">  param &#123; #权重学习参数</div><div class="line">    lr_mult: 1 #权重学习率 需要乘以基础学习率base\_lr</div><div class="line">    decay_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123; #偏置学习参数</div><div class="line">    lr_mult: 2</div><div class="line">    decay_mult: 0</div><div class="line">  &#125;</div><div class="line">  convolution_param &#123; #卷积参数</div><div class="line">    num_output: 96 #卷积操作后的输出特征图</div><div class="line">    kernel_size: 11 #卷积核大小</div><div class="line">    stride: 4 #步长 #可能也有pad为扩充边缘 </div><div class="line">    weight_filler &#123; #权值初始化</div><div class="line">      type: &quot;gaussian&quot; #类型为weight-filter 或xavier算法等，默认constant，全部0</div><div class="line">      std: 0.01</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123; #偏置的初始化</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">```  </div><div class="line">输入：`n*c0*w0*h0`  </div><div class="line">输出：`n*c1*w1*h2`  </div><div class="line">c1对应num_output，输出对应的大小计算:  </div><div class="line">`w1 = (w0 + 2*pad - kernersize)/stride + 1`  </div><div class="line">`h1 = (h0 + 2*pad - kernelsize)/stride + 1`  </div><div class="line">在 **caffe** 源码中的计算是将图像和卷积核通过 im2col 转换成矩阵，再对两矩阵内积。 </div><div class="line"></div><div class="line">**池化**  </div><div class="line">池化也称下采样，为了减少运算和数据维度的一种方式，被分为：  </div><div class="line">+	最大池化（Max Pooling），取最大值；  </div><div class="line">+	均值池化（Mean Pooling），取均值；  </div><div class="line">+	高斯池化。  </div><div class="line">**caffe** 中的配置代码：</div></pre></td></tr></table></figure></p>
+<p>layer {<br>  name: “pool1”<br>  type: “Pooling”<br>  bottom: “norm1”<br>  top: “pool1”<br>  pooling_param { #池化参数<br>    pool: MAX #池化类型<br>    kernel_size: 3 #池化核大小<br>    stride: 2 #步长，重叠<br>  }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">池化的计算公式与卷积操作类似：  </div><div class="line">输入：`n*c0*w0*h0`  </div><div class="line">输出：`n*c1*w1*h2`  </div><div class="line">c1对应num_output，输出对应的大小计算:  </div><div class="line">`w1 = (w0 + 2*pad - kernersize)/stride + 1`  </div><div class="line">`h1 = (h0 + 2*pad - kernelsize)/stride + 1`  </div><div class="line"></div><div class="line">**LRN层**  </div><div class="line">LRN全称为Local Response Normalization，即局部响应归一化层，没什么用，有一些网络中加入了这一层，对局部区域进行归一化，配置信息和参数说明如下：</div></pre></td></tr></table></figure></p>
+<p>layer {<br>  name: “norm1”<br>  type: “LRN”<br>  bottom: “conv1”<br>  top: “norm1”<br>  lrn_param { #参数<br>    local_size: 5 #（1）通道间归一化时表示求和的通道数；</p>
+<pre><code>#（2）通道内归一化时表示求和区间的边长；
+alpha: 0.0001 #缩放因子
+beta: 0.75 #指数项
+</code></pre><p>  }<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">**激活函数**</div><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;  </div><div class="line">激活函数需要具有以下特性：  </div><div class="line">+	非线性；  </div><div class="line">+	单调、连续可微分；  </div><div class="line">+	范围不饱和，避免梯度为0；  </div><div class="line">+	原点近似线性。  </div><div class="line">常用的激活函数有：**Sigmoid 函数**、**Tanh 函数**、**ReLU 函数**等。  </div><div class="line">如 **AlexNet** 中用到的ReLU激活函数：  </div><div class="line">$$f(x)=max(0,x)$$  </div><div class="line">这种激活函数的特点是：无梯度损耗，收敛速度快，网络稀疏性大，计算量小。缺点是，梯度大的话，导致权重更新以后变大，输出0，使得神经元不再更新。因此要注意学习率的设置。  </div><div class="line"></div><div class="line">**全连接层**  </div><div class="line">全连接层又称内积层（Inner-Product），是将特征图像全部展开为一维向量。  </div><div class="line">**caffe** 中的文档显示：  </div><div class="line">+  	Input  </div><div class="line">`n * c_i * h_i * w_i`  </div><div class="line">+	Output  </div><div class="line">`n * c_o * 1 * 1`  </div><div class="line">这里引用了[dupuleng](http://www.cnblogs.com/dupuleng/articles/4312149.html)的例子。  </div><div class="line">lenet 网络配置文件中的一段：</div></pre></td></tr></table></figure></p>
+<p>layers {<br>  name: “conv2”<br>  type: CONVOLUTION<br>  bottom: “pool1”<br>  top: “conv2”<br>  blobs_lr: 1<br>  blobs_lr: 2<br>  convolution_param {<br>    num_output: 50<br>    kernel_size: 5<br>    stride: 1<br>    weight_filler {<br>      type: “xavier”<br>    }<br>    bias_filler {<br>      type: “constant”<br>    }<br>  }<br>}<br>layers {<br>  name: “pool2”<br>  type: POOLING<br>  bottom: “conv2”<br>  top: “pool2”<br>  pooling_param {<br>    pool: MAX<br>    kernel_size: 2<br>    stride: 2<br>  }<br>}<br>layers {<br>  name: “ip1”<br>  type: INNER_PRODUCT<br>  bottom: “pool2”<br>  top: “ip1”<br>  blobs_lr: 1<br>  blobs_lr: 2<br>  inner_product_param {<br>    num_output: 500<br>    weight_filler {<br>      type: “xavier”<br>    }<br>    bias_filler {<br>      type: “constant”<br>    }<br>  }<br>}<br><code>``  
+conv2 的输入图像是</code>256<em>27</em>27<code>经过了卷积操作，输出</code>50<em>22</em>22<code>同样作为了pool2的输入，进行池化，pool2的输出</code>50<em>11</em>11<code>，下一层全连接层，输出</code>500<em>1</em>1<code>的向量，是如何进行计算的呢？要把所有通道全部展开做卷积，首先要把pool2输出的特征图展开为一维向量，共需要</code>500<em>50</em>11<em>11<code>个参数，进行卷积，输出</code>500</em>1*1`的一维向量。  </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/21/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/24/卷积网络应该注意的问题/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/03/21/CRFs-as-RNN/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Conditional Random Fields as Recurrent Neural Networks</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -249,10 +294,10 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		root: "/",
 		innerArchive: true,
