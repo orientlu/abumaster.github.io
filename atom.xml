@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-25T07:05:46.835Z</updated>
+  <updated>2017-03-26T08:52:35.544Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,68 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>全卷积网络用于图像语义分割</title>
+    <link href="http://abumaster.com/2017/03/25/%E5%85%A8%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
+    <id>http://abumaster.com/2017/03/25/全卷积网络用于图像语义分割/</id>
+    <published>2017-03-25T07:31:02.000Z</published>
+    <updated>2017-03-26T08:52:35.544Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)<sup>[1]</sup>  </p>
+</blockquote>
+<p>全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。<br><a id="more"></a></p>
+<p><strong>文章解决的问题是如何生成稠密的预测即dense prediction</strong>  </p>
+<ol>
+<li><del>Shift-and-stitch</del><br>假设原图和FCN输出图之间的降采样因子<code>f</code>，对于原图的每个<code>f*f</code>区域，对于<code>0 &lt;= x,y &lt;f</code>处理这 f<sup>2</sup> 个输入，并且交替输出，使得预测在接受域的中心像素。每个像素对应一个中心像素，因此为稠密输出。缺点：感受野没变，但是原图被划分为了<code>f*f</code>大小的图像片作为输入图像，使得网络无法感受更加精细的信息。   </li>
+<li>稀疏过滤器<br>调整下采样过程中的步长，变为1，可以保证下采样不会损失图像的大小。缺点：下采样的功能被减弱，同时保留了更多信息，接受域相对变小，可能损失全局信息，同样为卷积层带来了更多的运算。  </li>
+<li>上采样<br>上采样（Upsampling）也称反卷积（Deconvolution），参数和卷积一样可以在训练中学习。运算也和卷积类似，为逆过程。<br>设输入大小<code>w0*h0</code>，经过卷积后的大小为<code>w1*h1</code>，计算公式如下：<br><em>卷积运算：</em><br><code>w1 = (w0 + 2*pad - kernelsize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code><br><em>反卷积运算：</em><br><code>w0 = (w1 - 1)*stride + kernelsize - 2*pad</code><br><code>h0 = (h1 - 1)*stride + kernelsize - 2*pad</code><br>经过上采样后的图像可能会比原图大，需要裁剪为原图像大小，caffe中的crop层，提供了很好的算法。  </li>
+</ol>
+<p><strong>语义分割的框架结构</strong><br>文中提出的框架结构如图所示：<br><img src="/photos/fcn.png" alt="fcn"><br>作者发现32倍率的上采样导致输出图非常粗糙，因此想出了利用上层的一些特征来优化输出图像，就有了FCN-16s和FCN-8s的方案，其主要思想是利用上层的池化层的信息，减少上采样的倍率，保留了更多的特征。 </p>
+<p><strong>具体的实践</strong><br>针对传统网络的全连接层变为卷积层，如VGG-16网络中第一个卷积层是<code>25088*4096</code>，将之解释为<code>512*7*7*4096</code>。产生端对端的训练模型。在论文提供的源码中，FCN-32s的配置文件，第一个卷积层为：  </p>
+<pre><code>layer {
+  name: &quot;conv1_1&quot;
+  type: &quot;Convolution&quot;
+  bottom: &quot;data&quot;
+  top: &quot;conv1_1&quot;
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 100 #填充100
+    kernel_size: 3
+    stride: 1
+  }
+}
+</code></pre><p>填充100的原因为：在VGG-16网络中卷积的参数，kernersize=3，stride=1，pad=1，所以卷积层不会改变图像的大小，所以图像只有在池化层改变大小，且变为原大小的一半。为了方便将图像看为一维的，设原图像大小h，经过了5层池化后，图像缩小了32倍，变为<code>h5 = h/32</code>，紧接着全连接层，可以看成是卷积层，卷积参数为：<code>kernelsize=7 pad=0 stride=1</code>，根据卷积计算公式，经过卷积层fc6后的输出图像大小为<code>h6 = (h5-7)/1 + 1 = (h-192)/32</code> 因此，图像小于192的就无法往下计算了，所以要<code>pad=100</code>，解决了网络输入图像固定大小的弊端，全卷积网络可以输入任意大小的图像。  </p>
+<hr>
+<p><strong>例子</strong><br>根据FCN-32s的配置文件<br>如果输入图像大小为<code>3*320*320</code><br>经过了卷积conv1的输出为：<code>64*518*518</code><br>经过了池化pool1的输出为：<code>64*259*259</code><br>经过了卷积conv2的输出为：<code>128*259*259</code><br>经过了池化pool2的输出为：<code>128*130*130</code><br>经过了卷积conv3的输出为：<code>256*130*130</code><br>经过了池化pool3的输出为：<code>256*65*65</code><br>经过了卷积conv4的输出为：<code>512*65*65</code><br>进过了池化pool4的输出为：<code>512*32*32</code><br>经过了卷积conv5的输出为：<code>512*32*32</code><br>经过了池化pool5的输出为：<code>512*16*16</code><br>经过了fc6的卷积后输出为：<code>4096*10*10</code><br>经过了fc7的卷积后输出为：<code>4096*10*10</code><br>经过score_fr的卷积输出：<code>21*10*10</code><br>上采样（反卷积）输出为：<code>21*352*352</code><br>score层裁剪后输出为：<code>21*320*320</code>  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)&lt;sup&gt;[1]&lt;/sup&gt;  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
   
   <entry>
     <title>卷积网络应该注意的问题</title>
