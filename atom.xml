@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-29T06:20:44.238Z</updated>
+  <updated>2017-03-29T06:46:54.303Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,16 +16,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>图床测试‘ </title>
+    <title>图床测试</title>
     <link href="http://abumaster.com/2017/03/29/%E5%9B%BE%E5%BA%8A%E6%B5%8B%E8%AF%95/"/>
     <id>http://abumaster.com/2017/03/29/图床测试/</id>
     <published>2017-03-29T06:20:44.000Z</published>
-    <updated>2017-03-29T06:20:44.238Z</updated>
+    <updated>2017-03-29T06:46:54.303Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p><strong>图床</strong>一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是<strong><a href="http://jiantuku.com/">极简图床</a></strong>。<br>优点：不必把图片上传到博客服务器，节省服务器的空间。<br>缺点：不能上传大于5M的图片，稳定性待测。  </p>
+</blockquote>
+<a id="more"></a>
+<p>来一波从<a href="https://alpha.wallhaven.cc/">wallhaven</a>下载的图片<br><img src="http://i2.muimg.com/567571/45e54958a190cbaa.jpg" alt=""><br><img src="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg" alt=""><br><img src="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg" alt=""><br><img src="http://i2.muimg.com/567571/8354836d59a379b8.jpg" alt=""><br><img src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg" alt=""><br><img src="http://i4.buimg.com/567571/2f18c12c56375cef.jpg" alt=""><br><img src="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg" alt=""><br><img src="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg" alt=""><br><img src="http://i4.buimg.com/567571/83e0a892aa71f6b5.png" alt=""><br><img src="http://i2.muimg.com/567571/5cce81a18b11621c.jpg" alt=""><br><img src="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png" alt=""></p>
+]]></content>
     
     <summary type="html">
     
+      &lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;图床&lt;/strong&gt;一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是&lt;strong&gt;&lt;a href=&quot;http://jiantuku.com/&quot;&gt;极简图床&lt;/a&gt;&lt;/strong&gt;。&lt;br&gt;优点：不必把图片上传到博客服务器，节省服务器的空间。&lt;br&gt;缺点：不能上传大于5M的图片，稳定性待测。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
     </summary>
     
+      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
+    
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
   </entry>
   

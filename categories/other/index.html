@@ -6,26 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>全卷积网络用于图像语义分割 | 张国丰</title>
+  <title>Category: 其他 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)[1]  
-
-全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类">
-<meta property="og:type" content="article">
-<meta property="og:title" content="全卷积网络用于图像语义分割">
-<meta property="og:url" content="http://abumaster.com/2017/03/25/全卷积网络用于图像语义分割/index.html">
+  <meta name="description" content="记录学习生活的点滴">
+<meta property="og:type" content="website">
+<meta property="og:title" content="张国丰">
+<meta property="og:url" content="http://abumaster.com/categories/other/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)[1]  
-
-全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类">
-<meta property="og:image" content="http://abumaster.com/photos/fcn.png">
-<meta property="og:updated_time" content="2017-03-26T08:52:35.544Z">
+<meta property="og:description" content="记录学习生活的点滴">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="全卷积网络用于图像语义分割">
-<meta name="twitter:description" content="全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)[1]  
-
-全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类">
-<meta name="twitter:image" content="http://abumaster.com/photos/fcn.png">
+<meta name="twitter:title" content="张国丰">
+<meta name="twitter:description" content="记录学习生活的点滴">
   
   
     <link rel="icon" href="/favi.ico">
@@ -167,186 +158,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-全卷积网络用于图像语义分割" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      全卷积网络用于图像语义分割
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/03/29/图床测试/" class="archive-article-date">
+  	<time datetime="2017-03-29T06:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/03/29/图床测试/">图床测试</a>
     </h1>
   
 
-        
-        <a href="/2017/03/25/全卷积网络用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-03-25T07:31:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)<sup>[1]</sup>  </p>
-</blockquote>
-<p>全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。<br><a id="more"></a></p>
-<p><strong>文章解决的问题是如何生成稠密的预测即dense prediction</strong>  </p>
-<ol>
-<li><del>Shift-and-stitch</del><br>假设原图和FCN输出图之间的降采样因子<code>f</code>，对于原图的每个<code>f*f</code>区域，对于<code>0 &lt;= x,y &lt;f</code>处理这 f<sup>2</sup> 个输入，并且交替输出，使得预测在接受域的中心像素。每个像素对应一个中心像素，因此为稠密输出。缺点：感受野没变，但是原图被划分为了<code>f*f</code>大小的图像片作为输入图像，使得网络无法感受更加精细的信息。   </li>
-<li>稀疏过滤器<br>调整下采样过程中的步长，变为1，可以保证下采样不会损失图像的大小。缺点：下采样的功能被减弱，同时保留了更多信息，接受域相对变小，可能损失全局信息，同样为卷积层带来了更多的运算。  </li>
-<li>上采样<br>上采样（Upsampling）也称反卷积（Deconvolution），参数和卷积一样可以在训练中学习。运算也和卷积类似，为逆过程。<br>设输入大小<code>w0*h0</code>，经过卷积后的大小为<code>w1*h1</code>，计算公式如下：<br><em>卷积运算：</em><br><code>w1 = (w0 + 2*pad - kernelsize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code><br><em>反卷积运算：</em><br><code>w0 = (w1 - 1)*stride + kernelsize - 2*pad</code><br><code>h0 = (h1 - 1)*stride + kernelsize - 2*pad</code><br>经过上采样后的图像可能会比原图大，需要裁剪为原图像大小，caffe中的crop层，提供了很好的算法。  </li>
-</ol>
-<p><strong>语义分割的框架结构</strong><br>文中提出的框架结构如图所示：<br><img src="/photos/fcn.png" alt="fcn"><br>作者发现32倍率的上采样导致输出图非常粗糙，因此想出了利用上层的一些特征来优化输出图像，就有了FCN-16s和FCN-8s的方案，其主要思想是利用上层的池化层的信息，减少上采样的倍率，保留了更多的特征。 </p>
-<p><strong>具体的实践</strong><br>针对传统网络的全连接层变为卷积层，如VGG-16网络中第一个卷积层是<code>25088*4096</code>，将之解释为<code>512*7*7*4096</code>。产生端对端的训练模型。在论文提供的源码中，FCN-32s的配置文件，第一个卷积层为：  </p>
-<pre><code>layer {
-  name: &quot;conv1_1&quot;
-  type: &quot;Convolution&quot;
-  bottom: &quot;data&quot;
-  top: &quot;conv1_1&quot;
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 64
-    pad: 100 #填充100
-    kernel_size: 3
-    stride: 1
-  }
-}
-</code></pre><p>填充100的原因为：在VGG-16网络中卷积的参数，kernersize=3，stride=1，pad=1，所以卷积层不会改变图像的大小，所以图像只有在池化层改变大小，且变为原大小的一半。为了方便将图像看为一维的，设原图像大小h，经过了5层池化后，图像缩小了32倍，变为<code>h5 = h/32</code>，紧接着全连接层，可以看成是卷积层，卷积参数为：<code>kernelsize=7 pad=0 stride=1</code>，根据卷积计算公式，经过卷积层fc6后的输出图像大小为<code>h6 = (h5-7)/1 + 1 = (h-192)/32</code> 因此，图像小于192的就无法往下计算了，所以要<code>pad=100</code>，解决了网络输入图像固定大小的弊端，全卷积网络可以输入任意大小的图像。  </p>
-<hr>
-<p><strong>例子</strong><br>根据FCN-32s的配置文件<br>如果输入图像大小为<code>3*320*320</code><br>经过了卷积conv1的输出为：<code>64*518*518</code><br>经过了池化pool1的输出为：<code>64*259*259</code><br>经过了卷积conv2的输出为：<code>128*259*259</code><br>经过了池化pool2的输出为：<code>128*130*130</code><br>经过了卷积conv3的输出为：<code>256*130*130</code><br>经过了池化pool3的输出为：<code>256*65*65</code><br>经过了卷积conv4的输出为：<code>512*65*65</code><br>进过了池化pool4的输出为：<code>512*32*32</code><br>经过了卷积conv5的输出为：<code>512*32*32</code><br>经过了池化pool5的输出为：<code>512*16*16</code><br>经过了fc6的卷积后输出为：<code>4096*10*10</code><br>经过了fc7的卷积后输出为：<code>4096*10*10</code><br>经过score_fr的卷积输出：<code>21*10*10</code><br>上采样（反卷积）输出为：<code>21*352*352</code><br>score层裁剪后输出为：<code>21*320*320</code>  </p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
+        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/25/全卷积网络用于图像语义分割/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Feedforward semantic segmentation with zoom-out features
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/03/24/卷积网络应该注意的问题/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">卷积网络应该注意的问题</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-
-  
-    <div class="duoshuo"></div>
+    </div></section>
   
 
-
+    
 
 
           </div>
@@ -369,10 +245,10 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
-		isCategory: false,
+		isCategory: true,
 		open_in_new: false,
 		root: "/",
 		innerArchive: true,
