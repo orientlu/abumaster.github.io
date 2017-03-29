@@ -6,17 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Tag: 论文 | 张国丰</title>
+  <title>Feedforward semantic segmentation with zoom-out features | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/tags/lunwen/index.html">
+  <meta name="description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Feedforward semantic segmentation with zoom-out features">
+<meta property="og:url" content="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
+<meta property="og:image" content="http://abumaster.com/photos/zoom-out.jpg">
+<meta property="og:updated_time" content="2017-03-29T02:49:47.429Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="Feedforward semantic segmentation with zoom-out features">
+<meta name="twitter:description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
+<meta name="twitter:image" content="http://abumaster.com/photos/zoom-out.jpg">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,36 +161,40 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-Feedforward-semantic-segmentation-with-zoom-out-features" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      Feedforward semantic segmentation with zoom-out features
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" class="archive-article-date">
+
+        
+        <a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" class="archive-article-date">
   	<time datetime="2017-03-27T06:21:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-27</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/">Feedforward semantic segmentation with zoom-out features</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  </p>
+</blockquote>
+<a id="more"></a>
+<p>从大量的现代分割著作中，得到了一种被广泛接受的知识，<strong>分割可以看成一个结构化预测的任务</strong>，可以用条件随机场和结构化支持向量机模型。作者脱离传统，提出<strong>图像语义分割看作单阶段的分类任务，其中每个像素元素（超像素）被标记为一个标签，使用一个前馈模型，依据从图像计算的证据</strong>。用在前馈分类中的证据不是从孤立的局部区域中获得，而是从序列中获得，序列是怎么组成的呢？首先得到一个超像素，再向外扩展，获得一个更大的闭合区域，直到扩展到整张图片。计算每一个层次的丰富特征，结合所有特征，放入分类网络中。<br><img src="/photos/zoom-out.jpg" alt="zoom-out">  </p>
+<p>###缩小的特征融合<br>将图像的类别分割转换成对一组超像素分类。由于我们期望为每个超级像素应用相同的分类机，我们希望超像素的性质是相似的，特别是它们的大小。使用了SLIC。<br><strong>本地</strong><br>超像素本身有很窄的范围，我们希望特征提取器可以捕获更多的本地信息：颜色，上下文，其他一些属性，在临近的超像素之间这些属性有很大的不同。<br><strong>近似</strong><br><strong>距离</strong><br><strong>场景</strong>  </p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -203,7 +210,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -216,123 +223,86 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/25/全卷积网络用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-03-25T07:31:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/25/全卷积网络用于图像语义分割/">全卷积网络用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/21/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/03/25/全卷积网络用于图像语义分割/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">全卷积网络用于图像语义分割</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -355,9 +325,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

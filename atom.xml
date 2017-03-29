@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-26T08:52:35.544Z</updated>
+  <updated>2017-03-29T02:49:47.429Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Feedforward semantic segmentation with zoom-out features</title>
+    <link href="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/"/>
+    <id>http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/</id>
+    <published>2017-03-27T06:21:29.000Z</published>
+    <updated>2017-03-29T02:49:47.429Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  </p>
+</blockquote>
+<a id="more"></a>
+<p>从大量的现代分割著作中，得到了一种被广泛接受的知识，<strong>分割可以看成一个结构化预测的任务</strong>，可以用条件随机场和结构化支持向量机模型。作者脱离传统，提出<strong>图像语义分割看作单阶段的分类任务，其中每个像素元素（超像素）被标记为一个标签，使用一个前馈模型，依据从图像计算的证据</strong>。用在前馈分类中的证据不是从孤立的局部区域中获得，而是从序列中获得，序列是怎么组成的呢？首先得到一个超像素，再向外扩展，获得一个更大的闭合区域，直到扩展到整张图片。计算每一个层次的丰富特征，结合所有特征，放入分类网络中。<br><img src="/photos/zoom-out.jpg" alt="zoom-out">  </p>
+<p>###缩小的特征融合<br>将图像的类别分割转换成对一组超像素分类。由于我们期望为每个超级像素应用相同的分类机，我们希望超像素的性质是相似的，特别是它们的大小。使用了SLIC。<br><strong>本地</strong><br>超像素本身有很窄的范围，我们希望特征提取器可以捕获更多的本地信息：颜色，上下文，其他一些属性，在临近的超像素之间这些属性有很大的不同。<br><strong>近似</strong><br><strong>距离</strong><br><strong>场景</strong>  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
   
   <entry>
     <title>全卷积网络用于图像语义分割</title>
