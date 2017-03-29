@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-29T02:49:47.429Z</updated>
+  <updated>2017-03-29T06:20:44.238Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>图床测试‘ </title>
+    <link href="http://abumaster.com/2017/03/29/%E5%9B%BE%E5%BA%8A%E6%B5%8B%E8%AF%95/"/>
+    <id>http://abumaster.com/2017/03/29/图床测试/</id>
+    <published>2017-03-29T06:20:44.000Z</published>
+    <updated>2017-03-29T06:20:44.238Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Feedforward semantic segmentation with zoom-out features</title>
