@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>卷积网络应该注意的问题 | 张国丰</title>
+  <title>深度解析网络用于图像语义分割 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：">
+  <meta name="description" content="2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network [1]，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="卷积网络应该注意的问题">
-<meta property="og:url" content="http://abumaster.com/2017/03/24/卷积网络应该注意的问题/index.html">
+<meta property="og:title" content="深度解析网络用于图像语义分割">
+<meta property="og:url" content="http://abumaster.com/2017/03/30/深度解析网络用于图像语义分割/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：">
-<meta property="og:updated_time" content="2017-03-25T07:05:46.835Z">
+<meta property="og:description" content="2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network [1]，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。">
+<meta property="og:updated_time" content="2017-03-30T06:00:24.803Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="卷积网络应该注意的问题">
-<meta name="twitter:description" content="卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。卷积卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：">
+<meta name="twitter:title" content="深度解析网络用于图像语义分割">
+<meta name="twitter:description" content="2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network [1]，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。">
   
   
     <link rel="icon" href="/favi.ico">
@@ -159,53 +159,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-卷积网络应该注意的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-深度解析网络用于图像语义分割" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      卷积网络应该注意的问题
+      深度解析网络用于图像语义分割
     </h1>
   
 
         
-        <a href="/2017/03/24/卷积网络应该注意的问题/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:28:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
+        <a href="/2017/03/30/深度解析网络用于图像语义分割/" class="archive-article-date">
+  	<time datetime="2017-03-30T02:20:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。<br><strong>卷积</strong><br>卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：<br><a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;conv1&quot;</div><div class="line">  type: &quot;Convolution&quot;</div><div class="line">  bottom: &quot;data&quot; #上层是数据层</div><div class="line">  top: &quot;conv1&quot;</div><div class="line">  param &#123; #权重学习参数</div><div class="line">    lr_mult: 1 #权重学习率 需要乘以基础学习率base\_lr</div><div class="line">    decay_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123; #偏置学习参数</div><div class="line">    lr_mult: 2</div><div class="line">    decay_mult: 0</div><div class="line">  &#125;</div><div class="line">  convolution_param &#123; #卷积参数</div><div class="line">    num_output: 96 #卷积操作后的输出特征图</div><div class="line">    kernel_size: 11 #卷积核大小</div><div class="line">    stride: 4 #步长 #可能也有pad为扩充边缘 </div><div class="line">    weight_filler &#123; #权值初始化</div><div class="line">      type: &quot;gaussian&quot; #类型为weight-filter 或xavier算法等，默认constant，全部0</div><div class="line">      std: 0.01</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123; #偏置的初始化</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>输入：<code>n*c0*w0*h0</code><br>输出：<code>n*c1*w1*h2</code><br>c1对应num_output，输出对应的大小计算:<br><code>w1 = (w0 + 2*pad - kernersize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code><br>在 <strong>caffe</strong> 源码中的计算是将图像和卷积核通过 im2col 转换成矩阵，再对两矩阵内积。 </p>
-<p><strong>池化</strong><br>池化也称下采样，为了减少运算和数据维度的一种方式，被分为：  </p>
-<ul>
-<li>最大池化（Max Pooling），取最大值；  </li>
-<li>均值池化（Mean Pooling），取均值；  </li>
-<li>高斯池化。<br><strong>caffe</strong> 中的配置代码：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;pool1&quot;</div><div class="line">  type: &quot;Pooling&quot;</div><div class="line">  bottom: &quot;norm1&quot;</div><div class="line">  top: &quot;pool1&quot;</div><div class="line">  pooling_param &#123; #池化参数</div><div class="line">    pool: MAX #池化类型</div><div class="line">    kernel_size: 3 #池化核大小</div><div class="line">    stride: 2 #步长，重叠</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>池化的计算公式与卷积操作类似：<br>输入：<code>n*c0*w0*h0</code><br>输出：<code>n*c1*w1*h2</code><br>c1对应num_output，输出对应的大小计算:<br><code>w1 = (w0 + 2*pad - kernersize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code>  </p>
-<p><strong>LRN层</strong><br>LRN全称为Local Response Normalization，即局部响应归一化层，没什么用，有一些网络中加入了这一层，对局部区域进行归一化，配置信息和参数说明如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;norm1&quot;</div><div class="line">  type: &quot;LRN&quot;</div><div class="line">  bottom: &quot;conv1&quot;</div><div class="line">  top: &quot;norm1&quot;</div><div class="line">  lrn_param &#123; #参数</div><div class="line">    local_size: 5 #（1）通道间归一化时表示求和的通道数；</div><div class="line">    #（2）通道内归一化时表示求和区间的边长；</div><div class="line">    alpha: 0.0001 #缩放因子</div><div class="line">    beta: 0.75 #指数项</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>激活函数</strong></p>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>激活函数需要具有以下特性：  </p>
-<ul>
-<li>非线性；  </li>
-<li>单调、连续可微分；  </li>
-<li>范围不饱和，避免梯度为0；  </li>
-<li>原点近似线性。<br>常用的激活函数有：<strong>Sigmoid 函数</strong>、<strong>Tanh 函数</strong>、<strong>ReLU 函数</strong>等。<br>如 <strong>AlexNet</strong> 中用到的ReLU激活函数：<br>$$f(x)=max(0,x)$$<br>这种激活函数的特点是：无梯度损耗，收敛速度快，网络稀疏性大，计算量小。缺点是，梯度大的话，导致权重更新以后变大，输出0，使得神经元不再更新。因此要注意学习率的设置。  </li>
-</ul>
-<p><strong>全连接层</strong><br>全连接层又称内积层（Inner-Product），是将特征图像全部展开为一维向量。<br><strong>caffe</strong> 中的文档显示：  </p>
-<ul>
-<li>Input<br><code>n * c_i * h_i * w_i</code>  </li>
-<li>Output<br><code>n * c_o * 1 * 1</code><br>这里引用了<a href="http://www.cnblogs.com/dupuleng/articles/4312149.html">dupuleng</a>的例子。<br>lenet 网络配置文件中的一段：  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">layers &#123;</div><div class="line">  name: &quot;conv2&quot;</div><div class="line">  type: CONVOLUTION</div><div class="line">  bottom: &quot;pool1&quot;</div><div class="line">  top: &quot;conv2&quot;</div><div class="line">  blobs_lr: 1</div><div class="line">  blobs_lr: 2</div><div class="line">  convolution_param &#123;</div><div class="line">    num_output: 50</div><div class="line">    kernel_size: 5</div><div class="line">    stride: 1</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;xavier&quot;</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">layers &#123;</div><div class="line">  name: &quot;pool2&quot;</div><div class="line">  type: POOLING</div><div class="line">  bottom: &quot;conv2&quot;</div><div class="line">  top: &quot;pool2&quot;</div><div class="line">  pooling_param &#123;</div><div class="line">    pool: MAX</div><div class="line">    kernel_size: 2</div><div class="line">    stride: 2</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">layers &#123;</div><div class="line">  name: &quot;ip1&quot;</div><div class="line">  type: INNER_PRODUCT</div><div class="line">  bottom: &quot;pool2&quot;</div><div class="line">  top: &quot;ip1&quot;</div><div class="line">  blobs_lr: 1</div><div class="line">  blobs_lr: 2</div><div class="line">  inner\_product\_param &#123;</div><div class="line">    num_output: 500</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;xavier&quot;</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>conv2 的输入图像是<code>256*27*27</code>经过了卷积操作，输出<code>50*22*22</code>同样作为了pool2的输入，进行池化，pool2的输出<code>50*11*11</code>，下一层全连接层，输出<code>500*1*1</code>的向量，是如何进行计算的呢？要把所有通道全部展开做卷积，首先要把pool2输出的特征图展开为一维向量，共需要<code>500*50*11*11</code>个参数，进行卷积，输出<code>500*1*1</code>的一维向量。  </p>
+        <blockquote>
+<p>2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network <sup>[1]</sup>，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。</p>
+</blockquote>
+<a id="more"></a>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y<em>i^u})+\sum</em>{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$  </p>
 
       
 
@@ -223,7 +201,7 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		
 		</ul>
@@ -290,7 +268,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/24/卷积网络应该注意的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/30/深度解析网络用于图像语义分割/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -304,18 +282,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/25/全卷积网络用于图像语义分割/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          全卷积网络用于图像语义分割
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/21/CRFs-as-RNN/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Conditional Random Fields as Recurrent Neural Networks</div>
+    <a href="/2017/03/29/公式专辑/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">公式专辑</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$">
-<meta property="og:updated_time" content="2017-03-29T13:13:17.590Z">
+<meta property="og:updated_time" content="2017-03-30T01:19:09.082Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="公式专辑">
 <meta name="twitter:description" content="公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。">
@@ -189,7 +189,7 @@
 <p>然后编写公式一个栗子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$$\sum_&#123;i=0&#125;^n i^2 = \frac&#123;(n^2+n)(2n+1)&#125;&#123;6&#125;$$</div></pre></td></tr></table></figure></p>
 <p>就生成了：<br>$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$<br>缺点：不能在本地浏览器上预览  </p>
 <p>###2.在线 LaTeX 公式编辑器<br><a href="https://www.codecogs.com/latex/eqneditor.php?lang=zh-cn">在线LaTeX公式编辑器</a>，使用<a href="http://baike.baidu.com/link?url=F3CVHlrVTZL-RRSnSK6kpx0TA2a3gLRmwxiZapagZeYpTSAT9od_rx14ufa0Bvgabs3xNyrUCs1irgp5Lufui_">LaTeX</a>公式。在其中编写好公式后，直接生成了一段html代码，直接复制到 Markdown 文本中。<br>如代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://latex.codecogs.com/gif.latex?$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; title=&quot;$$f(x)=\sum_&#123;i=1&#125;^n a_i$$&quot; /&gt;&lt;/a&gt;</div></pre></td></tr></table></figure></p>
-<p>生成：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_{i=1}^n&space;a_i$$" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$" title="$$f(x)=\sum_{i=1}^n a_i$$" /></a><br>优点：可以本地预览；缺点：只是引用的图片，右键不可操作，公式大的话可能加载慢。  </p>
+<p>生成：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_{i=1}^n&space;a_i$$" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$" title="$$f(x)=\sum_{i=1}^n a_i$$" /></a><br>优点：可以本地预览；缺点：只是引用的图片，右键不可操作，公式大的话可能加载慢，图片不清晰。  </p>
 <p>###3.基本语法  </p>
 <blockquote>
 <p>无论使用哪种方式，公式的基本语法是相同的。常用的总结如下。</p>
@@ -199,12 +199,11 @@
 <li><strong>字符</strong><br><code>\</code>为转义符，特殊字符前要加。  </li>
 <li><strong>上下标</strong><br>用<code>^</code>表示上标，用<code>_</code>表示下标  </li>
 <li>字母上下标记<br>用<code>\overline{}</code>表示上划线，用<code>\underline{}</code>表示下划线；<br>用<code>\hat{}</code>表示字母上面有一个小尖角，而<code>\widehat{}</code>表示有一个大尖角;<br>用<code>\bar{} \acute{} \check{} \grave{}</code>分别表示四个声调：一声平，二声扬，三声拐弯，四声降；<br><code>\tilde{}</code>波浪线, <code>\vec{}</code>向量,<code>\dot{}</code>点。  </li>
-<li><p>希腊字符  </p>
-</li>
-<li><p>数学函数  </p>
-</li>
-<li><p>分数开方  </p>
-</li>
+<li>希腊字符<br><code>\alpha</code>, <code>\beta</code>, …, <code>\omega</code>: α,β,…ω；<br><code>\Gamma</code>, <code>\Delta</code>, …, <code>\Omega</code>: Γ,Δ,…,Ω。</li>
+<li>数学函数<br>例如<code>sin x</code>要表示成<code>\sin x</code>；<code>log x</code>要表示成<code>\log x</code>；<code>lim x</code>表示成<code>\lim_{x\to0}</code>。</li>
+<li>分数开方<br><code>\frac{ }{ }</code>分数；<code>\sqrt{n}{r}</code>表示开n次方。  </li>
+<li>括号和分割符<br><code>() [] |</code>是不变的；<br><code>{}</code>要转义，写为<code>\{\}</code><br>用<code>\left 和 \right</code>调整大小。  </li>
+<li>数学公式<br>求和：<code>\sum_{i=0}^n{a_i}</code><br>积分：<code>\int</code><br>例子参见<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">stackexchange</a></li>
 </ul>
 
       
@@ -299,6 +298,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2017/03/30/深度解析网络用于图像语义分割/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          深度解析网络用于图像语义分割
+        
+      </div>
+    </a>
   
   
     <a href="/2017/03/29/图床测试/" id="article-nav-older" class="article-nav-link-wrap">
@@ -423,11 +431,11 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -435,11 +443,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">caffe</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color1">caffe</a>
               </li>
             
             <div class="clearfix"></div>
