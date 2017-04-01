@@ -14,10 +14,16 @@
 <meta property="og:url" content="http://abumaster.com/2017/03/30/深度解析网络用于图像语义分割/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network [1]，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。">
-<meta property="og:updated_time" content="2017-03-30T06:00:24.803Z">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}">
+<meta property="og:image" content="https://latex.codecogs.com/png.latex?$$E(y)=\sum_{\forall{i}\in&space;\upsilon}\Phi({y_i^u})+\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$">
+<meta property="og:image" content="http://i4.buimg.com/567571/8efb4635a6ff1245.png">
+<meta property="og:image" content="http://i2.muimg.com/567571/701622fcb0be647a.png">
+<meta property="og:image" content="http://i2.muimg.com/567571/5dd2e039380d9fbc.png">
+<meta property="og:updated_time" content="2017-04-01T12:04:37.492Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深度解析网络用于图像语义分割">
 <meta name="twitter:description" content="2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network [1]，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。">
+<meta name="twitter:image" content="https://latex.codecogs.com/gif.latex?$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}">
   
   
     <link rel="icon" href="/favi.ico">
@@ -183,7 +189,7 @@
 <p>2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network <sup>[1]</sup>，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。</p>
 </blockquote>
 <a id="more"></a>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y<em>i^u})+\sum</em>{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$  </p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y_i^u})+\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$<br>主要贡献：<br>使用DPN交叉训练VGG16网络，通过一次迭代近似MF，减少计算量并且保证性能。<br><strong>MRF</strong><br>对于一副图片，看成一个无向图。边代表像素之间的联系，顶点是一个二值隐变量可以看成像素<code>i</code>是否分到标签<code>u</code>。如公式所示：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}" title="$$y_u^i\in \left\{0,1\right\};$$ $$\forall u \in L=\left\{1,2,\dots ,l\right\}" /></a><br>能量函数可以写为：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$E(y)=\sum_{\forall{i}\in&space;\upsilon}\Phi({y_i^u})&plus;\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" target="_blank"><img src="https://latex.codecogs.com/png.latex?$$E(y)=\sum_{\forall{i}\in&space;\upsilon}\Phi({y_i^u})&plus;\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" title="$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y_i^u})+\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" /></a><br>\y ,\upsilon ,\varepsilon\分别代表了潜变量、顶点和边。上述能量函数分为一元项和二元项，很明显，一元项是一个预测值，表示预测像素是某一个标签，二元项则是代表一组平滑约束。<br>$$\Phi{(y_i^u)}=-\ln{p\left(y_i^u=1|I\right)}$$<br>像素i用标签u表示的可能性。<br>对于二元项是距离和共存性的乘积决定的。不可能共存，则值很大。如果两个像素临近并且相似，那么将会被鼓励分配相同的标签。这种衡量方法有两个主要的缺点：1.第一项是从训练数据中获得两个标签同时发生的频率来衡量，忽略了两个标签的空间上下文信息，比如人可以出现在桌子旁边，但是不太可能在桌子下面或者上面。<em>空间上下文是一个混合模式，不同物体的形态可能出现在不同的图片中</em>。2.只在像素间定义了成对的关系，没有考虑到高阶的相互作用。<br><img src="http://i4.buimg.com/567571/8efb4635a6ff1245.png" alt=""><br><img src="http://i2.muimg.com/567571/701622fcb0be647a.png" alt="DPN"><br><img src="http://i2.muimg.com/567571/5dd2e039380d9fbc.png" alt=""><br>不理解，先放着。</p>
 
       
 
@@ -281,6 +287,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2017/03/31/动态规划-背包问题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          动态规划-背包问题
+        
+      </div>
+    </a>
   
   
     <a href="/2017/03/29/公式专辑/" id="article-nav-older" class="article-nav-link-wrap">

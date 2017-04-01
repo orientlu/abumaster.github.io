@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-03-30T06:00:24.803Z</updated>
+  <updated>2017-04-01T06:16:33.910Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,17 +16,86 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>数据结构-红黑二叉树</title>
+    <link href="http://abumaster.com/2017/04/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%A2%E9%BB%91%E4%BA%8C%E5%8F%89%E6%A0%91/"/>
+    <id>http://abumaster.com/2017/04/01/数据结构-红黑二叉树/</id>
+    <published>2017-04-01T04:25:53.000Z</published>
+    <updated>2017-04-01T06:16:33.910Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="http://baike.baidu.com/link?url=mBopTNvEQOoavVU5s3cuRGbnLKZpEqoY3bjObubuenp_uCcLmyRAwh1PuuWb_GG-uLYrHyVtzC1h4hVP6pOO87s2UyvehOgd136FgM3x8IcRcaXalJMpEG1KfjIbmCcA">红黑树（Red Black Tree）</a>是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。<br>它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。<br>红黑树和<a href="http://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91">AVL树（平衡二叉树）</a>类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。<br><a id="more"></a><br>它虽然是复杂的，但它的最坏情况运行时间也是非常良好的，并且在实践中是高效的： 它可以在O(log n)时间内做查找，插入和删除，这里的n是树中元素的数目。<br><strong>性质</strong><br>红黑树是每个节点都带有黑色或者红色的二叉查找树。具有二叉树的性质，并且具有以下几个性质：  </p>
+<ul>
+<li>根节点是黑色   </li>
+<li>叶子节点（空节点）是黑色的  </li>
+<li>每个红色节点的两个子节点都是黑色的，叶子到根的路径上不能有连续的红色节点  </li>
+<li>从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点<br><strong>基本操作</strong><br>左旋、右旋、重新着色三个操作。<br><img src="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg" alt="左旋"><br>右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。  </li>
+</ul>
+<p><strong>插入</strong>  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;http://baike.baidu.com/link?url=mBopTNvEQOoavVU5s3cuRGbnLKZpEqoY3bjObubuenp_uCcLmyRAwh1PuuWb_GG-uLYrHyVtzC1h4hVP6pOO87s2UyvehOgd136FgM3x8IcRcaXalJMpEG1KfjIbmCcA&quot;&gt;红黑树（Red Black Tree）&lt;/a&gt;是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。&lt;br&gt;它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。&lt;br&gt;红黑树和&lt;a href=&quot;http://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91&quot;&gt;AVL树（平衡二叉树）&lt;/a&gt;类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>动态规划-背包问题</title>
+    <link href="http://abumaster.com/2017/03/31/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/"/>
+    <id>http://abumaster.com/2017/03/31/动态规划-背包问题/</id>
+    <published>2017-03-31T00:41:50.000Z</published>
+    <updated>2017-03-31T01:46:12.686Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>题目描述</strong><br>有 a，b，c 三个物体，<br>重量记为 W 5，4，3<br>价值记为 V 20 10 12<br>有一个背包容量 C = 10 ，问：可以装的最大价值为多少？  </p>
+<a id="more"></a>
+<p>解决动态规划问题的主要方法是找到<strong>状态转移方程</strong>，动态规划全局最优包含了局部最优解。<br>分析上述问题：<br>背包容量10，首先，第一个物品有装入和不装入两种情况，转入的话状态变为：容量5，物品重量4,3物品价值10,12；不装入则变为：容量10，物品质量4,3，价值10,12。因此可以定义：<code>dp[i][j]表示前i个物品装到剩余容量为j的背包中的价值 dp[3][10]即为所求的结果</code>，有了状态，这个状态是如何转移的呢？由上面的分析，可知，第i个物品有装入和不装入两种情况，因此状态转移方程可以表示如下：<code>dp[i][j] = Max(dp[i-1][j], dp[i-1][j-w[i]]+v[i])</code>。容易写出代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=C; j++)</div><div class="line">	&#123;</div><div class="line">		dp[i][j] = (i==<span class="number">0</span>?<span class="number">0</span>:dp[i<span class="number">-1</span>][j]);</div><div class="line">		<span class="keyword">if</span>(i&gt;<span class="number">0</span> &amp;&amp; j&gt;=W[i]) </div><div class="line">			dp[i][j] = Max(dp[i<span class="number">-1</span>][j], dp[i<span class="number">-1</span>][j-w[i]]+v[i]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>关于优化空间复杂度</strong><br>上述存储状态方程为二维数组，可以压缩为一维数组，<code>dp[i][j]变为dp[j]</code>避免了重复的计算。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">memeset(dp, <span class="number">0</span>, <span class="keyword">sizeof</span>(dp));</div><div class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> j=C; j&gt;=<span class="number">0</span>; j++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(i&gt;<span class="number">0</span>  &amp;&amp; j&gt;=W[i]) </div><div class="line">			dp[j] = Max(dp[j], dp[j-W[i]]+V[i]);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>[网易2017实习笔试题-双核处理]</strong><br>题目描述：<br>一种双核CPU的两个核能够同时的处理任务，现在有n个已知数据量的任务需要交给CPU处理，假设已知CPU的每个核1秒可以处理1kb，每个核同时只能处理一项任务。n个任务可以按照任意顺序放入CPU进行处理，现在需要设计一个方案让CPU处理完这批任务所需的时间最少，求这个最小的时间。<br>输入描述：  </p>
+<blockquote>
+<p>输入包括两行：<br>第一行为整数n(1 ≤ n ≤ 50)<br>第二行为n个整数length<a href="1024 ≤ length[i] ≤ 4194304">i</a>，表示每个任务的长度为length[i]kb，每个数均为1024的倍数。</p>
+</blockquote>
+<p>输出描述：</p>
+<blockquote>
+<p>输出一个整数，表示最少需要处理的时间</p>
+</blockquote>
+<p>输入输出例子：  </p>
+<blockquote>
+<p>5<br>3072 3072 7168 3072 1024<br>9216  </p>
+</blockquote>
+<p><em>解题思路:</em><br>双核可以同时运行，故可以把任务分成两组，交由两个核顺序执行，最短执行时间取决于最后一个执行完成的时间，因此，两个数组长度相差越小，执行的时间也是越短的，换句话说，使其中一个数组无限接近输入数据总长度的一半sum/2即可。执行的时间为sum-sum/2。可以变为简单的背包问题：<strong>背包容量sum/2，物体重量为输入数据的长度，尽可能装满背包</strong>。状态转移方程可以记为：<code>dp[i][j] = max(dp[i-1][j], dp[i-1][j-w[i]]+w[i]), dp[i][j]表示前i个物品在体积为j时可以填充的重量。</code>  同样可以压缩数组变为一维，如上。<br>代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;  </span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;  </div><div class="line"><span class="keyword">int</span> dp[<span class="number">210000</span>];  </div><div class="line"><span class="keyword">int</span> n,arr[<span class="number">51</span>];  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>  </div><div class="line"></span>&#123;  </div><div class="line">    <span class="keyword">int</span> n;  </div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n);  </div><div class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;  </div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; n ; i ++)&#123;  </div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;arr[i]);  </div><div class="line">        arr[i] /= <span class="number">1024</span>;  </div><div class="line">        sum += arr[i];  </div><div class="line">    &#125;</div><div class="line">    <span class="built_in">memset</span>(dp, <span class="number">0</span>, <span class="keyword">sizeof</span>(dp));  </div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; n ; i ++)  </div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = sum/<span class="number">2</span> ; j &gt;= arr[i] ; --j)  </div><div class="line">            dp[j] = max(dp[j],dp[j-arr[i]]+arr[i]);</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,(sum-dp[sum/<span class="number">2</span>])*<span class="number">1024</span>);  </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;题目描述&lt;/strong&gt;&lt;br&gt;有 a，b，c 三个物体，&lt;br&gt;重量记为 W 5，4，3&lt;br&gt;价值记为 V 20 10 12&lt;br&gt;有一个背包容量 C = 10 ，问：可以装的最大价值为多少？  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
     <title>深度解析网络用于图像语义分割</title>
     <link href="http://abumaster.com/2017/03/30/%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E7%BD%91%E7%BB%9C%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
     <id>http://abumaster.com/2017/03/30/深度解析网络用于图像语义分割/</id>
     <published>2017-03-30T02:20:52.000Z</published>
-    <updated>2017-03-30T06:00:24.803Z</updated>
+    <updated>2017-04-01T12:04:37.492Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network <sup>[1]</sup>，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。</p>
 </blockquote>
 <a id="more"></a>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y<em>i^u})+\sum</em>{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$  </p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y_i^u})+\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$<br>主要贡献：<br>使用DPN交叉训练VGG16网络，通过一次迭代近似MF，减少计算量并且保证性能。<br><strong>MRF</strong><br>对于一副图片，看成一个无向图。边代表像素之间的联系，顶点是一个二值隐变量可以看成像素<code>i</code>是否分到标签<code>u</code>。如公式所示：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$y_u^i\in&space;\left\{0,1\right\};$$&space;$$\forall&space;u&space;\in&space;L=\left\{1,2,\dots&space;,l\right\}" title="$$y_u^i\in \left\{0,1\right\};$$ $$\forall u \in L=\left\{1,2,\dots ,l\right\}" /></a><br>能量函数可以写为：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$E(y)=\sum_{\forall{i}\in&space;\upsilon}\Phi({y_i^u})&plus;\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" target="_blank"><img src="https://latex.codecogs.com/png.latex?$$E(y)=\sum_{\forall{i}\in&space;\upsilon}\Phi({y_i^u})&plus;\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" title="$$E(y)=\sum_{\forall{i}\in \upsilon}\Phi({y_i^u})+\sum_{\forall{i,j}\in\varepsilon}\Psi(y_i^u,y_j^v)$$" /></a><br>\y ,\upsilon ,\varepsilon\分别代表了潜变量、顶点和边。上述能量函数分为一元项和二元项，很明显，一元项是一个预测值，表示预测像素是某一个标签，二元项则是代表一组平滑约束。<br>$$\Phi{(y_i^u)}=-\ln{p\left(y_i^u=1|I\right)}$$<br>像素i用标签u表示的可能性。<br>对于二元项是距离和共存性的乘积决定的。不可能共存，则值很大。如果两个像素临近并且相似，那么将会被鼓励分配相同的标签。这种衡量方法有两个主要的缺点：1.第一项是从训练数据中获得两个标签同时发生的频率来衡量，忽略了两个标签的空间上下文信息，比如人可以出现在桌子旁边，但是不太可能在桌子下面或者上面。<em>空间上下文是一个混合模式，不同物体的形态可能出现在不同的图片中</em>。2.只在像素间定义了成对的关系，没有考虑到高阶的相互作用。<br><img src="http://i4.buimg.com/567571/8efb4635a6ff1245.png" alt=""><br><img src="http://i2.muimg.com/567571/701622fcb0be647a.png" alt="DPN"><br><img src="http://i2.muimg.com/567571/5dd2e039380d9fbc.png" alt=""><br>不理解，先放着。</p>
 ]]></content>
     
     <summary type="html">
