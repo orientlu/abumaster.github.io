@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-01T06:16:33.910Z</updated>
+  <updated>2017-04-02T07:29:14.771Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,47 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C++类构造函数</title>
+    <link href="http://abumaster.com/2017/04/02/C-%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
+    <id>http://abumaster.com/2017/04/02/C-类构造函数/</id>
+    <published>2017-04-02T06:45:54.000Z</published>
+    <updated>2017-04-02T07:29:14.771Z</updated>
+    
+    <content type="html"><![CDATA[<p>###C++中构造函数和析构函数应该注意的问题  </p>
+<p>构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。<br><a id="more"></a></p>
+<p>构造原则如下：  </p>
+<ol>
+<li><p>如果子类没有定义构造方法，则调用父类的无参数的构造方法。  </p>
+</li>
+<li><p>如果子类定义了构造方法，不论是无参数还是带参数，在创建子类的对象的时候,首先执行父类无参数的构造方法，然后执行自己的构造方法。 </p>
+</li>
+<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数，则会调用父类的默认无参构造函数。  </p>
+</li>
+<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数且父类自己提供了无参构造函数，则会调用父类自己的无参构造函数。  </p>
+</li>
+<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数且父类只定义了自己的有参构造函数，则会出错（如果父类只有有参数的构造方法，则子类必须显示调用此带参构造方法）。  </p>
+</li>
+<li><p>如果子类调用父类带参数的构造方法，需要用初始化父类成员对象的方式</p>
+</li>
+</ol>
+<p>析构函数<br>基类的析构函数声明为虚函数，这样销毁对象时子类会调用子类的析构函数，防止内存泄漏。如果没有定义为虚析构函数，销毁一个子类或者父类对象时，都会调用父类析构函数。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;###C++中构造函数和析构函数应该注意的问题  &lt;/p&gt;
+&lt;p&gt;构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>数据结构-红黑二叉树</title>
@@ -109,9 +150,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -239,9 +280,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -301,9 +342,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -406,9 +447,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
