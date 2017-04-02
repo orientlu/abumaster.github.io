@@ -8,19 +8,16 @@
   <link rel="dns-prefetch" href="http://abumaster.com">
   <title>C++类构造函数 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###C++中构造函数和析构函数应该注意的问题  
-构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器">
+  <meta name="description" content="C++中构造函数和析构函数应该注意的问题构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++类构造函数">
 <meta property="og:url" content="http://abumaster.com/2017/04/02/C-类构造函数/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="###C++中构造函数和析构函数应该注意的问题  
-构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器">
-<meta property="og:updated_time" content="2017-04-02T07:29:14.771Z">
+<meta property="og:description" content="C++中构造函数和析构函数应该注意的问题构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。">
+<meta property="og:updated_time" content="2017-04-02T13:48:05.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++类构造函数">
-<meta name="twitter:description" content="###C++中构造函数和析构函数应该注意的问题  
-构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器">
+<meta name="twitter:description" content="C++中构造函数和析构函数应该注意的问题构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。">
   
   
     <link rel="icon" href="/favi.ico">
@@ -182,8 +179,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###C++中构造函数和析构函数应该注意的问题  </p>
-<p>构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。<br><a id="more"></a></p>
+        <h3 id="C-中构造函数和析构函数应该注意的问题"><a href="#C-中构造函数和析构函数应该注意的问题" class="headerlink" title="C++中构造函数和析构函数应该注意的问题"></a>C++中构造函数和析构函数应该注意的问题</h3><p>构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。<br><a id="more"></a></p>
 <p>构造原则如下：  </p>
 <ol>
 <li><p>如果子类没有定义构造方法，则调用父类的无参数的构造方法。  </p>
@@ -417,7 +413,7 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -425,7 +421,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">C++</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
