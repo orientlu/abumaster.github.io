@@ -6,32 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>张国丰</title>
+  <title>Linux配置OpenCV | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="基本介绍 初级码农，学术菜鸟，奋斗在生活的底层，每天重复着相同的学习生活，平淡而自得其味。
-技能
-熟悉 Windows 和 Linux 操作系统下的C/C++编程
-熟练使用 C/C++语言，了解 Python、MATLAB 语言
-喜欢瞎折腾经验做过 Windows 平台的客户端程序有过 Linux 平台的网络编程经验评价还在不断学习，丰富自己的视野。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/about/index.html">
+  <meta name="description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux配置OpenCV">
+<meta property="og:url" content="http://abumaster.com/2017/04/03/Linux配置OpenCV/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="基本介绍 初级码农，学术菜鸟，奋斗在生活的底层，每天重复着相同的学习生活，平淡而自得其味。
-技能
-熟悉 Windows 和 Linux 操作系统下的C/C++编程
-熟练使用 C/C++语言，了解 Python、MATLAB 语言
-喜欢瞎折腾经验做过 Windows 平台的客户端程序有过 Linux 平台的网络编程经验评价还在不断学习，丰富自己的视野。">
-<meta property="og:image" content="http://abumaster.com/uploads/me.jpg">
-<meta property="og:updated_time" content="2017-03-24T00:50:01.639Z">
+<meta property="og:description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+<meta property="og:updated_time" content="2017-04-03T12:11:57.398Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="基本介绍 初级码农，学术菜鸟，奋斗在生活的底层，每天重复着相同的学习生活，平淡而自得其味。
-技能
-熟悉 Windows 和 Linux 操作系统下的C/C++编程
-熟练使用 C/C++语言，了解 Python、MATLAB 语言
-喜欢瞎折腾经验做过 Windows 平台的客户端程序有过 Linux 平台的网络编程经验评价还在不断学习，丰富自己的视野。">
-<meta name="twitter:image" content="http://abumaster.com/uploads/me.jpg">
+<meta name="twitter:title" content="Linux配置OpenCV">
+<meta name="twitter:description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
   
   
     <link rel="icon" href="/favi.ico">
@@ -173,17 +159,40 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-undefined" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Linux配置OpenCV" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Linux配置OpenCV
+    </h1>
+  
+
+        
+        <a href="/2017/04/03/Linux配置OpenCV/" class="archive-article-date">
+  	<time datetime="2017-04-03T08:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-03</time>
+</a>
+        
+      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p><img src="/uploads/me.jpg" alt="太帅无法显示" title="照片"> <strong>初级码农，学术菜鸟，奋斗在生活的底层，每天重复着相同的学习生活，平淡而自得其味。</strong></p>
-<h3 id="技能"><a href="#技能" class="headerlink" title="技能"></a>技能</h3><ul>
-<li>熟悉 Windows 和 Linux 操作系统下的C/C++编程</li>
-<li>熟练使用 C/C++语言，了解 Python、MATLAB 语言</li>
-<li>喜欢瞎折腾<h3 id="经验"><a href="#经验" class="headerlink" title="经验"></a>经验</h3>做过 Windows 平台的客户端程序<br>有过 Linux 平台的网络编程经验<h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3>还在不断学习，丰富自己的视野。</li>
+        <p><strong>源码安装OpenCV</strong><br>从<a href="http://opencv.org/">OpenCV官网</a>下载，最新版的OpenCV（opencv-3.2.0）。<br>解压文件，得到文件夹（opencv-3.2.0），并进入；<br>进行源码编译：<br><a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir release  </div><div class="line">cd release  </div><div class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..  </div><div class="line">make  </div><div class="line">sudo make install</div></pre></td></tr></table></figure>
+<p><strong>配置依赖库</strong><br>安装完成后，编译完成，运行时会出现找不到依赖库的情况如：<br><code>error while loading shared libraries: libopencv_core.so.2.4: cannot open shared object file: No such file or directory</code><br>这是因为没有把共享库放在加载器可以找到的位置，解决方法：<br>首先定位到Opencv动态库所在的目录，一般在<code>/usr/local/lib/</code>或者<code>/usr/lib/x86_64-linux-gun/</code>中，在<code>/etc/ld.so.conf.d/</code>目录下创建一个opencv.conf的文件，并把上述的路径写入文件，然后执行<code>sudo ldconfig -v</code><br><strong>编译</strong><br><strong>1.第一种方式</strong><br><code>g++ DisplayImage.cpp -o DisplayImage &#39;pkg-config opencv --cflags --libs&#39;</code><br>在上面的编译命令中我们其实用到了一个工具“pkg-config”，它主要有以下几个功能：</p>
+<ul>
+<li><p>检查库的版本号。如果所需要的库的版本不满足要求，它会打印出错误信息，避免链接错误版本的库文件。  </p>
+</li>
+<li><p>获得编译预处理参数，如宏定义，头文件的位置。  </p>
+</li>
+<li><p>获得链接参数，如库及依赖的其它库的位置，文件名及其它一些连接参数。  </p>
+</li>
+<li><p>自动加入所依赖的其它库的设置</p>
+</li>
 </ul>
+<p><strong>2.cmake工具</strong><br>CMake工具，需要一个CMakeLists.txt文件，然后输入命令<code>cmake .</code>会生成Makefile文件，然后make就行了。<br>CMakeLists.txt文件书写（opencv源码中带的例子example_cmake文件夹）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># CMakeLists.txt</div><div class="line"># 必须的信息</div><div class="line">cmake_minimum_required(VERSION 2.8)</div><div class="line"></div><div class="line"># 工程的名称</div><div class="line">project(opencv_example_project)</div><div class="line"></div><div class="line"># 查找opencv的包</div><div class="line">find_package(OpenCV REQUIRED)</div><div class="line"></div><div class="line"># 打印库的状态信息</div><div class="line">message(STATUS &quot;OpenCV library status:&quot;)</div><div class="line">message(STATUS &quot;    version: $&#123;OpenCV_VERSION&#125;&quot;)</div><div class="line">message(STATUS &quot;    libraries: $&#123;OpenCV_LIBS&#125;&quot;)</div><div class="line">message(STATUS &quot;    include path: $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</div><div class="line"></div><div class="line">if(CMAKE_VERSION VERSION_LESS &quot;2.8.11&quot;)</div><div class="line">  # Add OpenCV headers location to your include paths</div><div class="line">  include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</div><div class="line">endif()</div><div class="line"></div><div class="line"># 生成的目标以及源文件</div><div class="line">add_executable(opencv_example example.cpp)</div><div class="line"></div><div class="line"># 程序与opencv动态库连接</div><div class="line">target_link_libraries(opencv_example $&#123;OpenCV_LIBS&#125;)</div></pre></td></tr></table></figure></p>
 
       
 
@@ -192,7 +201,29 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
       
 
@@ -242,7 +273,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/about/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/03/Linux配置OpenCV/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -254,6 +285,16 @@
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2017/04/02/C-类构造函数/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">C++类构造函数</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 
 
@@ -286,7 +327,7 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
