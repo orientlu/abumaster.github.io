@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Linux配置OpenCV | 张国丰</title>
+  <title>全卷积网络和全连接条件随机场 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+  <meta name="description" content="来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux配置OpenCV">
-<meta property="og:url" content="http://abumaster.com/2017/04/03/Linux配置OpenCV/index.html">
+<meta property="og:title" content="全卷积网络和全连接条件随机场">
+<meta property="og:url" content="http://abumaster.com/2017/04/05/全卷积网络和全连接条件随机场/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
-<meta property="og:updated_time" content="2017-04-03T12:11:57.398Z">
+<meta property="og:description" content="来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。">
+<meta property="og:image" content="http://i1.piimg.com/567571/ceb8871164ae116c.png">
+<meta property="og:image" content="http://i1.piimg.com/567571/17c50f02e9958365.png">
+<meta property="og:updated_time" content="2017-04-05T14:06:33.244Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux配置OpenCV">
-<meta name="twitter:description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+<meta name="twitter:title" content="全卷积网络和全连接条件随机场">
+<meta name="twitter:description" content="来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。">
+<meta name="twitter:image" content="http://i1.piimg.com/567571/ceb8871164ae116c.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -159,40 +162,38 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Linux配置OpenCV" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-全卷积网络和全连接条件随机场" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Linux配置OpenCV
+      全卷积网络和全连接条件随机场
     </h1>
   
 
         
-        <a href="/2017/04/03/Linux配置OpenCV/" class="archive-article-date">
-  	<time datetime="2017-04-03T08:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-03</time>
+        <a href="/2017/04/05/全卷积网络和全连接条件随机场/" class="archive-article-date">
+  	<time datetime="2017-04-05T07:08:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-05</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>源码安装OpenCV</strong><br>从<a href="http://opencv.org/">OpenCV官网</a>下载，最新版的OpenCV（opencv-3.2.0）。<br>解压文件，得到文件夹（opencv-3.2.0），并进入；<br>进行源码编译：<br><a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir release  </div><div class="line">cd release  </div><div class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..  </div><div class="line">make  </div><div class="line">sudo make install</div></pre></td></tr></table></figure>
-<p><strong>配置依赖库</strong><br>安装完成后，编译完成，运行时会出现找不到依赖库的情况如：<br><code>error while loading shared libraries: libopencv_core.so.2.4: cannot open shared object file: No such file or directory</code><br>这是因为没有把共享库放在加载器可以找到的位置，解决方法：<br>首先定位到Opencv动态库所在的目录，一般在<code>/usr/local/lib/</code>或者<code>/usr/lib/x86_64-linux-gun/</code>中，在<code>/etc/ld.so.conf.d/</code>目录下创建一个opencv.conf的文件，并把上述的路径写入文件，然后执行<code>sudo ldconfig -v</code><br><strong>编译</strong><br><strong>1.第一种方式</strong><br><code>g++ DisplayImage.cpp -o DisplayImage &#39;pkg-config opencv --cflags --libs&#39;</code><br>在上面的编译命令中我们其实用到了一个工具“pkg-config”，它主要有以下几个功能：</p>
+        <p>来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。<br><a id="more"></a><br><strong>主要创新点：</strong><br>1.带孔卷积<br>在最后两个池化层后，跳过子采样，修改之后的卷积过滤器，变为卷积层。命名为孔算法，解释如图：<br><img src="http://i1.piimg.com/567571/ceb8871164ae116c.png" alt="">  </p>
 <ul>
-<li><p>检查库的版本号。如果所需要的库的版本不满足要求，它会打印出错误信息，避免链接错误版本的库文件。  </p>
-</li>
-<li><p>获得编译预处理参数，如宏定义，头文件的位置。  </p>
-</li>
-<li><p>获得链接参数，如库及依赖的其它库的位置，文件名及其它一些连接参数。  </p>
-</li>
-<li><p>自动加入所依赖的其它库的设置</p>
-</li>
+<li>高效的特征提取算法，有效的稠密滑动窗口特征提取器  </li>
+<li>控制接受域大小，加速卷积网络的计算  </li>
 </ul>
-<p><strong>2.cmake工具</strong><br>CMake工具，需要一个CMakeLists.txt文件，然后输入命令<code>cmake .</code>会生成Makefile文件，然后make就行了。<br>CMakeLists.txt文件书写（opencv源码中带的例子example_cmake文件夹）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># CMakeLists.txt</div><div class="line"># 必须的信息</div><div class="line">cmake_minimum_required(VERSION 2.8)</div><div class="line"></div><div class="line"># 工程的名称</div><div class="line">project(opencv_example_project)</div><div class="line"></div><div class="line"># 查找opencv的包</div><div class="line">find_package(OpenCV REQUIRED)</div><div class="line"></div><div class="line"># 打印库的状态信息</div><div class="line">message(STATUS &quot;OpenCV library status:&quot;)</div><div class="line">message(STATUS &quot;    version: $&#123;OpenCV_VERSION&#125;&quot;)</div><div class="line">message(STATUS &quot;    libraries: $&#123;OpenCV_LIBS&#125;&quot;)</div><div class="line">message(STATUS &quot;    include path: $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</div><div class="line"></div><div class="line">if(CMAKE_VERSION VERSION_LESS &quot;2.8.11&quot;)</div><div class="line">  # Add OpenCV headers location to your include paths</div><div class="line">  include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</div><div class="line">endif()</div><div class="line"></div><div class="line"># 生成的目标以及源文件</div><div class="line">add_executable(opencv_example example.cpp)</div><div class="line"></div><div class="line"># 程序与opencv动态库连接</div><div class="line">target_link_libraries(opencv_example $&#123;OpenCV_LIBS&#125;)</div></pre></td></tr></table></figure></p>
+<p>2.边界恢复问题<br>目前定位物体边界的挑战主要从两个方面：  </p>
+<ul>
+<li>利用融合不同层特征图的相关信息，估计物体边界  </li>
+<li>利用超像素表征，将任务委托给低层次的分割任务  </li>
+</ul>
+<p>模型：<br><img src="http://i1.piimg.com/567571/17c50f02e9958365.png" alt="">  </p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(x)=\sum_i\theta_i(x<em>i)+\sum</em>{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二元项。<br>3.多尺度预测<br>为了增加边界定位的准确性，用了多尺度预测。具体是，为输入图像和第一个四层最大池化层附加一个双层MLP（第一层：<code>128 个3*3的卷积核</code>，第二层：<code>128个1*1的卷积核</code>）与最后一层的特征图连接。汇总的特征图，放入softmax层，产生<code>5*128=640</code>通道。</p>
 
       
 
@@ -206,7 +207,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -218,7 +223,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
+        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -273,7 +278,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/03/Linux配置OpenCV/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/05/全卷积网络和全连接条件随机场/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -287,18 +292,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/04/05/全卷积网络和全连接条件随机场/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          全卷积网络和全连接条件随机场
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/04/02/C-类构造函数/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">C++类构造函数</div>
+    <a href="/2017/04/03/Linux配置OpenCV/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux配置OpenCV</div>
       <i class="icon-circle-right"></i>
     </a>
   

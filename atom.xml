@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-03T12:11:57.398Z</updated>
+  <updated>2017-04-05T14:06:33.244Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>全卷积网络和全连接条件随机场</title>
+    <link href="http://abumaster.com/2017/04/05/%E5%85%A8%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA/"/>
+    <id>http://abumaster.com/2017/04/05/全卷积网络和全连接条件随机场/</id>
+    <published>2017-04-05T07:08:55.000Z</published>
+    <updated>2017-04-05T14:06:33.244Z</updated>
+    
+    <content type="html"><![CDATA[<p>来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。<br><a id="more"></a><br><strong>主要创新点：</strong><br>1.带孔卷积<br>在最后两个池化层后，跳过子采样，修改之后的卷积过滤器，变为卷积层。命名为孔算法，解释如图：<br><img src="http://i1.piimg.com/567571/ceb8871164ae116c.png" alt="">  </p>
+<ul>
+<li>高效的特征提取算法，有效的稠密滑动窗口特征提取器  </li>
+<li>控制接受域大小，加速卷积网络的计算  </li>
+</ul>
+<p>2.边界恢复问题<br>目前定位物体边界的挑战主要从两个方面：  </p>
+<ul>
+<li>利用融合不同层特征图的相关信息，估计物体边界  </li>
+<li>利用超像素表征，将任务委托给低层次的分割任务  </li>
+</ul>
+<p>模型：<br><img src="http://i1.piimg.com/567571/17c50f02e9958365.png" alt="">  </p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(x)=\sum_i\theta_i(x<em>i)+\sum</em>{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二元项。<br>3.多尺度预测<br>为了增加边界定位的准确性，用了多尺度预测。具体是，为输入图像和第一个四层最大池化层附加一个双层MLP（第一层：<code>128 个3*3的卷积核</code>，第二层：<code>128个1*1的卷积核</code>）与最后一层的特征图连接。汇总的特征图，放入softmax层，产生<code>5*128=640</code>通道。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux配置OpenCV</title>
@@ -184,9 +220,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -195,7 +231,7 @@
     <link href="http://abumaster.com/2017/03/29/%E5%85%AC%E5%BC%8F%E4%B8%93%E8%BE%91/"/>
     <id>http://abumaster.com/2017/03/29/公式专辑/</id>
     <published>2017-03-29T07:53:21.000Z</published>
-    <updated>2017-03-30T01:19:09.082Z</updated>
+    <updated>2017-04-05T07:26:41.854Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。</p>
@@ -203,7 +239,7 @@
 <a id="more"></a>
 <p>###1.MathJax 引擎<br>参考<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">stackexchange</a>，很简单引入一个脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
 <p>然后编写公式一个栗子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$$\sum_&#123;i=0&#125;^n i^2 = \frac&#123;(n^2+n)(2n+1)&#125;&#123;6&#125;$$</div></pre></td></tr></table></figure></p>
-<p>就生成了：<br>$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$<br>缺点：不能在本地浏览器上预览  </p>
+<p>就生成了：<br>$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$<br>注意：想要在浏览器上预览，需要更改markdown priview的配置文件，运行mathjax运行。 </p>
 <p>###2.在线 LaTeX 公式编辑器<br><a href="https://www.codecogs.com/latex/eqneditor.php?lang=zh-cn">在线LaTeX公式编辑器</a>，使用<a href="http://baike.baidu.com/link?url=F3CVHlrVTZL-RRSnSK6kpx0TA2a3gLRmwxiZapagZeYpTSAT9od_rx14ufa0Bvgabs3xNyrUCs1irgp5Lufui_">LaTeX</a>公式。在其中编写好公式后，直接生成了一段html代码，直接复制到 Markdown 文本中。<br>如代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://latex.codecogs.com/gif.latex?$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; title=&quot;$$f(x)=\sum_&#123;i=1&#125;^n a_i$$&quot; /&gt;&lt;/a&gt;</div></pre></td></tr></table></figure></p>
 <p>生成：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_{i=1}^n&space;a_i$$" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$" title="$$f(x)=\sum_{i=1}^n a_i$$" /></a><br>优点：可以本地预览；缺点：只是引用的图片，右键不可操作，公式大的话可能加载慢，图片不清晰。  </p>
 <p>###3.基本语法  </p>
@@ -314,9 +350,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -376,9 +412,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -481,9 +517,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
