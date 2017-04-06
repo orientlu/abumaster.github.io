@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-05T14:06:33.244Z</updated>
+  <updated>2017-04-06T13:10:41.589Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://abumaster.com/2017/04/05/%E5%85%A8%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA/"/>
     <id>http://abumaster.com/2017/04/05/全卷积网络和全连接条件随机场/</id>
     <published>2017-04-05T07:08:55.000Z</published>
-    <updated>2017-04-05T14:06:33.244Z</updated>
+    <updated>2017-04-06T13:10:41.589Z</updated>
     
     <content type="html"><![CDATA[<p>来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。<br><a id="more"></a><br><strong>主要创新点：</strong><br>1.带孔卷积<br>在最后两个池化层后，跳过子采样，修改之后的卷积过滤器，变为卷积层。命名为孔算法，解释如图：<br><img src="http://i1.piimg.com/567571/ceb8871164ae116c.png" alt="">  </p>
 <ul>
@@ -33,7 +33,16 @@
 <li>利用超像素表征，将任务委托给低层次的分割任务  </li>
 </ul>
 <p>模型：<br><img src="http://i1.piimg.com/567571/17c50f02e9958365.png" alt="">  </p>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(x)=\sum_i\theta_i(x<em>i)+\sum</em>{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二元项。<br>3.多尺度预测<br>为了增加边界定位的准确性，用了多尺度预测。具体是，为输入图像和第一个四层最大池化层附加一个双层MLP（第一层：<code>128 个3*3的卷积核</code>，第二层：<code>128个1*1的卷积核</code>）与最后一层的特征图连接。汇总的特征图，放入softmax层，产生<code>5*128=640</code>通道。</p>
+<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>$$E(x)=\sum_i\theta_i(x_i)+\sum_{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二元项。<br>3.多尺度预测<br>为了增加边界定位的准确性，用了多尺度预测。具体是，为输入图像和第一个四层最大池化层附加一个双层MLP（第一层：<code>128 个3*3的卷积核</code>，第二层：<code>128个1*1的卷积核</code>）与最后一层的特征图连接。汇总的特征图，放入softmax层，产生<code>5*128=640</code>通道。  </p>
+<p><strong>系统实现</strong><br>DeepLab：使用深度卷积网络，atrous卷积和全连接crfs的图像语义分割模型。<br>针对传统方法的不足：  </p>
+<ul>
+<li>减少特征解析度（重复的最大池化和下采样）  </li>
+<li>存在多个尺度的对象  </li>
+<li>由于深度网络的稳定性导致定位精度下降<br>提出的优化方案：  </li>
+<li>不采样  </li>
+<li>atrous spatial pyramid pooling 空间金字塔池化  </li>
+<li>结合条件随机场<br><strong>细节</strong><br>atrous卷积的计算，一维信号量示例如图：<br><img src="http://i1.piimg.com/567571/e4d2c7eb9eaa6b1e.png" alt=""><br>$$y[i]=\sum_{k=1}^Kx[i+r\cdot{k}]w[k]$$<br>全连接条件随机场：<br>关于能量函数，第一项由预测网络给出的预测值；第二项：<br><img src="http://i1.piimg.com/567571/c38b63130a578629.png" alt=""><br>公式分为两项，第一项是节点值不相等时为1，相等时为0，为了表示不同的标签将要受到惩罚。第二项，有两个高斯核组成，第一个是用像素的位置和像素的值表示，第二个是用像素之间的位置表示，他们是不同空间的特征。<br><img src="http://i2.muimg.com/567571/020f15b2235a3483.png" alt=""></li>
+</ul>
 ]]></content>
     
     <summary type="html">
