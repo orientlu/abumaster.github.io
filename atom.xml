@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-06T14:09:19.093Z</updated>
+  <updated>2017-04-07T13:46:05.840Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>结合特定任务边缘检测的图像语义分割</title>
+    <link href="http://abumaster.com/2017/04/07/%E7%BB%93%E5%90%88%E7%89%B9%E5%AE%9A%E4%BB%BB%E5%8A%A1%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E7%9A%84%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
+    <id>http://abumaster.com/2017/04/07/结合特定任务边缘检测的图像语义分割/</id>
+    <published>2017-04-07T07:38:22.000Z</published>
+    <updated>2017-04-07T13:46:05.840Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提出了一种新的解决方案，空间转换（DT）替换crfs，这是一种边缘过滤保留方法。计算速度有一定的提升。  </p>
+</blockquote>
+<a id="more"></a>
+<p><strong>主要思想</strong><br>取代最后的全连接条件随机场和与其关联的双向过滤器，变为域变换（DT）一种边缘感知过滤器。域变换的递归公式等于信号的自适应递归滤波，其中信息不允许在某些参考信号中跨越边缘传播。速度快。<br><strong>前期工作</strong>  </p>
+<ul>
+<li>图像语义分割<br>网络中最大池化和下采样的出现，使稠密网络最后的输出图无法精准定位物体的边界信息，为了解决这个问题，出现了很多解决方案：组合中间特征图信息；反卷积和上采样；超像素等底层的分割方法；条件随机场，利用像素之间的依赖关系。  </li>
+<li>边缘检测<br>学习物体的边界直接优化图像语义分割的表现。  </li>
+<li>长距离依赖（Long range dependency）<br>通过DT输入进行反向传播，以共同学习端对端可训练系统中的分割图得分和边缘图。<br><strong>提出模型</strong><br>论文中提出的模型图：<br><img src="http://i4.buimg.com/567571/1043df45dae88c0c.png" alt=""><br>分为三个部分：<br>1.语义分割预测，得出一个大致的分割图，与全卷积网络输出图类似；<br>2.边缘预测网络，生成一个边缘预测图；<br>3.域转换，使用物体边界限制分割图。  </li>
+</ul>
+<p><strong>参考文献</strong><br>[1] “Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform”<br>Liang-Chieh Chen, Jonathan T. Barron, George Papandreou, Kevin Murphy, and Alan L. Yuille<br>In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提出了一种新的解决方案，空间转换（DT）替换crfs，这是一种边缘过滤保留方法。计算速度有一定的提升。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
   
   <entry>
     <title>进制转换</title>
