@@ -15,7 +15,8 @@
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提">
 <meta property="og:image" content="http://i4.buimg.com/567571/1043df45dae88c0c.png">
-<meta property="og:updated_time" content="2017-04-07T13:46:05.840Z">
+<meta property="og:image" content="http://i2.muimg.com/567571/08cbd87d8bbbe172.png">
+<meta property="og:updated_time" content="2017-04-08T02:30:39.618Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="结合特定任务边缘检测的图像语义分割">
 <meta name="twitter:description" content="DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提">
@@ -189,7 +190,7 @@
 <ul>
 <li>图像语义分割<br>网络中最大池化和下采样的出现，使稠密网络最后的输出图无法精准定位物体的边界信息，为了解决这个问题，出现了很多解决方案：组合中间特征图信息；反卷积和上采样；超像素等底层的分割方法；条件随机场，利用像素之间的依赖关系。  </li>
 <li>边缘检测<br>学习物体的边界直接优化图像语义分割的表现。  </li>
-<li>长距离依赖（Long range dependency）<br>通过DT输入进行反向传播，以共同学习端对端可训练系统中的分割图得分和边缘图。<br><strong>提出模型</strong><br>论文中提出的模型图：<br><img src="http://i4.buimg.com/567571/1043df45dae88c0c.png" alt=""><br>分为三个部分：<br>1.语义分割预测，得出一个大致的分割图，与全卷积网络输出图类似；<br>2.边缘预测网络，生成一个边缘预测图；<br>3.域转换，使用物体边界限制分割图。  </li>
+<li>长距离依赖（Long range dependency）<br>通过DT输入进行反向传播，以共同学习端对端可训练系统中的分割图得分和边缘图。<br><strong>提出模型</strong><br>论文中提出的模型图：<br><img src="http://i4.buimg.com/567571/1043df45dae88c0c.png" alt=""><br>分为三个部分：<br>1.语义分割预测，得出一个大致的分割图，与全卷积网络输出图类似；<br>2.边缘预测网络，生成一个边缘预测图；<br>3.域转换，使用物体边界限制分割图。<br><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>x表示需要过滤的原始信号量，y表示域转换密度信号d。使用递归公式计算，初始化y1=x1，然后递归计算<code>i=2,...,N</code>：<br>$$y_i=(1-w_i)x_i+w_iy_{i-1}$$<br>其中权重wi的计算依赖di：<br>$$w_i=exp(-\sqrt2d_i/{\sigma_{s}})$$<br>一维计算树，前向和反向传播的计算：<br><img src="http://i2.muimg.com/567571/08cbd87d8bbbe172.png" alt=""><br>$$\frac{\partial L}{\partial x_i}\leftarrow (1-w_i)\frac{\partial L}{\partial y_i}$$<br>$$\frac{\partial L}{\partial w_i}\leftarrow \frac{\partial L}{\partial w_i}+(y_{i-1}-x_i)\frac{\partial L}{\partial y_i}$$<br>$$\frac{\partial L}{\partial y_{i-1}}\leftarrow \frac{\partial L}{\partial y_{i-1}}+w_i\frac{\partial L}{\partial y_i}$$<br>源码和模型<a href="http://liangchiehchen.com/projects/DeepLab.html">地址</a>。接下来学习。</li>
 </ul>
 <p><strong>参考文献</strong><br>[1] “Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform”<br>Liang-Chieh Chen, Jonathan T. Barron, George Papandreou, Kevin Murphy, and Alan L. Yuille<br>In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
 
@@ -205,11 +206,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		
 		</ul>
@@ -417,7 +418,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color3">技巧</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -425,7 +426,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技巧</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
