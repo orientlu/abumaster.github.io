@@ -6,17 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Category: 深度学习 | 张国丰</title>
+  <title>caffe提取各层特征 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/categories/deeplearning/index.html">
+  <meta name="description" content="根据薛开宇的caffe学习笔记中逐层可视化特征进行实践，中间出现了一些问题，记录如下：1.caffe创建分类器Classifier继承自Net，可以从网络配置文件和模型中初始化网络，提供了一个predict函数，输入是一幅图片(w*H*K)返回的是一张N*C的numpy.ndarry。代表每张图片有可能对应的C个类别。也就是说，你以后用这个class会很方便，直接省去图片的初始化。源码位于：caf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="caffe提取各层特征">
+<meta property="og:url" content="http://abumaster.com/2017/04/09/caffe提取各层特征/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="根据薛开宇的caffe学习笔记中逐层可视化特征进行实践，中间出现了一些问题，记录如下：1.caffe创建分类器Classifier继承自Net，可以从网络配置文件和模型中初始化网络，提供了一个predict函数，输入是一幅图片(w*H*K)返回的是一张N*C的numpy.ndarry。代表每张图片有可能对应的C个类别。也就是说，你以后用这个class会很方便，直接省去图片的初始化。源码位于：caf">
+<meta property="og:image" content="http://i2.muimg.com/567571/aa302291a05f322a.png">
+<meta property="og:updated_time" content="2017-04-09T13:47:20.332Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="caffe提取各层特征">
+<meta name="twitter:description" content="根据薛开宇的caffe学习笔记中逐层可视化特征进行实践，中间出现了一些问题，记录如下：1.caffe创建分类器Classifier继承自Net，可以从网络配置文件和模型中初始化网络，提供了一个predict函数，输入是一幅图片(w*H*K)返回的是一张N*C的numpy.ndarry。代表每张图片有可能对应的C个类别。也就是说，你以后用这个class会很方便，直接省去图片的初始化。源码位于：caf">
+<meta name="twitter:image" content="http://i2.muimg.com/567571/aa302291a05f322a.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,36 +161,64 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-caffe提取各层特征" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      caffe提取各层特征
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/09/caffe提取各层特征/" class="archive-article-date">
+
+        
+        <a href="/2017/04/09/caffe提取各层特征/" class="archive-article-date">
   	<time datetime="2017-04-09T12:07:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-09</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/09/caffe提取各层特征/">caffe提取各层特征</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>根据薛开宇的caffe学习笔记中逐层可视化特征进行实践，中间出现了一些问题，记录如下：<br><strong>1.caffe创建分类器</strong><br>Classifier继承自Net，可以从网络配置文件和模型中初始化网络，提供了一个predict函数，输入是一幅图片(w*H*K)返回的是一张N*C的numpy.ndarry。代表每张图片有可能对应的C个类别。也就是说，你以后用这个class会很方便，直接省去图片的初始化。源码位于：caffe-master\python\caffe下。<br><a id="more"></a><br>初始化这个分类器的时候，出现了一个问题：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">net = caffe.Classifier(caffe_root + <span class="string">'models/bvlc_reference_caffenet/deploy.prototxt'</span>,</div><div class="line">caffe_root + <span class="string">'models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span>)</div><div class="line"></div><div class="line">net.set_phase_test()</div><div class="line">net.set_mode_cpu()</div><div class="line">net.set_mean(<span class="string">'data'</span>, caffe_root + <span class="string">'python/caffe/imagenet/ilsvrc_2012_mean.npy'</span>)</div><div class="line">net.set_channel_swap(<span class="string">'data'</span>, (<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>)) </div><div class="line">net.set_input_scale(<span class="string">'data'</span>, <span class="number">255</span>)</div></pre></td></tr></table></figure></p>
+<p>就是在网络设置时，一直提示没有<code>set_phase_test(*)</code>的成员函数，试了几个平台都是如此提示，后来在网上找到了一点<a href="http://www.programcreek.com/python/example/83400/caffe.set_phase_test">信息</a>其中提到了，可以直接创建的时候初始化，对应于函数的声明所需的参数：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">net = caffe.Classifier(MODEL_FILE, PRETRAINED,</div><div class="line">                        mean=np.load(os.path.join(CAFFE_DIR, <span class="string">'python/caffe/imagenet/ilsvrc_2012_mean.npy'</span>)),</div><div class="line">                        channel_swap=(<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>),</div><div class="line">                        raw_scale=<span class="number">255</span>,</div><div class="line">                        image_dims=(<span class="number">256</span>, <span class="number">256</span>))</div></pre></td></tr></table></figure></p>
+<p><strong>维度不匹配问题</strong>代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> File &quot;one.py&quot;, line 14, in &lt;module&gt;</div><div class="line">    image_dims=(256, 256))</div><div class="line">  File &quot;/home/zgf/caffe-master/python/caffe/classifier.py&quot;, line 34, in __init__</div><div class="line">    self.transformer.set_mean(in_, mean)</div><div class="line">  File &quot;/home/zgf/caffe-master/python/caffe/io.py&quot;, line 259, in set_mean</div><div class="line">    raise ValueError(&apos;Mean shape incompatible with input shape.&apos;)</div><div class="line">ValueError: Mean shape incompatible with input shape.</div></pre></td></tr></table></figure></p>
+<p>中值文件读取的错误，在网络上找到了解决<a href="http://stackoverflow.com/questions/30808735/error-when-using-classify-in-caffe">方案</a>，将读取中值文件改为：<code>mean=np.load(&#39;/home/zgf/caffe-master/python/caffe/imagenet/ilsvrc_2012_mean.npy&#39;).mean(1).mean(1)</code>可以解决。  </p>
+<p><strong>2.显示特征图像问题</strong><br>按照文档描述依次往下进行，文档使用的工具为ipython，显示图片用：<code>ipt.show()</code>，而我用的工具是jupyter，所以一直找不到这个命令，无法查看图像，从网上查到，可以在代码前面加上一句<code>%matplotlib inline</code>然后用<code>import matplotlib as plt plt.imshow(img)</code>实现。  </p>
+<p><strong>3.结果</strong><br>加载网络<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div><div class="line">caffe_root=<span class="string">'/home/zgf/caffe-master/'</span></div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> os</div><div class="line">sys.path.insert(<span class="number">0</span>, caffe_root + <span class="string">'python/caffe'</span>)</div><div class="line"><span class="keyword">import</span> caffe</div><div class="line"></div><div class="line">plt.rcParams[<span class="string">'figure.figsize'</span>] = (<span class="number">10</span>, <span class="number">10</span>)</div><div class="line">plt.rcParams[<span class="string">'image.interpolation'</span>] = <span class="string">'nearest'</span></div><div class="line">plt.rcParams[<span class="string">'image.cmap'</span>] = <span class="string">'gray'</span></div><div class="line"></div><div class="line">ref_model_file = caffe_root+<span class="string">'/models/bvlc_reference_caffenet/deploy.prototxt'</span></div><div class="line">ref_pretrained = caffe_root+<span class="string">'/models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'</span></div><div class="line"></div><div class="line">net = caffe.Classifier(ref_model_file, ref_pretrained,</div><div class="line">       mean=np.load(<span class="string">'/home/zgf/caffe-master/python/caffe/imagenet/ilsvrc_2012_mean.npy'</span>).mean(<span class="number">1</span>).mean(<span class="number">1</span>),</div><div class="line">       channel_swap=(<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>),</div><div class="line">       raw_scale=<span class="number">255</span>,</div><div class="line">       image_dims=(<span class="number">256</span>, <span class="number">256</span>))</div><div class="line"></div><div class="line">scores = net.predict([caffe.io.load_image(caffe_root + <span class="string">'examples/images/cat.jpg'</span>)])</div><div class="line"><span class="comment">#显示网络的结构信息</span></div><div class="line">[(k, v.data.shape) <span class="keyword">for</span> k, v <span class="keyword">in</span> net.blobs.items()]</div></pre></td></tr></table></figure></p>
+<p><em>[out]：</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[(&apos;data&apos;, (10, 3, 227, 227)),</div><div class="line"> (&apos;conv1&apos;, (10, 96, 55, 55)),</div><div class="line"> (&apos;pool1&apos;, (10, 96, 27, 27)),</div><div class="line"> (&apos;norm1&apos;, (10, 96, 27, 27)),</div><div class="line"> (&apos;conv2&apos;, (10, 256, 27, 27)),</div><div class="line"> (&apos;pool2&apos;, (10, 256, 13, 13)),</div><div class="line"> (&apos;norm2&apos;, (10, 256, 13, 13)),</div><div class="line"> (&apos;conv3&apos;, (10, 384, 13, 13)),</div><div class="line"> (&apos;conv4&apos;, (10, 384, 13, 13)),</div><div class="line"> (&apos;conv5&apos;, (10, 256, 13, 13)),</div><div class="line"> (&apos;pool5&apos;, (10, 256, 6, 6)),</div><div class="line"> (&apos;fc6&apos;, (10, 4096)),</div><div class="line"> (&apos;fc7&apos;, (10, 4096)),</div><div class="line"> (&apos;fc8&apos;, (10, 1000)),</div><div class="line"> (&apos;prob&apos;, (10, 1000))]</div></pre></td></tr></table></figure></p>
+<p>显示参数信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[(k, v[0].data.shape) for k, v in net.params.items()]</div><div class="line">```  </div><div class="line">*[out]：*</div></pre></td></tr></table></figure></p>
+<p>[(‘conv1’, (96, 3, 11, 11)),<br> (‘conv2’, (256, 48, 5, 5)),<br> (‘conv3’, (384, 256, 3, 3)),<br> (‘conv4’, (384, 192, 3, 3)),<br> (‘conv5’, (256, 192, 3, 3)),<br> (‘fc6’, (4096, 9216)),<br> (‘fc7’, (4096, 4096)),<br> (‘fc8’, (1000, 4096))]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">**输入层**</div></pre></td></tr></table></figure></p>
+<p>%matplotlib inline<br>def showimage(im):<br>    if im.ndim == 3:<br>        m = im[:, :, ::-1]<br>    plt.imshow(im)</p>
+<p>def vis_square(data, padsize=1, padval=0):<br>    data -= data.min()<br>    data /= data.max()</p>
+<pre><code># force the number of filters to be square
+n = int(np.ceil(np.sqrt(data.shape[0])))
+padding = ((0, n ** 2 - data.shape[0]), (0, padsize), (0, padsize)) + ((0, 0),) * (data.ndim - 3)
+data = np.pad(data, padding, mode=&apos;constant&apos;, constant_values=(padval, padval))
+# 对图像使用滤波器
+data = data.reshape((n, n) + data.shape[1:]).transpose((0, 2, 1, 3) + tuple(range(4, data.ndim + 1)))
+data = data.reshape((n * data.shape[1], n * data.shape[3]) + data.shape[4:])
+showimage(data)
+#plt.imshow(data)
+</code></pre><h1 id="index-four-is-the-center-crop"><a href="#index-four-is-the-center-crop" class="headerlink" title="index four is the center crop"></a>index four is the center crop</h1><h1 id="输出输入的图像"><a href="#输出输入的图像" class="headerlink" title="输出输入的图像"></a>输出输入的图像</h1><p>image = net.blobs[‘data’].data[4].copy()<br>image -= image.min()<br>image /= image.max()<br>showimage(image.transpose(1, 2, 0))</p>
+<p>#plt.imshow(image.transpose(1,2,0))<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![](http://i4.buimg.com/567571/2d78079157ce4c40.png)</div></pre></td></tr></table></figure></p>
+<p>filters = net.params[‘conv1’][0].data<br>vis_square(filters.transpose(0, 2, 3, 1))</p>
+<p>#96 feature map<br>feat = net.blobs[‘conv1’].data[4, :96]<br>vis_square(feat, padval=1)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<p>filters = net.params[‘conv2’][0].data<br>vis_square(filters[:48].reshape(48**2, 5, 5))</p>
+<p>feat = net.blobs[‘conv2’].data[4, :36]<br>vis_square(feat, padval=1)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>feat = net.blobs[‘conv3’].data[4]<br>vis_square(feat, padval=0.5)</p>
+<p>feat = net.blobs[‘conv4’].data[4]<br>vis_square(feat, padval=0.5)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">feat = net.blobs[&apos;fc6&apos;].data[4]</div><div class="line">plt.subplot(2, 1, 1)</div><div class="line">plt.plot(feat.flat)</div><div class="line">plt.subplot(2, 1, 2)</div><div class="line">_ = plt.hist(feat.flat[feat.flat &gt; 0], bins=100)</div></pre></td></tr></table></figure></p>
+<p><img src="http://i2.muimg.com/567571/aa302291a05f322a.png" alt=""></p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -203,7 +234,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -216,388 +247,86 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/09/caffe提取各层特征/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/07/结合特定任务边缘检测的图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-04-07T07:38:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/07/结合特定任务边缘检测的图像语义分割/">结合特定任务边缘检测的图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/05/全卷积网络和全连接条件随机场/" class="archive-article-date">
-  	<time datetime="2017-04-05T07:08:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/05/全卷积网络和全连接条件随机场/">全卷积网络和全连接条件随机场</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/30/深度解析网络用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-03-30T02:20:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/30/深度解析网络用于图像语义分割/">深度解析网络用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" class="archive-article-date">
-  	<time datetime="2017-03-27T06:21:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/">Feedforward semantic segmentation with zoom-out features</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/25/全卷积网络用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-03-25T07:31:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/25/全卷积网络用于图像语义分割/">全卷积网络用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/24/卷积网络应该注意的问题/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:28:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/24/卷积网络应该注意的问题/">卷积网络应该注意的问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/21/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/04/07/结合特定任务边缘检测的图像语义分割/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">结合特定任务边缘检测的图像语义分割</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -620,10 +349,10 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		root: "/",
 		innerArchive: true,
