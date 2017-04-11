@@ -6,17 +6,32 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Tag: caffe | 张国丰</title>
+  <title>Stanford Background Dataset介绍和使用 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/tags/caffe/index.html">
+  <meta name="description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCALVOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
+
+images文件夹包含了715张图像；  
+
+hori">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stanford Background Dataset介绍和使用">
+<meta property="og:url" content="http://abumaster.com/2017/04/10/Stanford-Background-Dataset介绍和使用/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCALVOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
+
+images文件夹包含了715张图像；  
+
+hori">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png">
+<meta property="og:updated_time" content="2017-04-11T00:58:07.351Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="Stanford Background Dataset介绍和使用">
+<meta name="twitter:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCALVOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
+
+images文件夹包含了715张图像；  
+
+hori">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,36 +173,116 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Stanford-Background-Dataset介绍和使用" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/09/caffe提取各层特征/" class="archive-article-date">
-  	<time datetime="2017-04-09T12:07:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-09</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/09/caffe提取各层特征/">caffe提取各层特征</a>
+    <h1 class="article-title" itemprop="name">
+      Stanford Background Dataset介绍和使用
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/04/10/Stanford-Background-Dataset介绍和使用/" class="archive-article-date">
+  	<time datetime="2017-04-10T06:35:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://dags.stanford.edu/projects/scenedataset.html">Stanford Background Dataset</a>是一个从各个数据库（LabelMe, MSRC, PASCAL<br>VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。</p>
+<ul>
+<li><p>images文件夹包含了715张图像；  </p>
+</li>
+<li><p>horizons.txt  图像名称、大小、水平线位置；  </p>
+<a id="more"></a>
+</li>
+<li><p>labels/*.regions.txt 标识每个像素的语义，0-7代表八类语义；  </p>
+</li>
+<li><p>labels/*.surfaces.txt 标识每个像素的几何类别（天空，水平，垂直）； </p>
+</li>
+<li><p>labels/*.layers.txt    表示不同图像区域的整数矩阵。  </p>
+</li>
+</ul>
+<p><strong>读取图像和分割图像</strong><br>1.首先读取标签文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">vector&lt;char&gt; vec;//保存像素标记</div><div class="line">void readlabel(string labelname)</div><div class="line">&#123;</div><div class="line">	ifstream infile(labelname.c_str(), std::ios::in);</div><div class="line">	char line[1024] = &#123; 0 &#125;;</div><div class="line">	while (infile.getline(line, sizeof(line)))</div><div class="line">	&#123;</div><div class="line">		stringstream word(line);</div><div class="line">		char ch;</div><div class="line">		while (word &gt;&gt; ch)</div><div class="line">		&#123;</div><div class="line">			vec.push_back(ch);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2.显示分割图像，根据语义标签，设置不同的颜色以区别  </p>
+<pre><code class="c++"><span class="comment">//显示分割图像</span>
+    <span class="function">Mat <span class="title">colorim</span><span class="params">(im.rows, im.cols, CV_8UC3)</span></span>;
+    <span class="keyword">int</span> index = <span class="number">0</span>;
+    <span class="comment">//遍历所有像素，并设置像素值</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; colorim.rows; ++i)
+    {
+        <span class="comment">//获取第 i 行首像素指针</span>
+        Vec3b * p = colorim.ptr&lt;Vec3b&gt;(i);
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; colorim.cols; ++j)
+        {
+            <span class="keyword">int</span> lab = vec[index++];
+            <span class="keyword">switch</span> (lab)
+            {
+            <span class="keyword">case</span> <span class="string">'0'</span>:<span class="comment">//sky</span>
+                p[j][<span class="number">0</span>] = <span class="number">128</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">128</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">128</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'1'</span>:<span class="comment">//tree</span>
+                p[j][<span class="number">0</span>] = <span class="number">84</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">230</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">80</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'2'</span>:<span class="comment">//road</span>
+                p[j][<span class="number">0</span>] = <span class="number">115</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">100</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'3'</span>:<span class="comment">//grass</span>
+                p[j][<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">255</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">0</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'4'</span>:<span class="comment">//water</span>
+                p[j][<span class="number">0</span>] = <span class="number">255</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">0</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'5'</span>:<span class="comment">//building</span>
+                p[j][<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">160</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'6'</span>:<span class="comment">//mountain</span>
+                p[j][<span class="number">0</span>] = <span class="number">63</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">214</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">8</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">'7'</span>:<span class="comment">//obj</span>
+                p[j][<span class="number">0</span>] = <span class="number">37</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">159</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">230</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+            <span class="keyword">default</span>:<span class="comment">//somthing else</span>
+                p[j][<span class="number">0</span>] = <span class="number">255</span>; <span class="comment">//Blue</span>
+                p[j][<span class="number">1</span>] = <span class="number">255</span>; <span class="comment">//Green</span>
+                p[j][<span class="number">2</span>] = <span class="number">255</span>; <span class="comment">//Red</span>
+                <span class="keyword">break</span>;
+
+            }
+
+        }
+    }
+    imshow(<span class="string">"分割图"</span>, colorim);
+</code></pre>
+<p><strong>结果</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -197,89 +292,105 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">dataset</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
+        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/10/Stanford-Background-Dataset介绍和使用/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/24/卷积网络应该注意的问题/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:28:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/24/卷积网络应该注意的问题/">卷积网络应该注意的问题</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/04/09/caffe提取各层特征/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">caffe提取各层特征</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
+
   
-  
-    </div></section>
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -302,9 +413,9 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
