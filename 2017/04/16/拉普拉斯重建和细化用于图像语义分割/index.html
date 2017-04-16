@@ -6,30 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>图床测试 | 张国丰</title>
+  <title>拉普拉斯重建和细化用于图像语义分割 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
+  <meta name="description" content="来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图床测试">
-<meta property="og:url" content="http://abumaster.com/2017/03/29/图床测试/index.html">
+<meta property="og:title" content="拉普拉斯重建和细化用于图像语义分割">
+<meta property="og:url" content="http://abumaster.com/2017/04/16/拉普拉斯重建和细化用于图像语义分割/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta property="og:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8354836d59a379b8.jpg">
-<meta property="og:image" content="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/2f18c12c56375cef.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/83e0a892aa71f6b5.png">
-<meta property="og:image" content="http://i2.muimg.com/567571/5cce81a18b11621c.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png">
-<meta property="og:updated_time" content="2017-03-29T06:54:39.333Z">
+<meta property="og:description" content="来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png">
+<meta property="og:updated_time" content="2017-04-16T13:56:48.682Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图床测试">
-<meta name="twitter:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta name="twitter:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
+<meta name="twitter:title" content="拉普拉斯重建和细化用于图像语义分割">
+<meta name="twitter:description" content="来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -171,20 +161,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-图床测试" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-拉普拉斯重建和细化用于图像语义分割" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      图床测试
+      拉普拉斯重建和细化用于图像语义分割
     </h1>
   
 
         
-        <a href="/2017/03/29/图床测试/" class="archive-article-date">
-  	<time datetime="2017-03-29T06:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
+        <a href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" class="archive-article-date">
+  	<time datetime="2017-04-16T08:05:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-16</time>
 </a>
         
       </header>
@@ -192,31 +182,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p><strong>图床</strong>一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是<strong><a href="http://jiantuku.com/">极简图床</a></strong>。<br>优点：不必把图片上传到博客服务器，节省服务器的空间。<br>缺点：不能上传大于5M的图片，稳定性待测。  </p>
+<p>来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  </p>
 </blockquote>
 <a id="more"></a>
-<p>来一波从<a href="https://alpha.wallhaven.cc/">wallhaven</a>下载的图片<br><img src="http://i2.muimg.com/567571/45e54958a190cbaa.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8354836d59a379b8.jpg" alt=""></p>
-<hr>
-<p><img src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/2f18c12c56375cef.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/83e0a892aa71f6b5.png" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/5cce81a18b11621c.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png" alt=""></p>
-<hr>
+<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。</p>
 
       
 
@@ -230,7 +199,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
         		</li>
       		
 		</ul>
@@ -242,7 +219,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
+        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -297,7 +274,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/29/图床测试/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -311,18 +288,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/29/公式专辑/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          公式专辑
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Feedforward semantic segmentation with zoom-out features</div>
+    <a href="/2017/04/14/网易2017春招笔试编程题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">网易2017春招笔试编程题</div>
       <i class="icon-circle-right"></i>
     </a>
   
