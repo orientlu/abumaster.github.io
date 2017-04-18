@@ -15,7 +15,9 @@
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png">
-<meta property="og:updated_time" content="2017-04-16T13:56:48.682Z">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/25758666-file_1492397377051_a8d3.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/99567344-file_1492411678446_ecd2.png">
+<meta property="og:updated_time" content="2017-04-17T07:21:41.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="拉普拉斯重建和细化用于图像语义分割">
 <meta name="twitter:description" content="来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。">
@@ -185,7 +187,12 @@
 <p>来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  </p>
 </blockquote>
 <a id="more"></a>
-<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。</p>
+<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。为了保留更多的空间信息，论文避免了将高维特征图折叠成低分辨率的类别预测。取而代之的是利用高分辨率基函数的线性组合对高分辨率的分类得分图的空间模式进行编码，这些函数的权重被高维特征图预测得到。实现：将高分辨率的特征图分成不重叠的图像块，大小取决于网络中池化层的个数次幂，通过一个卷积网络预测从高纬度低分辨率到特征图像块的映射。这些特征图像块和类别系数与一个基本函数集合相乘，再与一个基本的去卷积层相加，得到期望的全分辨率类别图。<br><strong>连接样条插值</strong><br>更高阶的样条插值替代上采样。<br><strong>学习基本函数</strong><br><strong>基本结构</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/25758666-file_1492397377051_a8d3.png" alt=""><br>首先，网络从上到下，分辨率越来越小。在每一次缩小时，特征图重建，再进行组合，产生对应倍数特征图的分割得分图，上图的水平方向，通过组合不同倍数的得分图。<br>一种从高分辨率中减去低频成分的方法，边界masking，孤立出边界成分。<br>金字塔的应用：<br>下层分割图得分上采样作为上一层采样的参考，用于得分图和像素对的产生。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/99567344-file_1492411678446_ecd2.png" alt=""><br><strong>Conclusion</strong>  </p>
+<ul>
+<li>以特定类重建为基础作为上采样；  </li>
+<li>合成低分辨率的语义丰富的特征图和拥有更多空间特性的高分辨率特征图，多层拉普拉斯金字塔重建结构。  </li>
+<li>最后可以加上CRF进行后期处理，优化结果。</li>
+</ul>
 
       
 
@@ -199,11 +206,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -287,6 +294,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          高效分片训练结构化模型用于图像语义分割
+        
+      </div>
+    </a>
   
   
     <a href="/2017/04/14/网易2017春招笔试编程题/" id="article-nav-older" class="article-nav-link-wrap">
@@ -411,6 +427,10 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">C++</a>
               </li>
              
@@ -419,7 +439,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">技巧</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -428,10 +448,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">caffe</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">技巧</a>
               </li>
              
               <li class="article-tag-list-item">

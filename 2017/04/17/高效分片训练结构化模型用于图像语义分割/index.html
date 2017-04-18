@@ -6,30 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>图床测试 | 张国丰</title>
+  <title>高效分片训练结构化模型用于图像语义分割 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
+  <meta name="description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图床测试">
-<meta property="og:url" content="http://abumaster.com/2017/03/29/图床测试/index.html">
+<meta property="og:title" content="高效分片训练结构化模型用于图像语义分割">
+<meta property="og:url" content="http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta property="og:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8354836d59a379b8.jpg">
-<meta property="og:image" content="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/2f18c12c56375cef.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/83e0a892aa71f6b5.png">
-<meta property="og:image" content="http://i2.muimg.com/567571/5cce81a18b11621c.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png">
-<meta property="og:updated_time" content="2017-03-29T06:54:39.333Z">
+<meta property="og:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png">
+<meta property="og:updated_time" content="2017-04-18T02:13:45.979Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图床测试">
-<meta name="twitter:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta name="twitter:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
+<meta name="twitter:title" content="高效分片训练结构化模型用于图像语义分割">
+<meta name="twitter:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -171,20 +163,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-图床测试" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-高效分片训练结构化模型用于图像语义分割" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      图床测试
+      高效分片训练结构化模型用于图像语义分割
     </h1>
   
 
         
-        <a href="/2017/03/29/图床测试/" class="archive-article-date">
-  	<time datetime="2017-03-29T06:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
+        <a href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" class="archive-article-date">
+  	<time datetime="2017-04-17T08:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-17</time>
 </a>
         
       </header>
@@ -192,31 +184,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p><strong>图床</strong>一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是<strong><a href="http://jiantuku.com/">极简图床</a></strong>。<br>优点：不必把图片上传到博客服务器，节省服务器的空间。<br>缺点：不能上传大于5M的图片，稳定性待测。  </p>
+<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic<br>Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
 </blockquote>
 <a id="more"></a>
-<p>来一波从<a href="https://alpha.wallhaven.cc/">wallhaven</a>下载的图片<br><img src="http://i2.muimg.com/567571/45e54958a190cbaa.jpg" alt=""></p>
+<p><strong>特点：</strong>  </p>
+<ol>
+<li>制定了基于CNN的在CRFs上总体分段潜在函数模型用于衡量语义图像片之间的关系；  </li>
+<li>分段训练CRFs，避免重复推导，提高速度；  </li>
+<li>多尺度图像输入，用于探索图像背景和前景上下文信息；  </li>
+</ol>
 <hr>
-<p><img src="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8354836d59a379b8.jpg" alt=""></p>
-<hr>
-<p><img src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/2f18c12c56375cef.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/83e0a892aa71f6b5.png" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/5cce81a18b11621c.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png" alt=""></p>
-<hr>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png" alt=""><br>Featmap-Net是一个卷积网络，用于输出特征图，低分辨率的特征图；<br>创建CRF图，首先对于卷积网络生成的特征图，创建一些边界框，在边界框内被认为空间近似，顶点才会全连接，不同空间会创建不同的边界框。  </p>
+<p><strong>上下文深度CRFs</strong><br>分为一元组的图的顶点和二元组的图的边，分别对应一个能量函数，通过一元和二元网络对应生成了类别的预测。<br><strong>利用背景上下文</strong><br>产生特征图的网络：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png" alt=""></p>
+<p>首先将输入图像缩放为三个不同的大小，放入网络，共享权重。图像缩放大小为1.2,0.8,0.4，再经过一层独立的卷积产生多尺度特征图，然后经过滑动金字塔池化产生了组合的特征图，金字塔池化如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png" alt=""><br>使用双线性上采样和简单的边界优化对粗糙的预测结果进行后期处理，可能又更复杂的优化方式，比如：训练反卷积网络，训练复杂的从粗糙到精细的网络，利用中间特征图到高分辨率的预测。</p>
 
       
 
@@ -230,7 +210,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
         		</li>
       		
 		</ul>
@@ -242,7 +230,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
+        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -297,7 +285,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/29/图床测试/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -311,18 +299,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/29/公式专辑/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/04/18/Caffe的C-接口调用/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          公式专辑
+          Caffe的C++接口调用
         
       </div>
     </a>
   
   
-    <a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Feedforward semantic segmentation with zoom-out features</div>
+    <a href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">拉普拉斯重建和细化用于图像语义分割</div>
       <i class="icon-circle-right"></i>
     </a>
   

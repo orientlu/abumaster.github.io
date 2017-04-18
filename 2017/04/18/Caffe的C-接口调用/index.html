@@ -6,30 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>图床测试 | 张国丰</title>
+  <title>Caffe的C++接口调用 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
+  <meta name="description" content="Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图床测试">
-<meta property="og:url" content="http://abumaster.com/2017/03/29/图床测试/index.html">
+<meta property="og:title" content="Caffe的C++接口调用">
+<meta property="og:url" content="http://abumaster.com/2017/04/18/Caffe的C-接口调用/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta property="og:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8354836d59a379b8.jpg">
-<meta property="og:image" content="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/2f18c12c56375cef.jpg">
-<meta property="og:image" content="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg">
-<meta property="og:image" content="http://i4.buimg.com/567571/83e0a892aa71f6b5.png">
-<meta property="og:image" content="http://i2.muimg.com/567571/5cce81a18b11621c.jpg">
-<meta property="og:image" content="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png">
-<meta property="og:updated_time" content="2017-03-29T06:54:39.333Z">
+<meta property="og:description" content="Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。">
+<meta property="og:updated_time" content="2017-04-18T13:20:27.571Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图床测试">
-<meta name="twitter:description" content="图床一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是极简图床。优点：不必把图片上传到博客服务器，节省服务器的空间。缺点：不能上传大于5M的图片，稳定性待测。">
-<meta name="twitter:image" content="http://i2.muimg.com/567571/45e54958a190cbaa.jpg">
+<meta name="twitter:title" content="Caffe的C++接口调用">
+<meta name="twitter:description" content="Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。">
   
   
     <link rel="icon" href="/favi.ico">
@@ -171,52 +159,32 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-图床测试" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Caffe的C-接口调用" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      图床测试
+      Caffe的C++接口调用
     </h1>
   
 
         
-        <a href="/2017/03/29/图床测试/" class="archive-article-date">
-  	<time datetime="2017-03-29T06:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
+        <a href="/2017/04/18/Caffe的C-接口调用/" class="archive-article-date">
+  	<time datetime="2017-04-18T12:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p><strong>图床</strong>一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是<strong><a href="http://jiantuku.com/">极简图床</a></strong>。<br>优点：不必把图片上传到博客服务器，节省服务器的空间。<br>缺点：不能上传大于5M的图片，稳定性待测。  </p>
-</blockquote>
-<a id="more"></a>
-<p>来一波从<a href="https://alpha.wallhaven.cc/">wallhaven</a>下载的图片<br><img src="http://i2.muimg.com/567571/45e54958a190cbaa.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/792c48bc4d5f4151.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/914a377ed5b3d41f.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8354836d59a379b8.jpg" alt=""></p>
-<hr>
-<p><img src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-497846.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/2f18c12c56375cef.jpg" alt=""></p>
-<hr>
-<p><img src="http://i1.piimg.com/567571/72f7171b31ced0f7.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/174cfe3e37e396fc.jpg" alt=""></p>
-<hr>
-<p><img src="http://i4.buimg.com/567571/83e0a892aa71f6b5.png" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/5cce81a18b11621c.jpg" alt=""></p>
-<hr>
-<p><img src="http://i2.muimg.com/567571/8e60e0d9e66b9b6d.png" alt=""></p>
-<hr>
+        <p>Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。<br><a id="more"></a></p>
+<h2 id="1-配置第三方库"><a href="#1-配置第三方库" class="headerlink" title="1.配置第三方库"></a>1.配置第三方库</h2><p>Windows上运行的是官方的 Caffe-Windows 项目，第三方库是从别人打包好的下载，主要分为几大类：boost、gflags、glog、hdf5、LevelDB、lmdb、OpenBLAS、OpenCV、protobuf。配置内容包括（调试器最好配置Release版本的x64平台）：<br><strong>头文件</strong><br>新建一个工程，打开项目-&gt;工程属性页，C/C++ -&gt; 常规 -&gt; 附加包含目录，添加caffe相关的头文件,caffe及第三方依赖库，我的如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">D:\caffeDev\caffe-master\include;D:\caffeDev\NugetPackages\boost.1.59.0.0\lib\native\include;D:\caffeDev\NugetPackages\OpenCV.2.4.10\build\native\include;D:\caffeDev\NugetPackages\gflags.2.1.2.1\build\native\include;D:\caffeDev\NugetPackages\glog.0.3.3.0\build\native\include;D:\caffeDev\NugetPackages\hdf5-v120-complete.1.8.15.2\lib\native\include;D:\caffeDev\NugetPackages\lmdb-v120-clean.0.9.14.0\lib\native\include;D:\caffeDev\NugetPackages\protobuf-v120.2.6.1\build\native\include;D:\caffeDev\NugetPackages\OpenBLAS.0.2.14.1\lib\native\include;</div></pre></td></tr></table></figure></p>
+<p><strong>附加库目录</strong><br>链接器 -&gt; 常规 -&gt; 附加库目录 ，添加内容为lib库所在的目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;AdditionalLibraryDirectories&gt;D:\caffeDev\NugetPackages\glog.0.3.3.0\build\native\lib\x64\v120\Release\dynamic;D:\caffeDev\caffe-master\Build\x64\Release;D:\caffeDev\NugetPackages\OpenCV.2.4.10\build\native\lib\x64\v120\Release;D:\caffeDev\NugetPackages\boost_date_time-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_filesystem-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_system-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\protobuf-v120.2.6.1\build\native\lib\x64\v120\Release;D:\caffeDev\NugetPackages\boost_thread-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_chrono-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\hdf5-v120-complete.1.8.15.2\lib\native\lib\x64;D:\caffeDev\NugetPackages\gflags.2.1.2.1\build\native\x64\v120\dynamic\Lib;D:\caffeDev\NugetPackages\OpenBLAS.0.2.14.1\lib\native\lib\x64;%(AdditionalLibraryDirectories)&lt;/AdditionalLibraryDirectories&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>依赖项</strong><br>输入 -&gt; 附加依赖项，中填写需要的链接库，为上述目录中的链接库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;AdditionalDependencies&gt;</div><div class="line">opencv_calib3d2410.lib;</div><div class="line">opencv_contrib2410.lib;</div><div class="line">opencv_core2410.lib;</div><div class="line">opencv_features2d2410.lib;</div><div class="line">opencv_flann2410.lib;</div><div class="line">opencv_gpu2410.lib;</div><div class="line">opencv_highgui2410.lib;</div><div class="line">opencv_imgproc2410.lib;</div><div class="line">opencv_legacy2410.lib;</div><div class="line">opencv_ml2410.lib;</div><div class="line">opencv_nonfree2410.lib;</div><div class="line">opencv_objdetect2410.lib;</div><div class="line">opencv_ocl2410.lib;</div><div class="line">opencv_photo2410.lib;</div><div class="line">opencv_stitching2410.lib;</div><div class="line">opencv_superres2410.lib;</div><div class="line">opencv_ts2410.lib;</div><div class="line">opencv_video2410.lib;</div><div class="line">opencv_videostab2410.lib;</div><div class="line">libglog.lib;</div><div class="line">caffe.lib;</div><div class="line">libprotobuf.lib;</div><div class="line">libcaffe.lib;</div><div class="line">gflags.lib;</div><div class="line">gflags_nothreads.lib;</div><div class="line">hdf5.lib;</div><div class="line">hdf5_cpp.lib;</div><div class="line">hdf5_f90cstub.lib;</div><div class="line">hdf5_fortran.lib;</div><div class="line">hdf5_hl.lib;</div><div class="line">hdf5_hl_cpp.lib;</div><div class="line">hdf5_hl_f90cstub.lib;</div><div class="line">hdf5_hl_fortran.lib;</div><div class="line">hdf5_tools.lib;</div><div class="line">szip.lib;</div><div class="line">zlib.lib;</div><div class="line">libopenblas.dll.a;</div><div class="line">%(AdditionalDependencies)</div><div class="line">&lt;/AdditionalDependencies&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="2-运行时问题"><a href="#2-运行时问题" class="headerlink" title="2.运行时问题"></a>2.运行时问题</h2><p>实际新建一个项目（从caffe工程中拷的源码，配置好一切环境），可以编译成功，但是运行时出现问题：<br><strong>F0519 14:54:12.494139 14504 layer_factory.hpp:77] Check failed: registry.count(type) == 1 (0 vs. 1) Unknown layer type: Input (known types: Input )</strong><br>一者说，只有在caffe解决方案中新建项目，才可以正常运行<a href="https://github.com/Microsoft/caffe/issues/45">问题</a>。还有利用别人改进的caffe来减少外部的依赖关系，<a href="https://github.com/dtmoodie/caffe">dtmoodie</a>。<br>另外一种，<a href="http://blog.csdn.net/fangjin_kl/article/details/50936952#0-tsina-1-63793-397232819ff9a47a7b7e80a40613cfe1">解决方法</a>主要解决方案是将caffe中的各层都放进一个头文件中包含进工程中，<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"caffe/common.hpp"</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"caffe/layers/input_layer.hpp"</span></span></div><div class="line"><span class="function"><span class="keyword">extern</span> <span class="title">INSTANTIATE_CLASS</span><span class="params">(InputLayer)</span></span>;<span class="comment">//添加层信息</span></div><div class="line">REGISTER_LAYER_CLASS(Input);<span class="comment">//注册层信息</span></div></pre></td></tr></table></figure></p>
+<p>可以完美运行了。  </p>
 
       
 
@@ -230,7 +198,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
         		</li>
       		
 		</ul>
@@ -242,7 +214,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
+        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
         		</li>
       		
 		</ul>
@@ -297,7 +269,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/03/29/图床测试/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/18/Caffe的C-接口调用/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -311,18 +283,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/29/公式专辑/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          公式专辑
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Feedforward semantic segmentation with zoom-out features</div>
+    <a href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">高效分片训练结构化模型用于图像语义分割</div>
       <i class="icon-circle-right"></i>
     </a>
   

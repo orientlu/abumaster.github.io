@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-16T13:56:48.682Z</updated>
+  <updated>2017-04-18T13:20:27.571Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,17 +16,94 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Caffe的C++接口调用</title>
+    <link href="http://abumaster.com/2017/04/18/Caffe%E7%9A%84C-%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8/"/>
+    <id>http://abumaster.com/2017/04/18/Caffe的C-接口调用/</id>
+    <published>2017-04-18T12:25:06.000Z</published>
+    <updated>2017-04-18T13:20:27.571Z</updated>
+    
+    <content type="html"><![CDATA[<p>Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。<br><a id="more"></a></p>
+<h2 id="1-配置第三方库"><a href="#1-配置第三方库" class="headerlink" title="1.配置第三方库"></a>1.配置第三方库</h2><p>Windows上运行的是官方的 Caffe-Windows 项目，第三方库是从别人打包好的下载，主要分为几大类：boost、gflags、glog、hdf5、LevelDB、lmdb、OpenBLAS、OpenCV、protobuf。配置内容包括（调试器最好配置Release版本的x64平台）：<br><strong>头文件</strong><br>新建一个工程，打开项目-&gt;工程属性页，C/C++ -&gt; 常规 -&gt; 附加包含目录，添加caffe相关的头文件,caffe及第三方依赖库，我的如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">D:\caffeDev\caffe-master\include;D:\caffeDev\NugetPackages\boost.1.59.0.0\lib\native\include;D:\caffeDev\NugetPackages\OpenCV.2.4.10\build\native\include;D:\caffeDev\NugetPackages\gflags.2.1.2.1\build\native\include;D:\caffeDev\NugetPackages\glog.0.3.3.0\build\native\include;D:\caffeDev\NugetPackages\hdf5-v120-complete.1.8.15.2\lib\native\include;D:\caffeDev\NugetPackages\lmdb-v120-clean.0.9.14.0\lib\native\include;D:\caffeDev\NugetPackages\protobuf-v120.2.6.1\build\native\include;D:\caffeDev\NugetPackages\OpenBLAS.0.2.14.1\lib\native\include;</div></pre></td></tr></table></figure></p>
+<p><strong>附加库目录</strong><br>链接器 -&gt; 常规 -&gt; 附加库目录 ，添加内容为lib库所在的目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;AdditionalLibraryDirectories&gt;D:\caffeDev\NugetPackages\glog.0.3.3.0\build\native\lib\x64\v120\Release\dynamic;D:\caffeDev\caffe-master\Build\x64\Release;D:\caffeDev\NugetPackages\OpenCV.2.4.10\build\native\lib\x64\v120\Release;D:\caffeDev\NugetPackages\boost_date_time-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_filesystem-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_system-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\protobuf-v120.2.6.1\build\native\lib\x64\v120\Release;D:\caffeDev\NugetPackages\boost_thread-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\boost_chrono-vc120.1.59.0.0\lib\native\address-model-64\lib;D:\caffeDev\NugetPackages\hdf5-v120-complete.1.8.15.2\lib\native\lib\x64;D:\caffeDev\NugetPackages\gflags.2.1.2.1\build\native\x64\v120\dynamic\Lib;D:\caffeDev\NugetPackages\OpenBLAS.0.2.14.1\lib\native\lib\x64;%(AdditionalLibraryDirectories)&lt;/AdditionalLibraryDirectories&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>依赖项</strong><br>输入 -&gt; 附加依赖项，中填写需要的链接库，为上述目录中的链接库：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;AdditionalDependencies&gt;</div><div class="line">opencv_calib3d2410.lib;</div><div class="line">opencv_contrib2410.lib;</div><div class="line">opencv_core2410.lib;</div><div class="line">opencv_features2d2410.lib;</div><div class="line">opencv_flann2410.lib;</div><div class="line">opencv_gpu2410.lib;</div><div class="line">opencv_highgui2410.lib;</div><div class="line">opencv_imgproc2410.lib;</div><div class="line">opencv_legacy2410.lib;</div><div class="line">opencv_ml2410.lib;</div><div class="line">opencv_nonfree2410.lib;</div><div class="line">opencv_objdetect2410.lib;</div><div class="line">opencv_ocl2410.lib;</div><div class="line">opencv_photo2410.lib;</div><div class="line">opencv_stitching2410.lib;</div><div class="line">opencv_superres2410.lib;</div><div class="line">opencv_ts2410.lib;</div><div class="line">opencv_video2410.lib;</div><div class="line">opencv_videostab2410.lib;</div><div class="line">libglog.lib;</div><div class="line">caffe.lib;</div><div class="line">libprotobuf.lib;</div><div class="line">libcaffe.lib;</div><div class="line">gflags.lib;</div><div class="line">gflags_nothreads.lib;</div><div class="line">hdf5.lib;</div><div class="line">hdf5_cpp.lib;</div><div class="line">hdf5_f90cstub.lib;</div><div class="line">hdf5_fortran.lib;</div><div class="line">hdf5_hl.lib;</div><div class="line">hdf5_hl_cpp.lib;</div><div class="line">hdf5_hl_f90cstub.lib;</div><div class="line">hdf5_hl_fortran.lib;</div><div class="line">hdf5_tools.lib;</div><div class="line">szip.lib;</div><div class="line">zlib.lib;</div><div class="line">libopenblas.dll.a;</div><div class="line">%(AdditionalDependencies)</div><div class="line">&lt;/AdditionalDependencies&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="2-运行时问题"><a href="#2-运行时问题" class="headerlink" title="2.运行时问题"></a>2.运行时问题</h2><p>实际新建一个项目（从caffe工程中拷的源码，配置好一切环境），可以编译成功，但是运行时出现问题：<br><strong>F0519 14:54:12.494139 14504 layer_factory.hpp:77] Check failed: registry.count(type) == 1 (0 vs. 1) Unknown layer type: Input (known types: Input )</strong><br>一者说，只有在caffe解决方案中新建项目，才可以正常运行<a href="https://github.com/Microsoft/caffe/issues/45">问题</a>。还有利用别人改进的caffe来减少外部的依赖关系，<a href="https://github.com/dtmoodie/caffe">dtmoodie</a>。<br>另外一种，<a href="http://blog.csdn.net/fangjin_kl/article/details/50936952#0-tsina-1-63793-397232819ff9a47a7b7e80a40613cfe1">解决方法</a>主要解决方案是将caffe中的各层都放进一个头文件中包含进工程中，<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"caffe/common.hpp"</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"caffe/layers/input_layer.hpp"</span></span></div><div class="line"><span class="function"><span class="keyword">extern</span> <span class="title">INSTANTIATE_CLASS</span><span class="params">(InputLayer)</span></span>;<span class="comment">//添加层信息</span></div><div class="line">REGISTER_LAYER_CLASS(Input);<span class="comment">//注册层信息</span></div></pre></td></tr></table></figure></p>
+<p>可以完美运行了。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效分片训练结构化模型用于图像语义分割</title>
+    <link href="http://abumaster.com/2017/04/17/%E9%AB%98%E6%95%88%E5%88%86%E7%89%87%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%84%E5%8C%96%E6%A8%A1%E5%9E%8B%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
+    <id>http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/</id>
+    <published>2017-04-17T08:58:15.000Z</published>
+    <updated>2017-04-18T02:13:45.979Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic<br>Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
+</blockquote>
+<a id="more"></a>
+<p><strong>特点：</strong>  </p>
+<ol>
+<li>制定了基于CNN的在CRFs上总体分段潜在函数模型用于衡量语义图像片之间的关系；  </li>
+<li>分段训练CRFs，避免重复推导，提高速度；  </li>
+<li>多尺度图像输入，用于探索图像背景和前景上下文信息；  </li>
+</ol>
+<hr>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png" alt=""><br>Featmap-Net是一个卷积网络，用于输出特征图，低分辨率的特征图；<br>创建CRF图，首先对于卷积网络生成的特征图，创建一些边界框，在边界框内被认为空间近似，顶点才会全连接，不同空间会创建不同的边界框。  </p>
+<p><strong>上下文深度CRFs</strong><br>分为一元组的图的顶点和二元组的图的边，分别对应一个能量函数，通过一元和二元网络对应生成了类别的预测。<br><strong>利用背景上下文</strong><br>产生特征图的网络：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png" alt=""></p>
+<p>首先将输入图像缩放为三个不同的大小，放入网络，共享权重。图像缩放大小为1.2,0.8,0.4，再经过一层独立的卷积产生多尺度特征图，然后经过滑动金字塔池化产生了组合的特征图，金字塔池化如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png" alt=""><br>使用双线性上采样和简单的边界优化对粗糙的预测结果进行后期处理，可能又更复杂的优化方式，比如：训练反卷积网络，训练复杂的从粗糙到精细的网络，利用中间特征图到高分辨率的预测。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic&lt;br&gt;Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
+    
+  </entry>
+  
+  <entry>
     <title>拉普拉斯重建和细化用于图像语义分割</title>
     <link href="http://abumaster.com/2017/04/16/%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E9%87%8D%E5%BB%BA%E5%92%8C%E7%BB%86%E5%8C%96%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
     <id>http://abumaster.com/2017/04/16/拉普拉斯重建和细化用于图像语义分割/</id>
     <published>2017-04-16T08:05:56.000Z</published>
-    <updated>2017-04-16T13:56:48.682Z</updated>
+    <updated>2017-04-17T07:21:41.177Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  </p>
 </blockquote>
 <a id="more"></a>
-<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。</p>
+<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。为了保留更多的空间信息，论文避免了将高维特征图折叠成低分辨率的类别预测。取而代之的是利用高分辨率基函数的线性组合对高分辨率的分类得分图的空间模式进行编码，这些函数的权重被高维特征图预测得到。实现：将高分辨率的特征图分成不重叠的图像块，大小取决于网络中池化层的个数次幂，通过一个卷积网络预测从高纬度低分辨率到特征图像块的映射。这些特征图像块和类别系数与一个基本函数集合相乘，再与一个基本的去卷积层相加，得到期望的全分辨率类别图。<br><strong>连接样条插值</strong><br>更高阶的样条插值替代上采样。<br><strong>学习基本函数</strong><br><strong>基本结构</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/25758666-file_1492397377051_a8d3.png" alt=""><br>首先，网络从上到下，分辨率越来越小。在每一次缩小时，特征图重建，再进行组合，产生对应倍数特征图的分割得分图，上图的水平方向，通过组合不同倍数的得分图。<br>一种从高分辨率中减去低频成分的方法，边界masking，孤立出边界成分。<br>金字塔的应用：<br>下层分割图得分上采样作为上一层采样的参考，用于得分图和像素对的产生。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/99567344-file_1492411678446_ecd2.png" alt=""><br><strong>Conclusion</strong>  </p>
+<ul>
+<li>以特定类重建为基础作为上采样；  </li>
+<li>合成低分辨率的语义丰富的特征图和拥有更多空间特性的高分辨率特征图，多层拉普拉斯金字塔重建结构。  </li>
+<li>最后可以加上CRF进行后期处理，优化结果。</li>
+</ul>
 ]]></content>
     
     <summary type="html">
@@ -40,9 +117,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -300,9 +377,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -372,9 +449,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -547,9 +624,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -677,9 +754,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -739,9 +816,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -793,99 +870,6 @@
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="caffe" scheme="http://abumaster.com/tags/caffe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Conditional Random Fields as Recurrent Neural Networks</title>
-    <link href="http://abumaster.com/2017/03/21/CRFs-as-RNN/"/>
-    <id>http://abumaster.com/2017/03/21/CRFs-as-RNN/</id>
-    <published>2017-03-21T08:00:18.000Z</published>
-    <updated>2017-03-21T12:40:34.307Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
-</blockquote>
-<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
-<ol>
-<li>加入脚本定义，现在用到的是 MathJax 引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>  </p>
-<ol>
-<li>使用Tex公式 $$行间公式；\\行内公式，参考<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">MathJax basic tutorial and quick reference</a>  </li>
-<li>示例<br>$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$  </li>
-</ol>
-<hr>
-<p><strong>引言</strong><br>低层次计算机视觉问题，为图像中的像素分配标签。特征表示在个体像素分类中占有重要的作用。同样要考虑到图像的边界和特征、空间关系，以此来获得较为准确地分割结果。<br>设计出一个<strong>强大的特征表示器是像素级别标记的关键挑战</strong>。传统的方法不再讨论，现在深度学习的方法利用大尺度的卷积网络，在高层次视觉上取得了非常大的成果。这激励着利用卷积网络去解决低层次的问题。主要利用卷积网络提取特征替代以前的手工标注特征。<br>将用于高层视觉的分类网络转换成低层次视觉的任务依然存在着一些问题提出了几个问题：  </p>
-<ul>
-<li>传统的卷积网络有大接受域的卷积过滤器，会产生比较粗糙的输出图。最大池化层的出现，过滤掉一些特征，导致了输出的分割图不够精细。  </li>
-<li>缺少了平滑度约束，没有考虑到相似的像素，空间或者外形相似的约束，导致了输出图的边界不明确，或者出现杂散区域。<br>尤其是马尔科夫随机场（MRFs）和它的变体条件随机场（CRFs）已经成为应用到计算机视觉领域中一个成功的模型。<strong>用于像素标记的CRFs推理主要的思想是将语义标签分配问题转换成概率推理问题，包括了相似像素之间一致性并入假设</strong>。CRFs可以微调分割图的细节，优化边界问题，克服了单纯利用CNNs的缺点。<del>用CRFs作为后期的处理，无法发挥出CRF的优势，卷积网络在训练的阶段也无法根据CRF的表现来调整权重</del>。本文将CNN与CRF结合为一个统一的框架，可以共同训练。<br><strong>相关工作</strong><br>许多方法用深度学习来解决图像语义分割问题，可以归为以下两个类别：  </li>
-</ul>
-<ul>
-<li>特征提取和分割分离开的策略。使用CNN提取有意义的图像特征，利用超像素去构造图像的模式。首先从图像中获得超像素，再用特征提取器提取特征。存在着一个致命的缺点，前期如果有误差，后面误差越来越大。与他们的方案不同，此文用典型的图模型CRF可以被作为RNN，指定为深度网络的一部分。结合CNN实现端对端的训练。  </li>
-<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div><br>条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
-
-
-</li>
-</ul>
-<p><strong>参考文献</strong><br>[1] Zheng S, Jayasumana S, Romera-Paredes B, et al. Conditional random fields as recurrent neural networks[C]//Proceedings of the IEEE International Conference on Computer Vision. 2015: 1529-1537.</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks&lt;sup&gt;[1]&lt;/sup&gt; 的阅读笔记。    &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;strong&gt;关键词&lt;/strong&gt;&lt;br&gt;图像语义分割&lt;br&gt;CRF as RNN&lt;br&gt;&lt;strong&gt;摘要&lt;/strong&gt;&lt;br&gt;像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>柔性数组</title>
-    <link href="http://abumaster.com/2017/03/12/%E6%9F%94%E6%80%A7%E6%95%B0%E7%BB%84/"/>
-    <id>http://abumaster.com/2017/03/12/柔性数组/</id>
-    <published>2017-03-12T13:59:48.000Z</published>
-    <updated>2017-03-21T08:45:40.231Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
-<p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
-<h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
-<li>用法举例：<br><br>放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  </li>
-</ul>
-<a id="more"></a>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> package &#123;</div><div class="line">	<span class="keyword">int</span> len;</div><div class="line">	<span class="keyword">char</span> data[<span class="number">0</span>];</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>用途：<br>根据变长数组的特性很容易构造出一些数据结构，缓冲区、数据包等。不会浪费多余的空间，用多少申请多少。<br></li>
-<li>使用:<br>假设用上面的结构来发送1024字节大小的数据包，首先要构造一个数据包：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">char *pMsg = (char *)malloc(sizeof(package)+1024); </div><div class="line">package *pPack = (package*)pMsg;</div><div class="line">pPack-&gt;len = 1024;</div><div class="line">memcpy(pPack-&gt;data, source, 1024);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>强制类型转换，将package类型的指针指向了申请的内存的开始，分为两个部分：前一部分表示字符串的长度，后一部分表示实际的内容。将整个数据包发出去，不会浪费一点额外的空间，在网络中传输节省了流量，提升了速度。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;C-C-中的0长数组&quot;&gt;&lt;a href=&quot;#C-C-中的0长数组&quot; class=&quot;headerlink&quot; title=&quot;C/C++中的0长数组&quot;&gt;&lt;/a&gt;C/C++中的0长数组&lt;/h3&gt;&lt;hr&gt;
-&lt;p&gt;定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。&lt;br&gt;&lt;/p&gt;
-&lt;h2 id=&quot;作用-：放入结构体中，可以存放动态长度的字符串、数组等。&quot;&gt;&lt;a href=&quot;#作用-：放入结构体中，可以存放动态长度的字符串、数组等。&quot; class=&quot;headerlink&quot; title=&quot;作用 ：放入结构体中，可以存放动态长度的字符串、数组等。&quot;&gt;&lt;/a&gt;作用 ：放入结构体中，可以存放动态长度的字符串、数组等。&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;用法举例：&lt;br&gt;&lt;br&gt;放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  &lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="学习" scheme="http://abumaster.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
