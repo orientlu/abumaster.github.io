@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-18T13:20:27.571Z</updated>
+  <updated>2017-04-23T08:31:48.935Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>零散</title>
+    <link href="http://abumaster.com/2017/04/19/%E9%9B%B6%E6%95%A3/"/>
+    <id>http://abumaster.com/2017/04/19/零散/</id>
+    <published>2017-04-19T06:25:45.000Z</published>
+    <updated>2017-04-23T08:31:48.935Z</updated>
+    
+    <content type="html"><![CDATA[<embed src="//music.163.com/style/swf/widget.swf?sid=473440587&type=2&auto=1&width=320&height=66" width="340" height="86"  allowNetworking="all"></embed>
+
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=473440587&auto=0&height=66"></iframe>
+
+<p>图像分类：<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
+<p>物体检测：<br>Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate object detection and semantic segmentation[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2014: 580-587.<br>Erhan D, Szegedy C, Toshev A, et al. Scalable object detection using deep neural networks[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014: 2147-2154.<br>Ren S, He K, Girshick R, et al. Faster r-cnn: Towards real-time object detection with region proposal networks[C]//Advances in neural information processing systems. 2015: 91-99.<br>He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 770-778.  </p>
+<p><strong>CNN用于图像分割</strong><br>Schulz H, Behnke S. Learning Object-Class Segmentation with Convolutional Neural Networks[C]//ESANN. 2012.<br>Farabet C, Couprie C, Najman L, et al. Scene parsing with multiscale feature learning, purity trees, and optimal covers[J]. arXiv preprint arXiv:1202.2160, 2012.<br>Farabet C, Couprie C, Najman L, et al. Learning hierarchical features for scene labeling[J]. IEEE transactions on pattern analysis and machine intelligence, 2013, 35(8): 1915-1929.<br>Dai J, He K, Sun J. Convolutional feature masking for joint object and stuff segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3992-4000.</p>
+<p>Long J, Shelhamer E, Darrell T. Fully convolutional networks for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3431-3440.  </p>
+<p>刘丹,刘学军,王美珍. 一种多尺度CNN的图像语义分割算法[J]. 遥感信息,2017,(01):57-64.<br>蒋应锋,张桦,薛彦兵,周冕,徐光平,高赞. 一种新的多尺度深度学习图像语义理解方法研究[J]. 光电子·激光,2016,(02):224-230.  </p>
+<p>Mostajabi M, Yadollahpour P, Shakhnarovich G. Feedforward semantic segmentation with zoom-out features[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3376-3385.<br>Lin G, Shen C, van den Hengel A, et al. Efficient piecewise training of deep structured models for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 3194-3203.  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;embed src=&quot;//music.163.com/style/swf/widget.swf?sid=473440587&amp;type=2&amp;auto=1&amp;width=320&amp;height=66&quot; width=&quot;340&quot; height=&quot;86&quot;  allowNetworking=&quot;
+    
+    </summary>
+    
+      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
+    
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+  </entry>
   
   <entry>
     <title>Caffe的C++接口调用</title>
@@ -39,9 +71,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -79,9 +111,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -117,9 +149,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -377,9 +409,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -449,9 +481,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -624,9 +656,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -754,9 +786,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -816,60 +848,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
-  </entry>
-  
-  <entry>
-    <title>卷积网络应该注意的问题</title>
-    <link href="http://abumaster.com/2017/03/24/%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E5%BA%94%E8%AF%A5%E6%B3%A8%E6%84%8F%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://abumaster.com/2017/03/24/卷积网络应该注意的问题/</id>
-    <published>2017-03-24T06:28:18.000Z</published>
-    <updated>2017-03-25T07:05:46.835Z</updated>
-    
-    <content type="html"><![CDATA[<p>卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。<br><strong>卷积</strong><br>卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：<br><a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;conv1&quot;</div><div class="line">  type: &quot;Convolution&quot;</div><div class="line">  bottom: &quot;data&quot; #上层是数据层</div><div class="line">  top: &quot;conv1&quot;</div><div class="line">  param &#123; #权重学习参数</div><div class="line">    lr_mult: 1 #权重学习率 需要乘以基础学习率base\_lr</div><div class="line">    decay_mult: 1</div><div class="line">  &#125;</div><div class="line">  param &#123; #偏置学习参数</div><div class="line">    lr_mult: 2</div><div class="line">    decay_mult: 0</div><div class="line">  &#125;</div><div class="line">  convolution_param &#123; #卷积参数</div><div class="line">    num_output: 96 #卷积操作后的输出特征图</div><div class="line">    kernel_size: 11 #卷积核大小</div><div class="line">    stride: 4 #步长 #可能也有pad为扩充边缘 </div><div class="line">    weight_filler &#123; #权值初始化</div><div class="line">      type: &quot;gaussian&quot; #类型为weight-filter 或xavier算法等，默认constant，全部0</div><div class="line">      std: 0.01</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123; #偏置的初始化</div><div class="line">      type: &quot;constant&quot;</div><div class="line">      value: 0</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>输入：<code>n*c0*w0*h0</code><br>输出：<code>n*c1*w1*h2</code><br>c1对应num_output，输出对应的大小计算:<br><code>w1 = (w0 + 2*pad - kernersize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code><br>在 <strong>caffe</strong> 源码中的计算是将图像和卷积核通过 im2col 转换成矩阵，再对两矩阵内积。 </p>
-<p><strong>池化</strong><br>池化也称下采样，为了减少运算和数据维度的一种方式，被分为：  </p>
-<ul>
-<li>最大池化（Max Pooling），取最大值；  </li>
-<li>均值池化（Mean Pooling），取均值；  </li>
-<li>高斯池化。<br><strong>caffe</strong> 中的配置代码：  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;pool1&quot;</div><div class="line">  type: &quot;Pooling&quot;</div><div class="line">  bottom: &quot;norm1&quot;</div><div class="line">  top: &quot;pool1&quot;</div><div class="line">  pooling_param &#123; #池化参数</div><div class="line">    pool: MAX #池化类型</div><div class="line">    kernel_size: 3 #池化核大小</div><div class="line">    stride: 2 #步长，重叠</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>池化的计算公式与卷积操作类似：<br>输入：<code>n*c0*w0*h0</code><br>输出：<code>n*c1*w1*h2</code><br>c1对应num_output，输出对应的大小计算:<br><code>w1 = (w0 + 2*pad - kernersize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code>  </p>
-<p><strong>LRN层</strong><br>LRN全称为Local Response Normalization，即局部响应归一化层，没什么用，有一些网络中加入了这一层，对局部区域进行归一化，配置信息和参数说明如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">layer &#123;</div><div class="line">  name: &quot;norm1&quot;</div><div class="line">  type: &quot;LRN&quot;</div><div class="line">  bottom: &quot;conv1&quot;</div><div class="line">  top: &quot;norm1&quot;</div><div class="line">  lrn_param &#123; #参数</div><div class="line">    local_size: 5 #（1）通道间归一化时表示求和的通道数；</div><div class="line">    #（2）通道内归一化时表示求和区间的边长；</div><div class="line">    alpha: 0.0001 #缩放因子</div><div class="line">    beta: 0.75 #指数项</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>激活函数</strong></p>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script><br>激活函数需要具有以下特性：  </p>
-<ul>
-<li>非线性；  </li>
-<li>单调、连续可微分；  </li>
-<li>范围不饱和，避免梯度为0；  </li>
-<li>原点近似线性。<br>常用的激活函数有：<strong>Sigmoid 函数</strong>、<strong>Tanh 函数</strong>、<strong>ReLU 函数</strong>等。<br>如 <strong>AlexNet</strong> 中用到的ReLU激活函数：<br>$$f(x)=max(0,x)$$<br>这种激活函数的特点是：无梯度损耗，收敛速度快，网络稀疏性大，计算量小。缺点是，梯度大的话，导致权重更新以后变大，输出0，使得神经元不再更新。因此要注意学习率的设置。  </li>
-</ul>
-<p><strong>全连接层</strong><br>全连接层又称内积层（Inner-Product），是将特征图像全部展开为一维向量。<br><strong>caffe</strong> 中的文档显示：  </p>
-<ul>
-<li>Input<br><code>n * c_i * h_i * w_i</code>  </li>
-<li>Output<br><code>n * c_o * 1 * 1</code><br>这里引用了<a href="http://www.cnblogs.com/dupuleng/articles/4312149.html">dupuleng</a>的例子。<br>lenet 网络配置文件中的一段：  </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">layers &#123;</div><div class="line">  name: &quot;conv2&quot;</div><div class="line">  type: CONVOLUTION</div><div class="line">  bottom: &quot;pool1&quot;</div><div class="line">  top: &quot;conv2&quot;</div><div class="line">  blobs_lr: 1</div><div class="line">  blobs_lr: 2</div><div class="line">  convolution_param &#123;</div><div class="line">    num_output: 50</div><div class="line">    kernel_size: 5</div><div class="line">    stride: 1</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;xavier&quot;</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">layers &#123;</div><div class="line">  name: &quot;pool2&quot;</div><div class="line">  type: POOLING</div><div class="line">  bottom: &quot;conv2&quot;</div><div class="line">  top: &quot;pool2&quot;</div><div class="line">  pooling_param &#123;</div><div class="line">    pool: MAX</div><div class="line">    kernel_size: 2</div><div class="line">    stride: 2</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">layers &#123;</div><div class="line">  name: &quot;ip1&quot;</div><div class="line">  type: INNER_PRODUCT</div><div class="line">  bottom: &quot;pool2&quot;</div><div class="line">  top: &quot;ip1&quot;</div><div class="line">  blobs_lr: 1</div><div class="line">  blobs_lr: 2</div><div class="line">  inner\_product\_param &#123;</div><div class="line">    num_output: 500</div><div class="line">    weight_filler &#123;</div><div class="line">      type: &quot;xavier&quot;</div><div class="line">    &#125;</div><div class="line">    bias_filler &#123;</div><div class="line">      type: &quot;constant&quot;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>conv2 的输入图像是<code>256*27*27</code>经过了卷积操作，输出<code>50*22*22</code>同样作为了pool2的输入，进行池化，pool2的输出<code>50*11*11</code>，下一层全连接层，输出<code>500*1*1</code>的向量，是如何进行计算的呢？要把所有通道全部展开做卷积，首先要把pool2输出的特征图展开为一维向量，共需要<code>500*50*11*11</code>个参数，进行卷积，输出<code>500*1*1</code>的一维向量。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。&lt;br&gt;&lt;strong&gt;卷积&lt;/strong&gt;&lt;br&gt;卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：&lt;br&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="caffe" scheme="http://abumaster.com/tags/caffe/"/>
     
   </entry>
   
