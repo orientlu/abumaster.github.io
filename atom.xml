@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-04-23T08:31:48.935Z</updated>
+  <updated>2017-04-25T11:44:08.513Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,17 +16,44 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>尺度感知模型</title>
+    <link href="http://abumaster.com/2017/04/25/%E5%B0%BA%E5%BA%A6%E6%84%9F%E7%9F%A5%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://abumaster.com/2017/04/25/尺度感知模型/</id>
+    <published>2017-04-25T07:02:25.000Z</published>
+    <updated>2017-04-25T11:44:08.513Z</updated>
+    
+    <content type="html"><![CDATA[<p>来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。<br><a id="more"></a><br><strong>1.注意力模型 Attention model</strong><br>Attention model(AM)最先在计算机视觉中被应用于图片识别的问题，之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法，被称之为Recurrent Attention Model(RAM)，其核心就是一个Encoder-Decoder的过程。图像识别中，经常把图像缩放成固定大小，引起信息的丢失，结合人看物体时，目光会沿着感兴趣的方向移动，甚至聚焦感兴趣的区域，Attention（注意力）就是在网络中加入关注区域的移动、缩放机制、连续部分信息序列化输入。<a href="https://www.zhihu.com/question/36591394">知乎问题回答</a>。可以分为两种模型：  </p>
+<ul>
+<li>hard：Attention 每次移动固定大小区域；  </li>
+<li>soft：Attention 每次是所有区域的一个加权和。<br><strong>注意力</strong>，人看一副图像不是按像素点去看的，往往是一个区域一个区域看的，关注感兴趣区域（Region of Interest），Attention 可以自动寻找感兴趣的区域？强化学习。<br><strong>2.如何利用多尺度信息</strong><br>在 FCNs 场景下，有两种方式利用多尺度信息，如图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/98403353-file_1493107872063_3e36.png" alt="">  </li>
+<li>利用网络中间层信息，由于随着网络层数的增加，图像不断缩小，图像的特征也会不断地丢失，在经典的FCN-8s网络中提出了融合中间层的特征图，优化最后的分割结果；  </li>
+<li>多尺度图像输入，网络共享权重，不同尺度会产生不同大小的特征图，每个尺度的特征图关注点也不同，通过在最后对不同尺度特征图的融合，产生最终的分割结果。<br><strong>3.模型介绍</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/24866344-file_1493107637433_24f2.png" alt="model"><br>模型如何运作？<br>不同尺度图像输入 FCNs 中会生成不同的热力图（得分图），然后，如何融合不同的得分图，论文中提出了一个<em>注意力模型</em>，对于每个尺度特征图输出一个权重图，权重是如何生成的呢，通过学习，对于大物体在褚略的特征图上置为较大的权重。有了权重图，结合特征图，很容易加权融合多个尺度特征图，得到最后的输出。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/73523202-file_1493108587550_a9.png" alt=""><br>每个尺度，对应着一个score map，这里乘以由尺度获得的权重图，得到最终的输出图。权重是由注意力模型产生的score map的所占比重决定的，表示摸个尺度的重要性。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
+    
+  </entry>
+  
+  <entry>
     <title>零散</title>
     <link href="http://abumaster.com/2017/04/19/%E9%9B%B6%E6%95%A3/"/>
     <id>http://abumaster.com/2017/04/19/零散/</id>
     <published>2017-04-19T06:25:45.000Z</published>
-    <updated>2017-04-23T08:31:48.935Z</updated>
+    <updated>2017-04-25T02:22:17.824Z</updated>
     
-    <content type="html"><![CDATA[<embed src="//music.163.com/style/swf/widget.swf?sid=473440587&type=2&auto=1&width=320&height=66" width="340" height="86"  allowNetworking="all"></embed>
-
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=473440587&auto=0&height=66"></iframe>
-
-<p>图像分类：<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
+    <content type="html"><![CDATA[<p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=473440587&auto=0&height=66"></iframe><br><a id="more"></a><br>图像分类：<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
 <p>物体检测：<br>Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate object detection and semantic segmentation[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2014: 580-587.<br>Erhan D, Szegedy C, Toshev A, et al. Scalable object detection using deep neural networks[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014: 2147-2154.<br>Ren S, He K, Girshick R, et al. Faster r-cnn: Towards real-time object detection with region proposal networks[C]//Advances in neural information processing systems. 2015: 91-99.<br>He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 770-778.  </p>
 <p><strong>CNN用于图像分割</strong><br>Schulz H, Behnke S. Learning Object-Class Segmentation with Convolutional Neural Networks[C]//ESANN. 2012.<br>Farabet C, Couprie C, Najman L, et al. Scene parsing with multiscale feature learning, purity trees, and optimal covers[J]. arXiv preprint arXiv:1202.2160, 2012.<br>Farabet C, Couprie C, Najman L, et al. Learning hierarchical features for scene labeling[J]. IEEE transactions on pattern analysis and machine intelligence, 2013, 35(8): 1915-1929.<br>Dai J, He K, Sun J. Convolutional feature masking for joint object and stuff segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3992-4000.</p>
 <p>Long J, Shelhamer E, Darrell T. Fully convolutional networks for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3431-3440.  </p>
@@ -36,7 +63,7 @@
     
     <summary type="html">
     
-      &lt;embed src=&quot;//music.163.com/style/swf/widget.swf?sid=473440587&amp;type=2&amp;auto=1&amp;width=320&amp;height=66&quot; width=&quot;340&quot; height=&quot;86&quot;  allowNetworking=&quot;
+      &lt;p&gt;&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; width=330 height=86 src=&quot;//music.163.com/outchain/player?type=2&amp;id=473440587&amp;auto=0&amp;height=66&quot;&gt;&lt;/iframe&gt;&lt;br&gt;
     
     </summary>
     
@@ -780,68 +807,6 @@
       &lt;blockquote&gt;
 &lt;p&gt;使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  &lt;/p&gt;
 &lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>全卷积网络用于图像语义分割</title>
-    <link href="http://abumaster.com/2017/03/25/%E5%85%A8%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
-    <id>http://abumaster.com/2017/03/25/全卷积网络用于图像语义分割/</id>
-    <published>2017-03-25T07:31:02.000Z</published>
-    <updated>2017-03-26T08:52:35.544Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)<sup>[1]</sup>  </p>
-</blockquote>
-<p>全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。<br><a id="more"></a></p>
-<p><strong>文章解决的问题是如何生成稠密的预测即dense prediction</strong>  </p>
-<ol>
-<li><del>Shift-and-stitch</del><br>假设原图和FCN输出图之间的降采样因子<code>f</code>，对于原图的每个<code>f*f</code>区域，对于<code>0 &lt;= x,y &lt;f</code>处理这 f<sup>2</sup> 个输入，并且交替输出，使得预测在接受域的中心像素。每个像素对应一个中心像素，因此为稠密输出。缺点：感受野没变，但是原图被划分为了<code>f*f</code>大小的图像片作为输入图像，使得网络无法感受更加精细的信息。   </li>
-<li>稀疏过滤器<br>调整下采样过程中的步长，变为1，可以保证下采样不会损失图像的大小。缺点：下采样的功能被减弱，同时保留了更多信息，接受域相对变小，可能损失全局信息，同样为卷积层带来了更多的运算。  </li>
-<li>上采样<br>上采样（Upsampling）也称反卷积（Deconvolution），参数和卷积一样可以在训练中学习。运算也和卷积类似，为逆过程。<br>设输入大小<code>w0*h0</code>，经过卷积后的大小为<code>w1*h1</code>，计算公式如下：<br><em>卷积运算：</em><br><code>w1 = (w0 + 2*pad - kernelsize)/stride + 1</code><br><code>h1 = (h0 + 2*pad - kernelsize)/stride + 1</code><br><em>反卷积运算：</em><br><code>w0 = (w1 - 1)*stride + kernelsize - 2*pad</code><br><code>h0 = (h1 - 1)*stride + kernelsize - 2*pad</code><br>经过上采样后的图像可能会比原图大，需要裁剪为原图像大小，caffe中的crop层，提供了很好的算法。  </li>
-</ol>
-<p><strong>语义分割的框架结构</strong><br>文中提出的框架结构如图所示：<br><img src="/photos/fcn.png" alt="fcn"><br>作者发现32倍率的上采样导致输出图非常粗糙，因此想出了利用上层的一些特征来优化输出图像，就有了FCN-16s和FCN-8s的方案，其主要思想是利用上层的池化层的信息，减少上采样的倍率，保留了更多的特征。 </p>
-<p><strong>具体的实践</strong><br>针对传统网络的全连接层变为卷积层，如VGG-16网络中第一个卷积层是<code>25088*4096</code>，将之解释为<code>512*7*7*4096</code>。产生端对端的训练模型。在论文提供的源码中，FCN-32s的配置文件，第一个卷积层为：  </p>
-<pre><code>layer {
-  name: &quot;conv1_1&quot;
-  type: &quot;Convolution&quot;
-  bottom: &quot;data&quot;
-  top: &quot;conv1_1&quot;
-  param {
-    lr_mult: 1
-    decay_mult: 1
-  }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
-  convolution_param {
-    num_output: 64
-    pad: 100 #填充100
-    kernel_size: 3
-    stride: 1
-  }
-}
-</code></pre><p>填充100的原因为：在VGG-16网络中卷积的参数，kernersize=3，stride=1，pad=1，所以卷积层不会改变图像的大小，所以图像只有在池化层改变大小，且变为原大小的一半。为了方便将图像看为一维的，设原图像大小h，经过了5层池化后，图像缩小了32倍，变为<code>h5 = h/32</code>，紧接着全连接层，可以看成是卷积层，卷积参数为：<code>kernelsize=7 pad=0 stride=1</code>，根据卷积计算公式，经过卷积层fc6后的输出图像大小为<code>h6 = (h5-7)/1 + 1 = (h-192)/32</code> 因此，图像小于192的就无法往下计算了，所以要<code>pad=100</code>，解决了网络输入图像固定大小的弊端，全卷积网络可以输入任意大小的图像。  </p>
-<hr>
-<p><strong>例子</strong><br>根据FCN-32s的配置文件<br>如果输入图像大小为<code>3*320*320</code><br>经过了卷积conv1的输出为：<code>64*518*518</code><br>经过了池化pool1的输出为：<code>64*259*259</code><br>经过了卷积conv2的输出为：<code>128*259*259</code><br>经过了池化pool2的输出为：<code>128*130*130</code><br>经过了卷积conv3的输出为：<code>256*130*130</code><br>经过了池化pool3的输出为：<code>256*65*65</code><br>经过了卷积conv4的输出为：<code>512*65*65</code><br>进过了池化pool4的输出为：<code>512*32*32</code><br>经过了卷积conv5的输出为：<code>512*32*32</code><br>经过了池化pool5的输出为：<code>512*16*16</code><br>经过了fc6的卷积后输出为：<code>4096*10*10</code><br>经过了fc7的卷积后输出为：<code>4096*10*10</code><br>经过score_fr的卷积输出：<code>21*10*10</code><br>上采样（反卷积）输出为：<code>21*352*352</code><br>score层裁剪后输出为：<code>21*320*320</code>  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)&lt;sup&gt;[1]&lt;/sup&gt;  &lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。&lt;br&gt;
     
     </summary>
     

@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>零散 | 张国丰</title>
+  <title>尺度感知模型 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="零散">
-<meta property="og:url" content="http://abumaster.com/2017/04/19/零散/index.html">
+  <meta name="description" content="来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="尺度感知模型">
+<meta property="og:url" content="http://abumaster.com/2017/04/25/尺度感知模型/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:updated_time" content="2017-04-25T02:22:17.824Z">
+<meta property="og:description" content="来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/98403353-file_1493107872063_3e36.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/24866344-file_1493107637433_24f2.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/73523202-file_1493108587550_a9.png">
+<meta property="og:updated_time" content="2017-04-25T11:44:08.513Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="零散">
+<meta name="twitter:title" content="尺度感知模型">
+<meta name="twitter:description" content="来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/98403353-file_1493107872063_3e36.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -156,32 +163,33 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-零散" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-尺度感知模型" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      零散
+      尺度感知模型
     </h1>
   
 
         
-        <a href="/2017/04/19/零散/" class="archive-article-date">
-  	<time datetime="2017-04-19T06:25:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-19</time>
+        <a href="/2017/04/25/尺度感知模型/" class="archive-article-date">
+  	<time datetime="2017-04-25T07:02:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-25</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=473440587&auto=0&height=66"></iframe><br><a id="more"></a><br>图像分类：<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
-<p>物体检测：<br>Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate object detection and semantic segmentation[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2014: 580-587.<br>Erhan D, Szegedy C, Toshev A, et al. Scalable object detection using deep neural networks[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014: 2147-2154.<br>Ren S, He K, Girshick R, et al. Faster r-cnn: Towards real-time object detection with region proposal networks[C]//Advances in neural information processing systems. 2015: 91-99.<br>He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 770-778.  </p>
-<p><strong>CNN用于图像分割</strong><br>Schulz H, Behnke S. Learning Object-Class Segmentation with Convolutional Neural Networks[C]//ESANN. 2012.<br>Farabet C, Couprie C, Najman L, et al. Scene parsing with multiscale feature learning, purity trees, and optimal covers[J]. arXiv preprint arXiv:1202.2160, 2012.<br>Farabet C, Couprie C, Najman L, et al. Learning hierarchical features for scene labeling[J]. IEEE transactions on pattern analysis and machine intelligence, 2013, 35(8): 1915-1929.<br>Dai J, He K, Sun J. Convolutional feature masking for joint object and stuff segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3992-4000.</p>
-<p>Long J, Shelhamer E, Darrell T. Fully convolutional networks for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3431-3440.  </p>
-<p>刘丹,刘学军,王美珍. 一种多尺度CNN的图像语义分割算法[J]. 遥感信息,2017,(01):57-64.<br>蒋应锋,张桦,薛彦兵,周冕,徐光平,高赞. 一种新的多尺度深度学习图像语义理解方法研究[J]. 光电子·激光,2016,(02):224-230.  </p>
-<p>Mostajabi M, Yadollahpour P, Shakhnarovich G. Feedforward semantic segmentation with zoom-out features[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3376-3385.<br>Lin G, Shen C, van den Hengel A, et al. Efficient piecewise training of deep structured models for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 3194-3203.  </p>
+        <p>来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。<br><a id="more"></a><br><strong>1.注意力模型 Attention model</strong><br>Attention model(AM)最先在计算机视觉中被应用于图片识别的问题，之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法，被称之为Recurrent Attention Model(RAM)，其核心就是一个Encoder-Decoder的过程。图像识别中，经常把图像缩放成固定大小，引起信息的丢失，结合人看物体时，目光会沿着感兴趣的方向移动，甚至聚焦感兴趣的区域，Attention（注意力）就是在网络中加入关注区域的移动、缩放机制、连续部分信息序列化输入。<a href="https://www.zhihu.com/question/36591394">知乎问题回答</a>。可以分为两种模型：  </p>
+<ul>
+<li>hard：Attention 每次移动固定大小区域；  </li>
+<li>soft：Attention 每次是所有区域的一个加权和。<br><strong>注意力</strong>，人看一副图像不是按像素点去看的，往往是一个区域一个区域看的，关注感兴趣区域（Region of Interest），Attention 可以自动寻找感兴趣的区域？强化学习。<br><strong>2.如何利用多尺度信息</strong><br>在 FCNs 场景下，有两种方式利用多尺度信息，如图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/98403353-file_1493107872063_3e36.png" alt="">  </li>
+<li>利用网络中间层信息，由于随着网络层数的增加，图像不断缩小，图像的特征也会不断地丢失，在经典的FCN-8s网络中提出了融合中间层的特征图，优化最后的分割结果；  </li>
+<li>多尺度图像输入，网络共享权重，不同尺度会产生不同大小的特征图，每个尺度的特征图关注点也不同，通过在最后对不同尺度特征图的融合，产生最终的分割结果。<br><strong>3.模型介绍</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/24866344-file_1493107637433_24f2.png" alt="model"><br>模型如何运作？<br>不同尺度图像输入 FCNs 中会生成不同的热力图（得分图），然后，如何融合不同的得分图，论文中提出了一个<em>注意力模型</em>，对于每个尺度特征图输出一个权重图，权重是如何生成的呢，通过学习，对于大物体在褚略的特征图上置为较大的权重。有了权重图，结合特征图，很容易加权融合多个尺度特征图，得到最后的输出。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/73523202-file_1493108587550_a9.png" alt=""><br>每个尺度，对应着一个score map，这里乘以由尺度获得的权重图，得到最终的输出图。权重是由注意力模型产生的score map的所占比重决定的，表示摸个尺度的重要性。</li>
+</ul>
 
       
 
@@ -195,7 +203,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
         		</li>
       		
 		</ul>
@@ -207,7 +219,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
+        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -262,7 +274,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/19/零散/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/04/25/尺度感知模型/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -276,18 +288,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/04/25/尺度感知模型/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          尺度感知模型
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/04/18/Caffe的C-接口调用/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Caffe的C++接口调用</div>
+    <a href="/2017/04/19/零散/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">零散</div>
       <i class="icon-circle-right"></i>
     </a>
   
