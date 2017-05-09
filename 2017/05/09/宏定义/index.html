@@ -6,17 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Archives: 2017 | 张国丰</title>
+  <title>宏定义 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/archives/2017/page/3/index.html">
+  <meta name="description" content="宏定义进入编译器之前展开替换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宏定义">
+<meta property="og:url" content="http://abumaster.com/2017/05/09/宏定义/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="宏定义进入编译器之前展开替换。">
+<meta property="og:updated_time" content="2017-05-09T13:32:34.427Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="宏定义">
+<meta name="twitter:description" content="宏定义进入编译器之前展开替换。">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,346 +159,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-宏定义" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      宏定义
+    </h1>
+  
+
+        
+        <a href="/2017/05/09/宏定义/" class="archive-article-date">
+  	<time datetime="2017-05-09T12:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-09</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>宏定义进入编译器之前展开替换。<br><a id="more"></a><br><strong>宏常量</strong><br><code>#define MAX 100</code>用100替换符号MAX，c++中一般不推荐使用，通常用常量const定义；<br><strong>用于条件编译的宏</strong><br>如避免包含重复头文件的宏：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#ifdefine XXX </span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> XXX </span></div><div class="line"><span class="comment">//some include file</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">`</div></pre></td></tr></table></figure></p>
+<p><strong>宏函数</strong><br>避免函数调用，提高执行效率，以空间换取时间。<br>对于一些重复的函数可以声明为宏函数，就像内联函数一样…<br>例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*Onefunction)</span><span class="params">()</span></span>;<span class="comment">//定义函数指针</span></div><div class="line"><span class="keyword">typedef</span> <span class="built_in">map</span>&lt;<span class="built_in">string</span>, Onefunction&gt; OneMap;<span class="comment">//名称，函数指针相关联的map</span></div><div class="line">OneMap g_one_map;<span class="comment">//全局变量保存</span></div><div class="line"></div><div class="line"><span class="comment">//注册函数的宏，其中展开为一个按名定义的类，</span></div><div class="line"><span class="comment">//构造函数,将函数地址和函数名称放入全局的map中</span></div><div class="line"><span class="comment">//最后一个简单的类对象声明，可以保证构造函数的执行，</span></div><div class="line"><span class="comment">//作用域可以保证在执行完后对象的销毁，用过即销毁。</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> RegisterOneFunction(func) \</div><div class="line">&#123; \</div><div class="line">class __Register_##func &#123; \</div><div class="line">public: \</div><div class="line">__Register_##func() &#123; \</div><div class="line">g_one_map[#func] = &amp;func; \</div><div class="line">&#125; \</div><div class="line">&#125;; \</div><div class="line">__Register_##func g_register_##func; \</div><div class="line">&#125;</span></div><div class="line"><span class="comment">//自定义的函数，无参，返回int</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">func1</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"func1 out...\n"</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">func2</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"func2 out...222\n"</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//调用宏，注册函数</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">WrapperRegisterFunction</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	RegisterOneFunction(func1);</div><div class="line">	RegisterOneFunction(func2);</div><div class="line">&#125;</div><div class="line"><span class="comment">//根据函数名称获得函数的指针</span></div><div class="line"><span class="function">Onefunction <span class="title">GetOneFunction</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; fname)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">if</span>(g_one_map.count(fname))</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> g_one_map[fname];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"not found"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">for</span>(OneMap::iterator it=g_one_map.begin();</div><div class="line">			it!=g_one_map.end(); it++)</div><div class="line">		&#123;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt;it-&gt;first&lt;&lt;<span class="string">" "</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">string</span> funNmae;</div><div class="line"></div><div class="line">	WrapperRegisterFunction();</div><div class="line"></div><div class="line">	<span class="built_in">cin</span> &gt;&gt; funNmae;</div><div class="line">	<span class="comment">//以名称来使用函数</span></div><div class="line">	GetOneFunction(funNmae)();</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>注意事项</strong><br>1.普通宏定义  </p>
+<ul>
+<li>宏名一般用大写  </li>
+<li>使用宏可提高程序的通用性和易读性，减少不一致性，减少输入错误和便于修改  </li>
+<li>预处理是在编译之前的处理，而编译工作的任务之一就是语法检查，预处理不做语法检查  </li>
+<li>宏定义末尾不加分号  </li>
+<li>宏定义写在函数的花括号外边，作用域为其后的程序，通常在文件的最开头  </li>
+<li>可以用#undef命令终止宏定义的作用域  </li>
+<li>宏定义可以嵌套   </li>
+<li>字符串””中永远不包含宏  </li>
+<li>宏定义不分配内存，变量定义分配内存<br>2.带参宏定义  </li>
+<li>实参如果是表达式容易出问题  </li>
+<li>宏名和参数的括号间不能有空格  </li>
+<li>宏替换只作替换，不做计算，不做表达式求解  </li>
+<li>函数调用在编译后程序运行时进行，并且分配内存。宏替换在编译前进行，不分配内存  </li>
+<li>宏的哑实结合不存在类型，也没有类型转换  </li>
+<li>函数只有一个返回值，利用宏则可以设法得到多个值  </li>
+<li>宏展开使源程序变长，函数调用不会  </li>
+<li>宏展开不占运行时间，只占编译时间，函数调用占运行时间（分配内存、保留现场、值传递、返回值）  </li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/29/公式专辑/" class="archive-article-date">
-  	<time datetime="2017-03-29T07:53:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/29/公式专辑/">公式专辑</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/29/图床测试/" class="archive-article-date">
-  	<time datetime="2017-03-29T06:20:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/29/图床测试/">图床测试</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" class="archive-article-date">
-  	<time datetime="2017-03-27T06:21:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/">Feedforward semantic segmentation with zoom-out features</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/25/全卷积网络用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-03-25T07:31:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/25/全卷积网络用于图像语义分割/">全卷积网络用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/24/卷积网络应该注意的问题/" class="archive-article-date">
-  	<time datetime="2017-03-24T06:28:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/24/卷积网络应该注意的问题/">卷积网络应该注意的问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/21/CRFs-as-RNN/" class="archive-article-date">
-  	<time datetime="2017-03-21T08:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/21/CRFs-as-RNN/">Conditional Random Fields as Recurrent Neural Networks</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/12/柔性数组/" class="archive-article-date">
-  	<time datetime="2017-03-12T13:59:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/12/柔性数组/">柔性数组</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -509,34 +220,99 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/学习/" class="article-tag-list-link color3">学习</a>
+        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/05/09/宏定义/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2017/05/07/‘caffe学习-分类/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">caffe学习-分类</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2017/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2017/">1</a><a class="page-number" href="/archives/2017/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
-  
+
 
 
           </div>
@@ -559,8 +335,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
