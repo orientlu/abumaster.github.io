@@ -8,16 +8,28 @@
   <link rel="dns-prefetch" href="http://abumaster.com">
   <title>零散 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="图像分类：Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.Simonyan K, Zisserma">
+  <meta name="description" content="VMware虚拟机在Windows下错误
+出现如下错误：VMware Workstation and Device/Credential Guard are not compatible
+
+Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！解决方案：1.关闭hyper-v服务如图，关闭红色框内的功能。2.增加开机启动选项stackoverflow 问题回答在CMD管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="零散">
 <meta property="og:url" content="http://abumaster.com/2017/04/19/零散/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="图像分类：Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.Simonyan K, Zisserma">
-<meta property="og:updated_time" content="2017-05-10T12:15:14.661Z">
+<meta property="og:description" content="VMware虚拟机在Windows下错误
+出现如下错误：VMware Workstation and Device/Credential Guard are not compatible
+
+Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！解决方案：1.关闭hyper-v服务如图，关闭红色框内的功能。2.增加开机启动选项stackoverflow 问题回答在CMD管理">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png">
+<meta property="og:updated_time" content="2017-05-13T08:22:45.478Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="零散">
-<meta name="twitter:description" content="图像分类：Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.Simonyan K, Zisserma">
+<meta name="twitter:description" content="VMware虚拟机在Windows下错误
+出现如下错误：VMware Workstation and Device/Credential Guard are not compatible
+
+Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！解决方案：1.关闭hyper-v服务如图，关闭红色框内的功能。2.增加开机启动选项stackoverflow 问题回答在CMD管理">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -179,9 +191,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<p>图像分类：<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
-<p>物体检测：<br>Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate object detection and semantic segmentation[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2014: 580-587.<br>Erhan D, Szegedy C, Toshev A, et al. Scalable object detection using deep neural networks[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014: 2147-2154.<br>Ren S, He K, Girshick R, et al. Faster r-cnn: Towards real-time object detection with region proposal networks[C]//Advances in neural information processing systems. 2015: 91-99.<br>He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 770-778.  </p>
+        <h4 id="VMware虚拟机在Windows下错误"><a href="#VMware虚拟机在Windows下错误" class="headerlink" title="VMware虚拟机在Windows下错误"></a>VMware虚拟机在Windows下错误</h4><blockquote>
+<p>出现如下错误：VMware Workstation and Device/Credential Guard are not compatible</p>
+</blockquote>
+<p>Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！<br><strong>解决方案：</strong><br>1.关闭hyper-v服务<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png" alt=""><br>如图，关闭红色框内的功能。<br>2.增加开机启动选项<br><a href="http://stackoverflow.com/questions/39858200/vmware-workstation-and-device-credential-guard-are-not-compatible/41968105#41968105">stackoverflow 问题回答</a>在CMD管理员身份运行，注意不能用PowerShell。编辑bcd。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /copy &#123;current&#125; /d &quot;No Hyper-V&quot; </div><div class="line">The entry was successfully copied to &#123;ff-23-113-824e-5c5144ea&#125;. </div><div class="line"></div><div class="line">C:\&gt;bcdedit /set &#123;ff-23-113-824e-5c5144ea&#125; hypervisorlaunchtype off </div><div class="line">The operation completed successfully.</div></pre></td></tr></table></figure></p>
+<p>重启经过一段时间配置，开机启动项出现了两个选项：</p>
+<ul>
+<li>Windows 10  </li>
+<li>No Hyper-V  </li>
+</ul>
+<p><em>删除开启启动项：</em><br>在CMD中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /v</div><div class="line">列出了开机启动项，删除对应的选项即可。</div><div class="line">C:\&gt;bcdedit /delete &#123;ff-23-113-824e-5c5144ea&#125;</div></pre></td></tr></table></figure></p>
+<p>另一种，在系统配置中直接配置引导项。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png" alt="">  </p>
+<a id="more"></a>
+<p>图像分类：
+Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
+<p>物体检测：
+Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate object detection and semantic segmentation[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2014: 580-587.<br>Erhan D, Szegedy C, Toshev A, et al. Scalable object detection using deep neural networks[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2014: 2147-2154.<br>Ren S, He K, Girshick R, et al. Faster r-cnn: Towards real-time object detection with region proposal networks[C]//Advances in neural information processing systems. 2015: 91-99.<br>He K, Zhang X, Ren S, et al. Deep residual learning for image recognition[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016: 770-778.  </p>
 <p><strong>CNN用于图像分割</strong><br>Schulz H, Behnke S. Learning Object-Class Segmentation with Convolutional Neural Networks[C]//ESANN. 2012.<br>Farabet C, Couprie C, Najman L, et al. Scene parsing with multiscale feature learning, purity trees, and optimal covers[J]. arXiv preprint arXiv:1202.2160, 2012.<br>Farabet C, Couprie C, Najman L, et al. Learning hierarchical features for scene labeling[J]. IEEE transactions on pattern analysis and machine intelligence, 2013, 35(8): 1915-1929.<br>Dai J, He K, Sun J. Convolutional feature masking for joint object and stuff segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3992-4000.</p>
 <p>Long J, Shelhamer E, Darrell T. Fully convolutional networks for semantic segmentation[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 3431-3440.  </p>
 <p>刘丹,刘学军,王美珍. 一种多尺度CNN的图像语义分割算法[J]. 遥感信息,2017,(01):57-64.<br>蒋应锋,张桦,薛彦兵,周冕,徐光平,高赞. 一种新的多尺度深度学习图像语义理解方法研究[J]. 光电子·激光,2016,(02):224-230.  </p>
@@ -416,11 +441,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -441,6 +466,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

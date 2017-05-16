@@ -8,19 +8,22 @@
   <link rel="dns-prefetch" href="http://abumaster.com">
   <title>高效分片训练结构化模型用于图像语义分割 | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
+  <meta name="description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
+Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高效分片训练结构化模型用于图像语义分割">
 <meta property="og:url" content="http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
+<meta property="og:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
+Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png">
 <meta property="og:updated_time" content="2017-04-18T02:13:45.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高效分片训练结构化模型用于图像语义分割">
-<meta name="twitter:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for SemanticSegmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
+<meta name="twitter:description" content="cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
+Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。">
 <meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png">
   
   
@@ -184,7 +187,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic<br>Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
+<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
+Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
 </blockquote>
 <a id="more"></a>
 <p><strong>特点：</strong>  </p>
@@ -194,7 +198,8 @@
 <li>多尺度图像输入，用于探索图像背景和前景上下文信息；  </li>
 </ol>
 <hr>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png" alt=""><br>Featmap-Net是一个卷积网络，用于输出特征图，低分辨率的特征图；<br>创建CRF图，首先对于卷积网络生成的特征图，创建一些边界框，在边界框内被认为空间近似，顶点才会全连接，不同空间会创建不同的边界框。  </p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png" alt=""><br>Featmap-Net是一个卷积网络，用于输出特征图，低分辨率的特征图；
+创建CRF图，首先对于卷积网络生成的特征图，创建一些边界框，在边界框内被认为空间近似，顶点才会全连接，不同空间会创建不同的边界框。  </p>
 <p><strong>上下文深度CRFs</strong><br>分为一元组的图的顶点和二元组的图的边，分别对应一个能量函数，通过一元和二元网络对应生成了类别的预测。<br><strong>利用背景上下文</strong><br>产生特征图的网络：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png" alt=""></p>
 <p>首先将输入图像缩放为三个不同的大小，放入网络，共享权重。图像缩放大小为1.2,0.8,0.4，再经过一层独立的卷积产生多尺度特征图，然后经过滑动金字塔池化产生了组合的特征图，金字塔池化如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png" alt=""><br>使用双线性上采样和简单的边界优化对粗糙的预测结果进行后期处理，可能又更复杂的优化方式，比如：训练反卷积网络，训练复杂的从粗糙到精细的网络，利用中间特征图到高分辨率的预测。</p>
 
@@ -210,11 +215,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -435,11 +440,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -460,6 +465,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

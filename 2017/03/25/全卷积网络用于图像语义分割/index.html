@@ -221,7 +221,8 @@
 }
 </code></pre><p>填充100的原因为：在VGG-16网络中卷积的参数，kernersize=3，stride=1，pad=1，所以卷积层不会改变图像的大小，所以图像只有在池化层改变大小，且变为原大小的一半。为了方便将图像看为一维的，设原图像大小h，经过了5层池化后，图像缩小了32倍，变为<code>h5 = h/32</code>，紧接着全连接层，可以看成是卷积层，卷积参数为：<code>kernelsize=7 pad=0 stride=1</code>，根据卷积计算公式，经过卷积层fc6后的输出图像大小为<code>h6 = (h5-7)/1 + 1 = (h-192)/32</code> 因此，图像小于192的就无法往下计算了，所以要<code>pad=100</code>，解决了网络输入图像固定大小的弊端，全卷积网络可以输入任意大小的图像。  </p>
 <hr>
-<p><strong>例子</strong><br>根据FCN-32s的配置文件<br>如果输入图像大小为<code>3*320*320</code><br>经过了卷积conv1的输出为：<code>64*518*518</code><br>经过了池化pool1的输出为：<code>64*259*259</code><br>经过了卷积conv2的输出为：<code>128*259*259</code><br>经过了池化pool2的输出为：<code>128*130*130</code><br>经过了卷积conv3的输出为：<code>256*130*130</code><br>经过了池化pool3的输出为：<code>256*65*65</code><br>经过了卷积conv4的输出为：<code>512*65*65</code><br>进过了池化pool4的输出为：<code>512*32*32</code><br>经过了卷积conv5的输出为：<code>512*32*32</code><br>经过了池化pool5的输出为：<code>512*16*16</code><br>经过了fc6的卷积后输出为：<code>4096*10*10</code><br>经过了fc7的卷积后输出为：<code>4096*10*10</code><br>经过score_fr的卷积输出：<code>21*10*10</code><br>上采样（反卷积）输出为：<code>21*352*352</code><br>score层裁剪后输出为：<code>21*320*320</code>  </p>
+<p><strong>例子</strong><br>根据FCN-32s的配置文件<br>如果输入图像大小为<code>3*320*320</code><br>经过了卷积conv1的输出为：<code>64*518*518</code><br>经过了池化pool1的输出为：<code>64*259*259</code><br>经过了卷积conv2的输出为：<code>128*259*259</code><br>经过了池化pool2的输出为：<code>128*130*130</code><br>经过了卷积conv3的输出为：<code>256*130*130</code><br>经过了池化pool3的输出为：<code>256*65*65</code><br>经过了卷积conv4的输出为：<code>512*65*65</code><br>进过了池化pool4的输出为：<code>512*32*32</code>
+经过了卷积conv5的输出为：<code>512*32*32</code><br>经过了池化pool5的输出为：<code>512*16*16</code><br>经过了fc6的卷积后输出为：<code>4096*10*10</code><br>经过了fc7的卷积后输出为：<code>4096*10*10</code><br>经过score_fr的卷积输出：<code>21*10*10</code><br>上采样（反卷积）输出为：<code>21*352*352</code><br>score层裁剪后输出为：<code>21*320*320</code>  </p>
 
       
 
@@ -235,11 +236,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -456,11 +457,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -481,6 +482,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

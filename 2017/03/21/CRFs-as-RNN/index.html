@@ -209,7 +209,8 @@
 </ul>
 <ul>
 <li>特征提取和分割分离开的策略。使用CNN提取有意义的图像特征，利用超像素去构造图像的模式。首先从图像中获得超像素，再用特征提取器提取特征。存在着一个致命的缺点，前期如果有误差，后面误差越来越大。与他们的方案不同，此文用典型的图模型CRF可以被作为RNN，指定为深度网络的一部分。结合CNN实现端对端的训练。  </li>
-<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div><br>条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
+<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div>
+条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
 
 
 </li>
@@ -228,11 +229,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
         		</li>
       		
 		</ul>
@@ -449,11 +450,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -474,6 +475,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

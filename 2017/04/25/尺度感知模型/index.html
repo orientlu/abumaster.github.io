@@ -183,7 +183,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。<br><a id="more"></a><br><strong>1.注意力模型 Attention model</strong><br>Attention model(AM)最先在计算机视觉中被应用于图片识别的问题，之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法，被称之为Recurrent Attention Model(RAM)，其核心就是一个Encoder-Decoder的过程。图像识别中，经常把图像缩放成固定大小，引起信息的丢失，结合人看物体时，目光会沿着感兴趣的方向移动，甚至聚焦感兴趣的区域，Attention（注意力）就是在网络中加入关注区域的移动、缩放机制、连续部分信息序列化输入。<a href="https://www.zhihu.com/question/36591394">知乎问题回答</a>。可以分为两种模型：  </p>
+        <p>来自 2016 年 ICCV 论文：Attention to Scale: Scale-aware Semantic Image Segmentation，注意尺度：尺度敏感图像语义分割。在全卷积网络中合并多尺度特征已经是提高图像语义分割效果的一个关键因素。通过不同图像尺寸的输入，提取出不同尺度的信息，通过一个注意力模型获得权重融合特征图，最终得到分割图像。<br><a id="more"></a>
+<strong>1.注意力模型 Attention model</strong><br>Attention model(AM)最先在计算机视觉中被应用于图片识别的问题，之后在自然语言处理(NLP)和计算机视觉(CV)中经常结合递归神经网络结构RNN、GRU、LSTM等深度学习算法，被称之为Recurrent Attention Model(RAM)，其核心就是一个Encoder-Decoder的过程。图像识别中，经常把图像缩放成固定大小，引起信息的丢失，结合人看物体时，目光会沿着感兴趣的方向移动，甚至聚焦感兴趣的区域，Attention（注意力）就是在网络中加入关注区域的移动、缩放机制、连续部分信息序列化输入。<a href="https://www.zhihu.com/question/36591394">知乎问题回答</a>。可以分为两种模型：  </p>
 <ul>
 <li>hard：Attention 每次移动固定大小区域；  </li>
 <li>soft：Attention 每次是所有区域的一个加权和。<br><strong>注意力</strong>，人看一副图像不是按像素点去看的，往往是一个区域一个区域看的，关注感兴趣区域（Region of Interest），Attention 可以自动寻找感兴趣的区域？强化学习。<br><strong>2.如何利用多尺度信息</strong><br>在 FCNs 场景下，有两种方式利用多尺度信息，如图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-25/98403353-file_1493107872063_3e36.png" alt="">  </li>
@@ -424,11 +425,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -449,6 +450,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">

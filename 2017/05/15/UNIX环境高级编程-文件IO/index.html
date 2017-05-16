@@ -6,17 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abumaster.com">
-  <title>Archives | 张国丰</title>
+  <title>UNIX环境高级编程-文件IO | 张国丰</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/archives/index.html">
+  <meta name="description" content="UNIX环境高级编程读书笔记，第3章 文件 I/O。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNIX环境高级编程-文件IO">
+<meta property="og:url" content="http://abumaster.com/2017/05/15/UNIX环境高级编程-文件IO/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="UNIX环境高级编程读书笔记，第3章 文件 I/O。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-15/62478241-file_1494854203087_11715.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-16/22619423-file_1494918444995_14a6d.png">
+<meta property="og:updated_time" content="2017-05-16T12:46:55.147Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="UNIX环境高级编程-文件IO">
+<meta name="twitter:description" content="UNIX环境高级编程读书笔记，第3章 文件 I/O。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-15/62478241-file_1494854203087_11715.png">
   
   
     <link rel="icon" href="/favi.ico">
@@ -158,85 +162,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-UNIX环境高级编程-文件IO" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/16/UNIX环境高级编程-文件和目录/" class="archive-article-date">
-  	<time datetime="2017-05-16T11:39:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-16</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/16/UNIX环境高级编程-文件和目录/">UNIX环境高级编程-文件和目录</a>
+    <h1 class="article-title" itemprop="name">
+      UNIX环境高级编程-文件IO
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Linux/" class="article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/15/UNIX环境高级编程-文件IO/" class="archive-article-date">
+        
+        <a href="/2017/05/15/UNIX环境高级编程-文件IO/" class="archive-article-date">
   	<time datetime="2017-05-15T12:29:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-15</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/15/UNIX环境高级编程-文件IO/">UNIX环境高级编程-文件IO</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>UNIX环境高级编程读书笔记，第3章 文件 I/O。
+<a id="more"></a></p>
+<h3 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h3><p>Linux一切皆文件，无论是设备还是文档都是一个文件，这种抽象显示了Linux系统的灵活和通用性。文件描述符一般是一个非负整数，当打开或者创建一个文件时，内核向进程返回一个文件描述符，此描述符用于其他操作的参数。<br>通常在<code>unistd.h</code>中定义了常量：<code>STDIN_FILENO STDOUT_FILENO STDERR_FILENO</code>分别代表数字0,1,2是标准输入输出错误输出三种基本的文件描述符。<br><strong>open函数</strong><br>描述：打开或者创建文件，返回文件描述符或者-1<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">oepn</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">int</span> flags,...<span class="comment">/*mode_t mode*/</span>)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>creat函数</strong><br>描述：创建一个文件，只能只写的方式打开，成功返回文件描述符，失败-1<br><strong>close函数</strong><br>描述：关闭文件描述符<br><strong>lseek函数</strong><br>描述：为一个打开的文件描述符设置偏移量，成功返回新的文件偏移量，失败-1<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">off_t</span> lseek(<span class="keyword">int</span> filedes, <span class="keyword">off_t</span> offset, <span class="keyword">int</span> whence);</div></pre></td></tr></table></figure></p>
+<p>偏移量的方式取决于第三个参数。<code>SEEK_SET</code> 开始处设置偏移量，绝对偏移量；<code>SEEK_CUR</code> 当前位置设置偏移量，相对偏移量；<code>SEEK_END</code> 结束开始设置偏移量，相对于文件末端偏移量。<br><strong>read函数</strong><br>打开的文件中读取数据，返回读取的字节数，如果剩余文件不够要读的字节数。<br><strong>write函数</strong><br>向打开的文件中写数据，返回实际写入的数据字节数。  </p>
+<h3 id="文件共享"><a href="#文件共享" class="headerlink" title="文件共享"></a>文件共享</h3><p>不同进程之间共享打开的文件，内核使用三种数据结构表示打开的文件。<br><strong>1.进程表项</strong><br>描述一个打开的文件描述表，每个文件描述符表包含了两项：  </p>
+<ul>
+<li>文件描述符标志   </li>
+<li>指向文件表项的指针<br><strong>2.文件表</strong><br>每个文件表包含如下信息：  </li>
+<li>文件状态标志（读写…)  </li>
+<li>当前文件偏移量  </li>
+<li>指向文件v节点表项的指针<br><strong>3.v节点表</strong><br>v节点表表示文件类型，以及对文件进行各种操作的指针，也包含了i节点及文件长度等信息。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-15/62478241-file_1494854203087_11715.png" alt=""><br>不同进程打开同一个文件的各项状态。  </li>
+</ul>
+<p><strong>dup和dup2函数</strong><br>用来复制一个现存的文件描述符。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup</span><span class="params">(<span class="keyword">int</span> filedes)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">dup2</span><span class="params">(<span class="keyword">int</span> filedes, <span class="keyword">int</span> filedes2)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>dup返回的文件描述符是当前可用文件描述符的最小值；dup2可以用filedes来指定新的描述符，如果filedes2已经打开，则先将其关闭，如果相等，则返回filedes2，不必关闭。<br>执行dup后，文件表项和v节点表项不变。<br>作用：一般用于重定向和共享文件，如父进程处理了一些文件，现在需要子进程处理，可以dup一份；同样dup2的使用，可以看为<code>dup2(源, 目标)</code>，目标将会被源替换掉。具体<a href="http://blog.csdn.net/zhouhong1026/article/details/8151235">使用</a>。<br><strong>fcntl函数</strong><br>可以读取和改变打开文件的性质。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> filedes, <span class="keyword">int</span> cmd, ...<span class="comment">/*int arg*/</span>)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>fnctl的功能：  </p>
+<p><1>    复制一个现有的描述符，cmd=F_DUPFD</1>  </p>
+<p><2>    获取/设置文件描述符标记(cmd=F_GETFD / F_SETFD)</2>  </p>
+<p><3>    获得和设置文件状态标志<code>cmd=F_GETFL F_SETFL</code></3>  </p>
+<p><4>    获取和设置异步I/O所有权<code>cmd=F_GETOWN F_SETOWN</code></4>  </p>
+<p><5>    获得和设置记录锁<code>cmd = F_GETLK F_SETLK</code></5><br>同样，复制文件描述符函数：<code>dup(filedes)</code>等价于<code>fcntl(filedes, F_DUPFD, 0)</code>。调用<code>dup2(filedes1,filedes2)</code>相当于调用：<code>close(filedes2); fcntl(filedes1, F_DUPFD, filedes2)</code>。不同之处在于dup2函数是原子操作，而用fcntl是两个函数调用。<br>dup2的功能:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">dup2(fd, <span class="number">0</span>);</div><div class="line">dup2(fd, <span class="number">1</span>);</div><div class="line">dup2(fd, <span class="number">2</span>);</div><div class="line"><span class="keyword">if</span>(fd &gt; <span class="number">2</span>)</div><div class="line">	close(fd);</div></pre></td></tr></table></figure></p>
+<p>假设fd=1，则执行后的结果图如下：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-16/22619423-file_1494918444995_14a6d.png" alt=""><br>fd=3时，结果同，把3的文件复制到前3个上，删除以后的。  </p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -248,7 +223,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -261,967 +236,95 @@
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abumaster.com/2017/05/15/UNIX环境高级编程-文件IO/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/10/High-performance-Semantic-Segmentation-using-VDFC/" class="archive-article-date">
-  	<time datetime="2017-05-10T07:37:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-10</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/10/High-performance-Semantic-Segmentation-using-VDFC/">High-performance Semantic Segmentation using VDFC</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/09/宏定义/" class="archive-article-date">
-  	<time datetime="2017-05-09T12:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/09/宏定义/">宏定义</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/07/‘caffe学习-分类/" class="archive-article-date">
-  	<time datetime="2017-05-07T11:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/07/‘caffe学习-分类/">caffe学习-分类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/05/01/Caffe笔记/" class="archive-article-date">
-  	<time datetime="2017-05-01T06:41:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/05/01/Caffe笔记/">Caffe笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/25/尺度感知模型/" class="archive-article-date">
-  	<time datetime="2017-04-25T07:02:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/25/尺度感知模型/">尺度感知模型</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/19/零散/" class="archive-article-date">
-  	<time datetime="2017-04-19T06:25:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/19/零散/">零散</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/18/Caffe的C-接口调用/" class="archive-article-date">
-  	<time datetime="2017-04-18T12:25:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/18/Caffe的C-接口调用/">Caffe的C++接口调用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-04-17T08:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/">高效分片训练结构化模型用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-04-16T08:05:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/">拉普拉斯重建和细化用于图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机视觉</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/14/网易2017春招笔试编程题/" class="archive-article-date">
-  	<time datetime="2017-04-14T06:14:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/14/网易2017春招笔试编程题/">网易2017春招笔试编程题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/11/FCN图像语义分割计算的细节问题/" class="archive-article-date">
-  	<time datetime="2017-04-11T08:59:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-11</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/11/FCN图像语义分割计算的细节问题/">FCN图像语义分割计算的细节问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/10/Stanford-Background-Dataset介绍和使用/" class="archive-article-date">
-  	<time datetime="2017-04-10T06:35:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/10/Stanford-Background-Dataset介绍和使用/">Stanford Background Dataset介绍和使用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">dataset</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/其他/" class="article-tag-list-link color3">其他</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/09/caffe提取各层特征/" class="archive-article-date">
-  	<time datetime="2017-04-09T12:07:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/09/caffe提取各层特征/">caffe提取各层特征</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">caffe</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/07/结合特定任务边缘检测的图像语义分割/" class="archive-article-date">
-  	<time datetime="2017-04-07T07:38:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/07/结合特定任务边缘检测的图像语义分割/">结合特定任务边缘检测的图像语义分割</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/06/进制转换/" class="archive-article-date">
-  	<time datetime="2017-04-06T13:16:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/06/进制转换/">进制转换</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/05/全卷积网络和全连接条件随机场/" class="archive-article-date">
-  	<time datetime="2017-04-05T07:08:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/05/全卷积网络和全连接条件随机场/">全卷积网络和全连接条件随机场</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">论文</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/深度学习/" class="article-tag-list-link color5">深度学习</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/03/Linux配置OpenCV/" class="archive-article-date">
-  	<time datetime="2017-04-03T08:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/03/Linux配置OpenCV/">Linux配置OpenCV</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技巧</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/04/02/C-类构造函数/" class="archive-article-date">
-  	<time datetime="2017-04-02T06:45:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-02</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/04/02/C-类构造函数/">C++类构造函数</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">C++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/编程/" class="article-tag-list-link color3">编程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+    <a href="/2017/05/16/UNIX环境高级编程-文件和目录/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          UNIX环境高级编程-文件和目录
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2017/05/10/High-performance-Semantic-Segmentation-using-VDFC/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">High-performance Semantic Segmentation using VDFC</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
-  
+
 
 
           </div>
@@ -1244,8 +347,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

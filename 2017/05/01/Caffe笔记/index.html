@@ -179,15 +179,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Caffe学习中的遇到的一些问题拾遗。<br><a id="more"></a><br><strong>1..solverstate的使用</strong><br>在网络训练过程中当保存一个快照时，会保存两个文件：<code>**.caffemodel</code> 和 <code>**.solverstate</code> 第一个文件是训练过程中，迭代了N次，保存的模型，第二个文件是训练过程意外暂停，如<code>ctrl+C</code> 或者电脑死机，保存的网络状态，下一次网络可以接着训练，参考<a href="https://github.com/BVLC/caffe/wiki/Training-and-Resuming">Caffe Wiki - Training and Resuming</a>。<br>使用：  </p>
+        <p>Caffe学习中的遇到的一些问题拾遗。<br><a id="more"></a>
+<strong>1..solverstate的使用</strong><br>在网络训练过程中当保存一个快照时，会保存两个文件：<code>**.caffemodel</code> 和 <code>**.solverstate</code> 第一个文件是训练过程中，迭代了N次，保存的模型，第二个文件是训练过程意外暂停，如<code>ctrl+C</code> 或者电脑死机，保存的网络状态，下一次网络可以接着训练，参考<a href="https://github.com/BVLC/caffe/wiki/Training-and-Resuming">Caffe Wiki - Training and Resuming</a>。<br>使用：  </p>
 <ul>
 <li>命令行<br>训练：<code>caffe train -solver solver.prototxt</code><br>状态中恢复训练：<code>caffe train -solver solver.prototxt -snapshot train_190000.solverstate</code>  </li>
 <li>Python 接口<br>从模型中copy参数：<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">weights = <span class="string">'../ilsvrc-nets/vgg16-fcn.caffemodel'</span></div><div class="line"><span class="comment"># init</span></div><div class="line">solver = caffe.SGDSolver(<span class="string">'solver.prototxt'</span>)</div><div class="line">solver.net.copy_from(weights)</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>从状态中恢复训练：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">solver = caffe.SGDSolver(<span class="string">'solver.prototxt'</span>)</div><div class="line">solver.restore(<span class="string">'snapshot/train_iter_2000.solverstate'</span>)</div></pre></td></tr></table></figure></p>
+<p>从状态中恢复训练：
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">solver = caffe.SGDSolver(<span class="string">'solver.prototxt'</span>)</div><div class="line">solver.restore(<span class="string">'snapshot/train_iter_2000.solverstate'</span>)</div></pre></td></tr></table></figure></p>
 <p>这时不需要copy参数了。  </p>
-<p><strong>2.编写网络配置文件</strong><br>通常创建一个创建一个 solver 来表示网络的参数信息，包括：迭代次数，训练策略以及保存快照等。其中包含了一个训练网络模型定义和一个测试网络模型定义文件，也可以写在一个配置文件中，当写在一个文件中的时候，要在网络的不同之处加上：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">include &#123;</div><div class="line">    phase: TEST (TRAIN)</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2.编写网络配置文件</strong><br>通常创建一个创建一个 solver 来表示网络的参数信息，包括：迭代次数，训练策略以及保存快照等。其中包含了一个训练网络模型定义和一个测试网络模型定义文件，也可以写在一个配置文件中，当写在一个文件中的时候，要在网络的不同之处加上：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">include &#123;</div><div class="line">    phase: TEST (TRAIN)</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
 <p><strong>3.网络运行过程</strong>  </p>
 <ul>
 <li>加载 solver 有两种方式（Python 接口）：<br><code>solver = caffe.get_solver(&#39;models/bvlc_reference_caffenet/solver.prototxt&#39;)</code> 和<br><code>solver = caffe.SGDSolver(&#39;models/bvlc_reference_caffenet/solver.prototxt&#39;)</code>  </li>
@@ -433,11 +436,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
+                <a href="javascript:void(0)" class="js-tag color3">论文</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">论文</a>
+                <a href="javascript:void(0)" class="js-tag color5">深度学习</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -458,6 +461,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">dataset</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
              
               <li class="article-tag-list-item">
