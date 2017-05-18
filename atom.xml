@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-16T13:17:34.994Z</updated>
+  <updated>2017-05-18T02:11:33.522Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,88 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>UNIX环境高级编程-标准IO库</title>
+    <link href="http://abumaster.com/2017/05/18/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E6%A0%87%E5%87%86IO%E5%BA%93/"/>
+    <id>http://abumaster.com/2017/05/18/UNIX环境高级编程-标准IO库/</id>
+    <published>2017-05-18T00:39:42.000Z</published>
+    <updated>2017-05-18T02:11:33.522Z</updated>
+    
+    <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。<br><a id="more"></a></p>
+<p><strong>1.文件I/O和标准I/O区别</strong><br>标准I/O使用了缓冲机制，文件I/O不使用，而是直接调用内核中的一个系统调用完成。操作的对象不同，文件io操作的是文件描述符，标准io操作的是流，流与磁盘等外围设备关联。他们的函数对比。  </p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>标准I/O</th>
+<th>文件I/O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开</td>
+<td>fopen, froen, fdopen</td>
+<td>open</td>
+</tr>
+<tr>
+<td>关闭</td>
+<td>fclose</td>
+<td>close</td>
+</tr>
+<tr>
+<td>读</td>
+<td>getc, fgetc, getchar,<br>fgets, gets,<br>fread</td>
+<td>read</td>
+</tr>
+<tr>
+<td>写</td>
+<td>putc, fputc, putchar,<br>fputs, puts,<br>fwrite</td>
+<td>write</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2.缓冲</strong>  </p>
+<blockquote>
+<p>标准I/O提供的几种缓冲及其区别。  </p>
+</blockquote>
+<ul>
+<li>全缓冲，填满缓冲区后再进行实际的I/O操作，磁盘文件通常使用全缓冲。填满缓冲区后，调用fflush来刷新缓冲区，flush(冲洗)用来将缓冲区的内容写到磁盘上；flush(刷清)丢弃已经存储在缓冲区中的数据，用在终端驱动程序方面。  </li>
+<li>行缓冲，用在终端的输入输出，遇到换行符的时候，或者缓冲区满。  </li>
+<li>无缓冲，标准出错流，stderr，错误信息及时显示出来。  </li>
+</ul>
+<p>对于一个打开的流，设置更改缓冲区。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setvbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf, <span class="keyword">int</span> mode, <span class="keyword">size_t</span> size)</span></span>;</div><div class="line"><span class="comment">/* 	mode 参数：</div><div class="line">	_IOFBF 全缓冲；_IOLBF 行缓冲；_IONBF 不带缓冲</div><div class="line"> */</span></div><div class="line"><span class="comment">//强制冲洗流</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *fp)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>3.操作</strong><br><strong>打开关闭流</strong><br>打开关闭标准I/O流，如上表的函数所示。<br><strong>读写流</strong><br>打开了流，有三种类型的方式进行读写操作：  </p>
+<ul>
+<li>每次一个字符的I/O;  </li>
+<li>每次一行的I/O;  </li>
+<li>直接I/O。  </li>
+</ul>
+<p>每个流在FILE对象上维持了两个标志：出错标志，文件结束标志。<br><code>gets</code> 和<code>fgets</code>，不推荐使用前者，因为不能指定缓冲区大小，容易造成缓冲区溢出，另外，<code>gets</code>不保留换行符。<br><strong>4.临时文件</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">tmpnam</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span>;<span class="comment">//指向唯一路径的指针</span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">tmpfile</span><span class="params">(<span class="keyword">void</span>)</span></span>; <span class="comment">//返回文件指针</span></div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+      <category term="c" scheme="http://abumaster.com/tags/c/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+  </entry>
+  
+  <entry>
     <title>UNIX环境高级编程-文件和目录</title>
     <link href="http://abumaster.com/2017/05/16/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/"/>
     <id>http://abumaster.com/2017/05/16/UNIX环境高级编程-文件和目录/</id>
     <published>2017-05-16T11:39:00.000Z</published>
-    <updated>2017-05-16T13:17:34.994Z</updated>
+    <updated>2017-05-17T06:52:07.469Z</updated>
     
     <content type="html"><![CDATA[<p>UNIX环境高级编程读书笔记，第4章 文件和目录。<br><a id="more"></a></p>
 <blockquote>
@@ -76,7 +153,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>3.文件的访问权限</strong><br>分为三类：用户、组、其他，而每类对应的权限为：读、写、执行。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-16/90333911-file_1494936405039_f79a.png" alt=""><br><strong>4.文件系统</strong>  </p>
+<p><strong>3.文件的访问权限</strong><br>分为三类：用户、组、其他，而每类对应的权限为：读、写、执行。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-16/90333911-file_1494936405039_f79a.png" alt=""><br><strong>4.文件系统</strong><br>i节点：固定长度的记录项，保存着文件的大部分信息。<a href="http://www.ruanyifeng.com/blog/2011/12/inode.html">理解inode</a>。内核中，以inode编号来标识文件，而不是以文件名标识文件。  </p>
 ]]></content>
     
     <summary type="html">
@@ -251,9 +328,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -412,9 +489,9 @@ Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate o
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -886,45 +963,6 @@ $$E(x)=\sum_i\theta_i(x_i)+\sum_{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二
     
     
       <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>C++类构造函数</title>
-    <link href="http://abumaster.com/2017/04/02/C-%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/"/>
-    <id>http://abumaster.com/2017/04/02/C-类构造函数/</id>
-    <published>2017-04-02T06:45:54.000Z</published>
-    <updated>2017-04-02T13:48:05.088Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="C-中构造函数和析构函数应该注意的问题"><a href="#C-中构造函数和析构函数应该注意的问题" class="headerlink" title="C++中构造函数和析构函数应该注意的问题"></a>C++中构造函数和析构函数应该注意的问题</h3><p>构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。<br><a id="more"></a></p>
-<p>构造原则如下：  </p>
-<ol>
-<li><p>如果子类没有定义构造方法，则调用父类的无参数的构造方法。  </p>
-</li>
-<li><p>如果子类定义了构造方法，不论是无参数还是带参数，在创建子类的对象的时候,首先执行父类无参数的构造方法，然后执行自己的构造方法。 </p>
-</li>
-<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数，则会调用父类的默认无参构造函数。  </p>
-</li>
-<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数且父类自己提供了无参构造函数，则会调用父类自己的无参构造函数。  </p>
-</li>
-<li><p>在创建子类对象时候，如果子类的构造函数没有显示调用父类的构造函数且父类只定义了自己的有参构造函数，则会出错（如果父类只有有参数的构造方法，则子类必须显示调用此带参构造方法）。  </p>
-</li>
-<li><p>如果子类调用父类带参数的构造方法，需要用初始化父类成员对象的方式</p>
-</li>
-</ol>
-<p>析构函数<br>基类的析构函数声明为虚函数，这样销毁对象时子类会调用子类的析构函数，防止内存泄漏。如果没有定义为虚析构函数，销毁一个子类或者父类对象时，都会调用父类析构函数。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;C-中构造函数和析构函数应该注意的问题&quot;&gt;&lt;a href=&quot;#C-中构造函数和析构函数应该注意的问题&quot; class=&quot;headerlink&quot; title=&quot;C++中构造函数和析构函数应该注意的问题&quot;&gt;&lt;/a&gt;C++中构造函数和析构函数应该注意的问题&lt;/h3&gt;&lt;p&gt;构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
