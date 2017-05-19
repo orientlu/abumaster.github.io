@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-18T02:11:33.522Z</updated>
+  <updated>2017-05-19T12:01:06.405Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>UNIX环境高级编程-进程</title>
+    <link href="http://abumaster.com/2017/05/19/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B/"/>
+    <id>http://abumaster.com/2017/05/19/UNIX环境高级编程-进程/</id>
+    <published>2017-05-19T02:22:59.000Z</published>
+    <updated>2017-05-19T12:01:06.405Z</updated>
+    
+    <content type="html"><![CDATA[<p>Unix环境高级编程，第7、8、9章有关进程的读书笔记。<br><a id="more"></a></p>
+<h3 id="进程环境"><a href="#进程环境" class="headerlink" title="进程环境"></a>进程环境</h3><p>进程的启动和终止。一般c程序从入口函数<code>main</code>开始，调用一系列用户函数等；进程终止有正常终止和异常终止两种，其中，正常终止是程序从main函数返回(return)，或者正常调用退出函数<code>exit _exit _Exit</code>，或者线程的返回或退出，异常终止通常会调用<code>abort</code>或者信号中断。<br><strong>命令行参数和环境表</strong><br>它们都是有外界给程序的参数，就像标注的 ISO C 规定的主函数书写格式
+<figure class="highlight plain"><figcaption><span>main(int argc,char *argv[]```，将命令行参数保存，而环境变量表则被取消了，仍可以通过函数访问环境表。 </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">查看和设置环境变量，  </div><div class="line">```c</div><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">char *getenv(const char* envname);</div><div class="line">int putenv(char *str);//不会分配空间</div><div class="line">int setenv(char *name, char *value, int rewrite);//分配空间</div><div class="line">int unsetenv(const char *name);</div><div class="line">``` </div><div class="line">**C 程序的存储空间分布**  </div><div class="line">如图：  </div><div class="line">![](http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png)  </div><div class="line"></div><div class="line">+	正文段，存放程序运行所需的机器指令部分，具有只读属性；  </div><div class="line">+	初始化数据段，明确初始化的变量；</div><div class="line">+	未初始化的数据；  </div><div class="line">+	栈，存放自动变量或者临时变量；  </div><div class="line">+	堆，动态分配的空间。  </div><div class="line">**非局部goto**  </div><div class="line">```c</div><div class="line">#include &lt;setjmp.h&gt;</div><div class="line">int setjmp(jmp_buf env);//设置返回的位置</div><div class="line">void longjmp(jmp_buf env, int val);//开始返回</div></pre></td></tr></table></figure></p>
+<p>回滚一些变量的值，如果不想回滚到之前的值，可以将变量定义为：volatile，全局或静态变量的值也会保持不变。  </p>
+<h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><p><strong>进程标识符</strong><br>非负整型来表示唯一进程ID，但是可以重用，通常ID=0表示交换进程或者调度进程，ID=1表示init进程，ID=2表示页守护进程。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> getpid();<span class="comment">//进程ID</span></div><div class="line"><span class="keyword">pid_t</span> getppid();<span class="comment">//父进程ID</span></div></pre></td></tr></table></figure></p>
+<p><strong>fork函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> fork(<span class="keyword">void</span>);</div></pre></td></tr></table></figure></p>
+<p>两个返回，子进程返回0，通过getppid获得父进程id，ID为0，是交换进程使用，父进程返回子进程的ID，因为，这是父进程获得子进程ID的唯一方式。<br><strong>exec函数</strong><br>fork创建新进程，exec可以执行新程序，exit处理终止，wait等待终止。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Unix环境高级编程，第7、8、9章有关进程的读书笔记。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>UNIX环境高级编程-标准IO库</title>
@@ -532,9 +561,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -570,9 +599,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -847,9 +876,9 @@ In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -924,45 +953,9 @@ $$E(x)=\sum_i\theta_i(x_i)+\sum_{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
-  </entry>
-  
-  <entry>
-    <title>Linux配置OpenCV</title>
-    <link href="http://abumaster.com/2017/04/03/Linux%E9%85%8D%E7%BD%AEOpenCV/"/>
-    <id>http://abumaster.com/2017/04/03/Linux配置OpenCV/</id>
-    <published>2017-04-03T08:23:00.000Z</published>
-    <updated>2017-04-03T12:11:57.398Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>源码安装OpenCV</strong><br>从<a href="http://opencv.org/">OpenCV官网</a>下载，最新版的OpenCV（opencv-3.2.0）。<br>解压文件，得到文件夹（opencv-3.2.0），并进入；<br>进行源码编译：<br><a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir release  </div><div class="line">cd release  </div><div class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..  </div><div class="line">make  </div><div class="line">sudo make install</div></pre></td></tr></table></figure>
-<p><strong>配置依赖库</strong><br>安装完成后，编译完成，运行时会出现找不到依赖库的情况如：<br><code>error while loading shared libraries: libopencv_core.so.2.4: cannot open shared object file: No such file or directory</code><br>这是因为没有把共享库放在加载器可以找到的位置，解决方法：<br>首先定位到Opencv动态库所在的目录，一般在<code>/usr/local/lib/</code>或者<code>/usr/lib/x86_64-linux-gun/</code>中，在<code>/etc/ld.so.conf.d/</code>目录下创建一个opencv.conf的文件，并把上述的路径写入文件，然后执行<code>sudo ldconfig -v</code><br><strong>编译</strong><br><strong>1.第一种方式</strong><br><code>g++ DisplayImage.cpp -o DisplayImage &#39;pkg-config opencv --cflags --libs&#39;</code><br>在上面的编译命令中我们其实用到了一个工具“pkg-config”，它主要有以下几个功能：</p>
-<ul>
-<li><p>检查库的版本号。如果所需要的库的版本不满足要求，它会打印出错误信息，避免链接错误版本的库文件。  </p>
-</li>
-<li><p>获得编译预处理参数，如宏定义，头文件的位置。  </p>
-</li>
-<li><p>获得链接参数，如库及依赖的其它库的位置，文件名及其它一些连接参数。  </p>
-</li>
-<li><p>自动加入所依赖的其它库的设置</p>
-</li>
-</ul>
-<p><strong>2.cmake工具</strong><br>CMake工具，需要一个CMakeLists.txt文件，然后输入命令<code>cmake .</code>会生成Makefile文件，然后make就行了。<br>CMakeLists.txt文件书写（opencv源码中带的例子example_cmake文件夹）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># CMakeLists.txt</div><div class="line"># 必须的信息</div><div class="line">cmake_minimum_required(VERSION 2.8)</div><div class="line"></div><div class="line"># 工程的名称</div><div class="line">project(opencv_example_project)</div><div class="line"></div><div class="line"># 查找opencv的包</div><div class="line">find_package(OpenCV REQUIRED)</div><div class="line"></div><div class="line"># 打印库的状态信息</div><div class="line">message(STATUS &quot;OpenCV library status:&quot;)</div><div class="line">message(STATUS &quot;    version: $&#123;OpenCV_VERSION&#125;&quot;)</div><div class="line">message(STATUS &quot;    libraries: $&#123;OpenCV_LIBS&#125;&quot;)</div><div class="line">message(STATUS &quot;    include path: $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</div><div class="line"></div><div class="line">if(CMAKE_VERSION VERSION_LESS &quot;2.8.11&quot;)</div><div class="line">  # Add OpenCV headers location to your include paths</div><div class="line">  include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</div><div class="line">endif()</div><div class="line"></div><div class="line"># 生成的目标以及源文件</div><div class="line">add_executable(opencv_example example.cpp)</div><div class="line"></div><div class="line"># 程序与opencv动态库连接</div><div class="line">target_link_libraries(opencv_example $&#123;OpenCV_LIBS&#125;)</div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;源码安装OpenCV&lt;/strong&gt;&lt;br&gt;从&lt;a href=&quot;http://opencv.org/&quot;&gt;OpenCV官网&lt;/a&gt;下载，最新版的OpenCV（opencv-3.2.0）。&lt;br&gt;解压文件，得到文件夹（opencv-3.2.0），并进入；&lt;br&gt;进行源码编译：&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
