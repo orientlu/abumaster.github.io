@@ -447,11 +447,12 @@
     <link href="http://abumaster.com/2017/04/19/%E9%9B%B6%E6%95%A3/"/>
     <id>http://abumaster.com/2017/04/19/零散/</id>
     <published>2017-04-19T06:25:45.000Z</published>
-    <updated>2017-05-13T08:22:45.478Z</updated>
+    <updated>2017-05-19T14:03:42.963Z</updated>
     
     <content type="html"><![CDATA[<h4 id="VMware虚拟机在Windows下错误"><a href="#VMware虚拟机在Windows下错误" class="headerlink" title="VMware虚拟机在Windows下错误"></a>VMware虚拟机在Windows下错误</h4><blockquote>
 <p>出现如下错误：VMware Workstation and Device/Credential Guard are not compatible</p>
 </blockquote>
+<a id="more"></a>
 <p>Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！<br><strong>解决方案：</strong><br>1.关闭hyper-v服务<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png" alt=""><br>如图，关闭红色框内的功能。<br>2.增加开机启动选项<br><a href="http://stackoverflow.com/questions/39858200/vmware-workstation-and-device-credential-guard-are-not-compatible/41968105#41968105">stackoverflow 问题回答</a>在CMD管理员身份运行，注意不能用PowerShell。编辑bcd。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /copy &#123;current&#125; /d &quot;No Hyper-V&quot; </div><div class="line">The entry was successfully copied to &#123;ff-23-113-824e-5c5144ea&#125;. </div><div class="line"></div><div class="line">C:\&gt;bcdedit /set &#123;ff-23-113-824e-5c5144ea&#125; hypervisorlaunchtype off </div><div class="line">The operation completed successfully.</div></pre></td></tr></table></figure></p>
 <p>重启经过一段时间配置，开机启动项出现了两个选项：</p>
 <ul>
@@ -460,7 +461,6 @@
 </ul>
 <p><em>删除开启启动项：</em><br>在CMD中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /v</div><div class="line">列出了开机启动项，删除对应的选项即可。</div><div class="line">C:\&gt;bcdedit /delete &#123;ff-23-113-824e-5c5144ea&#125;</div></pre></td></tr></table></figure></p>
 <p>另一种，在系统配置中直接配置引导项。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png" alt="">  </p>
-<a id="more"></a>
 <p>图像分类：
 Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
 <p>物体检测：
@@ -476,14 +476,6 @@ Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate o
       &lt;h4 id=&quot;VMware虚拟机在Windows下错误&quot;&gt;&lt;a href=&quot;#VMware虚拟机在Windows下错误&quot; class=&quot;headerlink&quot; title=&quot;VMware虚拟机在Windows下错误&quot;&gt;&lt;/a&gt;VMware虚拟机在Windows下错误&lt;/h4&gt;&lt;blockquote&gt;
 &lt;p&gt;出现如下错误：VMware Workstation and Device/Credential Guard are not compatible&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！&lt;br&gt;&lt;strong&gt;解决方案：&lt;/strong&gt;&lt;br&gt;1.关闭hyper-v服务&lt;br&gt;&lt;img src=&quot;http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;如图，关闭红色框内的功能。&lt;br&gt;2.增加开机启动选项&lt;br&gt;&lt;a href=&quot;http://stackoverflow.com/questions/39858200/vmware-workstation-and-device-credential-guard-are-not-compatible/41968105#41968105&quot;&gt;stackoverflow 问题回答&lt;/a&gt;在CMD管理员身份运行，注意不能用PowerShell。编辑bcd。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;C:\&amp;gt;bcdedit /copy &amp;#123;current&amp;#125; /d &amp;quot;No Hyper-V&amp;quot; &lt;/div&gt;&lt;div class=&quot;line&quot;&gt;The entry was successfully copied to &amp;#123;ff-23-113-824e-5c5144ea&amp;#125;. &lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;C:\&amp;gt;bcdedit /set &amp;#123;ff-23-113-824e-5c5144ea&amp;#125; hypervisorlaunchtype off &lt;/div&gt;&lt;div class=&quot;line&quot;&gt;The operation completed successfully.&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;重启经过一段时间配置，开机启动项出现了两个选项：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Windows 10  &lt;/li&gt;
-&lt;li&gt;No Hyper-V  &lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;em&gt;删除开启启动项：&lt;/em&gt;&lt;br&gt;在CMD中输入：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;C:\&amp;gt;bcdedit /v&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;列出了开机启动项，删除对应的选项即可。&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;C:\&amp;gt;bcdedit /delete &amp;#123;ff-23-113-824e-5c5144ea&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;另一种，在系统配置中直接配置引导项。&lt;br&gt;&lt;img src=&quot;http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png&quot; alt=&quot;&quot;&gt;  &lt;/p&gt;
     
     </summary>
     
@@ -561,9 +553,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -599,9 +591,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -876,9 +868,9 @@ In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
@@ -953,9 +945,9 @@ $$E(x)=\sum_i\theta_i(x_i)+\sum_{ij}\theta_{ij}(x_i,x_j)$$<br>有一元项和二
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
