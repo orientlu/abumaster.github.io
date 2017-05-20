@@ -95,10 +95,12 @@
 <meta property="og:url" content="http://abumaster.com/2017/05/19/UNIX环境高级编程-进程/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Unix环境高级编程，第7、8、9章有关进程的读书笔记。">
-<meta property="og:updated_time" content="2017-05-19T12:01:06.405Z">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png">
+<meta property="og:updated_time" content="2017-05-20T01:52:58.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX环境高级编程-进程">
 <meta name="twitter:description" content="Unix环境高级编程，第7、8、9章有关进程的读书笔记。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png">
 
 
 
@@ -144,6 +146,15 @@
 
 
 
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=62233777";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -224,9 +235,43 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -347,7 +392,18 @@
       
         <p>Unix环境高级编程，第7、8、9章有关进程的读书笔记。<br><a id="more"></a></p>
 <h3 id="进程环境"><a href="#进程环境" class="headerlink" title="进程环境"></a>进程环境</h3><p>进程的启动和终止。一般c程序从入口函数<code>main</code>开始，调用一系列用户函数等；进程终止有正常终止和异常终止两种，其中，正常终止是程序从main函数返回(return)，或者正常调用退出函数<code>exit _exit _Exit</code>，或者线程的返回或退出，异常终止通常会调用<code>abort</code>或者信号中断。<br><strong>命令行参数和环境表</strong><br>它们都是有外界给程序的参数，就像标注的 ISO C 规定的主函数书写格式
-<figure class="highlight plain"><figcaption><span>main(int argc,char *argv[]```，将命令行参数保存，而环境变量表则被取消了，仍可以通过函数访问环境表。 </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">查看和设置环境变量，  </div><div class="line">```c</div><div class="line">#include &lt;stdlib.h&gt;</div><div class="line">char *getenv(const char* envname);</div><div class="line">int putenv(char *str);//不会分配空间</div><div class="line">int setenv(char *name, char *value, int rewrite);//分配空间</div><div class="line">int unsetenv(const char *name);</div><div class="line">``` </div><div class="line">**C 程序的存储空间分布**  </div><div class="line">如图：  </div><div class="line">![](http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png)  </div><div class="line"></div><div class="line">+	正文段，存放程序运行所需的机器指令部分，具有只读属性；  </div><div class="line">+	初始化数据段，明确初始化的变量；</div><div class="line">+	未初始化的数据；  </div><div class="line">+	栈，存放自动变量或者临时变量；  </div><div class="line">+	堆，动态分配的空间。  </div><div class="line">**非局部goto**  </div><div class="line">```c</div><div class="line">#include &lt;setjmp.h&gt;</div><div class="line">int setjmp(jmp_buf env);//设置返回的位置</div><div class="line">void longjmp(jmp_buf env, int val);//开始返回</div></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[]</span></span></div></pre></td></tr></table></figure></p>
+<p>将命令行参数保存，而环境变量表则被取消了，仍可以通过函数访问环境表。 
+查看和设置环境变量，<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* envname)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">putenv</span><span class="params">(<span class="keyword">char</span> *str)</span></span>;<span class="comment">//不会分配空间</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">setenv</span><span class="params">(<span class="keyword">char</span> *name, <span class="keyword">char</span> *value, <span class="keyword">int</span> rewrite)</span></span>;<span class="comment">//分配空间</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>C 程序的存储空间分布</strong><br>如图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png" alt="">   </p>
+<ul>
+<li>正文段，存放程序运行所需的机器指令部分，具有只读属性；  </li>
+<li>初始化数据段，明确初始化的变量；</li>
+<li>未初始化的数据；  </li>
+<li>栈，存放自动变量或者临时变量；  </li>
+<li>堆，动态分配的空间。  </li>
+</ul>
+<p><strong>非局部goto</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span>;<span class="comment">//设置返回的位置</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env, <span class="keyword">int</span> val)</span></span>;<span class="comment">//开始返回</span></div></pre></td></tr></table></figure></p>
 <p>回滚一些变量的值，如果不想回滚到之前的值，可以将变量定义为：volatile，全局或静态变量的值也会保持不变。  </p>
 <h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><p><strong>进程标识符</strong><br>非负整型来表示唯一进程ID，但是可以重用，通常ID=0表示交换进程或者调度进程，ID=1表示init进程，ID=2表示页守护进程。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> getpid();<span class="comment">//进程ID</span></div><div class="line"><span class="keyword">pid_t</span> getppid();<span class="comment">//父进程ID</span></div></pre></td></tr></table></figure></p>
 <p><strong>fork函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> fork(<span class="keyword">void</span>);</div></pre></td></tr></table></figure></p>
@@ -410,6 +466,29 @@
 
 
     <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
       
     </div>
   </div>
@@ -574,7 +653,7 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
+  &copy;  2016 - 
   <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
@@ -710,6 +789,132 @@
 
   
   
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
 
   
   
@@ -731,7 +936,7 @@
         }
       });
     </script>
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
   
 
 
