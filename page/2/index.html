@@ -295,7 +295,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/18/Caffe的C-接口调用/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/03/Linux配置OpenCV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -317,8 +317,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/18/Caffe的C-接口调用/" itemprop="url">
-                  Caffe的C++接口调用
+                <a class="post-title-link" href="/2017/04/03/Linux配置OpenCV/" itemprop="url">
+                  Linux配置OpenCV
                 </a>
               
             
@@ -334,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-18T20:25:06+08:00">
-                2017-04-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-03T16:23:00+08:00">
+                2017-04-03
               </time>
             
 
@@ -393,10 +393,10 @@
 
       
         
-          <p>Caffe的原生接口是C++，但是使用起来相对于Python和MATLAB也是最麻烦的，一个是需要配置各种第三方库，二是Windows下用VS新建C++工程出现各种编译问题。<br>
+          <p><strong>源码安装OpenCV</strong><br>从<a href="http://opencv.org/">OpenCV官网</a>下载，最新版的OpenCV（opencv-3.2.0）。<br>解压文件，得到文件夹（opencv-3.2.0），并进入；<br>进行源码编译：<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/18/Caffe的C-接口调用/#more" rel="contents">
+            <a class="btn" href="/2017/04/03/Linux配置OpenCV/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -439,7 +439,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/02/C-类构造函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -461,8 +461,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" itemprop="url">
-                  高效分片训练结构化模型用于图像语义分割
+                <a class="post-title-link" href="/2017/04/02/C-类构造函数/" itemprop="url">
+                  C++类构造函数
                 </a>
               
             
@@ -478,8 +478,440 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T16:58:15+08:00">
-                2017-04-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-02T14:45:54+08:00">
+                2017-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="C-中构造函数和析构函数应该注意的问题"><a href="#C-中构造函数和析构函数应该注意的问题" class="headerlink" title="C++中构造函数和析构函数应该注意的问题"></a>C++中构造函数和析构函数应该注意的问题</h3><p>构造方法用来初始化类的对象，与父类的其它成员不同，它不能被子类继承（子类可以继承父类所有的成员变量和成员方法，但不继承父类的构造方法）。因此，在创建子类对象时，为了初始化从父类继承来的数据成员，系统需要调用其父类的构造方法。C++11新标准中，派生类可以重用其直接基类定义的构造函数，类不能继承默认、拷贝、移动构造函数，如果派生类没有指定，则编译器会自动合成。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/02/C-类构造函数/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/01/数据结构-红黑二叉树/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/01/数据结构-红黑二叉树/" itemprop="url">
+                  数据结构-红黑二叉树
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-01T12:25:53+08:00">
+                2017-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="http://baike.baidu.com/link?url=mBopTNvEQOoavVU5s3cuRGbnLKZpEqoY3bjObubuenp_uCcLmyRAwh1PuuWb_GG-uLYrHyVtzC1h4hVP6pOO87s2UyvehOgd136FgM3x8IcRcaXalJMpEG1KfjIbmCcA">红黑树（Red Black Tree）</a>是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。<br>它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。<br>红黑树和<a href="http://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91">AVL树（平衡二叉树）</a>类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/01/数据结构-红黑二叉树/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/31/动态规划-背包问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/31/动态规划-背包问题/" itemprop="url">
+                  动态规划-背包问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-31T08:41:50+08:00">
+                2017-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>题目描述</strong><br>有 a，b，c 三个物体，<br>重量记为 W 5，4，3<br>价值记为 V 20 10 12<br>有一个背包容量 C = 10 ，问：可以装的最大价值为多少？  </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/31/动态规划-背包问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/30/深度解析网络用于图像语义分割/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/30/深度解析网络用于图像语义分割/" itemprop="url">
+                  深度解析网络用于图像语义分割
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-30T10:20:52+08:00">
+                2017-03-30
               </time>
             
 
@@ -538,12 +970,11 @@
       
         
           <blockquote>
-<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
-Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
+<p>2015 年 ICCV 论文：Semantic Image Segmentation via Deep Parsing Network <sup>[1]</sup>，针对图像语义分割将丰富信息（上下文关系）并入马尔科夫随机场（MRF），取代用迭代法去优化 MRFs 提出了一种卷积网络，被称为深度解析网络（DPN），可以通过一次前向传递决定端对端的计算。</p>
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/#more" rel="contents">
+            <a class="btn" href="/2017/03/30/深度解析网络用于图像语义分割/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -586,7 +1017,7 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/16/拉普拉斯重建和细化用于图像语义分割/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/29/公式专辑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -608,8 +1039,8 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
             
               
                 
-                <a class="post-title-link" href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" itemprop="url">
-                  拉普拉斯重建和细化用于图像语义分割
+                <a class="post-title-link" href="/2017/03/29/公式专辑/" itemprop="url">
+                  公式专辑
                 </a>
               
             
@@ -625,442 +1056,8 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T16:05:56+08:00">
-                2017-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  </p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/14/网易2017春招笔试编程题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="abumaster">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="张国丰">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/14/网易2017春招笔试编程题/" itemprop="url">
-                  网易2017春招笔试编程题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-14T14:14:18+08:00">
-                2017-04-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/programming/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><strong>感悟</strong>：读的算法书，练习的算法题目都学到狗身上去了？不能活学活用，也就不能灵光乍现，难以进步。看似简单的题目，往往没有经过深思熟虑，导致复杂度高，无法通过。欠缺思考。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/14/网易2017春招笔试编程题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/11/FCN图像语义分割计算的细节问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="abumaster">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="张国丰">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/11/FCN图像语义分割计算的细节问题/" itemprop="url">
-                  FCN图像语义分割计算的细节问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-11T16:59:57+08:00">
-                2017-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Fully Convolutional Networks for Semantic Segmentation论文中的源代码阅读笔记。详细描述了分类网络如何变为一个分割网络，并输出最后的分割图。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/11/FCN图像语义分割计算的细节问题/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/10/Stanford-Background-Dataset介绍和使用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="abumaster">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="张国丰">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/10/Stanford-Background-Dataset介绍和使用/" itemprop="url">
-                  Stanford Background Dataset介绍和使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-10T14:35:07+08:00">
-                2017-04-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T15:53:21+08:00">
+                2017-03-29
               </time>
             
 
@@ -1118,15 +1115,12 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
 
       
         
-          <p><a href="http://dags.stanford.edu/projects/scenedataset.html">Stanford Background Dataset</a>是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。</p>
-<ul>
-<li><p>images文件夹包含了715张图像；  </p>
-</li>
-<li><p>horizons.txt  图像名称、大小、水平线位置；  </p>
+          <blockquote>
+<p>公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/10/Stanford-Background-Dataset介绍和使用/#more" rel="contents">
+            <a class="btn" href="/2017/03/29/公式专辑/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1169,7 +1163,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/09/caffe提取各层特征/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/29/图床测试/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -1191,8 +1185,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
             
               
                 
-                <a class="post-title-link" href="/2017/04/09/caffe提取各层特征/" itemprop="url">
-                  caffe提取各层特征
+                <a class="post-title-link" href="/2017/03/29/图床测试/" itemprop="url">
+                  图床测试
                 </a>
               
             
@@ -1208,8 +1202,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T20:07:29+08:00">
-                2017-04-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T14:20:44+08:00">
+                2017-03-29
               </time>
             
 
@@ -1231,8 +1225,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
+                  <a href="/categories/other/" itemprop="url" rel="index">
+                    <span itemprop="name">其他</span>
                   </a>
                 </span>
 
@@ -1267,10 +1261,12 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 
       
         
-          <p>根据薛开宇的caffe学习笔记中逐层可视化特征进行实践，中间出现了一些问题，记录如下：<br><strong>1.caffe创建分类器</strong><br>Classifier继承自Net，可以从网络配置文件和模型中初始化网络，提供了一个predict函数，输入是一幅图片(w*H*K)返回的是一张N*C的numpy.ndarry。代表每张图片有可能对应的C个类别。也就是说，你以后用这个class会很方便，直接省去图片的初始化。源码位于：caffe-master\python\caffe下。<br>
+          <blockquote>
+<p><strong>图床</strong>一般是专门用来存储图片的服务器，同时向外提供链接。国内和国外之分，本次测试的是<strong><a href="http://jiantuku.com/">极简图床</a></strong>。<br>优点：不必把图片上传到博客服务器，节省服务器的空间。<br>缺点：不能上传大于5M的图片，稳定性待测。  </p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/09/caffe提取各层特征/#more" rel="contents">
+            <a class="btn" href="/2017/03/29/图床测试/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1313,7 +1309,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/07/结合特定任务边缘检测的图像语义分割/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -1335,8 +1331,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
             
               
                 
-                <a class="post-title-link" href="/2017/04/07/结合特定任务边缘检测的图像语义分割/" itemprop="url">
-                  结合特定任务边缘检测的图像语义分割
+                <a class="post-title-link" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" itemprop="url">
+                  Feedforward semantic segmentation with zoom-out features
                 </a>
               
             
@@ -1352,8 +1348,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-07T15:38:22+08:00">
-                2017-04-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-27T14:21:29+08:00">
+                2017-03-27
               </time>
             
 
@@ -1412,11 +1408,11 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
       
         
           <blockquote>
-<p>DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提出了一种新的解决方案，空间转换（DT）替换crfs，这是一种边缘过滤保留方法。计算速度有一定的提升。  </p>
+<p>使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  </p>
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/07/结合特定任务边缘检测的图像语义分割/#more" rel="contents">
+            <a class="btn" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1459,7 +1455,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/06/进制转换/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/25/全卷积网络用于图像语义分割/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -1481,8 +1477,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
             
               
                 
-                <a class="post-title-link" href="/2017/04/06/进制转换/" itemprop="url">
-                  进制转换
+                <a class="post-title-link" href="/2017/03/25/全卷积网络用于图像语义分割/" itemprop="url">
+                  全卷积网络用于图像语义分割
                 </a>
               
             
@@ -1498,152 +1494,8 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-06T21:16:07+08:00">
-                2017-04-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/programming/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><strong>题目描述</strong><br>将任意长度的二进制转换成十进制。<br>要求任意长度，所以，不能常规的按照整型或长整型来表示，任意长度的数字，这里还要考虑溢出。因此，考虑字符串表示，同样的题目还有：<em>数字的n次方</em>、<em>大数相加</em>、<em>大数相乘</em>。主要思想：用字符串或者数组保存数字，计算时利用进位和标准运算进行。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/06/进制转换/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/05/全卷积网络和全连接条件随机场/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="abumaster">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="张国丰">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/05/全卷积网络和全连接条件随机场/" itemprop="url">
-                  全卷积网络和全连接条件随机场
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-05T15:08:55+08:00">
-                2017-04-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-25T15:31:02+08:00">
+                2017-03-25
               </time>
             
 
@@ -1701,10 +1553,453 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 
       
         
-          <p>来自论文Semantic image segmentation with deep convolutional nets and fully connected crfs 2015.  主要针对将深度卷积网络应用到图像标记任务中的两个问题：下采样，和从分类网络中获得以物体为中心的描述。提出了像素级别的条件随机场和基于DCNN的一元项的结合的模型。优点：速度快，正确度高，模型简单。<br>
+          <blockquote>
+<p>全卷积网络用于图像语义分割 (Fully Convolutional Networks for Semantic Segmentation)<sup>[1]</sup>  </p>
+</blockquote>
+<p>全卷积网络实际上就是把普通卷积网络的最后的全连接层变为卷积层，因为全连接层会把空间信息隐藏，全部展开为一维向量，换为卷积可以保留空间信息。如VGG-16网络在处理ImageNet数据集时，最后的1000个输出，是1000维向量，来表示1000类事物的概率，当换为卷积层时，输出了1000个1*1大小的输出，对此上采样，可以输出对应的heat-map。这是分类网络作为稠密输出的关键。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/05/全卷积网络和全连接条件随机场/#more" rel="contents">
+            <a class="btn" href="/2017/03/25/全卷积网络用于图像语义分割/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/24/卷积网络应该注意的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/24/卷积网络应该注意的问题/" itemprop="url">
+                  卷积网络应该注意的问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-24T14:28:18+08:00">
+                2017-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>卷积神经网络简介，由于其出色的特征提取特性，使得在计算机视觉方面有了很好的应用，并取得了出色的成绩。<br><strong>卷积</strong><br>卷积操作是卷积网络中的核心操作，其主要目的是为了提取图像的显著特征，降低特征维数，进而来减少计算量。在 caffe 代码中的主要参数如下：<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/24/卷积网络应该注意的问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/21/CRFs-as-RNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/21/CRFs-as-RNN/" itemprop="url">
+                  Conditional Random Fields as Recurrent Neural Networks
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T16:00:18+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
+</blockquote>
+<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/21/CRFs-as-RNN/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/12/柔性数组/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/12/柔性数组/" itemprop="url">
+                  柔性数组
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-12T21:59:48+08:00">
+                2017-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="C-C-中的0长数组"><a href="#C-C-中的0长数组" class="headerlink" title="C/C++中的0长数组"></a>C/C++中的0长数组</h3><hr>
+<p>定义：柔性数组（Flexible Array）也叫伸缩性数组、变长数组。<br></p>
+<h2 id="作用-：放入结构体中，可以存放动态长度的字符串、数组等。"><a href="#作用-：放入结构体中，可以存放动态长度的字符串、数组等。" class="headerlink" title="作用 ：放入结构体中，可以存放动态长度的字符串、数组等。"></a>作用 ：放入结构体中，可以存放动态长度的字符串、数组等。</h2><ul>
+<li>用法举例：<br>
+放在结构体的最后，长度为0的数组。长度为0不占用任何空间，数组名只是一个符号，代表了一个不可改变的地址。  </li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/12/柔性数组/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1742,7 +2037,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
 
@@ -1847,6 +2142,15 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
                 </a>
               </span>
             
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2938537815/profile?topnav=1&wvr=6" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
           
         </div>
 
@@ -1899,6 +2203,22 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 
 
         
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">您是第<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>个小伙伴</span>
+  
+
+  
+    <span class="site-pv">本站总浏览<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
 
         
       </div>
@@ -2003,17 +2323,6 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 
 
 
-  
-    <script type="text/javascript">
-      (function(d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') { return; }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-      })(document, 'script');
-    </script>
   
 
 
@@ -2174,6 +2483,21 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 
