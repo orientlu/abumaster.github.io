@@ -1,0 +1,1094 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++,技巧,测试," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="张国丰" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/19174796-file_1495200018518_1007d.png?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="googletest是Google的一个C++单元测试框架，Github地址。其中包括了googletest和googlemock。使测试具有良好的独立性和重用性，并可以跨平台使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="googletest使用">
+<meta property="og:url" content="http://abumaster.com/2017/05/21/googletest使用/index.html">
+<meta property="og:site_name" content="张国丰">
+<meta property="og:description" content="googletest是Google的一个C++单元测试框架，Github地址。其中包括了googletest和googlemock。使测试具有良好的独立性和重用性，并可以跨平台使用。">
+<meta property="og:updated_time" content="2017-05-21T09:15:48.244Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="googletest使用">
+<meta name="twitter:description" content="googletest是Google的一个C++单元测试框架，Github地址。其中包括了googletest和googlemock。使测试具有良好的独立性和重用性，并可以跨平台使用。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://abumaster.com/2017/05/21/googletest使用/"/>
+
+
+
+
+
+  <title> googletest使用 | 张国丰 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=62233777";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">张国丰</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">张国丰的博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/05/21/googletest使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                googletest使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T11:02:25+08:00">
+                2017-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>googletest是Google的一个C++单元测试框架，<a href="https://github.com/google/googletest">Github地址</a>。其中包括了googletest和googlemock。使测试具有良好的独立性和重用性，并可以跨平台使用。<br><a id="more"></a></p>
+<h3 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h3><p>从<a href="https://github.com/google/googletest">github</a>下载源码，本地解压。在 Windows 平台下用vs打开<code>msvc</code>目录中的<code>gtest.sln</code>，全部生成，根据平台的不同会在同目录下的debug和release中生成<code>gtestd.lib</code>和<code>gtest_maind.lib</code>，用时拷贝include和lib文件，并在工程项目中添加依赖。Linux平台下用cmake生成，在源文件目录下创建一个新文件目录如<code>build</code>，进入<code>build</code>打开终端输入<code>cmake ..</code>，生成<code>makefile</code>文件，输入<code>make</code>，生成<code>libgtest.a</code>文件，使用时将include文件包含入项目，动态链接<code>-lgtest</code>由于用到线程也需要链接<code>-lpthread</code>。更多详细信息可以在源码的<a href="https://github.com/google/googletest/blob/master/googletest/README.md">README.MD</a>。  </p>
+<h3 id="断言"><a href="#断言" class="headerlink" title="断言"></a>断言</h3><blockquote>
+<p>Google Test 中使用了类似宏的断言来定义测试内容。一般分为两个版本：<code>ASSERT_*</code>，错误抛出异常并终止运行；<code>EXPECT_*</code>生成不致命的错误，不会终止功能的运行。</p>
+</blockquote>
+<h4 id="基本断言"><a href="#基本断言" class="headerlink" title="基本断言"></a>基本断言</h4><p>用于判断true/false的断言。  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>致命断言</strong></th>
+<th style="text-align:left"><strong>非致命</strong></th>
+<th style="text-align:left"><strong>验证</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ASSERT_TRUE(</code><em>condition</em><code>)</code>;</td>
+<td style="text-align:left"><code>EXPECT_TRUE(</code><em>condition</em><code>)</code>;</td>
+<td style="text-align:left"><em>condition</em> is true</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_FALSE(</code><em>condition</em><code>)</code>;</td>
+<td style="text-align:left"><code>EXPECT_FALSE(</code><em>condition</em><code>)</code>;</td>
+<td style="text-align:left"><em>condition</em> is false</td>
+</tr>
+</tbody>
+</table>
+<h4 id="二元比较"><a href="#二元比较" class="headerlink" title="二元比较"></a>二元比较</h4><p>测试比较两个值。  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>致命断言</strong></th>
+<th style="text-align:left"><strong>非致命断言</strong></th>
+<th style="text-align:left"><strong>验证</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ASSERT_EQ(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_EQ(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>==</code> <em>val2</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_NE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_NE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>!=</code> <em>val2</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_LT(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_LT(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>&lt;</code> <em>val2</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_LE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_LE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>&lt;=</code> <em>val2</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_GT(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_GT(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>&gt;</code> <em>val2</em></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_GE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_GE(</code><em>val1</em><code>,</code><em>val2</em><code>);</code></td>
+<td style="text-align:left"><em>val1</em> <code>&gt;=</code> <em>val2</em></td>
+</tr>
+</tbody>
+</table>
+<h4 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h4><p>测试两个字符串string。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>致命断言</strong></th>
+<th style="text-align:left"><strong>非致命断言</strong></th>
+<th style="text-align:left"><strong>验证</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ASSERT_STREQ(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_STREQ(</code><em>str1</em><code>,</code>_str_2<code>);</code></td>
+<td style="text-align:left">两个c字符串有相同的内容</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_STRNE(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_STRNE(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left">两个c字符串不同</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_STRCASEEQ(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_STRCASEEQ(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left">两字符串相同，忽略案例</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ASSERT_STRCASENE(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left"><code>EXPECT_STRCASENE(</code><em>str1</em><code>,</code><em>str2</em><code>);</code></td>
+<td style="text-align:left">两字符串不同，忽略用例</td>
+</tr>
+</tbody>
+</table>
+<h3 id="简单的使用"><a href="#简单的使用" class="headerlink" title="简单的使用"></a>简单的使用</h3><h4 id="创建简单测试"><a href="#创建简单测试" class="headerlink" title="创建简单测试"></a>创建简单测试</h4><p>创建简单测试的过程：</p>
+<ol>
+<li>使用<code>TEST()</code>宏定义和命名一个测试函数，不需要返回值，像普通的c++函数一样；  </li>
+<li>在其中可以使用任何合法的C++语句，并包含Googletest的测试宏，用来检查值；  </li>
+<li>由其中定义的宏决定返回值，成功或者失败。  </li>
+</ol>
+<p>如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TEST(test_case_name, test_name) &#123;</div><div class="line"> <span class="comment">//具体测试宏和普通语句</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>第一个参数为测试用例的名字，第二个参数为测试的名字，名字符合C++命名规范。  </p>
+<p><strong>例子：</strong>  </p>
+<blockquote>
+<p>测试一个函数 <code>int Factorial(int n); // 返回n的阶乘</code></p>
+</blockquote>
+<p>则测试用例可以写为：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Tests factorial of 0.</span></div><div class="line">TEST(FactorialTest, HandlesZeroInput) &#123;</div><div class="line">  EXPECT_EQ(<span class="number">1</span>, Factorial(<span class="number">0</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Tests factorial of positive numbers.</span></div><div class="line">TEST(FactorialTest, HandlesPositiveInput) &#123;</div><div class="line">  EXPECT_EQ(<span class="number">1</span>, Factorial(<span class="number">1</span>));</div><div class="line">  EXPECT_EQ(<span class="number">2</span>, Factorial(<span class="number">2</span>));</div><div class="line">  EXPECT_EQ(<span class="number">6</span>, Factorial(<span class="number">3</span>));</div><div class="line">  EXPECT_EQ(<span class="number">40320</span>, Factorial(<span class="number">8</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上述一个测试用例，包含了两个不同输入的测试。  </p>
+<h4 id="Test-Fixture-为不同测试配置相同的数据"><a href="#Test-Fixture-为不同测试配置相同的数据" class="headerlink" title="Test Fixture 为不同测试配置相同的数据"></a>Test Fixture 为不同测试配置相同的数据</h4><p>写了多组测试，需要用到相似的数据，这时就需要 <em>test fexture</em> ，可以在不同测试中使用相同的对象配置。创建一个 <em>fixture</em> 的过程如下：  </p>
+<ol>
+<li>先从 <code>::testing::Test</code> 类中继承一个类，成员函数定义为 <code>public:</code> 或者 <code>protected:</code>，可以使子类访问；  </li>
+<li>在类中定义你想用到的对象；  </li>
+<li>如果有必要可以写一个默认构造函数或者 <code>SetUp()</code> 函数，来准备测试所需的对象；  </li>
+<li>如果有必要写一个析构函数或者 <code>TearDown()</code> 函数，来释放申请的资源信息，与上一步配对使用；  </li>
+<li>为测试写子程序。  </li>
+</ol>
+<p>同样，<code>TEST_F()</code> 取代了上面的 <code>TEST()</code> 宏，允许访问 <em>test fixture</em> 中的子程序和对象：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TEST_F(test_case_name, test_name) &#123;</div><div class="line"> <span class="comment">//测试</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> <em>第一个参数</em> 为测试用例的名称，必须为 <em>test fixture</em> 类的名称（_F 代表了 fixture）。如何使用。<br> <strong>例子：</strong><br>需要测试的一个类 <code>Queue</code> 定义如下：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> E&gt; <span class="comment">// E is the element type.</span></div><div class="line"><span class="keyword">class</span> Queue &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">  Queue();</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">Enqueue</span><span class="params">(<span class="keyword">const</span> E&amp; element)</span></span>;</div><div class="line">  <span class="function">E* <span class="title">Dequeue</span><span class="params">()</span></span>; <span class="comment">// Returns NULL if the queue is empty.</span></div><div class="line">  <span class="keyword">size_t</span> size() <span class="keyword">const</span>;</div><div class="line">  ...</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>定义 fixture 类，命名规范如果待测试的类为 <code>Foo</code> 则 fixture 类命名为 <code>FooTest</code> 。
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> QueueTest : <span class="keyword">public</span> ::testing::Test &#123;</div><div class="line"> <span class="keyword">protected</span>:</div><div class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">SetUp</span><span class="params">()</span> </span>&#123;</div><div class="line">    q1_.Enqueue(<span class="number">1</span>);</div><div class="line">    q2_.Enqueue(<span class="number">2</span>);</div><div class="line">    q2_.Enqueue(<span class="number">3</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// virtual void TearDown() &#123;&#125;</span></div><div class="line"></div><div class="line">  Queue&lt;<span class="keyword">int</span>&gt; q0_;</div><div class="line">  Queue&lt;<span class="keyword">int</span>&gt; q1_;</div><div class="line">  Queue&lt;<span class="keyword">int</span>&gt; q2_;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>使用 <code>TES_F()</code> 和 <code>fixture class</code> 创建测试
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">TEST_F(QueueTest, IsEmptyInitially) &#123;</div><div class="line">  EXPECT_EQ(<span class="number">0</span>, q0_.size());</div><div class="line">&#125;</div><div class="line"></div><div class="line">TEST_F(QueueTest, DequeueWorks) &#123;</div><div class="line">  <span class="keyword">int</span>* n = q0_.Dequeue();</div><div class="line">  EXPECT_EQ(<span class="literal">NULL</span>, n);</div><div class="line"></div><div class="line">  n = q1_.Dequeue();</div><div class="line">  ASSERT_TRUE(n != <span class="literal">NULL</span>);</div><div class="line">  EXPECT_EQ(<span class="number">1</span>, *n);</div><div class="line">  EXPECT_EQ(<span class="number">0</span>, q1_.size());</div><div class="line">  <span class="keyword">delete</span> n;</div><div class="line"></div><div class="line">  n = q2_.Dequeue();</div><div class="line">  ASSERT_TRUE(n != <span class="literal">NULL</span>);</div><div class="line">  EXPECT_EQ(<span class="number">2</span>, *n);</div><div class="line">  EXPECT_EQ(<span class="number">1</span>, q2_.size());</div><div class="line">  <span class="keyword">delete</span> n;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>进行如上工作时，如何运作的呢？  </p>
+<ol>
+<li>构造一个 <code>QueueTest</code> 对象，如<code>t1</code>；  </li>
+<li>调用 <code>t1.SetUp()</code> 来初始化 <code>t1</code> ；  </li>
+<li>在 <code>t1</code> 上运行第一个测试 <code>IsEmptyInitially</code> ；</li>
+<li>测试完成后，调用<code>t1.TearDown()</code> ；  </li>
+<li>析构 <code>t1</code> ；  </li>
+<li>重复上述测试。</li>
+</ol>
+<h3 id="调用测试"><a href="#调用测试" class="headerlink" title="调用测试"></a>调用测试</h3><p>初始化，运行所有测试，代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></div><div class="line"></span>&#123;</div><div class="line">	testing::InitGoogleTest(&amp;argc, argv);</div><div class="line">	<span class="keyword">return</span> RUN_ALL_TESTS();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/jq/" rel="tag"># 技巧</a>
+          
+            <a href="/tags/test/" rel="tag"># 测试</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/19/UNIX环境高级编程-进程/" rel="next" title="UNIX环境高级编程-进程">
+                <i class="fa fa-chevron-left"></i> UNIX环境高级编程-进程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
+               alt="abumaster" />
+          <p class="site-author-name" itemprop="name">abumaster</p>
+           
+              <p class="site-description motion-element" itemprop="description">记录学习生活的点滴</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/abumaster" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-guo-feng-3/activities" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-chrome"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2938537815/profile?topnav=1&wvr=6" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译安装"><span class="nav-number">1.</span> <span class="nav-text">编译安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断言"><span class="nav-number">2.</span> <span class="nav-text">断言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本断言"><span class="nav-number">2.1.</span> <span class="nav-text">基本断言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二元比较"><span class="nav-number">2.2.</span> <span class="nav-text">二元比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串比较"><span class="nav-number">2.3.</span> <span class="nav-text">字符串比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的使用"><span class="nav-number">3.</span> <span class="nav-text">简单的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建简单测试"><span class="nav-number">3.1.</span> <span class="nav-text">创建简单测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Test-Fixture-为不同测试配置相同的数据"><span class="nav-number">3.2.</span> <span class="nav-text">Test Fixture 为不同测试配置相同的数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用测试"><span class="nav-number">4.</span> <span class="nav-text">调用测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">abumaster</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">您是第<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>个小伙伴</span>
+  
+
+  
+    <span class="site-pv">本站总浏览<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+  
+
+</body>
+</html>
