@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-21T09:15:48.244Z</updated>
+  <updated>2017-05-22T07:22:13.548Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,220 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>UNIX环境高级编程-信号</title>
+    <link href="http://abumaster.com/2017/05/22/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E4%BF%A1%E5%8F%B7/"/>
+    <id>http://abumaster.com/2017/05/22/UNIX环境高级编程-信号/</id>
+    <published>2017-05-22T02:01:10.000Z</published>
+    <updated>2017-05-22T07:22:13.548Z</updated>
+    
+    <content type="html"><![CDATA[<p>Unix环境高级编程，第10章 信号，读书笔记。信号是一种软件中断，用于处理异步事件。</p>
+<a id="more"></a>
+<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p><strong>信号</strong>都有一个名字，以 <em>SIG</em> 开头，在头文件 <code>&lt;signal.h&gt;</code> 中定义为正整数，信号的编号。信号的产生条件：  </p>
+<ul>
+<li>终端输入中断按键，如 <code>Ctrl+C</code> 产生了 <code>SIGINT</code> 中断信号；  </li>
+<li>硬件异常产生的信号，无效内存引用，除0，等，硬件检测到，通知内核；  </li>
+<li>进程调用 <code>kill(2)</code> 函数可将信号发送给同一用户的另一个进程或进程组；  </li>
+<li>用户调用 <code>kill(1)</code> 将信号发送给其他进程；  </li>
+<li>软件中断。  </li>
+</ul>
+<p>对于信号的处理，有三种方式：忽略此信号、捕捉信号、执行默认动作。<br><strong>系统信号</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>POSIX 信号</th>
+<th>说明</th>
+<th>默认动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGHUP</td>
+<td>挂起</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGINT</td>
+<td>终端中断符</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGQUIT</td>
+<td>退出</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>非法指令</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGTRAP</td>
+<td>断点或陷阱指令</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGABRT/SIGIOT</td>
+<td>abort发送的信号</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGBUS</td>
+<td>非法内存访问</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>浮点异常</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGKILL</td>
+<td>kill信号</td>
+<td>终止(+)</td>
+</tr>
+<tr>
+<td>SIGUSR1</td>
+<td>用户信号1</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGSEGV</td>
+<td>无效内存访问</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGUSR2</td>
+<td>用户信号2</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGPIPE</td>
+<td>管道错误</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGALRM</td>
+<td>alrm发送信号</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGTERM</td>
+<td>终止信号</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGCHLD</td>
+<td>子进程退出</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td>SIGCONT</td>
+<td>进程继续</td>
+<td>忽略(*)</td>
+</tr>
+<tr>
+<td>SIGSTOP</td>
+<td>进程停止</td>
+<td>stop(*)(+)</td>
+</tr>
+<tr>
+<td>SIGTSTP</td>
+<td>终端停止</td>
+<td>stop(*)</td>
+</tr>
+<tr>
+<td>SIGTTIN</td>
+<td>后台读控制tty</td>
+<td>stop(*)</td>
+</tr>
+<tr>
+<td>SIGTTOU</td>
+<td>后台写tty</td>
+<td>stop(*)</td>
+</tr>
+<tr>
+<td>SIGURG</td>
+<td>紧急情况</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td>SIGXCPU</td>
+<td>超过CPU限制</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGXFSZ</td>
+<td>超过文件长度限制</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGVTALRM</td>
+<td>虚拟时钟超时</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGPROF</td>
+<td>梗概时间超时</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGPOLL/SIGIO</td>
+<td>轮询事件pool</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGSYS/SIGUNUSED</td>
+<td>无效系统调用</td>
+<td>内核中断</td>
+</tr>
+<tr>
+<td>SIGSTKFLT</td>
+<td>协处理器栈故障</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGWINCH</td>
+<td>终端窗口大小改变</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td>SIGPWR</td>
+<td>电源失效或重启</td>
+<td>终止</td>
+</tr>
+<tr>
+<td>SIGEMT</td>
+<td>硬件故障</td>
+<td>内核中断</td>
+</tr>
+</tbody>
+</table>
+<h4 id="signal-函数"><a href="#signal-函数" class="headerlink" title="signal 函数"></a>signal 函数</h4><p>Unix 系统的信号机制最简单的接口就是 <em>signal</em> 函数，当程序收到指定信号时，调用指定的函数。函数原型为
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="keyword">void</span> (*signal(<span class="keyword">int</span> signo, <span class="keyword">void</span>(*func)(<span class="keyword">int</span>)))(<span class="keyword">int</span>);</div><div class="line"><span class="comment">//成功返回信号以前的配置，出错返回 SIG_ERR</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_ERR (void (*) ())-1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_DFL (void (*)())0</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SIG_IGN (void (*)())1</span></div></pre></td></tr></table></figure></p>
+<p><strong>说明：</strong> <em>signal</em> 函数有两个参数，返回一个函数指针，这个函数指针有一个参数，并且返回空。 <em>signo</em> 表示上表的函数名称或者编号，第二个参数是一个函数指针，整型参数，返回空。<br>通过宏可以更清晰表示函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="keyword">void</span> <span class="title">Sigfunc</span><span class="params">(<span class="keyword">int</span>)</span></span>;</div><div class="line"><span class="function">Sigfunc *<span class="title">signal</span><span class="params">(<span class="keyword">int</span>, Sigfunc)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>简单示例：</strong><br>捕获信号 <code>SGIUSR1</code> 和 <code>SGIUSR2</code> 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sig_usr</span><span class="params">(<span class="keyword">int</span>)</span></span>; <span class="comment">//signal proc function</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">if</span>(signal(SIGUSR1, sig_usr) == SIG_ERR)</div><div class="line">		err_sys(<span class="string">"can't catch SIGUSR1"</span>);</div><div class="line">	<span class="keyword">if</span>(signal(SIGUSR2, sig_usr) == SIG_ERR)</div><div class="line">		err_sys(<span class="string">"can not catch SIGUSR2"</span>);</div><div class="line"></div><div class="line">	<span class="keyword">for</span>(;;)</div><div class="line">		pause();</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sig_usr</span><span class="params">(<span class="keyword">int</span> signo)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">if</span>(signo == SIGUSR1)</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"received SIGUSR1\n"</span>);</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(signo == SIGUSR2)</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"received SIGUSR2\n"</span>);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		err_dump(<span class="string">"received signal:%d\n"</span>, signo);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当在终端后台运行程序后，输入 <code>kill USR1 (进程ID)</code> 会捕获相应的信号，输出对应的信息。  </p>
+<h4 id="sigaction-函数"><a href="#sigaction-函数" class="headerlink" title="sigaction 函数"></a>sigaction 函数</h4><div class="note info"><p><em>sigaction</em> 函数的功能是用来检查或者修改与指定信号相关联的处理动作，可以用来取代早期的 <em>signal</em> 函数。 </p>
+</div>  
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="function">ing <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> signo, <span class="keyword">const</span> <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> act, <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> oact)</span></span>;</div></pre></td></tr></table></figure>
+<p>其中， <em>signo</em> 是要检查的信号编号， <em>act</em> 指针非空，则是要修改动作，如果 <em>oact</em> 非空则会经由该指针返回该信号的上一个动作。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Unix环境高级编程，第10章 信号，读书笔记。信号是一种软件中断，用于处理异步事件。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>googletest使用</title>
@@ -1054,35 +1268,6 @@ In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>进制转换</title>
-    <link href="http://abumaster.com/2017/04/06/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/"/>
-    <id>http://abumaster.com/2017/04/06/进制转换/</id>
-    <published>2017-04-06T13:16:07.000Z</published>
-    <updated>2017-04-06T14:09:19.093Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>题目描述</strong><br>将任意长度的二进制转换成十进制。<br>要求任意长度，所以，不能常规的按照整型或长整型来表示，任意长度的数字，这里还要考虑溢出。因此，考虑字符串表示，同样的题目还有：<em>数字的n次方</em>、<em>大数相加</em>、<em>大数相乘</em>。主要思想：用字符串或者数组保存数字，计算时利用进位和标准运算进行。<br><a id="more"></a>
-<strong>解法</strong><br>二进制转换成十进制<br>观察：<code>10001000</code>的计算过程，转换成十进制为：<code>2^7+0+0+0+2^3+0+0+0</code>。<br>因此问题分为两个部分：计算二进制位置上为1时对应的十进制数是多少；对所有的位置得到的数字求和。<br>代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</div><div class="line"> * bin2dec 二进制转换成十进制</div><div class="line"> * @param decnum 十进制数字串</div><div class="line"> * @param n      二进制1后面的0的个数</div><div class="line"> */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bin2dec</span><span class="params">(<span class="keyword">int</span> *decnum, <span class="keyword">int</span> n)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> index = LEN<span class="number">-1</span>;</div><div class="line">	decnum[index] = <span class="number">1</span>;</div><div class="line">	<span class="keyword">int</span> jinwei = <span class="number">0</span>;</div><div class="line">	<span class="keyword">while</span> (n--) <span class="comment">//总共几个0</span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = LEN<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">int</span> nowtemp = <span class="number">2</span>*decnum[i]+jinwei;</div><div class="line">			<span class="keyword">if</span>(nowtemp&gt;=<span class="number">10</span>)<span class="comment">//需要进位</span></div><div class="line">			&#123;</div><div class="line">				decnum[i] = nowtemp%<span class="number">10</span>; <span class="comment">//改变当前的数值</span></div><div class="line">				jinwei = nowtemp/<span class="number">10</span>; <span class="comment">//进位的多少</span></div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span></div><div class="line">			&#123;</div><div class="line">				decnum[i] = nowtemp;</div><div class="line">				jinwei=<span class="number">0</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">/**</div><div class="line"> * 将两个大数合并，放入左边数组</div><div class="line"> * @param left  相加结果放入此</div><div class="line"> * @param right 数组</div><div class="line"> */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sumbignum</span><span class="params">(<span class="keyword">int</span> *left, <span class="keyword">int</span> *right, <span class="keyword">int</span> n=LEN)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> jinwei = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=n<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">int</span> temp = left[i]+right[i]+jinwei;<span class="comment">//俩数之和加上进位标志</span></div><div class="line">		<span class="keyword">if</span>(temp &gt;= <span class="number">10</span>)<span class="comment">//需要进位的</span></div><div class="line">		&#123;</div><div class="line">			left[i] = temp%<span class="number">10</span>;</div><div class="line">			jinwei = temp/<span class="number">10</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">else</span> <span class="comment">//不用进位</span></div><div class="line">		&#123;</div><div class="line">			left[i] = temp;</div><div class="line">			jinwei = <span class="number">0</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>十进制转换成二进制</strong><br>同理，位数少的十进制转换成二进制一般应用除2求余，然后直到商为0。<a href="http://baike.baidu.com/link?url=QHeUym9N6IWCVV6zLmIHIX6Y6CMPOfthTCyDRkfsq9TAxCjewlxrfhHYUw2sarVURML8-Oyz0bCASXtMqHqUWYGGRieuENcGHN30Qzmx6Ef_XdJSIaiBCn0vfvUrrILr4t15XLZWOj6RIdcgit792Vn5iQGGQYVyOfQF4R2ggfm">参考</a>。<br>对于大数，可以保存在一个数组中，用前一位的余数与当前的位数拼成一个数，除以2，商替换原数字对应的位数上，余数更新，直到把数字的位数计算完，算作得出二进制的一位（最后得出的余数）。直到商为0结束。代码如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> LEN = <span class="number">100</span>;</div><div class="line"><span class="comment">/**</div><div class="line"> * 检查数组代表的数字是否为空</div><div class="line"> * @param  arr [description]</div><div class="line"> * @param  len [description]</div><div class="line"> * @return     [description]</div><div class="line"> */</span></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">IsZero</span><span class="params">(<span class="keyword">int</span> *arr, <span class="keyword">int</span> len)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">bool</span> ret = <span class="literal">true</span>;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(arr[i] != <span class="number">0</span>)</div><div class="line">		&#123;</div><div class="line">			ret = <span class="literal">false</span>;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> ret;</div><div class="line">&#125;</div><div class="line"><span class="comment">/**</div><div class="line"> * 十进制转换成二进制的核心函数</div><div class="line"> * @param decnum 十进制保存位置</div><div class="line"> * @param binnum 二进制字符串</div><div class="line"> * @param len    十进制长度</div><div class="line"> */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dec2binCore</span><span class="params">(<span class="keyword">int</span> *decnum, <span class="keyword">int</span> *binnum, <span class="keyword">int</span> len)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> mod;</div><div class="line">	<span class="keyword">int</span> index = LEN<span class="number">-1</span>;</div><div class="line">	<span class="keyword">while</span>(!IsZero(decnum, len))<span class="comment">//十进制表示的数字不为0</span></div><div class="line">	&#123;</div><div class="line">		mod = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i =<span class="number">0</span>; i&lt;len; i++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">int</span> tempnum = <span class="number">10</span>*mod+decnum[i];</div><div class="line">			<span class="keyword">int</span> sang = tempnum/<span class="number">2</span>;</div><div class="line">			mod = tempnum%<span class="number">2</span>;</div><div class="line">			decnum[i] = sang; <span class="comment">//更新商</span></div><div class="line">		&#125;</div><div class="line">		binnum[index--] = mod;<span class="comment">//最后的余数是二进制</span></div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintInt</span><span class="params">(<span class="keyword">int</span> *arr, <span class="keyword">int</span> n)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> start = <span class="number">0</span>;<span class="comment">//bug</span></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n<span class="number">-1</span>; i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">int</span> j = i+<span class="number">1</span>;</div><div class="line">		<span class="keyword">if</span>(arr[i]==<span class="number">0</span> &amp;&amp; arr[j]!=<span class="number">0</span> &amp;&amp; !start)</div><div class="line">		&#123;</div><div class="line">			start = <span class="number">1</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (start)</div><div class="line">			<span class="built_in">cout</span> &lt;&lt; arr[j];</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">testdec2bin</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">string</span> strnum;</div><div class="line">	<span class="keyword">while</span>(<span class="built_in">cin</span> &gt;&gt; strnum)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">int</span> len = strnum.size();</div><div class="line">		<span class="keyword">int</span> *decnum = <span class="keyword">new</span> <span class="keyword">int</span>[len];</div><div class="line">		<span class="built_in">memset</span>(decnum, <span class="number">0</span>, len*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)</div><div class="line">			decnum[i]= strnum[i]-<span class="string">'0'</span>;</div><div class="line">		<span class="keyword">int</span> *binnum = <span class="keyword">new</span> <span class="keyword">int</span>[LEN];</div><div class="line">		<span class="built_in">memset</span>(binnum, <span class="number">0</span>, LEN*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line">		dec2binCore(decnum, binnum, len);</div><div class="line">		PrintInt(binnum, LEN);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	testdec2bin();</div><div class="line"></div><div class="line">	system(<span class="string">"pause"</span>);</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>感悟</strong>
-看似简单的问题，还要细思量。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;题目描述&lt;/strong&gt;&lt;br&gt;将任意长度的二进制转换成十进制。&lt;br&gt;要求任意长度，所以，不能常规的按照整型或长整型来表示，任意长度的数字，这里还要考虑溢出。因此，考虑字符串表示，同样的题目还有：&lt;em&gt;数字的n次方&lt;/em&gt;、&lt;em&gt;大数相加&lt;/em&gt;、&lt;em&gt;大数相乘&lt;/em&gt;。主要思想：用字符串或者数组保存数字，计算时利用进位和标准运算进行。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
   </entry>
   
