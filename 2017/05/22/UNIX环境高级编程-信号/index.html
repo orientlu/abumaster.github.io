@@ -96,7 +96,7 @@
 <meta property="og:url" content="http://abumaster.com/2017/05/22/UNIX环境高级编程-信号/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Unix环境高级编程，第10章 信号，读书笔记。信号是一种软件中断，用于处理异步事件。">
-<meta property="og:updated_time" content="2017-05-22T07:22:13.548Z">
+<meta property="og:updated_time" content="2017-05-24T02:50:22.042Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX环境高级编程-信号">
 <meta name="twitter:description" content="Unix环境高级编程，第10章 信号，读书笔记。信号是一种软件中断，用于处理异步事件。">
@@ -580,7 +580,9 @@
 <h4 id="sigaction-函数"><a href="#sigaction-函数" class="headerlink" title="sigaction 函数"></a>sigaction 函数</h4><div class="note info"><p><em>sigaction</em> 函数的功能是用来检查或者修改与指定信号相关联的处理动作，可以用来取代早期的 <em>signal</em> 函数。 </p>
 </div>  
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="function">ing <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> signo, <span class="keyword">const</span> <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> act, <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> oact)</span></span>;</div></pre></td></tr></table></figure>
-<p>其中， <em>signo</em> 是要检查的信号编号， <em>act</em> 指针非空，则是要修改动作，如果 <em>oact</em> 非空则会经由该指针返回该信号的上一个动作。  </p>
+<p>其中， <em>signo</em> 是要检查的信号编号， <em>act</em> 指针非空，则是要修改动作，如果 <em>oact</em> 非空则会经由该指针返回该信号的上一个动作。<br>使用数据结构：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> sigaction</div><div class="line">&#123;</div><div class="line">    <span class="keyword">void</span> (*sa_handler) (<span class="keyword">int</span>);<span class="comment">//信号捕获函数的地址</span></div><div class="line">    <span class="keyword">sigset_t</span> sa_mask;<span class="comment">//信号集，调用捕获函数之前，加到信号屏蔽字中</span></div><div class="line">    <span class="keyword">int</span> sa_flags;<span class="comment">//信号处理的选项</span></div><div class="line">    <span class="keyword">void</span> (*sa_restorer) (<span class="keyword">void</span>);<span class="comment">//没有使用</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="sigprocmask-函数"><a href="#sigprocmask-函数" class="headerlink" title="sigprocmask 函数"></a>sigprocmask 函数</h4><p><strong>信号屏蔽字</strong>规定了当前阻塞而不能递送给该进程的信号集，调用 <em>sigprocmask</em> 函数可以检测和更改其信号屏蔽字，或同时执行两个动作。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigprocmask</span><span class="params">(<span class="keyword">int</span> how, <span class="keyword">const</span> <span class="keyword">sigset_t</span> *<span class="keyword">restrict</span> <span class="built_in">set</span>, <span class="keyword">sigset_t</span> *<span class="keyword">restrict</span> oset)</span></span>;</div></pre></td></tr></table></figure></p>
+<p> <em>oset</em> 为非空指针，那么进程的当前信号屏蔽字通过 <em>oset</em> 返回。 <em>set</em> 为空，不改变进程的屏蔽字， <em>set</em> 非空，由 <em>how</em> 指定如何修改。  </p>
 
       
     </div>
@@ -626,6 +628,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/24/UNIX环境高级编程-线程/" rel="prev" title="UNIX环境高级编程-线程">
+                UNIX环境高级编程-线程 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -697,7 +703,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -790,7 +796,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#signal-函数"><span class="nav-number">2.</span> <span class="nav-text">signal 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sigaction-函数"><span class="nav-number">3.</span> <span class="nav-text">sigaction 函数</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#signal-函数"><span class="nav-number">2.</span> <span class="nav-text">signal 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sigaction-函数"><span class="nav-number">3.</span> <span class="nav-text">sigaction 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sigprocmask-函数"><span class="nav-number">4.</span> <span class="nav-text">sigprocmask 函数</span></a></li></ol></div>
             
 
           </div>

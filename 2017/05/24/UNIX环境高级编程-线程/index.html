@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="论文,深度学习," />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -90,25 +90,18 @@
 
 
 
-<meta name="description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
-
-关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
+<meta name="description" content="Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Conditional Random Fields as Recurrent Neural Networks">
-<meta property="og:url" content="http://abumaster.com/2017/03/21/CRFs-as-RNN/index.html">
+<meta property="og:title" content="UNIX环境高级编程-线程">
+<meta property="og:url" content="http://abumaster.com/2017/05/24/UNIX环境高级编程-线程/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
-
-关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
-<meta property="og:image" content="http://abumaster.com/photos/crfs.jpg">
-<meta property="og:image" content="http://abumaster.com/photos/algo.png">
-<meta property="og:updated_time" content="2017-03-21T12:40:34.307Z">
+<meta property="og:description" content="Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-24/47171841.jpg">
+<meta property="og:updated_time" content="2017-05-24T12:59:21.726Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Conditional Random Fields as Recurrent Neural Networks">
-<meta name="twitter:description" content="2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks[1] 的阅读笔记。    
-
-关键词图像语义分割CRF as RNN摘要像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可">
-<meta name="twitter:image" content="http://abumaster.com/photos/crfs.jpg">
+<meta name="twitter:title" content="UNIX环境高级编程-线程">
+<meta name="twitter:description" content="Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-24/47171841.jpg">
 
 
 
@@ -136,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/2017/03/21/CRFs-as-RNN/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/05/24/UNIX环境高级编程-线程/"/>
 
 
 
 
 
-  <title> Conditional Random Fields as Recurrent Neural Networks | 张国丰 </title>
+  <title> UNIX环境高级编程-线程 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -304,7 +297,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/21/CRFs-as-RNN/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/05/24/UNIX环境高级编程-线程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -325,7 +318,7 @@
             
             
               
-                Conditional Random Fields as Recurrent Neural Networks
+                UNIX环境高级编程-线程
               
             
           </h1>
@@ -340,8 +333,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T16:00:18+08:00">
-                2017-03-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-24T10:52:22+08:00">
+                2017-05-24
               </time>
             
 
@@ -363,8 +356,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/deeplearning/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
                   </a>
                 </span>
 
@@ -398,35 +391,68 @@
       
 
       
-        <blockquote>
-<p>2015 年 ICCV 会议文章 Conditional Random Fields as Recurrent Neural Networks<sup>[1]</sup> 的阅读笔记。    </p>
-</blockquote>
-<p><strong>关键词</strong><br>图像语义分割<br>CRF as RNN<br><strong>摘要</strong><br>像素级别的标注任务，例如图像语义分割在图像理解方面占据着重要的作用。最近的方法开始利用深度学习技术在图像识别任务上的能力来解决像素级别的标注任务。现在的核心问题是深度学习方法在描绘可视化物体具有限制性。为了解决这个问题，我们提出了一个新形式的卷积网络，它结合了卷积网络的优势和条件随机场的概率图模型。为此，我们制定了使用高斯对模型和中值近似的条件随机场作为循环神经网络。这个网路就是 CRF-RNN 被嵌入到 CNN 中，最为一个集 CNNs 和 CRFs 优点于一体的深度网络。更重要的是，我们的系统完全在 CNNs 中集成了 CRF 模型，让使用传统的反向传播算法训练端对端的系统成为了可能，不需要额外的后期处理物体的边界。<br><a id="more"></a><br><del><strong>MarkDown 中使用公式</strong></del>  </p>
-<ol>
-<li>加入脚本定义，现在用到的是 MathJax 引擎<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>  </p>
-<ol>
-<li>使用Tex公式 $$行间公式；\\行内公式，参考<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">MathJax basic tutorial and quick reference</a>  </li>
-<li>示例<br>$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$  </li>
-</ol>
-<hr>
-<p><strong>引言</strong><br>低层次计算机视觉问题，为图像中的像素分配标签。特征表示在个体像素分类中占有重要的作用。同样要考虑到图像的边界和特征、空间关系，以此来获得较为准确地分割结果。<br>设计出一个<strong>强大的特征表示器是像素级别标记的关键挑战</strong>。传统的方法不再讨论，现在深度学习的方法利用大尺度的卷积网络，在高层次视觉上取得了非常大的成果。这激励着利用卷积网络去解决低层次的问题。主要利用卷积网络提取特征替代以前的手工标注特征。<br>将用于高层视觉的分类网络转换成低层次视觉的任务依然存在着一些问题提出了几个问题：  </p>
+        <p>Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。</p>
+<a id="more"></a>
+<div class="note primary"><p>单进程程序中需要处理多个任务时，通常用到多线程来分别处理各个任务，各个线程可以共享进程的资源。Linux中线程函数位于 <em>libpthread</em> 共享库中，因此在编译程序时要加上 <em>lpthread</em> 选项。 </p>
+</div>  
+<h4 id="线程基本操作"><a href="#线程基本操作" class="headerlink" title="线程基本操作"></a>线程基本操作</h4><p><strong>线程标识</strong> 如进程ID一样，线程也有一个为一个标识，只在进程环境中有效，用 _pthread_t_ 数据类型表示，不是一个整数，因此有专门的函数来比较两个线程的ID。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_equal</span><span class="params">(<span class="keyword">pthread_t</span> tid1, <span class="keyword">pthread_t</span> tid2)</span></span>;<span class="comment">//相等返回非零</span></div><div class="line"><span class="keyword">pthread_t</span> pthread_self(<span class="keyword">void</span>);<span class="comment">//调用线程的线程ID</span></div></pre></td></tr></table></figure></p>
+<p><strong>线程创建</strong> 可以直接调用 <code>pthread_create</code> 函数来创建一个新的线程，线程的执行顺序是不定的，无法保证哪个线程先运行，新的线程可以继承和调用线程的浮点环境和信号屏蔽字，多个线程可以共同访问进程的资源。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &lt;pthread.h&gt;</div><div class="line">int pthread_create(pthread_t *restrict tidp,</div><div class="line">					const pthread_attr_t *restrict attr,</div><div class="line">					void *(*start_rtn)(void *),</div><div class="line">					void *restrict arg);</div></pre></td></tr></table></figure></p>
+<p>成功返回0，失败返回错误编号。 <em>tidp</em> 表示新创建线程的ID， <em>attr</em> 定制各种不同的线程属性， _start_rtn_ 新创建线程的线程函数， <em>arg</em> 表示传入线程的参数，通常是结构体指针。<br><strong>线程终止</strong> 进程中的任一个线程如果调用了 <code>exit _Exit _exit</code> 函数，那么整个进程就会退出，如果单个线程退出而不影响整个进程，有下面三种方式：  </p>
 <ul>
-<li>传统的卷积网络有大接受域的卷积过滤器，会产生比较粗糙的输出图。最大池化层的出现，过滤掉一些特征，导致了输出的分割图不够精细。  </li>
-<li>缺少了平滑度约束，没有考虑到相似的像素，空间或者外形相似的约束，导致了输出图的边界不明确，或者出现杂散区域。<br>尤其是马尔科夫随机场（MRFs）和它的变体条件随机场（CRFs）已经成为应用到计算机视觉领域中一个成功的模型。<strong>用于像素标记的CRFs推理主要的思想是将语义标签分配问题转换成概率推理问题，包括了相似像素之间一致性并入假设</strong>。CRFs可以微调分割图的细节，优化边界问题，克服了单纯利用CNNs的缺点。<del>用CRFs作为后期的处理，无法发挥出CRF的优势，卷积网络在训练的阶段也无法根据CRF的表现来调整权重</del>。本文将CNN与CRF结合为一个统一的框架，可以共同训练。<br><strong>相关工作</strong><br>许多方法用深度学习来解决图像语义分割问题，可以归为以下两个类别：  </li>
+<li>线程从启动例程返回，返回值为线程的退出码；</li>
+<li>线程可以被同一进程中的其他线程取消；</li>
+<li>线程调用 <code>pthread_exit</code> 。</li>
 </ul>
-<ul>
-<li>特征提取和分割分离开的策略。使用CNN提取有意义的图像特征，利用超像素去构造图像的模式。首先从图像中获得超像素，再用特征提取器提取特征。存在着一个致命的缺点，前期如果有误差，后面误差越来越大。与他们的方案不同，此文用典型的图模型CRF可以被作为RNN，指定为深度网络的一部分。结合CNN实现端对端的训练。  </li>
-<li>直接学习从原始图像到标记图像的非线性模型。例如FCN等网络，去掉了最后的全连接层变为卷积层。<br><strong>全连接条件随机场</strong>  <div align=center> <img src="/photos/crfs.jpg" alt="CRFs"></div>
-条件随机场进行图像语义分割的能量函数：定义隐变量Xi为像素点i的分类标签，取值范围为分类语义标签L={l1,l2,l3,…,ln}；Yi为每个随机变量Xi的观测值，即是每个像素的颜色值。条件随机场的目标就是通过观测变量Yi，推理出潜变量Xi的标签。<br>对于一张图像，可以看成图模型<code>G=(V,E)</code>，每个顶点对应了<code>V={X1,X2,...,Xn}</code>，对于边来说，全连接的条件随机场，顶点与所有的点都有连线。<br>条件随机场的目标函数：<br>能量函数有一元势函数和二元势函数，分别表示了当像素点i的观测值是yi时，该像素点属于标签xi的概率。可以直接从cnn中计算出。二元是函数是两个像素值相似或者相邻则两个像素属于同一类的概率很大。<br><strong>实现</strong><br><div align=center> <img src="/photos/algo.png" alt="algorithm"></div>  
-
-
-</li>
-</ul>
-<p><strong>参考文献</strong><br>[1] Zheng S, Jayasumana S, Romera-Paredes B, et al. Conditional random fields as recurrent neural networks[C]//Proceedings of the IEEE International Conference on Computer Vision. 2015: 1529-1537.</p>
-
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="comment">//终止自己，并设置一个无类型指针表示终止码</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *rval_ptr)</span></span>;</div><div class="line"><span class="comment">//访问上述的指针一直阻塞等待，获得线程的终止状态</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **rval_ptr)</span></span>;</div></pre></td></tr></table></figure>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-24/47171841.jpg" alt=""><br>当 <code>pthread_join</code> 返回时，指向的内存必须是全局的或者是动态分配的，否则在栈上会出现覆盖的情况。创建的线程才算终止，才会释放占用的资源。  </p>
+<p><strong>进程原语和线程原语的比较</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>进程原语</th>
+<th>线程原语</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>fork</strong></td>
+<td>pthread_create</td>
+<td>创建新的控制流</td>
+</tr>
+<tr>
+<td><strong>exit</strong></td>
+<td>pthread_exit</td>
+<td>从现有的控制流中退出</td>
+</tr>
+<tr>
+<td><strong>waitpid</strong></td>
+<td>pthread_join</td>
+<td>从控制流中得到退出状态</td>
+</tr>
+<tr>
+<td><strong>atexit</strong></td>
+<td>pthread_cleanup_push</td>
+<td>注册在退出时调用的函数</td>
+</tr>
+<tr>
+<td><strong>getpid</strong></td>
+<td>pthread_self</td>
+<td>获取控制流的ID</td>
+</tr>
+<tr>
+<td><strong>abort</strong></td>
+<td>pthread_cancel</td>
+<td>请求控制流的非正常退出</td>
+</tr>
+</tbody>
+</table>
+<h4 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h4><p>同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。<br><strong>1.互斥量</strong><br>通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， <em>互斥量（mutex）</em> 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。<br>互斥变量通常用 <em>pthread_mutex_t</em> 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#include &lt;pthread.h&gt;</div><div class="line"></div><div class="line">int pthread_mutex_init(pthread_mutex_t *restrict mutex,</div><div class="line">						const pthread_mutexattr_t *restrict attr);</div><div class="line">int pthread_mutex_destory(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_lock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_trylock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_unlock(pthread_mutex_t *mutex);</div></pre></td></tr></table></figure></p>
+<p><strong>2.避免死锁</strong>  </p>
+<p><strong>3.读写锁</strong><br>读写锁允许更高的并行性。  </p>
+<p><strong>4.条件变量</strong>  </p>
+<h4 id="线程控制"><a href="#线程控制" class="headerlink" title="线程控制"></a>线程控制</h4>
       
     </div>
 
@@ -449,9 +475,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/lunwen/" rel="tag"># 论文</a>
-          
-            <a href="/tags/deeplearn/" rel="tag"># 深度学习</a>
+            <a href="/tags/linux/" rel="tag"># Linux</a>
           
         </div>
       
@@ -464,8 +488,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/12/柔性数组/" rel="next" title="柔性数组">
-                <i class="fa fa-chevron-left"></i> 柔性数组
+              <a href="/2017/05/22/UNIX环境高级编程-信号/" rel="next" title="UNIX环境高级编程-信号">
+                <i class="fa fa-chevron-left"></i> UNIX环境高级编程-信号
               </a>
             
           </div>
@@ -473,10 +497,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/24/卷积网络应该注意的问题/" rel="prev" title="卷积网络应该注意的问题">
-                卷积网络应该注意的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -523,8 +543,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
@@ -622,6 +651,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程基本操作"><span class="nav-number">1.</span> <span class="nav-text">线程基本操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程同步"><span class="nav-number">2.</span> <span class="nav-text">线程同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程控制"><span class="nav-number">3.</span> <span class="nav-text">线程控制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

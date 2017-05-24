@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-22T07:22:13.548Z</updated>
+  <updated>2017-05-24T12:59:21.726Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,94 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>UNIX环境高级编程-线程</title>
+    <link href="http://abumaster.com/2017/05/24/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B/"/>
+    <id>http://abumaster.com/2017/05/24/UNIX环境高级编程-线程/</id>
+    <published>2017-05-24T02:52:22.000Z</published>
+    <updated>2017-05-24T12:59:21.726Z</updated>
+    
+    <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。</p>
+<a id="more"></a>
+<div class="note primary"><p>单进程程序中需要处理多个任务时，通常用到多线程来分别处理各个任务，各个线程可以共享进程的资源。Linux中线程函数位于 <em>libpthread</em> 共享库中，因此在编译程序时要加上 <em>lpthread</em> 选项。 </p>
+</div>  
+<h4 id="线程基本操作"><a href="#线程基本操作" class="headerlink" title="线程基本操作"></a>线程基本操作</h4><p><strong>线程标识</strong> 如进程ID一样，线程也有一个为一个标识，只在进程环境中有效，用 _pthread_t_ 数据类型表示，不是一个整数，因此有专门的函数来比较两个线程的ID。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_equal</span><span class="params">(<span class="keyword">pthread_t</span> tid1, <span class="keyword">pthread_t</span> tid2)</span></span>;<span class="comment">//相等返回非零</span></div><div class="line"><span class="keyword">pthread_t</span> pthread_self(<span class="keyword">void</span>);<span class="comment">//调用线程的线程ID</span></div></pre></td></tr></table></figure></p>
+<p><strong>线程创建</strong> 可以直接调用 <code>pthread_create</code> 函数来创建一个新的线程，线程的执行顺序是不定的，无法保证哪个线程先运行，新的线程可以继承和调用线程的浮点环境和信号屏蔽字，多个线程可以共同访问进程的资源。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#include &lt;pthread.h&gt;</div><div class="line">int pthread_create(pthread_t *restrict tidp,</div><div class="line">					const pthread_attr_t *restrict attr,</div><div class="line">					void *(*start_rtn)(void *),</div><div class="line">					void *restrict arg);</div></pre></td></tr></table></figure></p>
+<p>成功返回0，失败返回错误编号。 <em>tidp</em> 表示新创建线程的ID， <em>attr</em> 定制各种不同的线程属性， _start_rtn_ 新创建线程的线程函数， <em>arg</em> 表示传入线程的参数，通常是结构体指针。<br><strong>线程终止</strong> 进程中的任一个线程如果调用了 <code>exit _Exit _exit</code> 函数，那么整个进程就会退出，如果单个线程退出而不影响整个进程，有下面三种方式：  </p>
+<ul>
+<li>线程从启动例程返回，返回值为线程的退出码；</li>
+<li>线程可以被同一进程中的其他线程取消；</li>
+<li>线程调用 <code>pthread_exit</code> 。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"><span class="comment">//终止自己，并设置一个无类型指针表示终止码</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_exit</span><span class="params">(<span class="keyword">void</span> *rval_ptr)</span></span>;</div><div class="line"><span class="comment">//访问上述的指针一直阻塞等待，获得线程的终止状态</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_join</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">void</span> **rval_ptr)</span></span>;</div></pre></td></tr></table></figure>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-24/47171841.jpg" alt=""><br>当 <code>pthread_join</code> 返回时，指向的内存必须是全局的或者是动态分配的，否则在栈上会出现覆盖的情况。创建的线程才算终止，才会释放占用的资源。  </p>
+<p><strong>进程原语和线程原语的比较</strong>  </p>
+<table>
+<thead>
+<tr>
+<th>进程原语</th>
+<th>线程原语</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>fork</strong></td>
+<td>pthread_create</td>
+<td>创建新的控制流</td>
+</tr>
+<tr>
+<td><strong>exit</strong></td>
+<td>pthread_exit</td>
+<td>从现有的控制流中退出</td>
+</tr>
+<tr>
+<td><strong>waitpid</strong></td>
+<td>pthread_join</td>
+<td>从控制流中得到退出状态</td>
+</tr>
+<tr>
+<td><strong>atexit</strong></td>
+<td>pthread_cleanup_push</td>
+<td>注册在退出时调用的函数</td>
+</tr>
+<tr>
+<td><strong>getpid</strong></td>
+<td>pthread_self</td>
+<td>获取控制流的ID</td>
+</tr>
+<tr>
+<td><strong>abort</strong></td>
+<td>pthread_cancel</td>
+<td>请求控制流的非正常退出</td>
+</tr>
+</tbody>
+</table>
+<h4 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h4><p>同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。<br><strong>1.互斥量</strong><br>通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， <em>互斥量（mutex）</em> 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。<br>互斥变量通常用 <em>pthread_mutex_t</em> 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#include &lt;pthread.h&gt;</div><div class="line"></div><div class="line">int pthread_mutex_init(pthread_mutex_t *restrict mutex,</div><div class="line">						const pthread_mutexattr_t *restrict attr);</div><div class="line">int pthread_mutex_destory(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_lock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_trylock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_unlock(pthread_mutex_t *mutex);</div></pre></td></tr></table></figure></p>
+<p><strong>2.避免死锁</strong>  </p>
+<p><strong>3.读写锁</strong><br>读写锁允许更高的并行性。  </p>
+<p><strong>4.条件变量</strong>  </p>
+<h4 id="线程控制"><a href="#线程控制" class="headerlink" title="线程控制"></a>线程控制</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>UNIX环境高级编程-信号</title>
     <link href="http://abumaster.com/2017/05/22/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E4%BF%A1%E5%8F%B7/"/>
     <id>http://abumaster.com/2017/05/22/UNIX环境高级编程-信号/</id>
     <published>2017-05-22T02:01:10.000Z</published>
-    <updated>2017-05-22T07:22:13.548Z</updated>
+    <updated>2017-05-24T02:50:22.042Z</updated>
     
     <content type="html"><![CDATA[<p>Unix环境高级编程，第10章 信号，读书笔记。信号是一种软件中断，用于处理异步事件。</p>
 <a id="more"></a>
@@ -213,7 +296,9 @@
 <h4 id="sigaction-函数"><a href="#sigaction-函数" class="headerlink" title="sigaction 函数"></a>sigaction 函数</h4><div class="note info"><p><em>sigaction</em> 函数的功能是用来检查或者修改与指定信号相关联的处理动作，可以用来取代早期的 <em>signal</em> 函数。 </p>
 </div>  
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="function">ing <span class="title">sigaction</span><span class="params">(<span class="keyword">int</span> signo, <span class="keyword">const</span> <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> act, <span class="keyword">struct</span> sigaction *<span class="keyword">restrict</span> oact)</span></span>;</div></pre></td></tr></table></figure>
-<p>其中， <em>signo</em> 是要检查的信号编号， <em>act</em> 指针非空，则是要修改动作，如果 <em>oact</em> 非空则会经由该指针返回该信号的上一个动作。  </p>
+<p>其中， <em>signo</em> 是要检查的信号编号， <em>act</em> 指针非空，则是要修改动作，如果 <em>oact</em> 非空则会经由该指针返回该信号的上一个动作。<br>使用数据结构：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> sigaction</div><div class="line">&#123;</div><div class="line">    <span class="keyword">void</span> (*sa_handler) (<span class="keyword">int</span>);<span class="comment">//信号捕获函数的地址</span></div><div class="line">    <span class="keyword">sigset_t</span> sa_mask;<span class="comment">//信号集，调用捕获函数之前，加到信号屏蔽字中</span></div><div class="line">    <span class="keyword">int</span> sa_flags;<span class="comment">//信号处理的选项</span></div><div class="line">    <span class="keyword">void</span> (*sa_restorer) (<span class="keyword">void</span>);<span class="comment">//没有使用</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="sigprocmask-函数"><a href="#sigprocmask-函数" class="headerlink" title="sigprocmask 函数"></a>sigprocmask 函数</h4><p><strong>信号屏蔽字</strong>规定了当前阻塞而不能递送给该进程的信号集，调用 <em>sigprocmask</em> 函数可以检测和更改其信号屏蔽字，或同时执行两个动作。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sigprocmask</span><span class="params">(<span class="keyword">int</span> how, <span class="keyword">const</span> <span class="keyword">sigset_t</span> *<span class="keyword">restrict</span> <span class="built_in">set</span>, <span class="keyword">sigset_t</span> *<span class="keyword">restrict</span> oset)</span></span>;</div></pre></td></tr></table></figure></p>
+<p> <em>oset</em> 为非空指针，那么进程的当前信号屏蔽字通过 <em>oset</em> 返回。 <em>set</em> 为空，不改变进程的屏蔽字， <em>set</em> 非空，由 <em>how</em> 指定如何修改。  </p>
 ]]></content>
     
     <summary type="html">
@@ -1228,46 +1313,6 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="caffe" scheme="http://abumaster.com/tags/caffe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>结合特定任务边缘检测的图像语义分割</title>
-    <link href="http://abumaster.com/2017/04/07/%E7%BB%93%E5%90%88%E7%89%B9%E5%AE%9A%E4%BB%BB%E5%8A%A1%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B%E7%9A%84%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
-    <id>http://abumaster.com/2017/04/07/结合特定任务边缘检测的图像语义分割/</id>
-    <published>2017-04-07T07:38:22.000Z</published>
-    <updated>2017-04-08T02:30:39.618Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提出了一种新的解决方案，空间转换（DT）替换crfs，这是一种边缘过滤保留方法。计算速度有一定的提升。  </p>
-</blockquote>
-<a id="more"></a>
-<p><strong>主要思想</strong><br>取代最后的全连接条件随机场和与其关联的双向过滤器，变为域变换（DT）一种边缘感知过滤器。域变换的递归公式等于信号的自适应递归滤波，其中信息不允许在某些参考信号中跨越边缘传播。速度快。<br><strong>前期工作</strong>  </p>
-<ul>
-<li>图像语义分割<br>网络中最大池化和下采样的出现，使稠密网络最后的输出图无法精准定位物体的边界信息，为了解决这个问题，出现了很多解决方案：组合中间特征图信息；反卷积和上采样；超像素等底层的分割方法；条件随机场，利用像素之间的依赖关系。  </li>
-<li>边缘检测<br>学习物体的边界直接优化图像语义分割的表现。  </li>
-<li>长距离依赖（Long range dependency）<br>通过DT输入进行反向传播，以共同学习端对端可训练系统中的分割图得分和边缘图。<br><strong>提出模型</strong><br>论文中提出的模型图：<br><img src="http://i4.buimg.com/567571/1043df45dae88c0c.png" alt=""><br>分为三个部分：<br>1.语义分割预测，得出一个大致的分割图，与全卷积网络输出图类似；<br>2.边缘预测网络，生成一个边缘预测图；<br>3.域转换，使用物体边界限制分割图。<br><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
-x表示需要过滤的原始信号量，y表示域转换密度信号d。使用递归公式计算，初始化y1=x1，然后递归计算<code>i=2,...,N</code>：<br>$$y_i=(1-w_i)x_i+w_iy_{i-1}$$<br>其中权重wi的计算依赖di：<br>$$w_i=exp(-\sqrt2d_i/{\sigma_{s}})$$<br>一维计算树，前向和反向传播的计算：<br><img src="http://i2.muimg.com/567571/08cbd87d8bbbe172.png" alt=""><br>$$\frac{\partial L}{\partial x_i}\leftarrow (1-w_i)\frac{\partial L}{\partial y_i}$$<br>$$\frac{\partial L}{\partial w_i}\leftarrow \frac{\partial L}{\partial w_i}+(y_{i-1}-x_i)\frac{\partial L}{\partial y_i}$$<br>$$\frac{\partial L}{\partial y_{i-1}}\leftarrow \frac{\partial L}{\partial y_{i-1}}+w_i\frac{\partial L}{\partial y_i}$$<br>源码和模型<a href="http://liangchiehchen.com/projects/DeepLab.html">地址</a>。接下来学习。</li>
-</ul>
-<p><strong>参考文献</strong><br>[1] “Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform”
-Liang-Chieh Chen, Jonathan T. Barron, George Papandreou, Kevin Murphy, and Alan L. Yuille
-In Conference on Computer Vision and Pattern Recognition (CVPR), 2016</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;DeepLab作者团队另一篇论文：Semantic Image Segmentation with Task-Specific Edge Detection Using CNNs and a Discriminatively Trained Domain Transform[1]。指出传统的FCN-CRF模型最后基于图模型的全连接条件随机场虽然可以定位物体边界更加准确，但是它的计算代价大，因而提出了一种新的解决方案，空间转换（DT）替换crfs，这是一种边缘过滤保留方法。计算速度有一定的提升。  &lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
   </entry>
   
