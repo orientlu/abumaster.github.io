@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[UNIX环境高级编程-线程]]></title>
     <url>%2F2017%2F05%2F24%2FUNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。 单进程程序中需要处理多个任务时，通常用到多线程来分别处理各个任务，各个线程可以共享进程的资源。Linux中线程函数位于 libpthread 共享库中，因此在编译程序时要加上 lpthread 选项。 线程基本操作线程标识 如进程ID一样，线程也有一个为一个标识，只在进程环境中有效，用 _pthread_t_ 数据类型表示，不是一个整数，因此有专门的函数来比较两个线程的ID。 123#include &lt;pthread.h&gt;int pthread_equal(pthread_t tid1, pthread_t tid2);//相等返回非零pthread_t pthread_self(void);//调用线程的线程ID 线程创建 可以直接调用 pthread_create 函数来创建一个新的线程，线程的执行顺序是不定的，无法保证哪个线程先运行，新的线程可以继承和调用线程的浮点环境和信号屏蔽字，多个线程可以共同访问进程的资源。12345#include &lt;pthread.h&gt;int pthread_create(pthread_t *restrict tidp, const pthread_attr_t *restrict attr, void *(*start_rtn)(void *), void *restrict arg); 成功返回0，失败返回错误编号。 tidp 表示新创建线程的ID， attr 定制各种不同的线程属性， _start_rtn_ 新创建线程的线程函数， arg 表示传入线程的参数，通常是结构体指针。线程终止 进程中的任一个线程如果调用了 exit _Exit _exit 函数，那么整个进程就会退出，如果单个线程退出而不影响整个进程，有下面三种方式： 线程从启动例程返回，返回值为线程的退出码； 线程可以被同一进程中的其他线程取消； 线程调用 pthread_exit 。 12345#include &lt;pthread.h&gt;//终止自己，并设置一个无类型指针表示终止码void pthread_exit(void *rval_ptr);//访问上述的指针一直阻塞等待，获得线程的终止状态void pthread_join(pthread_t thread, void **rval_ptr); 当 pthread_join 返回时，指向的内存必须是全局的或者是动态分配的，否则在栈上会出现覆盖的情况。创建的线程才算终止，才会释放占用的资源。 进程原语和线程原语的比较 进程原语 线程原语 描述 fork pthread_create 创建新的控制流 exit pthread_exit 从现有的控制流中退出 waitpid pthread_join 从控制流中得到退出状态 atexit pthread_cleanup_push 注册在退出时调用的函数 getpid pthread_self 获取控制流的ID abort pthread_cancel 请求控制流的非正常退出 线程同步同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。1.互斥量通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， 互斥量（mutex） 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。互斥变量通常用 pthread_mutex_t 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。1234567891011#include &lt;pthread.h&gt;int pthread_mutex_init(pthread_mutex_t *restrict mutex, const pthread_mutexattr_t *restrict attr);int pthread_mutex_destory(pthread_mutex_t *mutex);int pthread_mutex_lock(pthread_mutex_t *mutex);int pthread_mutex_trylock(pthread_mutex_t *mutex);int pthread_mutex_unlock(pthread_mutex_t *mutex); 2.避免死锁 3.读写锁读写锁允许更高的并行性。 4.条件变量 线程控制]]></content>
+    <content type="text"><![CDATA[Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。 单进程程序中需要处理多个任务时，通常用到多线程来分别处理各个任务，各个线程可以共享进程的资源。Linux中线程函数位于 libpthread 共享库中，因此在编译程序时要加上 lpthread 选项。 线程基本操作线程标识 如进程ID一样，线程也有一个为一个标识，只在进程环境中有效，用 _pthread_t_ 数据类型表示，不是一个整数，因此有专门的函数来比较两个线程的ID。 123#include &lt;pthread.h&gt;int pthread_equal(pthread_t tid1, pthread_t tid2);//相等返回非零pthread_t pthread_self(void);//调用线程的线程ID 线程创建 可以直接调用 pthread_create 函数来创建一个新的线程，线程的执行顺序是不定的，无法保证哪个线程先运行，新的线程可以继承和调用线程的浮点环境和信号屏蔽字，多个线程可以共同访问进程的资源。12345#include &lt;pthread.h&gt;int pthread_create(pthread_t *restrict tidp, const pthread_attr_t *restrict attr, void *(*start_rtn)(void *), void *restrict arg); 成功返回0，失败返回错误编号。 tidp 表示新创建线程的ID， attr 定制各种不同的线程属性， _start_rtn_ 新创建线程的线程函数， arg 表示传入线程的参数，通常是结构体指针。线程终止 进程中的任一个线程如果调用了 exit _Exit _exit 函数，那么整个进程就会退出，如果单个线程退出而不影响整个进程，有下面三种方式： 线程从启动例程返回，返回值为线程的退出码； 线程可以被同一进程中的其他线程取消； 线程调用 pthread_exit 。 12345#include &lt;pthread.h&gt;//终止自己，并设置一个无类型指针表示终止码void pthread_exit(void *rval_ptr);//访问上述的指针一直阻塞等待，获得线程的终止状态void pthread_join(pthread_t thread, void **rval_ptr); 当 pthread_join 返回时，指向的内存必须是全局的或者是动态分配的，否则在栈上会出现覆盖的情况。创建的线程才算终止，才会释放占用的资源。 进程原语和线程原语的比较 进程原语 线程原语 描述 fork pthread_create 创建新的控制流 exit pthread_exit 从现有的控制流中退出 waitpid pthread_join 从控制流中得到退出状态 atexit pthread_cleanup_push 注册在退出时调用的函数 getpid pthread_self 获取控制流的ID abort pthread_cancel 请求控制流的非正常退出 线程同步同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。1.互斥量通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， 互斥量（mutex） 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。互斥变量通常用 pthread_mutex_t 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。1234567891011#include &lt;pthread.h&gt;int pthread_mutex_init(pthread_mutex_t *restrict mutex, const pthread_mutexattr_t *restrict attr);int pthread_mutex_destory(pthread_mutex_t *mutex);int pthread_mutex_lock(pthread_mutex_t *mutex);int pthread_mutex_trylock(pthread_mutex_t *mutex);int pthread_mutex_unlock(pthread_mutex_t *mutex); 2.避免死锁通过加锁的顺序可以避免死锁，使用多个互斥量。3.读写锁读写锁允许更高的并行性。读写锁有三种状态：读模式下加锁状态、写模式下加锁状态、不加锁状态。可以多读，单独写的策略，被称为 共享-独占锁 非常适合读的次数大于写的次数的情况。1234567891011121314 int pthread_rwlock_init (pthread_rwlock_t *restrict rwlock, const pthread_rwlockattr_t *restrict attr);int pthread_rwlock_destroy (pthread_rwlock_t *__rwlock); /* 读模式下加锁 */ int pthread_rwlock_rdlock (pthread_rwlock_t *__rwlock); /* 非阻塞的读模式下加锁 */ int pthread_rwlock_tryrdlock (pthread_rwlock_t *__rwlock); /* 写模式下加锁 */ int pthread_rwlock_wrlock (pthread_rwlock_t *__rwlock); /* 非阻塞的写模式下加锁 */ int pthread_rwlock_trywrlock (pthread_rwlock_t *__rwlock); /* 解锁 */ int pthread_rwlock_unlock (pthread_rwlock_t *__rwlock); 4.条件变量条件变量可以与互斥量一起使用，等待特定条件的发生。条件本身用互斥量保护，获得了互斥量才可以改变条件或者获得条件的状态。数据类型为 pthread_cond_t 用之前用 PTHREAD_COND_INITIALIZER 静态初始化，或者调用函数动态初始化，结束使用后记得销毁。1234567int pthread_cond_init(pthread_cond_t *cond,pthread_condattr_t *cond_attr); int pthread_cond_wait(pthread_cond_t *cond,pthread_mutex_t *mutex);int pthread_cond_timewait(pthread_cond_t *cond,pthread_mutex *mutex, const timespec *abstime);int pthread_cond_destroy(pthread_cond_t *cond); int pthread_cond_signal(pthread_cond_t *cond); //唤醒单个等待线程int pthread_cond_broadcast(pthread_cond_t *cond); //唤醒所有等待线程 使用 pthread_cond_wait 等待条件为真，互斥量用于保护条件，调用函数时，会进行两个原子操作： 把调用线程放到等待条件的线程列表上； 对互斥量解锁。pthread_cond_timewait 多了一个超时时间，当等待的时间内未满足条件，则会返回一个超时的错误。等待时间的结构 1234struct timespec&#123; time_t tv_sec //Seconds. long tv_nsec //Nanoseconds. &#125;; 函数要求传入的时间值是一个绝对值，不是相对值，例如，想要等待3分钟，必须先获得当前时间，然后加上3分钟。 要想获得当前系统时间的timespec值，没有直接可调用的函数，需要通过调用gettimeofday函数获取timeval结构，然后转换成timespec结构。12345678910struct timeval now;struct timespec until;gettimeofday(&amp;now);//获得系统当前时间//把时间从timeval结构转换成timespec结构until.tv_sec = now.tv_sec;until.tv_nsec = now.tv_usec * 1000;//增加minuntil.tv_sec += 3 * 60; 线程控制线程的一些属性设置等。 守护进程守护进程daemonize是生存周期较长的一种没有控制终端、后台运行的进程，伴随着系统的启动和关闭。编程规则： 首先要做的是调用umask将文件模式创建屏蔽字设置为0。由继承得来的文件模式创建屏蔽字可能会拒绝设置某些权限。例如，若守护进程要创建一个组可读、写的文件，而继承的文件模式创建屏蔽字可能屏蔽了这两种权限，于是所要求的组可读、写就不能起作用。 调用fork，然后使父进程退出（exit）。这样做实现了下面几点：第一，如果该守护进程是作为一条简单shell命令启动的，那么父进程终止使得shell认为这条命令已经执行完毕（也就没有了控制终端）；第二，子进程继承了父进程的进程组ID，但具有一个新的进程ID，这就保证了子进程不是一个进程组的组长进程。这对于下面就要做的setsid调用是必要的前提条件。 调用setsid以创建一个新会话。使调用进程：（a）成为新会话的首进程，（b）成为一个新进程组的组长进程，（c）没有控制终端。 将当前工作目录更改为根目录。从父进程出继承过来的当前工作目录可能在一个挂载的文件系统（a mounted file system）中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作目录在一个挂载的文件系统中，那么该文件系统就不能被卸载。这与挂载文件系统的原意不符。 关闭不再需要的文件描述符。 某些守护进程打开/dev/null使其具有文件描述符0、1和2，这样，任何一个试图读标准输入、写标准输出和标准出错的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，所以不能在终端设备上显示其输出，也无处从交互式用户那里接受输入。即使守护进程是从交互式会话启动的，但因为守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。 参考外链接]]></content>
       <categories>
         <category>Linux</category>
       </categories>
@@ -171,8 +171,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -184,8 +184,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -245,8 +245,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -269,8 +269,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -325,8 +325,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -359,8 +359,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -371,8 +371,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -395,8 +395,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-24T12:59:21.726Z</updated>
+  <updated>2017-05-25T07:53:21.247Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://abumaster.com/2017/05/24/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B/"/>
     <id>http://abumaster.com/2017/05/24/UNIX环境高级编程-线程/</id>
     <published>2017-05-24T02:52:22.000Z</published>
-    <updated>2017-05-24T12:59:21.726Z</updated>
+    <updated>2017-05-25T07:53:21.247Z</updated>
     
     <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。</p>
 <a id="more"></a>
@@ -80,10 +80,28 @@
 </tbody>
 </table>
 <h4 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h4><p>同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。<br><strong>1.互斥量</strong><br>通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， <em>互斥量（mutex）</em> 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。<br>互斥变量通常用 <em>pthread_mutex_t</em> 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">#include &lt;pthread.h&gt;</div><div class="line"></div><div class="line">int pthread_mutex_init(pthread_mutex_t *restrict mutex,</div><div class="line">						const pthread_mutexattr_t *restrict attr);</div><div class="line">int pthread_mutex_destory(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_lock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_trylock(pthread_mutex_t *mutex);</div><div class="line"></div><div class="line">int pthread_mutex_unlock(pthread_mutex_t *mutex);</div></pre></td></tr></table></figure></p>
-<p><strong>2.避免死锁</strong>  </p>
-<p><strong>3.读写锁</strong><br>读写锁允许更高的并行性。  </p>
-<p><strong>4.条件变量</strong>  </p>
-<h4 id="线程控制"><a href="#线程控制" class="headerlink" title="线程控制"></a>线程控制</h4>]]></content>
+<p><strong>2.避免死锁</strong><br>通过加锁的顺序可以避免死锁，使用多个互斥量。<br><strong>3.读写锁</strong><br>读写锁允许更高的并行性。读写锁有三种状态：读模式下加锁状态、写模式下加锁状态、不加锁状态。可以多读，单独写的策略，被称为 <em>共享-独占锁</em> 非常适合读的次数大于写的次数的情况。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_init</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *<span class="keyword">restrict</span> rwlock,  </div><div class="line">                                <span class="keyword">const</span> <span class="keyword">pthread_rwlockattr_t</span> *<span class="keyword">restrict</span> attr)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_destroy</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>; </div><div class="line"></div><div class="line"><span class="comment">/* 读模式下加锁  */</span>  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_rdlock</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>;  </div><div class="line"><span class="comment">/* 非阻塞的读模式下加锁  */</span>  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_tryrdlock</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>;  </div><div class="line"><span class="comment">/* 写模式下加锁  */</span>  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_wrlock</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>;  </div><div class="line"><span class="comment">/* 非阻塞的写模式下加锁 */</span>  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_trywrlock</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>;  </div><div class="line"><span class="comment">/* 解锁 */</span>  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_rwlock_unlock</span> <span class="params">(<span class="keyword">pthread_rwlock_t</span> *__rwlock)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>4.条件变量</strong><br>条件变量可以与互斥量一起使用，等待特定条件的发生。条件本身用互斥量保护，获得了互斥量才可以改变条件或者获得条件的状态。<br>数据类型为 <code>pthread_cond_t</code> 用之前用 <code>PTHREAD_COND_INITIALIZER</code> 静态初始化，或者调用函数动态初始化，结束使用后记得销毁。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond,<span class="keyword">pthread_condattr_t</span> *cond_attr)</span></span>;     </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond,<span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_timewait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond,pthread_mutex *mutex,</div><div class="line">							<span class="keyword">const</span> timespec *abstime)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destroy</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;  </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>; <span class="comment">//唤醒单个等待线程</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;  <span class="comment">//唤醒所有等待线程</span></div></pre></td></tr></table></figure></p>
+<p>使用 <code>pthread_cond_wait</code> 等待条件为真，互斥量用于保护条件，调用函数时，会进行两个原子操作：  </p>
+<ul>
+<li>把调用线程放到等待条件的线程列表上；  </li>
+<li>对互斥量解锁。<br><code>pthread_cond_timewait</code> 多了一个超时时间，当等待的时间内未满足条件，则会返回一个超时的错误。<br>等待时间的结构  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> timespec&#123;  </div><div class="line"><span class="keyword">time_t</span>  tv_sec    <span class="comment">//Seconds.  </span></div><div class="line"><span class="keyword">long</span>    tv_nsec   <span class="comment">//Nanoseconds.  </span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>函数要求传入的时间值是一个绝对值，不是相对值，例如，想要等待3分钟，必须先获得当前时间，然后加上3分钟。
+要想获得当前系统时间的timespec值，没有直接可调用的函数，需要通过调用gettimeofday函数获取timeval结构，然后转换成timespec结构。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> timeval now;</div><div class="line"><span class="keyword">struct</span> timespec until;</div><div class="line">gettimeofday(&amp;now);<span class="comment">//获得系统当前时间</span></div><div class="line"></div><div class="line"><span class="comment">//把时间从timeval结构转换成timespec结构</span></div><div class="line">until.tv_sec = now.tv_sec;</div><div class="line">until.tv_nsec = now.tv_usec * <span class="number">1000</span>;</div><div class="line"></div><div class="line"><span class="comment">//增加min</span></div><div class="line">until.tv_sec += <span class="number">3</span> * <span class="number">60</span>;</div></pre></td></tr></table></figure></p>
+<h4 id="线程控制"><a href="#线程控制" class="headerlink" title="线程控制"></a>线程控制</h4><p>线程的一些属性设置等。  </p>
+<h4 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h4><p><strong>守护进程daemonize</strong>是生存周期较长的一种没有控制终端、后台运行的进程，伴随着系统的启动和关闭。<br><strong>编程规则：</strong>  </p>
+<ul>
+<li>首先要做的是调用umask将文件模式创建屏蔽字设置为0。由继承得来的文件模式创建屏蔽字可能会拒绝设置某些权限。例如，若守护进程要创建一个组可读、写的文件，而继承的文件模式创建屏蔽字可能屏蔽了这两种权限，于是所要求的组可读、写就不能起作用。  </li>
+<li>调用fork，然后使父进程退出（exit）。这样做实现了下面几点：第一，如果该守护进程是作为一条简单shell命令启动的，那么父进程终止使得shell认为这条命令已经执行完毕（也就没有了控制终端）；第二，子进程继承了父进程的进程组ID，但具有一个新的进程ID，这就保证了子进程不是一个进程组的组长进程。这对于下面就要做的setsid调用是必要的前提条件。  </li>
+<li>调用setsid以创建一个新会话。使调用进程：（a）成为新会话的首进程，（b）成为一个新进程组的组长进程，（c）没有控制终端。  </li>
+<li>将当前工作目录更改为根目录。从父进程出继承过来的当前工作目录可能在一个挂载的文件系统（a mounted file system）中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作目录在一个挂载的文件系统中，那么该文件系统就不能被卸载。这与挂载文件系统的原意不符。  </li>
+<li>关闭不再需要的文件描述符。  </li>
+<li>某些守护进程打开/dev/null使其具有文件描述符0、1和2，这样，任何一个试图读标准输入、写标准输出和标准出错的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，所以不能在终端设备上显示其输出，也无处从交互式用户那里接受输入。即使守护进程是从交互式会话启动的，但因为守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。</li>
+</ul>
+<p><a href="http://www.cnblogs.com/mickole/p/3188321.html">参考外链接</a></p>
+]]></content>
     
     <summary type="html">
     
@@ -1035,9 +1053,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -1073,9 +1091,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
