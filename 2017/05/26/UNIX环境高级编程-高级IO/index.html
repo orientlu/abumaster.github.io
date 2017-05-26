@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技巧," />
+  <meta name="keywords" content="Linux," />
 
 
 
@@ -90,18 +90,16 @@
 
 
 
-<meta name="description" content="公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。">
+<meta name="description" content="Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="公式专辑">
-<meta property="og:url" content="http://abumaster.com/2017/03/29/公式专辑/index.html">
+<meta property="og:title" content="UNIX环境高级编程-高级IO">
+<meta property="og:url" content="http://abumaster.com/2017/05/26/UNIX环境高级编程-高级IO/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。">
-<meta property="og:image" content="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$">
-<meta property="og:updated_time" content="2017-05-10T13:11:52.448Z">
+<meta property="og:description" content="Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。">
+<meta property="og:updated_time" content="2017-05-26T13:45:20.247Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="公式专辑">
-<meta name="twitter:description" content="公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。">
-<meta name="twitter:image" content="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$">
+<meta name="twitter:title" content="UNIX环境高级编程-高级IO">
+<meta name="twitter:description" content="Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。">
 
 
 
@@ -129,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/2017/03/29/公式专辑/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/05/26/UNIX环境高级编程-高级IO/"/>
 
 
 
 
 
-  <title> 公式专辑 | 张国丰 </title>
+  <title> UNIX环境高级编程-高级IO | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +295,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/29/公式专辑/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/05/26/UNIX环境高级编程-高级IO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -318,7 +316,7 @@
             
             
               
-                公式专辑
+                UNIX环境高级编程-高级IO
               
             
           </h1>
@@ -333,8 +331,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T15:53:21+08:00">
-                2017-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-26T15:01:48+08:00">
+                2017-05-26
               </time>
             
 
@@ -356,8 +354,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/other/" itemprop="url" rel="index">
-                    <span itemprop="name">其他</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
                   </a>
                 </span>
 
@@ -391,32 +389,36 @@
       
 
       
-        <blockquote>
-<p>公式的使用，论文中经常用到公式，在本地编写文章时常有 word 自带的基本上可以解决问题，当用 Markdown 书写时，又不想贴图，只好用在线的公式编辑器，一般有两种方法，一是在线生成公式，并引出外链，直接嵌入到文章中；另外一种用Mathjax引擎，引入一个脚本，在文章中编辑。</p>
-</blockquote>
+        <p>Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。  </p>
 <a id="more"></a>
-<h3 id="1-MathJax-引擎"><a href="#1-MathJax-引擎" class="headerlink" title="1.MathJax 引擎"></a>1.MathJax 引擎</h3><p>参考<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">stackexchange</a>，很简单引入一个脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
-<p>然后编写公式一个栗子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$$\sum_&#123;i=0&#125;^n i^2 = \frac&#123;(n^2+n)(2n+1)&#125;&#123;6&#125;$$</div></pre></td></tr></table></figure></p>
-<p>就生成了：<br>$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$<br>注意：想要在浏览器上预览，需要更改markdown priview的配置文件，运行mathjax运行。 </p>
-<h3 id="2-在线-LaTeX-公式编辑器"><a href="#2-在线-LaTeX-公式编辑器" class="headerlink" title="2.在线 LaTeX 公式编辑器"></a>2.在线 LaTeX 公式编辑器</h3><p><a href="https://www.codecogs.com/latex/eqneditor.php?lang=zh-cn">在线LaTeX公式编辑器</a>，使用<a href="http://baike.baidu.com/link?url=F3CVHlrVTZL-RRSnSK6kpx0TA2a3gLRmwxiZapagZeYpTSAT9od_rx14ufa0Bvgabs3xNyrUCs1irgp5Lufui_">LaTeX</a>公式。在其中编写好公式后，直接生成了一段html代码，直接复制到 Markdown 文本中。<br>如代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; target=&quot;_blank&quot;&gt;&lt;img src=&quot;https://latex.codecogs.com/gif.latex?$$f(x)=\sum_&#123;i=1&#125;^n&amp;space;a_i$$&quot; title=&quot;$$f(x)=\sum_&#123;i=1&#125;^n a_i$$&quot; /&gt;&lt;/a&gt;</div></pre></td></tr></table></figure></p>
-<p>生成：<br><a href="https://www.codecogs.com/eqnedit.php?latex=$$f(x)=\sum_{i=1}^n&space;a_i$$" target="_blank"><img src="https://latex.codecogs.com/gif.latex?$$f(x)=\sum_{i=1}^n&space;a_i$$" title="$$f(x)=\sum_{i=1}^n a_i$$" /></a><br>优点：可以本地预览；缺点：只是引用的图片，右键不可操作，公式大的话可能加载慢，图片不清晰。  </p>
-<h3 id="3-基本语法"><a href="#3-基本语法" class="headerlink" title="3.基本语法"></a>3.基本语法</h3><blockquote>
-<p>无论使用哪种方式，公式的基本语法是相同的。常用的总结如下。</p>
-</blockquote>
+<h4 id="I-O多路转换"><a href="#I-O多路转换" class="headerlink" title="I/O多路转换"></a>I/O多路转换</h4><p><strong>应用场景：</strong> 在服务器编程模型中，客户请求到来时，服务器开启一个进程去服务，但是请求量很大时，服务器不可能一直开启的进程无法满足大量请求。这时，一个进程去服务多个客户，多个客户由于情况不同，不能在一个客户身上浪费太多的时间（阻塞），这时就引入了 I/O 多路复用的技术。<br><div class="note info"><p>其实，解决多用户请求可以用到的方法主要有：非阻塞IO，通过一种叫做 <em>轮询</em> 的方法进行遍历多个描述符，符合要求就去读，不符合下一个，这样在“路上”浪费一些时间，避免使用这种方法；还有一种 <em>异步IO</em> 的方法，核心思想是当一个描述符准备好后，用信号通知，这种方法有一定的系统限制；比较好的方法就是 <em>IO多路转换</em> 了，下面详细介绍。</p>
+</div>  </p>
+<h5 id="select和pselect函数"><a href="#select和pselect函数" class="headerlink" title="select和pselect函数"></a>select和pselect函数</h5><p>传向<code>select</code>的参数告诉内核：  </p>
 <ul>
-<li><strong>公式样式</strong><br>行内公式<code>\\(公式\\)</code>，行间公式<code>$$公式$$</code>**<br>空格的表示：`\quad’表示一个quad空格  </li>
-<li><strong>字符</strong><br><code>\</code>为转义符，特殊字符前要加。  </li>
-<li><strong>上下标</strong><br>用<code>^</code>表示上标，用<code>_</code>表示下标  </li>
-<li>字母上下标记<br>用<code>\overline{}</code>表示上划线，用<code>\underline{}</code>表示下划线；<br>用<code>\hat{}</code>表示字母上面有一个小尖角，而<code>\widehat{}</code>表示有一个大尖角;
-用<code>\bar{} \acute{} \check{} \grave{}</code>分别表示四个声调：一声平，二声扬，三声拐弯，四声降；<br><code>\tilde{}</code>波浪线, <code>\vec{}</code>向量,<code>\dot{}</code>点。  </li>
-<li>希腊字符<br><code>\alpha</code>, <code>\beta</code>, …, <code>\omega</code>: α,β,…ω；<br><code>\Gamma</code>, <code>\Delta</code>, …, <code>\Omega</code>: Γ,Δ,…,Ω。</li>
-<li>数学函数<br>例如<code>sin x</code>要表示成<code>\sin x</code>；<code>log x</code>要表示成<code>\log x</code>；<code>lim x</code>表示成<code>\lim_{x\to0}</code>。</li>
-<li>分数开方<br><code>\frac{ }{ }</code>分数；<code>\sqrt{n}{r}</code>表示开n次方。  </li>
-<li>括号和分割符<br><code>() [] |</code>是不变的；
-<code>{}</code>要转义，写为<code>\{\}</code><br>用<code>\left 和 \right</code>调整大小。  </li>
-<li>数学公式<br>求和：<code>\sum_{i=0}^n{a_i}</code><br>积分：<code>\int</code><br>例子参见<a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">stackexchange</a></li>
+<li>关心的描述符；  </li>
+<li>对于每个描述符关心的状态（读、写）；  </li>
+<li>愿意等待的时间。<br>返回时，内核告诉我们：  </li>
+<li>已准备好的描述符数量；  </li>
+<li>对于读、写、异常的状态的每一个，哪些描述符已准备好。  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> maxfdp1, fd_set *<span class="keyword">restrict</span> readfds,</div><div class="line">			fd_set *<span class="keyword">restrict</span> writefds,</div><div class="line">			fd_set *<span class="keyword">restrict</span> exceptfds,</div><div class="line">			<span class="keyword">struct</span> timeval *<span class="keyword">restrict</span> tvptr)</span></span>;</div><div class="line"><span class="comment">//返回值：准备就绪的描述符，超时返回0，失败返回-1</span></div><div class="line"><span class="keyword">struct</span> timeval &#123;</div><div class="line">	<span class="keyword">long</span> tv_sec; <span class="comment">//seconds</span></div><div class="line">	<span class="keyword">long</span> tv_usec; <span class="comment">//microseconds</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
 </ul>
-
+<p>关于返回值有三种情况：  </p>
+<ul>
+<li><code>tvpr==NULL</code> 永远等待，有描述符准备好或捕获到一个信号中断等待；  </li>
+<li><code>tvpr-&gt;tv_sec==0 &amp;&amp; tvpr-&gt;tv_usec==0</code> 完全不等待；  </li>
+<li>有一个不等于0，则是等待特定时间。<br>中间的三个参数指定描述符集的指针，可以通过以下API来设置。  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//清空集合</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *fdset)</span></span>; </div><div class="line"><span class="comment">//将一个给定的文件描述符加入集合之中</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;</div><div class="line"><span class="comment">//将一个给定的文件描述符从集合中删除   </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;   </div><div class="line"><span class="comment">//检查集合中指定的文件描述符是否可以读写</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>第一个参数表示最大的描述符加1。为了限制在指定的范围内查找。<br><div class="note warning"><p><code>select</code> 有三个可能的返回值。<br>1.返回值 -1 表示出错。<br>2.返回值 0 表示没有描述符准备好，所有描述符集被清零。<br>3.正返回值，表示准备好的描述符数量，在描述符集中对应的位表示准备好的描述符。</p>
+</div><br><code>pselect</code> 为 <code>select</code> 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 </p>
+<p><strong>缺点：</strong>  </p>
+<ol>
+<li>每次调用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大 </li>
+<li>同时每次调用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很大 </li>
+<li>select支持的文件描述符数量太小了，默认是1024</li>
+</ol>
+<h5 id="pool函数"><a href="#pool函数" class="headerlink" title="pool函数"></a>pool函数</h5><p><code>pool</code>函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 <code>poolfd</code> 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。  </p>
+<h4 id="存储映射I-O"><a href="#存储映射I-O" class="headerlink" title="存储映射I/O"></a>存储映射I/O</h4>
       
     </div>
 
@@ -439,7 +441,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jq/" rel="tag"># 技巧</a>
+            <a href="/tags/linux/" rel="tag"># Linux</a>
           
         </div>
       
@@ -452,8 +454,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/29/图床测试/" rel="next" title="图床测试">
-                <i class="fa fa-chevron-left"></i> 图床测试
+              <a href="/2017/05/24/UNIX环境高级编程-线程/" rel="next" title="UNIX环境高级编程-线程">
+                <i class="fa fa-chevron-left"></i> UNIX环境高级编程-线程
               </a>
             
           </div>
@@ -461,10 +463,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/30/深度解析网络用于图像语义分割/" rel="prev" title="深度解析网络用于图像语义分割">
-                深度解析网络用于图像语义分割 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -629,7 +627,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MathJax-引擎"><span class="nav-number">1.</span> <span class="nav-text">1.MathJax 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在线-LaTeX-公式编辑器"><span class="nav-number">2.</span> <span class="nav-text">2.在线 LaTeX 公式编辑器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-基本语法"><span class="nav-number">3.</span> <span class="nav-text">3.基本语法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O多路转换"><span class="nav-number">1.</span> <span class="nav-text">I/O多路转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select和pselect函数"><span class="nav-number">1.1.</span> <span class="nav-text">select和pselect函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pool函数"><span class="nav-number">1.2.</span> <span class="nav-text">pool函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储映射I-O"><span class="nav-number">2.</span> <span class="nav-text">存储映射I/O</span></a></li></ol></div>
             
 
           </div>

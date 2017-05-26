@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[UNIX环境高级编程-高级IO]]></title>
+    <url>%2F2017%2F05%2F26%2FUNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E9%AB%98%E7%BA%A7IO%2F</url>
+    <content type="text"><![CDATA[Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。 I/O多路转换应用场景： 在服务器编程模型中，客户请求到来时，服务器开启一个进程去服务，但是请求量很大时，服务器不可能一直开启的进程无法满足大量请求。这时，一个进程去服务多个客户，多个客户由于情况不同，不能在一个客户身上浪费太多的时间（阻塞），这时就引入了 I/O 多路复用的技术。其实，解决多用户请求可以用到的方法主要有：非阻塞IO，通过一种叫做 轮询 的方法进行遍历多个描述符，符合要求就去读，不符合下一个，这样在“路上”浪费一些时间，避免使用这种方法；还有一种 异步IO 的方法，核心思想是当一个描述符准备好后，用信号通知，这种方法有一定的系统限制；比较好的方法就是 IO多路转换 了，下面详细介绍。 select和pselect函数传向select的参数告诉内核： 关心的描述符； 对于每个描述符关心的状态（读、写）； 愿意等待的时间。返回时，内核告诉我们： 已准备好的描述符数量； 对于读、写、异常的状态的每一个，哪些描述符已准备好。 12345678910#include &lt;sys/select.h&gt;int select(int maxfdp1, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict exceptfds, struct timeval *restrict tvptr);//返回值：准备就绪的描述符，超时返回0，失败返回-1struct timeval &#123; long tv_sec; //seconds long tv_usec; //microseconds&#125; 关于返回值有三种情况： tvpr==NULL 永远等待，有描述符准备好或捕获到一个信号中断等待； tvpr-&gt;tv_sec==0 &amp;&amp; tvpr-&gt;tv_usec==0 完全不等待； 有一个不等于0，则是等待特定时间。中间的三个参数指定描述符集的指针，可以通过以下API来设置。 12345678//清空集合void FD_ZERO(fd_set *fdset); //将一个给定的文件描述符加入集合之中void FD_SET(int fd, fd_set *fdset);//将一个给定的文件描述符从集合中删除 void FD_CLR(int fd, fd_set *fdset); //检查集合中指定的文件描述符是否可以读写int FD_ISSET(int fd, fd_set *fdset); 第一个参数表示最大的描述符加1。为了限制在指定的范围内查找。select 有三个可能的返回值。1.返回值 -1 表示出错。2.返回值 0 表示没有描述符准备好，所有描述符集被清零。3.正返回值，表示准备好的描述符数量，在描述符集中对应的位表示准备好的描述符。 pselect 为 select 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 缺点： 每次调用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大 同时每次调用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很大 select支持的文件描述符数量太小了，默认是1024 pool函数pool函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 poolfd 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。 存储映射I/O]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UNIX环境高级编程-线程]]></title>
     <url>%2F2017%2F05%2F24%2FUNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E7%BA%BF%E7%A8%8B%2F</url>
     <content type="text"><![CDATA[Unix环境高级编程读书笔记，第 11、12 章线程和线程控制。 单进程程序中需要处理多个任务时，通常用到多线程来分别处理各个任务，各个线程可以共享进程的资源。Linux中线程函数位于 libpthread 共享库中，因此在编译程序时要加上 lpthread 选项。 线程基本操作线程标识 如进程ID一样，线程也有一个为一个标识，只在进程环境中有效，用 _pthread_t_ 数据类型表示，不是一个整数，因此有专门的函数来比较两个线程的ID。 123#include &lt;pthread.h&gt;int pthread_equal(pthread_t tid1, pthread_t tid2);//相等返回非零pthread_t pthread_self(void);//调用线程的线程ID 线程创建 可以直接调用 pthread_create 函数来创建一个新的线程，线程的执行顺序是不定的，无法保证哪个线程先运行，新的线程可以继承和调用线程的浮点环境和信号屏蔽字，多个线程可以共同访问进程的资源。12345#include &lt;pthread.h&gt;int pthread_create(pthread_t *restrict tidp, const pthread_attr_t *restrict attr, void *(*start_rtn)(void *), void *restrict arg); 成功返回0，失败返回错误编号。 tidp 表示新创建线程的ID， attr 定制各种不同的线程属性， _start_rtn_ 新创建线程的线程函数， arg 表示传入线程的参数，通常是结构体指针。线程终止 进程中的任一个线程如果调用了 exit _Exit _exit 函数，那么整个进程就会退出，如果单个线程退出而不影响整个进程，有下面三种方式： 线程从启动例程返回，返回值为线程的退出码； 线程可以被同一进程中的其他线程取消； 线程调用 pthread_exit 。 12345#include &lt;pthread.h&gt;//终止自己，并设置一个无类型指针表示终止码void pthread_exit(void *rval_ptr);//访问上述的指针一直阻塞等待，获得线程的终止状态void pthread_join(pthread_t thread, void **rval_ptr); 当 pthread_join 返回时，指向的内存必须是全局的或者是动态分配的，否则在栈上会出现覆盖的情况。创建的线程才算终止，才会释放占用的资源。 进程原语和线程原语的比较 进程原语 线程原语 描述 fork pthread_create 创建新的控制流 exit pthread_exit 从现有的控制流中退出 waitpid pthread_join 从控制流中得到退出状态 atexit pthread_cleanup_push 注册在退出时调用的函数 getpid pthread_self 获取控制流的ID abort pthread_cancel 请求控制流的非正常退出 线程同步同一进程中的多个线程共享进程的资源，会产生竞争，为了保证数据的一致性，需要线程同步。1.互斥量通过使用pthread的互斥接口保护数据，确保同一时间只有一个线程访问数据， 互斥量（mutex） 相当于一把锁，在访问共享资源前对其加上一把锁，使用过后，释放。其他线程在访问时，如果加锁会阻塞，直到获取这个互斥锁。互斥变量通常用 pthread_mutex_t 的数据类型表示，使用前必须进行初始化，可以静态也可以动态，动态的话使用后要销毁。对应的 API 如下。1234567891011#include &lt;pthread.h&gt;int pthread_mutex_init(pthread_mutex_t *restrict mutex, const pthread_mutexattr_t *restrict attr);int pthread_mutex_destory(pthread_mutex_t *mutex);int pthread_mutex_lock(pthread_mutex_t *mutex);int pthread_mutex_trylock(pthread_mutex_t *mutex);int pthread_mutex_unlock(pthread_mutex_t *mutex); 2.避免死锁通过加锁的顺序可以避免死锁，使用多个互斥量。3.读写锁读写锁允许更高的并行性。读写锁有三种状态：读模式下加锁状态、写模式下加锁状态、不加锁状态。可以多读，单独写的策略，被称为 共享-独占锁 非常适合读的次数大于写的次数的情况。1234567891011121314 int pthread_rwlock_init (pthread_rwlock_t *restrict rwlock, const pthread_rwlockattr_t *restrict attr);int pthread_rwlock_destroy (pthread_rwlock_t *__rwlock); /* 读模式下加锁 */ int pthread_rwlock_rdlock (pthread_rwlock_t *__rwlock); /* 非阻塞的读模式下加锁 */ int pthread_rwlock_tryrdlock (pthread_rwlock_t *__rwlock); /* 写模式下加锁 */ int pthread_rwlock_wrlock (pthread_rwlock_t *__rwlock); /* 非阻塞的写模式下加锁 */ int pthread_rwlock_trywrlock (pthread_rwlock_t *__rwlock); /* 解锁 */ int pthread_rwlock_unlock (pthread_rwlock_t *__rwlock); 4.条件变量条件变量可以与互斥量一起使用，等待特定条件的发生。条件本身用互斥量保护，获得了互斥量才可以改变条件或者获得条件的状态。数据类型为 pthread_cond_t 用之前用 PTHREAD_COND_INITIALIZER 静态初始化，或者调用函数动态初始化，结束使用后记得销毁。1234567int pthread_cond_init(pthread_cond_t *cond,pthread_condattr_t *cond_attr); int pthread_cond_wait(pthread_cond_t *cond,pthread_mutex_t *mutex);int pthread_cond_timewait(pthread_cond_t *cond,pthread_mutex *mutex, const timespec *abstime);int pthread_cond_destroy(pthread_cond_t *cond); int pthread_cond_signal(pthread_cond_t *cond); //唤醒单个等待线程int pthread_cond_broadcast(pthread_cond_t *cond); //唤醒所有等待线程 使用 pthread_cond_wait 等待条件为真，互斥量用于保护条件，调用函数时，会进行两个原子操作： 把调用线程放到等待条件的线程列表上； 对互斥量解锁。pthread_cond_timewait 多了一个超时时间，当等待的时间内未满足条件，则会返回一个超时的错误。等待时间的结构 1234struct timespec&#123; time_t tv_sec //Seconds. long tv_nsec //Nanoseconds. &#125;; 函数要求传入的时间值是一个绝对值，不是相对值，例如，想要等待3分钟，必须先获得当前时间，然后加上3分钟。 要想获得当前系统时间的timespec值，没有直接可调用的函数，需要通过调用gettimeofday函数获取timeval结构，然后转换成timespec结构。12345678910struct timeval now;struct timespec until;gettimeofday(&amp;now);//获得系统当前时间//把时间从timeval结构转换成timespec结构until.tv_sec = now.tv_sec;until.tv_nsec = now.tv_usec * 1000;//增加minuntil.tv_sec += 3 * 60; 线程控制线程的一些属性设置等。 守护进程守护进程daemonize是生存周期较长的一种没有控制终端、后台运行的进程，伴随着系统的启动和关闭。编程规则： 首先要做的是调用umask将文件模式创建屏蔽字设置为0。由继承得来的文件模式创建屏蔽字可能会拒绝设置某些权限。例如，若守护进程要创建一个组可读、写的文件，而继承的文件模式创建屏蔽字可能屏蔽了这两种权限，于是所要求的组可读、写就不能起作用。 调用fork，然后使父进程退出（exit）。这样做实现了下面几点：第一，如果该守护进程是作为一条简单shell命令启动的，那么父进程终止使得shell认为这条命令已经执行完毕（也就没有了控制终端）；第二，子进程继承了父进程的进程组ID，但具有一个新的进程ID，这就保证了子进程不是一个进程组的组长进程。这对于下面就要做的setsid调用是必要的前提条件。 调用setsid以创建一个新会话。使调用进程：（a）成为新会话的首进程，（b）成为一个新进程组的组长进程，（c）没有控制终端。 将当前工作目录更改为根目录。从父进程出继承过来的当前工作目录可能在一个挂载的文件系统（a mounted file system）中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作目录在一个挂载的文件系统中，那么该文件系统就不能被卸载。这与挂载文件系统的原意不符。 关闭不再需要的文件描述符。 某些守护进程打开/dev/null使其具有文件描述符0、1和2，这样，任何一个试图读标准输入、写标准输出和标准出错的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，所以不能在终端设备上显示其输出，也无处从交互式用户那里接受输入。即使守护进程是从交互式会话启动的，但因为守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。 参考外链接]]></content>
@@ -106,7 +117,7 @@
   </entry>
   <entry>
     <title><![CDATA[caffe学习-分类]]></title>
-    <url>%2F2017%2F05%2F07%2F%E2%80%98caffe%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BB%2F</url>
+    <url>%2F2017%2F05%2F07%2Fcaffe%E5%AD%A6%E4%B9%A0-%E5%88%86%E7%B1%BB%2F</url>
     <content type="text"><![CDATA[在用caffe的c++接口时，遇到了许多问题，学习源码中解决问题，熟悉一些细节。 1.预测分类的流程图 2.代码注释123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169170171172173174175176177178179180181182183184185186187188189190191192193194195196197198199200201202203204205206207208209210211212213214215216217218219220221222223224225226227228229230231232233234235236237238239//classification.cpp/*一些头文件*/#ifdef USE_OPENCV/* Pair (label, confidence) * 代表一个预测结果，标签和概率的组合 */typedef std::pair&lt;string, float&gt; Prediction;//定义一个分类的类class Classifier &#123; public: Classifier(const string&amp; model_file, const string&amp; trained_file, const string&amp; mean_file, const string&amp; label_file);//提供给外部的接口，返回一个预测。参数：需要预测的图像和概率最大的N个结果 std::vector&lt;Prediction&gt; Classify(const cv::Mat&amp; img, int N = 5); private: void SetMean(const string&amp; mean_file);//设置中值 std::vector&lt;float&gt; Predict(const cv::Mat&amp; img); void WrapInputLayer(std::vector&lt;cv::Mat&gt;* input_channels); void Preprocess(const cv::Mat&amp; img, std::vector&lt;cv::Mat&gt;* input_channels); private: shared_ptr&lt;Net&lt;float&gt; &gt; net_; cv::Size input_geometry_; int num_channels_; cv::Mat mean_; std::vector&lt;string&gt; labels_;&#125;;Classifier::Classifier(const string&amp; model_file, const string&amp; trained_file, const string&amp; mean_file, const string&amp; label_file) &#123;#ifdef CPU_ONLY Caffe::set_mode(Caffe::CPU);#else Caffe::set_mode(Caffe::GPU);#endif //加载网络配置并初始化 net_.reset(new Net&lt;float&gt;(model_file, TEST)); net_-&gt;CopyTrainedLayersFrom(trained_file); CHECK_EQ(net_-&gt;num_inputs(), 1) &lt;&lt; "Network should have exactly one input."; CHECK_EQ(net_-&gt;num_outputs(), 1) &lt;&lt; "Network should have exactly one output."; //取出输入层的blob结构，可以提取出通道和输入图像的高宽 Blob&lt;float&gt;* input_layer = net_-&gt;input_blobs()[0]; num_channels_ = input_layer-&gt;channels(); CHECK(num_channels_ == 3 || num_channels_ == 1) &lt;&lt; "Input layer should have 1 or 3 channels."; input_geometry_ = cv::Size(input_layer-&gt;width(), input_layer-&gt;height()); //加载中值文件 SetMean(mean_file); //加载标签文件 std::ifstream labels(label_file.c_str()); CHECK(labels) &lt;&lt; "Unable to open labels file " &lt;&lt; label_file; string line; while (std::getline(labels, line)) labels_.push_back(string(line)); //检查标签数目和输出维度是否匹配 Blob&lt;float&gt;* output_layer = net_-&gt;output_blobs()[0]; CHECK_EQ(labels_.size(), output_layer-&gt;channels()) &lt;&lt; "Number of labels is different from the output layer dimension.";&#125;//自定义比较函数，用于排序预测结果static bool PairCompare(const std::pair&lt;float, int&gt;&amp; lhs, const std::pair&lt;float, int&gt;&amp; rhs) &#123; return lhs.first &gt; rhs.first;&#125;//返回v中元素最大的N个数的下标索引static std::vector&lt;int&gt; Argmax(const std::vector&lt;float&gt;&amp; v, int N) &#123; std::vector&lt;std::pair&lt;float, int&gt; &gt; pairs; for (size_t i = 0; i &lt; v.size(); ++i) pairs.push_back(std::make_pair(v[i], static_cast&lt;int&gt;(i))); std::partial_sort(pairs.begin(), pairs.begin() + N, pairs.end(), PairCompare); std::vector&lt;int&gt; result; for (int i = 0; i &lt; N; ++i) result.push_back(pairs[i].second); return result;&#125;//输入图像，返回前N个概率最大的预测(标签，概率)std::vector&lt;Prediction&gt; Classifier::Classify(const cv::Mat&amp; img, int N) &#123; std::vector&lt;float&gt; output = Predict(img); N = std::min&lt;int&gt;(labels_.size(), N); std::vector&lt;int&gt; maxN = Argmax(output, N); std::vector&lt;Prediction&gt; predictions; for (int i = 0; i &lt; N; ++i) &#123; int idx = maxN[i]; predictions.push_back(std::make_pair(labels_[idx], output[idx])); &#125; return predictions;&#125;/* Load the mean file in binaryproto format. */void Classifier::SetMean(const string&amp; mean_file) &#123; BlobProto blob_proto; ReadProtoFromBinaryFileOrDie(mean_file.c_str(), &amp;blob_proto); /* Convert from BlobProto to Blob&lt;float&gt; */ Blob&lt;float&gt; mean_blob; mean_blob.FromProto(blob_proto); CHECK_EQ(mean_blob.channels(), num_channels_) &lt;&lt; "Number of channels of mean file doesn't match input layer."; /* The format of the mean file is planar 32-bit float BGR or grayscale. */ std::vector&lt;cv::Mat&gt; channels; float* data = mean_blob.mutable_cpu_data(); for (int i = 0; i &lt; num_channels_; ++i) &#123; /* Extract an individual channel. */ cv::Mat channel(mean_blob.height(), mean_blob.width(), CV_32FC1, data); channels.push_back(channel); data += mean_blob.height() * mean_blob.width(); &#125; /* Merge the separate channels into a single image. */ cv::Mat mean; cv::merge(channels, mean); /* Compute the global mean pixel value and create a mean image * filled with this value. */ cv::Scalar channel_mean = cv::mean(mean); mean_ = cv::Mat(input_geometry_, mean.type(), channel_mean);&#125;//预测函数，返回输出的概率std::vector&lt;float&gt; Classifier::Predict(const cv::Mat&amp; img) &#123; Blob&lt;float&gt;* input_layer = net_-&gt;input_blobs()[0]; input_layer-&gt;Reshape(1, num_channels_, input_geometry_.height, input_geometry_.width); /* Forward dimension change to all layers. */ net_-&gt;Reshape(); std::vector&lt;cv::Mat&gt; input_channels; WrapInputLayer(&amp;input_channels); Preprocess(img, &amp;input_channels); net_-&gt;Forward(); /* Copy the output layer to a std::vector */ Blob&lt;float&gt;* output_layer = net_-&gt;output_blobs()[0]; const float* begin = output_layer-&gt;cpu_data(); const float* end = begin + output_layer-&gt;channels(); return std::vector&lt;float&gt;(begin, end);&#125; /* 包装网络的输入层，将每个通道保存为Mat对象， * 最后直接将分割的通道写入到输入层中 */void Classifier::WrapInputLayer(std::vector&lt;cv::Mat&gt;* input_channels) &#123; Blob&lt;float&gt;* input_layer = net_-&gt;input_blobs()[0]; int width = input_layer-&gt;width(); int height = input_layer-&gt;height(); //获取可更改的输入层数据指针 float* input_data = input_layer-&gt;mutable_cpu_data(); for (int i = 0; i &lt; input_layer-&gt;channels(); ++i) &#123; cv::Mat channel(height, width, CV_32FC1, input_data); input_channels-&gt;push_back(channel); input_data += width * height; &#125;//将各个通道变为Mat，依次放入vector中&#125;//图像拷贝入输入层中void Classifier::Preprocess(const cv::Mat&amp; img, std::vector&lt;cv::Mat&gt;* input_channels) &#123; /* 将输入图像转换为网络要求的输入格式 */ //通道数 cv::Mat sample; if (img.channels() == 3 &amp;&amp; num_channels_ == 1) cv::cvtColor(img, sample, cv::COLOR_BGR2GRAY); else if (img.channels() == 4 &amp;&amp; num_channels_ == 1) cv::cvtColor(img, sample, cv::COLOR_BGRA2GRAY); else if (img.channels() == 4 &amp;&amp; num_channels_ == 3) cv::cvtColor(img, sample, cv::COLOR_BGRA2BGR); else if (img.channels() == 1 &amp;&amp; num_channels_ == 3) cv::cvtColor(img, sample, cv::COLOR_GRAY2BGR); else sample = img; //大小 cv::Mat sample_resized; if (sample.size() != input_geometry_) cv::resize(sample, sample_resized, input_geometry_); else sample_resized = sample; //浮点数 cv::Mat sample_float; if (num_channels_ == 3) sample_resized.convertTo(sample_float, CV_32FC3); else sample_resized.convertTo(sample_float, CV_32FC1); //归一化处理：减去中值 cv::Mat sample_normalized; cv::subtract(sample_float, mean_, sample_normalized); //直接将mat拷贝到输入层，已经处理过输入层为Mat对象了 cv::split(sample_normalized, *input_channels); CHECK(reinterpret_cast&lt;float*&gt;(input_channels-&gt;at(0).data) == net_-&gt;input_blobs()[0]-&gt;cpu_data()) &lt;&lt; "Input channels are not wrapping the input layer of the network.";&#125;//主函数命令行调用int main(int argc, char** argv) &#123; if (argc != 6) &#123; std::cerr &lt;&lt; "Usage: " &lt;&lt; argv[0] &lt;&lt; " deploy.prototxt network.caffemodel" &lt;&lt; " mean.binaryproto labels.txt img.jpg" &lt;&lt; std::endl; return 1; &#125; ::google::InitGoogleLogging(argv[0]); string model_file = argv[1]; string trained_file = argv[2]; string mean_file = argv[3]; string label_file = argv[4]; Classifier classifier(model_file, trained_file, mean_file, label_file); string file = argv[5]; std::cout &lt;&lt; "---------- Prediction for " &lt;&lt; file &lt;&lt; " ----------" &lt;&lt; std::endl; cv::Mat img = cv::imread(file, -1); CHECK(!img.empty()) &lt;&lt; "Unable to decode image " &lt;&lt; file; std::vector&lt;Prediction&gt; predictions = classifier.Classify(img); /* Print the top N predictions. */ for (size_t i = 0; i &lt; predictions.size(); ++i) &#123; Prediction p = predictions[i]; std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(4) &lt;&lt; p.second &lt;&lt; " - \"" &lt;&lt; p.first &lt;&lt; "\"" &lt;&lt; std::endl; &#125;&#125;#elseint main(int argc, char** argv) &#123; LOG(FATAL) &lt;&lt; "This example requires OpenCV; compile with USE_OPENCV.";&#125;#endif // USE_OPENCV]]></content>
       <categories>
         <category>编程</category>
@@ -171,8 +182,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -184,8 +195,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -245,8 +256,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -269,8 +280,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -325,8 +336,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -359,8 +370,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -371,8 +382,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -395,8 +406,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
