@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[UNIX环境高级编程-高级IO]]></title>
     <url>%2F2017%2F05%2F26%2FUNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E9%AB%98%E7%BA%A7IO%2F</url>
-    <content type="text"><![CDATA[Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。 I/O多路转换应用场景： 在服务器编程模型中，客户请求到来时，服务器开启一个进程去服务，但是请求量很大时，服务器不可能一直开启的进程无法满足大量请求。这时，一个进程去服务多个客户，多个客户由于情况不同，不能在一个客户身上浪费太多的时间（阻塞），这时就引入了 I/O 多路复用的技术。其实，解决多用户请求可以用到的方法主要有：非阻塞IO，通过一种叫做 轮询 的方法进行遍历多个描述符，符合要求就去读，不符合下一个，这样在“路上”浪费一些时间，避免使用这种方法；还有一种 异步IO 的方法，核心思想是当一个描述符准备好后，用信号通知，这种方法有一定的系统限制；比较好的方法就是 IO多路转换 了，下面详细介绍。 select和pselect函数传向select的参数告诉内核： 关心的描述符； 对于每个描述符关心的状态（读、写）； 愿意等待的时间。返回时，内核告诉我们： 已准备好的描述符数量； 对于读、写、异常的状态的每一个，哪些描述符已准备好。 12345678910#include &lt;sys/select.h&gt;int select(int maxfdp1, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict exceptfds, struct timeval *restrict tvptr);//返回值：准备就绪的描述符，超时返回0，失败返回-1struct timeval &#123; long tv_sec; //seconds long tv_usec; //microseconds&#125; 关于返回值有三种情况： tvpr==NULL 永远等待，有描述符准备好或捕获到一个信号中断等待； tvpr-&gt;tv_sec==0 &amp;&amp; tvpr-&gt;tv_usec==0 完全不等待； 有一个不等于0，则是等待特定时间。中间的三个参数指定描述符集的指针，可以通过以下API来设置。 12345678//清空集合void FD_ZERO(fd_set *fdset); //将一个给定的文件描述符加入集合之中void FD_SET(int fd, fd_set *fdset);//将一个给定的文件描述符从集合中删除 void FD_CLR(int fd, fd_set *fdset); //检查集合中指定的文件描述符是否可以读写int FD_ISSET(int fd, fd_set *fdset); 第一个参数表示最大的描述符加1。为了限制在指定的范围内查找。select 有三个可能的返回值。1.返回值 -1 表示出错。2.返回值 0 表示没有描述符准备好，所有描述符集被清零。3.正返回值，表示准备好的描述符数量，在描述符集中对应的位表示准备好的描述符。 pselect 为 select 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 缺点： 每次调用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大 同时每次调用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很大 select支持的文件描述符数量太小了，默认是1024 pool函数pool函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 poolfd 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。 存储映射I/O]]></content>
+    <content type="text"><![CDATA[Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。 I/O多路转换应用场景： 在服务器编程模型中，客户请求到来时，服务器开启一个进程去服务，但是请求量很大时，服务器不可能一直开启的进程无法满足大量请求。这时，一个进程去服务多个客户，多个客户由于情况不同，不能在一个客户身上浪费太多的时间（阻塞），这时就引入了 I/O 多路复用的技术。其实，解决多用户请求可以用到的方法主要有：非阻塞IO，通过一种叫做 轮询 的方法进行遍历多个描述符，符合要求就去读，不符合下一个，这样在“路上”浪费一些时间，避免使用这种方法；还有一种 异步IO 的方法，核心思想是当一个描述符准备好后，用信号通知，这种方法有一定的系统限制；比较好的方法就是 IO多路转换 了，下面详细介绍。 select和pselect函数传向select的参数告诉内核： 关心的描述符； 对于每个描述符关心的状态（读、写）； 愿意等待的时间。返回时，内核告诉我们： 已准备好的描述符数量； 对于读、写、异常的状态的每一个，哪些描述符已准备好。 12345678910#include &lt;sys/select.h&gt;int select(int maxfdp1, fd_set *restrict readfds, fd_set *restrict writefds, fd_set *restrict exceptfds, struct timeval *restrict tvptr);//返回值：准备就绪的描述符，超时返回0，失败返回-1struct timeval &#123; long tv_sec; //seconds long tv_usec; //microseconds&#125; 关于返回值有三种情况： tvpr==NULL 永远等待，有描述符准备好或捕获到一个信号中断等待； tvpr-&gt;tv_sec==0 &amp;&amp; tvpr-&gt;tv_usec==0 完全不等待； 有一个不等于0，则是等待特定时间。中间的三个参数指定描述符集的指针，可以通过以下API来设置。 12345678//清空集合void FD_ZERO(fd_set *fdset); //将一个给定的文件描述符加入集合之中void FD_SET(int fd, fd_set *fdset);//将一个给定的文件描述符从集合中删除 void FD_CLR(int fd, fd_set *fdset); //检查集合中指定的文件描述符是否可以读写int FD_ISSET(int fd, fd_set *fdset); 第一个参数表示最大的描述符加1。为了限制在指定的范围内查找。select 有三个可能的返回值。1.返回值 -1 表示出错。2.返回值 0 表示没有描述符准备好，所有描述符集被清零。3.正返回值，表示准备好的描述符数量，在描述符集中对应的位表示准备好的描述符。 pselect 为 select 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 1234int pselect(int maxfd1, fd_set *readfds, fd_set *writefds, fd_set exceptfds, const struct timespec *tsptr, const sigset_t *sigmask); 缺点： 每次调用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大 同时每次调用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很大 select支持的文件描述符数量太小了，默认是1024 pool函数pool函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 poolfd 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。123456int poll(struct pollfd fdarray[], nfds_t nfds, int timeout);struct pollfd&#123; int fd; short events; //常用的读POLLIN/写POLLOUT short revents; //在fd上出现的event，可忽略设置&#125; poll 第一个参数是一个fd数组集合, 每个fd关联一个pollfd结构, 该结构说明fd的关心状态是读还是写poll 第二个参数是第一个参数中fd的个数poll 第三个参数是等待时间, -1表示无限等待, 0表示不等待, 其它正值表示可等待的毫秒数流程：将结构数组中的元素events成员设置为标志（POOLIN POOLOUT等），通过设置这些来告诉内核我们对该描述符关心的是什么，返回时内核设置 revents 来对于该描述符上已经发生了什么事件。 12345678910struct poolfd pfds[2];//定义poolfd结构数组pfds[0].fd=STDIN_FILENO;//关心的描述符pfds[0].events=POOLIN;//对于fd关心的events...pool(pfds, 2, -1);//设置pool，永远等待//判断是否有满足的返回if(pfds[0].revents &amp; POOLIN) //满足&#123; ...&#125; 存储映射I/O存储映射I/O（Memory-mapped I/O） 使一个磁盘文件和存储空间的一个缓冲区相映射，于是当从缓冲区中取数据，就相当于读文件中对应字节，向缓冲区写数据相当于自动写到文件中相应字节。可以在不使用 read 和 write 情况下执行IO。 基本使用首先，通知内核将一个文件映射到存储区中，调用 mmap 函数。 123#include &lt;sys/mman.h&gt;void *mmap(void *addr, size_t len, int prot, int flags, int filedes, off_t off);//返回值：若成功则返回映射区的起始地址，出错返回MAP_FAILED addr 参数用于指定映射存储区的起始地址，一般设置为0，表示由系统选择该映射区的起始地址，函数返回地址是映射区的起始地址。 filedes 指定要被映射文件的描述符，先要打开该文件。 len 表示映射的字节数。 off 映射文件在文件中的起始偏移量。 prot protect参数说明对映射存储区的保护要求。PROT_READ, PROT_WRITE, PROT_EXEC, PROT_NONE 可读可写可执行及不可访问。 其他函数： 1234567#include &lt;sys/mman.h&gt;//更改一个现存映射存储区的权限int mprotect(void *addr, size_t len, int prot);//将页冲洗到被映射的文件中int msync(void *addr, size_t len, int flags);//解除映射int munmap(caddr_t addr, size_t len); 应用： 参考ctthuangcheng 博客的例子。 改变文件的内容，拷贝文件 进程间共享文件 父子进程通信 关于内存映射区的地址：将文件或者其他东西映射到内存是以页面大小为单位进行分配的，往往被分配的映射区大小是页面大小的整数倍，如果不够一个页面则强制变为一个页面大小。文件大小到映射区大小之间的映射关系分为三种情况： 文件大小等于映射区大小，此时映射区的大小分配 文件大小大于映射区大小 文件大小小于映射区大小 如图：]]></content>
       <categories>
         <category>Linux</category>
       </categories>
@@ -182,8 +182,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -195,8 +195,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -256,8 +256,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -280,8 +280,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -336,8 +336,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -370,8 +370,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -382,8 +382,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -406,8 +406,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>

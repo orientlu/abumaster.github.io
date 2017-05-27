@@ -96,10 +96,13 @@
 <meta property="og:url" content="http://abumaster.com/2017/05/26/UNIX环境高级编程-高级IO/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。">
-<meta property="og:updated_time" content="2017-05-26T13:45:20.247Z">
+<meta property="og:image" content="http://images.cnitblog.com/i/507263/201405/132119172653497.png">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-27/49590422.jpg">
+<meta property="og:updated_time" content="2017-05-27T08:27:56.474Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX环境高级编程-高级IO">
 <meta name="twitter:description" content="Unix环境高级编程，第14章 高级I/O 读书笔记。高级 I/O 包括：非阻塞 I/O，记录锁、系统V流机制、I/O多路转换、存储映射 I/O 。">
+<meta name="twitter:image" content="http://images.cnitblog.com/i/507263/201405/132119172653497.png">
 
 
 
@@ -410,15 +413,38 @@
 </li>
 </ul>
 <p>第一个参数表示最大的描述符加1。为了限制在指定的范围内查找。<br><div class="note warning"><p><code>select</code> 有三个可能的返回值。<br>1.返回值 -1 表示出错。<br>2.返回值 0 表示没有描述符准备好，所有描述符集被清零。<br>3.正返回值，表示准备好的描述符数量，在描述符集中对应的位表示准备好的描述符。</p>
-</div><br><code>pselect</code> 为 <code>select</code> 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 </p>
+</div><br><code>pselect</code> 为 <code>select</code> 的变形，不同点在于，超时的结构，更精细的粒度来控制超时时间；可以设定信号屏蔽字。 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pselect</span><span class="params">(<span class="keyword">int</span> maxfd1, fd_set *readfds, </div><div class="line">			fd_set *writefds, fd_set exceptfds, </div><div class="line">			<span class="keyword">const</span> <span class="keyword">struct</span> timespec *tsptr, </div><div class="line">			<span class="keyword">const</span> <span class="keyword">sigset_t</span> *sigmask)</span></span>;</div></pre></td></tr></table></figure></p>
 <p><strong>缺点：</strong>  </p>
 <ol>
 <li>每次调用select，都需要把fd集合从用户态拷贝到内核态，这个开销在fd很多时会很大 </li>
 <li>同时每次调用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很大 </li>
 <li>select支持的文件描述符数量太小了，默认是1024</li>
 </ol>
-<h5 id="pool函数"><a href="#pool函数" class="headerlink" title="pool函数"></a>pool函数</h5><p><code>pool</code>函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 <code>poolfd</code> 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。  </p>
-<h4 id="存储映射I-O"><a href="#存储映射I-O" class="headerlink" title="存储映射I/O"></a>存储映射I/O</h4>
+<h5 id="pool函数"><a href="#pool函数" class="headerlink" title="pool函数"></a>pool函数</h5><p><code>pool</code>函数可用于任何类型的文件描述符，不是为每个状态构造一个描述符集，而是构造了一个 <code>poolfd</code> 结构数组，每个数组元素指定一个描述符编号以及对其关心的状态。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(<span class="keyword">struct</span> pollfd fdarray[], <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</div><div class="line"><span class="keyword">struct</span> pollfd&#123;</div><div class="line">    <span class="keyword">int</span> fd;</div><div class="line">    <span class="keyword">short</span> events; <span class="comment">//常用的读POLLIN/写POLLOUT</span></div><div class="line">    <span class="keyword">short</span> revents; <span class="comment">//在fd上出现的event，可忽略设置</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>poll</code> 第一个参数是一个fd数组集合, 每个fd关联一个pollfd结构, 该结构说明fd的关心状态是读还是写<br><code>poll</code> 第二个参数是第一个参数中fd的个数<br><code>poll</code> 第三个参数是等待时间, -1表示无限等待, 0表示不等待, 其它正值表示可等待的毫秒数<br><strong>流程：</strong>将结构数组中的元素<code>events</code>成员设置为标志（POOLIN POOLOUT等），通过设置这些来告诉内核我们对该描述符关心的是什么，返回时内核设置 <code>revents</code> 来对于该描述符上已经发生了什么事件。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> poolfd pfds[<span class="number">2</span>];<span class="comment">//定义poolfd结构数组</span></div><div class="line">pfds[<span class="number">0</span>].fd=STDIN_FILENO;<span class="comment">//关心的描述符</span></div><div class="line">pfds[<span class="number">0</span>].events=POOLIN;<span class="comment">//对于fd关心的events</span></div><div class="line">...</div><div class="line">pool(pfds, <span class="number">2</span>, <span class="number">-1</span>);<span class="comment">//设置pool，永远等待</span></div><div class="line"><span class="comment">//判断是否有满足的返回</span></div><div class="line"><span class="keyword">if</span>(pfds[<span class="number">0</span>].revents &amp; POOLIN) <span class="comment">//满足</span></div><div class="line">&#123;</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="存储映射I-O"><a href="#存储映射I-O" class="headerlink" title="存储映射I/O"></a>存储映射I/O</h4><div class="note info"><p><em>存储映射I/O（Memory-mapped I/O）</em> 使一个磁盘文件和存储空间的一个缓冲区相映射，于是当从缓冲区中取数据，就相当于读文件中对应字节，向缓冲区写数据相当于自动写到文件中相应字节。可以在不使用 <code>read</code> 和 <code>write</code> 情况下执行IO。</p>
+</div>  
+<h5 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h5><p>首先，通知内核将一个文件映射到存储区中，调用 <code>mmap</code> 函数。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> filedes, <span class="keyword">off_t</span> off)</span></span>;</div><div class="line"><span class="comment">//返回值：若成功则返回映射区的起始地址，出错返回MAP_FAILED</span></div></pre></td></tr></table></figure></p>
+<p> <em>addr</em> 参数用于指定映射存储区的起始地址，一般设置为0，表示由系统选择该映射区的起始地址，函数返回地址是映射区的起始地址。<br> <em>filedes</em> 指定要被映射文件的描述符，先要打开该文件。<br> <em>len</em> 表示映射的字节数。 <em>off</em> 映射文件在文件中的起始偏移量。<br> <em>prot</em> protect参数说明对映射存储区的保护要求。<br><code>PROT_READ, PROT_WRITE, PROT_EXEC, PROT_NONE</code> 可读可写可执行及不可访问。<br><img src="http://images.cnitblog.com/i/507263/201405/132119172653497.png" alt="">  </p>
+<p>其他函数：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></div><div class="line"><span class="comment">//更改一个现存映射存储区的权限</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">mprotect</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len, <span class="keyword">int</span> prot)</span></span>;</div><div class="line"><span class="comment">//将页冲洗到被映射的文件中</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msync</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="comment">//解除映射</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">munmap</span><span class="params">(<span class="keyword">caddr_t</span> addr, <span class="keyword">size_t</span> len)</span></span>;</div></pre></td></tr></table></figure></p>
+<p><strong>应用：</strong> 参考<a href="http://blog.csdn.net/ctthuangcheng/article/details/9278107">ctthuangcheng 博客</a>的例子。  </p>
+<ul>
+<li>改变文件的内容，拷贝文件  </li>
+<li>进程间共享文件  </li>
+<li>父子进程通信  </li>
+</ul>
+<p>关于内存映射区的地址：<br>将文件或者其他东西映射到内存是以页面大小为单位进行分配的，往往被分配的映射区大小是页面大小的整数倍，如果不够一个页面则强制变为一个页面大小。文件大小到映射区大小之间的映射关系分为三种情况：</p>
+<ul>
+<li>文件大小等于映射区大小，此时映射区的大小分配</li>
+<li>文件大小大于映射区大小</li>
+<li>文件大小小于映射区大小</li>
+</ul>
+<p>如图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-27/49590422.jpg" alt="">  </p>
+
       
     </div>
 
@@ -586,11 +612,11 @@
               </span>
             
               <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/zhang-guo-feng-3/activities" target="_blank" title="zhihu">
+                <a href="https://www.zhihu.com/people/zhang-guo-feng-3/activities" target="_blank" title="Zhihu">
                   
                     <i class="fa fa-fw fa-chrome"></i>
                   
-                  zhihu
+                  Zhihu
                 </a>
               </span>
             
@@ -627,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O多路转换"><span class="nav-number">1.</span> <span class="nav-text">I/O多路转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select和pselect函数"><span class="nav-number">1.1.</span> <span class="nav-text">select和pselect函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pool函数"><span class="nav-number">1.2.</span> <span class="nav-text">pool函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储映射I-O"><span class="nav-number">2.</span> <span class="nav-text">存储映射I/O</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O多路转换"><span class="nav-number">1.</span> <span class="nav-text">I/O多路转换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select和pselect函数"><span class="nav-number">1.1.</span> <span class="nav-text">select和pselect函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pool函数"><span class="nav-number">1.2.</span> <span class="nav-text">pool函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储映射I-O"><span class="nav-number">2.</span> <span class="nav-text">存储映射I/O</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基本使用"><span class="nav-number">2.1.</span> <span class="nav-text">基本使用</span></a></li></ol></li></ol></div>
             
 
           </div>
