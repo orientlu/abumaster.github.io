@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-31T11:14:18.887Z</updated>
+  <updated>2017-05-31T11:18:50.157Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,10 +20,11 @@
     <link href="http://abumaster.com/2017/05/30/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"/>
     <id>http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/</id>
     <published>2017-05-30T07:12:26.000Z</published>
-    <updated>2017-05-31T11:14:18.887Z</updated>
+    <updated>2017-05-31T11:18:50.157Z</updated>
     
     <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。</p>
 <a id="more"></a>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/36378614.jpg" alt="">  </p>
 <div class="note primary"><p><strong>进程间通信</strong>( <em>inteprocess communication</em> ) 的目的是：
 进行数据传输，不同进程协作处理一些数据；资源共享，多个进程间共享数据；通知事件，一个进程向其他进程通知一个事件发生；<br>进程间的通信主要分为：pipe，fifo，消息队列，信号量，共享存储，uds，套接字。</p>
 </div>  
@@ -640,9 +641,9 @@ FIFO用途：  </p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="测试" scheme="http://abumaster.com/tags/test/"/>
     
@@ -1007,9 +1008,9 @@ FIFO用途：  </p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -1160,9 +1161,9 @@ Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate o
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
