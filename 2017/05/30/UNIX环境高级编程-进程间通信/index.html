@@ -1,0 +1,1011 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="google-site-verification" content="Z2mNnZTxQGvYHVbQlnKmQS4kl_DPmc7ygzUyo5xLIf0" />
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="张国丰" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/19174796-file_1495200018518_1007d.png?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNIX环境高级编程-进程间通信">
+<meta property="og:url" content="http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/index.html">
+<meta property="og:site_name" content="张国丰">
+<meta property="og:description" content="Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/1955979.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/54057635.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/12251209.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/10176095.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/70265253.jpg">
+<meta property="og:updated_time" content="2017-05-31T11:14:18.887Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UNIX环境高级编程-进程间通信">
+<meta name="twitter:description" content="Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/1955979.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/"/>
+
+
+
+
+
+  <title> UNIX环境高级编程-进程间通信 | 张国丰 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=62233777";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">张国丰</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">张国丰的博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                UNIX环境高级编程-进程间通信
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-30T15:12:26+08:00">
+                2017-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。</p>
+<a id="more"></a>
+<div class="note primary"><p><strong>进程间通信</strong>( <em>inteprocess communication</em> ) 的目的是：
+进行数据传输，不同进程协作处理一些数据；资源共享，多个进程间共享数据；通知事件，一个进程向其他进程通知一个事件发生；<br>进程间的通信主要分为：pipe，fifo，消息队列，信号量，共享存储，uds，套接字。</p>
+</div>  
+<h4 id="pipe和fifo"><a href="#pipe和fifo" class="headerlink" title="pipe和fifo"></a>pipe和fifo</h4><h5 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h5><p>pipe又称管道，提供了一个半双工的父子进程之间通信的机制。创建管道很简单：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> fd[<span class="number">2</span>])</span></span>;</div></pre></td></tr></table></figure></p>
+<p>fd[0]可以用来读数据，fd[1]可以用来写数据。它们中间会有一个缓冲区。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="function">FILE* <span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* cmd,<span class="keyword">const</span> <span class="keyword">char</span>* type)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pclose</span><span class="params">(FILE* fp)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>打开的是一个可执行的命令，<code>type</code>只能是 <code>r</code> 和 <code>w</code> 可能会返回执行命令的结果。实现上我们值得思考一下，就是 <code>popen</code> 通常来说肯定是创建了一个进程，然后FILE里面记录的 <code>fd</code> 必然和这个进程号做了一个绑定。不然我们在 <code>pclose</code> 使用 <code>FILE*</code>必须能够找到，我们应该 <code>wait</code> 什么进程终止。 在 <code>pclose</code> 必须 <code>fclose</code> 掉句柄，不然如果作为一输入命令的话那么会一直等待输入完成。  </p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/1955979.jpg" alt=""><br><strong>实例</strong><br>通过 <code>popen</code> 对输入进行变换的程序。向标准输出一个提示，从标准输入读取一行，使用 <code>popen</code> 可以在标准输入和输出之间添加一个程序来对输入进行变换处理，（当然也可以写成一个函数的形式来解决），基本流程如图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/54057635.jpg" alt=""><br>从标准输入读入字符，将其转换成小写的程序。<br><figure class="highlight c"><figcaption><span>myuclc.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> c;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>((c = getchar()) != EOF)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">isupper</span>(c))</div><div class="line">			c=<span class="built_in">tolower</span>(c);</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">putchar</span>(c) == EOF)</div><div class="line">			err_sys(<span class="string">"output error"</span>);</div><div class="line">		<span class="keyword">if</span>(c==<span class="string">'\n'</span>)</div><div class="line">			fflush(<span class="built_in">stdout</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>编译为可执行文件myuclc，然后通过程序调用它。<br><figure class="highlight c"><figcaption><span>main.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">char</span> line[MAXLINE];</div><div class="line">	FILE *fpin;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>((fpin=popen(<span class="string">"./myuclc"</span>,<span class="string">"r"</span>)) == <span class="literal">NULL</span>)</div><div class="line">		err_sys(<span class="string">"popen error"</span>);</div><div class="line">	<span class="keyword">for</span>( ; ;)</div><div class="line">	&#123;</div><div class="line">		<span class="built_in">fputs</span>(<span class="string">"prompt&gt; "</span>, <span class="built_in">stdout</span>);</div><div class="line">		fflush(<span class="built_in">stdout</span>);</div><div class="line">		<span class="keyword">if</span>(fgets(line, MAXLINE, fpin) == <span class="literal">NULL</span>)</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">fputs</span>(line, <span class="built_in">stdout</span>) == EOF)</div><div class="line">			err_sys(<span class="string">"fputs error to pipe"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span>(pclose(fpin) == <span class="number">-1</span>)</div><div class="line">		err_sys(<span class="string">"pclose error"</span>);</div><div class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>  </p>
+<p><strong>协同进程</strong><br>当一个程序产生某个过滤程序的输入，并且又读取该过滤程序的输出时，该过滤程序被称为 <em>协同进程coprocess</em> ，<code>popen</code> 只提供连接到另一进程的单向管道，所以需要两个单向管道。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/12251209.jpg" alt="">  </p>
+<h5 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h5><blockquote>
+<p>FIFO通常被称为命名管道，它是一种文件类型.stat结构中的st_mode指明其类型，可以用宏S_ISFIFO 进行测试。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//成功返回0，失败返回-1</span></div></pre></td></tr></table></figure>
+<p>类似于管道，若用<code>write</code>写一个没有进程为读而打开的FIFO，则会产生SIG_PIPE信号，若FIFO最后一个写进程关闭了该FIFO，那么会为读进程产生一个文件结束标志。 
+FIFO用途：  </p>
+<ul>
+<li>将数据从一条管道线传送到另一条，无需创建临时文件；  </li>
+<li>用于客户进程-服务器进程的程序中，客户服务器之间传送数据。  </li>
+</ul>
+<p><strong>实例</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/10176095.jpg" alt=""><br>通常打开FIFO的方式有四种：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY);<span class="comment">//读，阻塞</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY | O_NONBLOCK);<span class="comment">//非阻塞  </span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY);<span class="comment">//写，阻塞，一直等待</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY | O_NONBLOCK);<span class="comment">//写，非阻塞</span></div><div class="line"><span class="comment">//阻塞情况下，没有对应端打开也会一直等待不返回</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/70265253.jpg" alt="">  </p>
+<div class="note primary"><p><strong>XPS IPC</strong> 即消息队列、信号量、共享存储。</p>
+</div>  
+<h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><p>消息队列是消息的链接表，存放在内核中并由消息队列标识符标识。<br>流程： <code>msgget</code> 创建或打开一个现存的队列， <code>msgsnd</code> 将消息添加到队列尾端， <code>msgrcv</code> 用于从队列中取消息。 
+使用 <code>key_t ftok(const char *path, int id);</code>来创建键值， <em>path</em> 必须存在，使用 <em>id</em> 的8位，组合。
+消息队列相关的 API 有四个，必须包含的头文件。 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p><strong>1.打开或者创建一个队列</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>参数key是一个键值，由ftok获得；msgflg参数是一些标志位。该调用返回与健值key相对应的消息队列描述字。<br>如果没有消息队列与健值key相对应，并且msgflg中包含了IPC_CREAT标志位或key参数为IPC_PRIVATE时创建新的队列。<br>参数msgflg可以为以下：IPC_CREAT、IPC_EXCL、IPC_NOWAIT或三者的或结果。<br>调用返回：成功返回消息队列描述字，否则返回-1。  </p>
+<p><strong>2.读取消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgrcv</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">long</span> msgtyp, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>该系统调用从msgid代表的消息队列中读取一个消息，并把消息存储在msgp指向的msgbuf结构中。msqid为消息队列描述字；消息返回后存储在msgp指向的地址，msgsz指定msgbuf的mtext成员的长度（即消息内容的长度），msgtyp为请求读取的消息类型；读消息标志msgflg可以为以下几个常值的或：  </p>
+<ul>
+<li>IPC_NOWAIT 如果没有满足条件的消息，调用立即返回，此时，errno=ENOMSG</li>
+<li>IPC_EXCEPT 与msgtyp&gt;0配合使用，返回队列中第一个类型不为msgtyp的消息</li>
+<li>IPC_NOERROR 如果队列中满足条件的消息内容大于所请求的msgsz字节，则把该消息截断，截断部分将丢失。</li>
+</ul>
+<p>调用返回：成功返回读出消息的实际字节数，否则返回-1。  </p>
+<p><strong>3.向队列发送一个消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgsnd</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>向msgid代表的消息队列发送一个消息，即将发送的消息存储在msgp指向的msgbuf结构中，消息的大小由msgze指定。对发送消息来说，有意义的msgflg标志为IPC_NOWAIT，指明在消息队列没有足够空间容纳要发送的消息时，msgsnd是否等待。造成msgsnd()等待的条件有两种：</p>
+<ul>
+<li>当前消息的大小与当前消息队列中的字节数之和超过了消息队列的总容量；</li>
+<li>当前消息队列的消息数（单位”个”）不小于消息队列的总容量（单位”字节数”），此时，虽然消息队列中的消息数目很多，但基本上都只有一个字节。</li>
+</ul>
+<p>调用返回：成功返回0，否则返回-1。  </p>
+<p><strong>4.垃圾桶函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgctl</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> msqid_ds *buf)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>该系统调用对由msqid标识的消息队列执行cmd操作，共有三种cmd操作：IPC_STAT、IPC_SET 、IPC_RMID。  </p>
+<ul>
+<li>IPC_STAT：该命令用来获取消息队列信息，返回的信息存贮在buf指向的msqid结构中；</li>
+<li>IPC_SET：该命令用来设置消息队列的属性，要设置的属性存储在buf指向的msqid结构中；可设置属性包括：msg_perm.uid、msg_perm.gid、msg_perm.mode以及msg_qbytes，同时，也影响msg_ctime成员。</li>
+<li>IPC_RMID：删除msqid标识的消息队列；</li>
+</ul>
+<p><strong>消息队列编程模型：</strong><br>接受消息端：申明消息类型——&gt; msgget建立消息队列 ——&gt;循环接收消息msgrcv——&gt;结束判断strcmp——&gt;msgctl(IPC_RMID)删除消息<br>发送消息端：申明消息类型——&gt;msgget建立消息队列——&gt;循环输入数据到消息中——&gt;msgsend向队列发送消息——结束判断strcmp——&gt;msgctl删除消息  </p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><h4 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h4>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/26/UNIX环境高级编程-高级IO/" rel="next" title="UNIX环境高级编程-高级IO">
+                <i class="fa fa-chevron-left"></i> UNIX环境高级编程-高级IO
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
+               alt="abumaster" />
+          <p class="site-author-name" itemprop="name">abumaster</p>
+           
+              <p class="site-description motion-element" itemprop="description">记录学习生活的点滴</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/abumaster" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/zhang-guo-feng-3/activities" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-chrome"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2938537815/profile?topnav=1&wvr=6" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#pipe和fifo"><span class="nav-number">1.</span> <span class="nav-text">pipe和fifo</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pipe"><span class="nav-number">1.1.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FIFO"><span class="nav-number">1.2.</span> <span class="nav-text">FIFO</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息队列"><span class="nav-number">2.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信号量"><span class="nav-number">3.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#共享存储"><span class="nav-number">4.</span> <span class="nav-text">共享存储</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">abumaster</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">您是第<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>个小伙伴</span>
+  
+
+  
+    <span class="site-pv">本站总浏览<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+  
+
+</body>
+</html>

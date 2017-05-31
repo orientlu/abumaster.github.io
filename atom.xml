@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-05-27T08:27:56.474Z</updated>
+  <updated>2017-05-31T11:14:18.887Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,82 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>UNIX环境高级编程-进程间通信</title>
+    <link href="http://abumaster.com/2017/05/30/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"/>
+    <id>http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/</id>
+    <published>2017-05-30T07:12:26.000Z</published>
+    <updated>2017-05-31T11:14:18.887Z</updated>
+    
+    <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。</p>
+<a id="more"></a>
+<div class="note primary"><p><strong>进程间通信</strong>( <em>inteprocess communication</em> ) 的目的是：
+进行数据传输，不同进程协作处理一些数据；资源共享，多个进程间共享数据；通知事件，一个进程向其他进程通知一个事件发生；<br>进程间的通信主要分为：pipe，fifo，消息队列，信号量，共享存储，uds，套接字。</p>
+</div>  
+<h4 id="pipe和fifo"><a href="#pipe和fifo" class="headerlink" title="pipe和fifo"></a>pipe和fifo</h4><h5 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h5><p>pipe又称管道，提供了一个半双工的父子进程之间通信的机制。创建管道很简单：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> fd[<span class="number">2</span>])</span></span>;</div></pre></td></tr></table></figure></p>
+<p>fd[0]可以用来读数据，fd[1]可以用来写数据。它们中间会有一个缓冲区。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="function">FILE* <span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* cmd,<span class="keyword">const</span> <span class="keyword">char</span>* type)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pclose</span><span class="params">(FILE* fp)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>打开的是一个可执行的命令，<code>type</code>只能是 <code>r</code> 和 <code>w</code> 可能会返回执行命令的结果。实现上我们值得思考一下，就是 <code>popen</code> 通常来说肯定是创建了一个进程，然后FILE里面记录的 <code>fd</code> 必然和这个进程号做了一个绑定。不然我们在 <code>pclose</code> 使用 <code>FILE*</code>必须能够找到，我们应该 <code>wait</code> 什么进程终止。 在 <code>pclose</code> 必须 <code>fclose</code> 掉句柄，不然如果作为一输入命令的话那么会一直等待输入完成。  </p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/1955979.jpg" alt=""><br><strong>实例</strong><br>通过 <code>popen</code> 对输入进行变换的程序。向标准输出一个提示，从标准输入读取一行，使用 <code>popen</code> 可以在标准输入和输出之间添加一个程序来对输入进行变换处理，（当然也可以写成一个函数的形式来解决），基本流程如图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/54057635.jpg" alt=""><br>从标准输入读入字符，将其转换成小写的程序。<br><figure class="highlight c"><figcaption><span>myuclc.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> c;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>((c = getchar()) != EOF)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">isupper</span>(c))</div><div class="line">			c=<span class="built_in">tolower</span>(c);</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">putchar</span>(c) == EOF)</div><div class="line">			err_sys(<span class="string">"output error"</span>);</div><div class="line">		<span class="keyword">if</span>(c==<span class="string">'\n'</span>)</div><div class="line">			fflush(<span class="built_in">stdout</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>编译为可执行文件myuclc，然后通过程序调用它。<br><figure class="highlight c"><figcaption><span>main.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">char</span> line[MAXLINE];</div><div class="line">	FILE *fpin;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>((fpin=popen(<span class="string">"./myuclc"</span>,<span class="string">"r"</span>)) == <span class="literal">NULL</span>)</div><div class="line">		err_sys(<span class="string">"popen error"</span>);</div><div class="line">	<span class="keyword">for</span>( ; ;)</div><div class="line">	&#123;</div><div class="line">		<span class="built_in">fputs</span>(<span class="string">"prompt&gt; "</span>, <span class="built_in">stdout</span>);</div><div class="line">		fflush(<span class="built_in">stdout</span>);</div><div class="line">		<span class="keyword">if</span>(fgets(line, MAXLINE, fpin) == <span class="literal">NULL</span>)</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">fputs</span>(line, <span class="built_in">stdout</span>) == EOF)</div><div class="line">			err_sys(<span class="string">"fputs error to pipe"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span>(pclose(fpin) == <span class="number">-1</span>)</div><div class="line">		err_sys(<span class="string">"pclose error"</span>);</div><div class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>  </p>
+<p><strong>协同进程</strong><br>当一个程序产生某个过滤程序的输入，并且又读取该过滤程序的输出时，该过滤程序被称为 <em>协同进程coprocess</em> ，<code>popen</code> 只提供连接到另一进程的单向管道，所以需要两个单向管道。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/12251209.jpg" alt="">  </p>
+<h5 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h5><blockquote>
+<p>FIFO通常被称为命名管道，它是一种文件类型.stat结构中的st_mode指明其类型，可以用宏S_ISFIFO 进行测试。</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//成功返回0，失败返回-1</span></div></pre></td></tr></table></figure>
+<p>类似于管道，若用<code>write</code>写一个没有进程为读而打开的FIFO，则会产生SIG_PIPE信号，若FIFO最后一个写进程关闭了该FIFO，那么会为读进程产生一个文件结束标志。 
+FIFO用途：  </p>
+<ul>
+<li>将数据从一条管道线传送到另一条，无需创建临时文件；  </li>
+<li>用于客户进程-服务器进程的程序中，客户服务器之间传送数据。  </li>
+</ul>
+<p><strong>实例</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/10176095.jpg" alt=""><br>通常打开FIFO的方式有四种：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY);<span class="comment">//读，阻塞</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY | O_NONBLOCK);<span class="comment">//非阻塞  </span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY);<span class="comment">//写，阻塞，一直等待</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY | O_NONBLOCK);<span class="comment">//写，非阻塞</span></div><div class="line"><span class="comment">//阻塞情况下，没有对应端打开也会一直等待不返回</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/70265253.jpg" alt="">  </p>
+<div class="note primary"><p><strong>XPS IPC</strong> 即消息队列、信号量、共享存储。</p>
+</div>  
+<h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><p>消息队列是消息的链接表，存放在内核中并由消息队列标识符标识。<br>流程： <code>msgget</code> 创建或打开一个现存的队列， <code>msgsnd</code> 将消息添加到队列尾端， <code>msgrcv</code> 用于从队列中取消息。 
+使用 <code>key_t ftok(const char *path, int id);</code>来创建键值， <em>path</em> 必须存在，使用 <em>id</em> 的8位，组合。
+消息队列相关的 API 有四个，必须包含的头文件。 
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p><strong>1.打开或者创建一个队列</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>参数key是一个键值，由ftok获得；msgflg参数是一些标志位。该调用返回与健值key相对应的消息队列描述字。<br>如果没有消息队列与健值key相对应，并且msgflg中包含了IPC_CREAT标志位或key参数为IPC_PRIVATE时创建新的队列。<br>参数msgflg可以为以下：IPC_CREAT、IPC_EXCL、IPC_NOWAIT或三者的或结果。<br>调用返回：成功返回消息队列描述字，否则返回-1。  </p>
+<p><strong>2.读取消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgrcv</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">long</span> msgtyp, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>该系统调用从msgid代表的消息队列中读取一个消息，并把消息存储在msgp指向的msgbuf结构中。msqid为消息队列描述字；消息返回后存储在msgp指向的地址，msgsz指定msgbuf的mtext成员的长度（即消息内容的长度），msgtyp为请求读取的消息类型；读消息标志msgflg可以为以下几个常值的或：  </p>
+<ul>
+<li>IPC_NOWAIT 如果没有满足条件的消息，调用立即返回，此时，errno=ENOMSG</li>
+<li>IPC_EXCEPT 与msgtyp&gt;0配合使用，返回队列中第一个类型不为msgtyp的消息</li>
+<li>IPC_NOERROR 如果队列中满足条件的消息内容大于所请求的msgsz字节，则把该消息截断，截断部分将丢失。</li>
+</ul>
+<p>调用返回：成功返回读出消息的实际字节数，否则返回-1。  </p>
+<p><strong>3.向队列发送一个消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgsnd</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>向msgid代表的消息队列发送一个消息，即将发送的消息存储在msgp指向的msgbuf结构中，消息的大小由msgze指定。对发送消息来说，有意义的msgflg标志为IPC_NOWAIT，指明在消息队列没有足够空间容纳要发送的消息时，msgsnd是否等待。造成msgsnd()等待的条件有两种：</p>
+<ul>
+<li>当前消息的大小与当前消息队列中的字节数之和超过了消息队列的总容量；</li>
+<li>当前消息队列的消息数（单位”个”）不小于消息队列的总容量（单位”字节数”），此时，虽然消息队列中的消息数目很多，但基本上都只有一个字节。</li>
+</ul>
+<p>调用返回：成功返回0，否则返回-1。  </p>
+<p><strong>4.垃圾桶函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgctl</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> msqid_ds *buf)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>该系统调用对由msqid标识的消息队列执行cmd操作，共有三种cmd操作：IPC_STAT、IPC_SET 、IPC_RMID。  </p>
+<ul>
+<li>IPC_STAT：该命令用来获取消息队列信息，返回的信息存贮在buf指向的msqid结构中；</li>
+<li>IPC_SET：该命令用来设置消息队列的属性，要设置的属性存储在buf指向的msqid结构中；可设置属性包括：msg_perm.uid、msg_perm.gid、msg_perm.mode以及msg_qbytes，同时，也影响msg_ctime成员。</li>
+<li>IPC_RMID：删除msqid标识的消息队列；</li>
+</ul>
+<p><strong>消息队列编程模型：</strong><br>接受消息端：申明消息类型——&gt; msgget建立消息队列 ——&gt;循环接收消息msgrcv——&gt;结束判断strcmp——&gt;msgctl(IPC_RMID)删除消息<br>发送消息端：申明消息类型——&gt;msgget建立消息队列——&gt;循环输入数据到消息中——&gt;msgsend向队列发送消息——结束判断strcmp——&gt;msgctl删除消息  </p>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><h4 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>UNIX环境高级编程-高级IO</title>
@@ -1127,9 +1203,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -1165,9 +1241,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -1247,118 +1323,6 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="学习" scheme="http://abumaster.com/tags/%E5%AD%A6%E4%B9%A0/"/>
     
       <category term="caffe" scheme="http://abumaster.com/tags/caffe/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Stanford Background Dataset介绍和使用</title>
-    <link href="http://abumaster.com/2017/04/10/Stanford-Background-Dataset%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/"/>
-    <id>http://abumaster.com/2017/04/10/Stanford-Background-Dataset介绍和使用/</id>
-    <published>2017-04-10T06:35:07.000Z</published>
-    <updated>2017-04-11T00:58:07.351Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://dags.stanford.edu/projects/scenedataset.html">Stanford Background Dataset</a>是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。</p>
-<ul>
-<li><p>images文件夹包含了715张图像；  </p>
-</li>
-<li><p>horizons.txt  图像名称、大小、水平线位置；  </p>
-<a id="more"></a>
-</li>
-<li><p>labels/*.regions.txt 标识每个像素的语义，0-7代表八类语义；  </p>
-</li>
-<li><p>labels/*.surfaces.txt 标识每个像素的几何类别（天空，水平，垂直）； </p>
-</li>
-<li><p>labels/*.layers.txt    表示不同图像区域的整数矩阵。  </p>
-</li>
-</ul>
-<p><strong>读取图像和分割图像</strong><br>1.首先读取标签文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">vector&lt;char&gt; vec;//保存像素标记</div><div class="line">void readlabel(string labelname)</div><div class="line">&#123;</div><div class="line">	ifstream infile(labelname.c_str(), std::ios::in);</div><div class="line">	char line[1024] = &#123; 0 &#125;;</div><div class="line">	while (infile.getline(line, sizeof(line)))</div><div class="line">	&#123;</div><div class="line">		stringstream word(line);</div><div class="line">		char ch;</div><div class="line">		while (word &gt;&gt; ch)</div><div class="line">		&#123;</div><div class="line">			vec.push_back(ch);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2.显示分割图像，根据语义标签，设置不同的颜色以区别  </p>
-<pre><code class="c++"><span class="comment">//显示分割图像</span>
-    <span class="function">Mat <span class="title">colorim</span><span class="params">(im.rows, im.cols, CV_8UC3)</span></span>;
-    <span class="keyword">int</span> index = <span class="number">0</span>;
-    <span class="comment">//遍历所有像素，并设置像素值</span>
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; colorim.rows; ++i)
-    {
-        <span class="comment">//获取第 i 行首像素指针</span>
-        Vec3b * p = colorim.ptr&lt;Vec3b&gt;(i);
-        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; colorim.cols; ++j)
-        {
-            <span class="keyword">int</span> lab = vec[index++];
-            <span class="keyword">switch</span> (lab)
-            {
-            <span class="keyword">case</span> <span class="string">'0'</span>:<span class="comment">//sky</span>
-                p[j][<span class="number">0</span>] = <span class="number">128</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">128</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">128</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'1'</span>:<span class="comment">//tree</span>
-                p[j][<span class="number">0</span>] = <span class="number">84</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">230</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">80</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'2'</span>:<span class="comment">//road</span>
-                p[j][<span class="number">0</span>] = <span class="number">115</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">100</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'3'</span>:<span class="comment">//grass</span>
-                p[j][<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">255</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">0</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'4'</span>:<span class="comment">//water</span>
-                p[j][<span class="number">0</span>] = <span class="number">255</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">0</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'5'</span>:<span class="comment">//building</span>
-                p[j][<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">0</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">160</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'6'</span>:<span class="comment">//mountain</span>
-                p[j][<span class="number">0</span>] = <span class="number">63</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">214</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">8</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">case</span> <span class="string">'7'</span>:<span class="comment">//obj</span>
-                p[j][<span class="number">0</span>] = <span class="number">37</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">159</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">230</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-            <span class="keyword">default</span>:<span class="comment">//somthing else</span>
-                p[j][<span class="number">0</span>] = <span class="number">255</span>; <span class="comment">//Blue</span>
-                p[j][<span class="number">1</span>] = <span class="number">255</span>; <span class="comment">//Green</span>
-                p[j][<span class="number">2</span>] = <span class="number">255</span>; <span class="comment">//Red</span>
-                <span class="keyword">break</span>;
-
-            }
-
-        }
-    }
-    imshow(<span class="string">"分割图"</span>, colorim);
-</code></pre>
-<p><strong>结果</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;http://dags.stanford.edu/projects/scenedataset.html&quot;&gt;Stanford Background Dataset&lt;/a&gt;是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;images文件夹包含了715张图像；  &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;horizons.txt  图像名称、大小、水平线位置；  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
-    
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="dataset" scheme="http://abumaster.com/tags/dataset/"/>
     
   </entry>
   
