@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-06-04T03:11:24.597Z</updated>
+  <updated>2017-06-04T13:00:38.863Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://abumaster.com/2017/05/30/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"/>
     <id>http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/</id>
     <published>2017-05-30T07:12:26.000Z</published>
-    <updated>2017-06-04T03:11:24.597Z</updated>
+    <updated>2017-06-04T13:00:38.863Z</updated>
     
     <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。</p>
 <a id="more"></a>
@@ -90,6 +90,8 @@ FIFO用途：  </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semop</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">struct</span> sembuf semoparray[], <span class="keyword">size_t</span> nops)</span></span>;</div></pre></td></tr></table></figure></p>
 <p>sem_id是由semget返回的信号量标识符，sembuf结构的定义如下：
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> sembuf&#123;  </div><div class="line">    <span class="keyword">short</span> sem_num;<span class="comment">//除非使用一组信号量，否则它为0  </span></div><div class="line">    <span class="keyword">short</span> sem_op;<span class="comment">//信号量在一次操作中需要改变的数据，通常是两个数，一个是-1，即P（等待）操作，  </span></div><div class="line">                    <span class="comment">//一个是+1，即V（发送信号）操作。  </span></div><div class="line">    <span class="keyword">short</span> sem_flg;<span class="comment">//通常为SEM_UNDO,使操作系统跟踪信号，  </span></div><div class="line">                    <span class="comment">//并在进程没有释放该信号量而终止时，操作系统释放信号量  </span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p><strong>一个例子</strong><br>设置一个信号量，使多进程之间共享。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> semun</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	<span class="keyword">struct</span> semid_ds *buf;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> *<span class="built_in">array</span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//创建信号量</span></div><div class="line">sem_id = semget((<span class="keyword">key_t</span>)<span class="number">1234</span>, <span class="number">1</span>, <span class="number">0666</span>|IPC_CREAT);</div><div class="line"></div><div class="line"><span class="comment">//初始化信号量，使用前必须这样做</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">set_semvalue</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">union</span> semun sem_union;</div><div class="line"></div><div class="line">	sem_union.val = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span>(semctl(sem_id, <span class="number">0</span>, SETVAL, sem_union)==<span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">del_semvalue</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">union</span> semun sem_union;</div><div class="line">	<span class="keyword">if</span>(semctl(sem_id, <span class="number">0</span>, IPC_RMID, sem_union) == <span class="number">-1</span>)</div><div class="line">		err_sys(<span class="string">"del semvalue error"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//p操作</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">semaphore_p</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">struct</span> sembuf sem_b;</div><div class="line">	sem_b.sem_num = <span class="number">0</span>;</div><div class="line">	sem_b.sem_op = <span class="number">-1</span>;</div><div class="line">	sem_b.sem_flg = SEM_UNDO;</div><div class="line">	<span class="keyword">if</span>(semop(sem_id, &amp;sem_b, <span class="number">1</span>) == <span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//v操作</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">semaphore_v</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">struct</span> sembuf sem_b;</div><div class="line">	sem_b.sem_num = <span class="number">0</span>;</div><div class="line">	sem_b.sem_op = <span class="number">1</span>;</div><div class="line">	sem_b.sem_flg = SEM_UNDO;</div><div class="line">	<span class="keyword">if</span>(semop(sem_id, &amp;sem_b, <span class="number">1</span>) == <span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p><strong>3.semctl函数</strong><br>控制信号量信息。
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semctl</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">int</span> semnum, <span class="keyword">int</span> cmd,...<span class="comment">/* union semun arg */</span>)</span></span>;</div></pre></td></tr></table></figure></p>
 <p>如果有第四个参数，它通常是一个union semum结构，定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> semun&#123;  </div><div class="line">    <span class="keyword">int</span> val;  </div><div class="line">    <span class="keyword">struct</span> semid_ds *buf;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> *arry;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
@@ -107,6 +109,7 @@ FIFO用途：  </p>
 shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> shmid_ds  </div><div class="line">&#123;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.uid;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.gid;  </div><div class="line">    <span class="keyword">mode_t</span> shm_perm.mode;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 </li>
 </ul>
+<p><strong>例子</strong><br>设计流程，注意多进程同时读写的问题。<br>创建共享存储，获得共享存储标识符；将共享存储连接到进程空间，获得首地址指针；设置存储空间格式；读写存储区。  </p>
 ]]></content>
     
     <summary type="html">
@@ -1117,9 +1120,9 @@ shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><t
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -1234,11 +1237,11 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
@@ -1272,11 +1275,11 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
   </entry>
   
