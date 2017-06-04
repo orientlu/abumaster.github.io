@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/12251209.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/10176095.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/70265253.jpg">
-<meta property="og:updated_time" content="2017-05-31T11:18:50.157Z">
+<meta property="og:updated_time" content="2017-06-04T03:11:24.597Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX环境高级编程-进程间通信">
 <meta name="twitter:description" content="Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。">
@@ -451,7 +451,37 @@ FIFO用途：  </p>
 <li>IPC_RMID：删除msqid标识的消息队列；</li>
 </ul>
 <p><strong>消息队列编程模型：</strong><br>接受消息端：申明消息类型——&gt; msgget建立消息队列 ——&gt;循环接收消息msgrcv——&gt;结束判断strcmp——&gt;msgctl(IPC_RMID)删除消息<br>发送消息端：申明消息类型——&gt;msgget建立消息队列——&gt;循环输入数据到消息中——&gt;msgsend向队列发送消息——结束判断strcmp——&gt;msgctl删除消息  </p>
-<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><h4 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h4>
+<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><p><em>信号量（semaphore）</em> 是一个计数器，用于多进程对共享数据的访问。<br><strong>工作原理</strong>，为了获得共享资源，进程需要：  </p>
+<ul>
+<li>测试控制资源的信号量；  </li>
+<li>若此信号量值为正，则可以使用信号量，并将信号量减1，表示使用了一个资源单位；  </li>
+<li>若此信号量值为0，进程休眠，直到信号量大于0，进程唤醒，重复上述。  </li>
+</ul>
+<p><strong>1.semget函数</strong><br>获取或者创建信号量集。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/sem.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> nsems, <span class="keyword">int</span> flag)</span></span>;</div><div class="line"><span class="comment">//成功返回信号量ID，失败返回-1</span></div></pre></td></tr></table></figure></p>
+<p>第一个参数key是整数值（唯一非零），不相关的进程可以通过它访问一个信号量，它代表程序可能要使用的某个资源，程序对所有信号量的访问都是间接的，程序先通过调用semget函数并提供一个键，再由系统生成一个相应的信号标识符（semget函数的返回值），只有semget函数才直接使用信号量键，所有其他的信号量函数使用由semget函数返回的信号量标识符。<br>第二个参数nsems指定需要的信号量数目，创建新集合的时候非零指定值，引用现有的集合则可以为0。<br>第三个参数flag，当想要当信号量不存在时创建一个新的信号量，可以和值IPC_CREAT做按位或操作。设置了IPC_CREAT标志后，即使给出的键是一个已有信号量的键，也不会产生错误。而IPC_CREAT | IPC_EXCL则可以创建一个新的，唯一的信号量，如果信号量已存在，返回一个错误。  </p>
+<p><strong>2.semop函数</strong><br>自动执行信号量集合上的操作数组，原子操作，改变信号量的值。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semop</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">struct</span> sembuf semoparray[], <span class="keyword">size_t</span> nops)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>sem_id是由semget返回的信号量标识符，sembuf结构的定义如下：
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> sembuf&#123;  </div><div class="line">    <span class="keyword">short</span> sem_num;<span class="comment">//除非使用一组信号量，否则它为0  </span></div><div class="line">    <span class="keyword">short</span> sem_op;<span class="comment">//信号量在一次操作中需要改变的数据，通常是两个数，一个是-1，即P（等待）操作，  </span></div><div class="line">                    <span class="comment">//一个是+1，即V（发送信号）操作。  </span></div><div class="line">    <span class="keyword">short</span> sem_flg;<span class="comment">//通常为SEM_UNDO,使操作系统跟踪信号，  </span></div><div class="line">                    <span class="comment">//并在进程没有释放该信号量而终止时，操作系统释放信号量  </span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p><strong>3.semctl函数</strong><br>控制信号量信息。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semctl</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">int</span> semnum, <span class="keyword">int</span> cmd,...<span class="comment">/* union semun arg */</span>)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>如果有第四个参数，它通常是一个union semum结构，定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> semun&#123;  </div><div class="line">    <span class="keyword">int</span> val;  </div><div class="line">    <span class="keyword">struct</span> semid_ds *buf;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> *arry;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h4 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h4><p>共享存储允许两个或更多的进程共享以给定的存储区。无需进程间的复制，是一种最快的IPC。多个进程对同一存储区的同步访问。<br><strong>1.shmget函数</strong><br>获取一个共享存储标识符。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/shm.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flag)</span></span>;</div><div class="line"><span class="comment">//成功返回共享存储ID，出错返回-1</span></div></pre></td></tr></table></figure></p>
+<p>第一个参数，与信号量的semget函数一样，程序需要提供一个参数key（非0整数），它有效地为共享内存段命名，shmget函数成功时返回一个与key相关的共享内存标识符（非负整数），用于后续的共享内存函数。<br>不相关的进程可以通过该函数的返回值访问同一共享内存，它代表程序可能要使用的某个资源，程序对所有共享内存的访问都是间接的，程序先通过调用shmget函数并提供一个键，再由系统生成一个相应的共享内存标识符（shmget函数的返回值），只有shmget函数才直接使用信号量键，所有其他的信号量函数使用由semget函数返回的信号量标识符。<br>第二个参数，size以字节为单位指定需要共享的内存容量。<br>第三个参数，flag是权限标志，它的作用与open函数的mode参数一样，如果要想在key标识的共享内存不存在时，创建它的话，可以与IPC_CREAT做或操作。共享内存的权限标志与文件的读写权限一样，举例来说，0644,它表示允许一个进程创建的共享内存被内存创建者所拥有的进程向共享内存读取和写入数据，同时其他用户创建的进程只能读取共享内存。<br><strong>2.shmat函数</strong><br>第一次创建完共享内存时，它还不能被任何进程访问，shmat函数的作用就是用来启动对该共享内存的访问，并把共享内存连接到当前进程的地址空间。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">shmat</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">int</span> flag)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>第一个参数，是semget返回的存储空间标识；<br>第二个参数，为0，则连接到第一个可用的地址上，推荐使用；非0并且没有指定SHM_RND，则连接到<em>addr</em>指定的地址；<br>第三个参数，是一组标志位，通常为0。<br><strong>3.shmdt函数</strong><br>用于将共享内存从当前进程中分离。注意，将共享内存分离并不是删除它，只是使该共享内存对当前进程不再可用。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmdt</span><span class="params">(<span class="keyword">void</span> *addr)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>addr 参数是调用 <code>shmat</code> 的返回值。<br><strong>4.shmctl函数</strong><br>对共享存储段进行多种操作。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>第一个参数，shmid是shmget函数返回的共享内存标识符。<br>第二个参数，cmd是要采取的操作，它可以取下面的三个值 ：  </p>
+<ul>
+<li>IPC_STAT：把shmid_ds结构中的数据设置为共享内存的当前关联值，即用共享内存的当前关联值覆盖shmid_ds的值。  </li>
+<li>IPC_SET：如果进程有足够的权限，就把共享内存的当前关联值设置为shmid_ds结构中给出的值。  </li>
+<li>IPC_RMID：删除共享内存段。<br>第三个参数，buf是一个结构指针，它指向共享内存模式和访问权限的结构。
+shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> shmid_ds  </div><div class="line">&#123;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.uid;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.gid;  </div><div class="line">    <span class="keyword">mode_t</span> shm_perm.mode;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
       
     </div>
 
@@ -619,20 +649,20 @@ FIFO用途：  </p>
               </span>
             
               <span class="links-of-author-item">
-                <a href="https://www.zhihu.com/people/zhang-guo-feng-3/activities" target="_blank" title="Zhihu">
-                  
-                    <i class="fa fa-fw fa-chrome"></i>
-                  
-                  Zhihu
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
                 <a href="http://weibo.com/2938537815/profile?topnav=1&wvr=6" target="_blank" title="Weibo">
                   
                     <i class="fa fa-fw fa-weibo"></i>
                   
                   Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://oo7zsi4t8.bkt.clouddn.com/17-6-1/96363415.jpg" target="_blank" title="QQ">
+                  
+                    <i class="fa fa-fw fa-qq"></i>
+                  
+                  QQ
                 </a>
               </span>
             
