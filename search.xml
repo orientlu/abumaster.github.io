@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Nginx源码学习-内存池]]></title>
+    <url>%2F2017%2F06%2F08%2FNginx%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0-%E5%86%85%E5%AD%98%E6%B1%A0%2F</url>
+    <content type="text"><![CDATA[Nginx 是一款轻量级的 Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，供俄国大型的入口网站及搜索引擎Rambler（俄文：Рамблер）使用。其特点是占用内存少，并发能力强。其编写简洁高效，有诸多学习之处。 C/C++ 的内存管理，往往让人头痛。要时刻注意分配足够的内存，并在不用的时候记得释放内存，直接使用系统调用 malloc/free, new/delete 会有如下的一些弊端： 系统调用时根据最先匹配、最优匹配原则，有时会合并，产生额外的开销； 频繁使用，会产生大量的内存碎片，降低程序运行速度； 稍有不慎容易造成内存泄漏。 内存池（memory pool）的出现代替了直接的系统调用。它是首先向系统申请足够大的空间，当需要时向内存池申请，而不是来进行系统调用，使用内存池可以对应解决以上的缺陷。 基本数据结构注：Nginx源码中用 xx_xx_t 来表示type；用 xx_xx_s 表示struct。在源码 /Src/Core/Ngx_palloc.h{c} 中内存池数据块类型 ngx_pool_data_t123456typedef struct &#123; u_char *last;//指向已用的数据结尾 u_char *end;//指向存储空间结尾(内存池结束位置) ngx_pool_t *next;//下一个内存块 ngx_uint_t failed;//内存池分配错误次数&#125; ngx_pool_data_t; 内存池头部结构 ngx_pool_s12345678910struct ngx_pool_s &#123; ngx_pool_data_t d; //内存池数据块 size_t max; //内存池数据块的最大值 ngx_pool_t *current; //指向当前的内存池 ngx_chain_t *chain; ngx_pool_large_t *large; //指向大块内存 ngx_pool_cleanup_t *cleanup; //释放内存时的回调函数 ngx_log_t *log; //日志信息&#125;;typedef struct ngx_pool_s ngx_pool_t; 内存池的基本操作内存池对外提供的函数如下： 功能 函数 创建内存池 ngx_pool_t *ngx_create_pool(size_t size, ngx_log_t *log); 销毁内存池 void ngx_destroy_pool(ngx_pool_t *pool); 重置内存池 void ngx_reset_pool(ngx_pool_t *pool); 内存申请（对齐） void *ngx_palloc(ngx_pool_t *pool, size_t size); 内存申请（不对齐） void *ngx_pnalloc(ngx_pool_t *pool, size_t size); 内存申请并且置为0 void *ngx_pcalloc(ngx_pool_t *pool, size_t size); 内存清除 ngx_int_t ngx_pfree(ngx_pool_t *pool, void *p); 封装的系统调用两个函数 ngx_alloc 和 ngx_calloc 对系统调用 malloc 进行封装。源码./src/Os/Unix（Win32）/ngx_alloc.h/.c。调用malloc申请内存。 123456789101112131415void *ngx_alloc(size_t size, ngx_log_t *log)&#123; void *p; p = malloc(size); if (p == NULL) &#123; ngx_log_error(NGX_LOG_EMERG, log, ngx_errno, "malloc(%uz) failed", size); &#125; ngx_log_debug2(NGX_LOG_DEBUG_ALLOC, log, 0, "malloc: %p:%uz", p, size); return p;&#125; 申请内存并且置0 1234567891011121314#define ngx_memzero(buf, n) (void) memset(buf, 0, n)void *ngx_calloc(size_t size, ngx_log_t *log)&#123; void *p; p = ngx_alloc(size, log); if (p) &#123; ngx_memzero(p, size); &#125; return p;&#125; 内存池的创建1234567891011121314151617181920212223242526272829303132ngx_pool_t *ngx_create_pool(size_t size, ngx_log_t *log)&#123; ngx_pool_t *p;//申请内存并对齐 p = ngx_memalign(NGX_POOL_ALIGNMENT, size, log); if (p == NULL) &#123; return NULL; &#125;//sizeof(ngx_pool_t) = 40B sizeof(ngx_pool_data_t) = 16B p-&gt;d.last = (u_char *) p + sizeof(ngx_pool_t);//指针设置到跳过内存池的头结构 p-&gt;d.end = (u_char *) p + size;//内存池的结尾 p-&gt;d.next = NULL; p-&gt;d.failed = 0;//可用的最大字节数 size = size - sizeof(ngx_pool_t); p-&gt;max = (size &lt; NGX_MAX_ALLOC_FROM_POOL) ? size : NGX_MAX_ALLOC_FROM_POOL;//其他的一些设置 p-&gt;current = p; p-&gt;chain = NULL; p-&gt;large = NULL; p-&gt;cleanup = NULL; p-&gt;log = log; return p;&#125;//它调用了系统函数/*函数：void * memalign (size_t boundary, size_t size) 函数memalign将分配一个由size指定大小，地址是boundary的倍数的内存块。参数boundary必须是2的幂！函数memalign可以分配较大的内存块，并且可以为返回的地址指定粒度。*/ nginx对内存的管理分为大内存与小内存，当某一个申请的内存大于某一个值时，就需要从大内存中分配空间，否则从小内存中分配空间。nginx中的内存池是在创建的时候就设定好了大小，在以后分配小块内存的时候，如果内存不够，则是重新创建一块内存串到内存池中，而不是将原有的内存池进行扩张。当要分配大块内存是，则是在内存池外面再分配空间进行管理的，称为大块内存池。 内存的申请12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576void *ngx_palloc(ngx_pool_t *pool, size_t size)&#123;#if !(NGX_DEBUG_PALLOC) if (size &lt;= pool-&gt;max) &#123;//申请的空间小于内存池的最大空间 return ngx_palloc_small(pool, size, 1); &#125;#endif return ngx_palloc_large(pool, size);&#125;//申请小内存static ngx_inline void *ngx_palloc_small(ngx_pool_t *pool, size_t size, ngx_uint_t align)&#123; u_char *m; ngx_pool_t *p; p = pool-&gt;current; do &#123; m = p-&gt;d.last; if (align) &#123; m = ngx_align_ptr(m, NGX_ALIGNMENT); &#125;//是否需要对齐，需要则按NGX_ALIGNMENT对齐 if ((size_t) (p-&gt;d.end - m) &gt;= size) &#123; //未使用的空间大于申请的，则不需要链接新的内存块了 p-&gt;d.last = m + size;//移动使用空间末尾指针 return m;//返回新申请空间开始的指针(m, m+size)空间 &#125; //空间不够向链表的下一个节点查询 p = p-&gt;d.next; &#125; while (p); //遍历完还是没有找到，那么再申请 return ngx_palloc_block(pool, size);&#125;//内存对齐#define ngx_align_ptr(p, a) \ (u_char *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) &amp; ~((uintptr_t) a - 1))static void *ngx_palloc_block(ngx_pool_t *pool, size_t size)&#123; u_char *m; size_t psize; ngx_pool_t *p, *new;//计算第一块的大小 psize = (size_t) (pool-&gt;d.end - (u_char *) pool);//申请与第一块内存相同大小的空间并用m指向 m = ngx_memalign(NGX_POOL_ALIGNMENT, psize, pool-&gt;log); if (m == NULL) &#123; return NULL; &#125;//新的内存块，变为内存池类型 new = (ngx_pool_t *) m;//初始化其中的数据 new-&gt;d.end = m + psize; new-&gt;d.next = NULL; new-&gt;d.failed = 0;//申请内存的结尾设置 m += sizeof(ngx_pool_data_t); m = ngx_align_ptr(m, NGX_ALIGNMENT); new-&gt;d.last = m + size;//将新的内存块连接到内存池链表中 for (p = pool-&gt;current; p-&gt;d.next; p = p-&gt;d.next) &#123; if (p-&gt;d.failed++ &gt; 4) &#123; pool-&gt;current = p-&gt;d.next; &#125; &#125; p-&gt;d.next = new;//返回size大小的内存的起始指针(m, m+size)空间 return m;&#125; 对于申请小的内存（申请大小 &lt; 设定的内存池数据块大小），基本流程就是，在内存池的链表中找空闲的内存，不满足条件的话再创建新的内存块并连接到内存池链表中，注意在内存池中申请内存，只是控制移动指针而已，这时注意字节的对齐，保证读写的高效。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UNIX环境高级编程-网络IPC]]></title>
     <url>%2F2017%2F06%2F05%2FUNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E7%BD%91%E7%BB%9CIPC%2F</url>
     <content type="text"><![CDATA[Unix环境高级编程， 第16章 网络IPC：套接字 读书笔记。不同计算机进行通信的机制。 简述套接字 是通信端点的对象，也有套接字描述符，类似于文件描述符，许多操作也可以直接应用到套接字描述符上。创建一个套接字： 123#include &lt;sys/socket.h&gt;int socket(int domain, int type, int protocol);//成功返回套接字描述符，失败返回-1 参数说明：domain 确定通信的特性，通常有 AF_INET 最常用，表示IPv4因特网域。type 套接字类型，tcp和udp的通信协议分别对应 SOCK_STREAM 和 SOCK_DGRAM ，面向连接的字节流和面向无连接的报文。protocol 通常为零，默认协议。 关闭套接字：1int shutdown(int sockfd, int how); how 的类别决定关闭的方式： SHUT_RD 关闭读端，无法从套接字读取数据； SHUT_WR 关闭写端，无法向套接字写数据； SHUT_RDWR 同时关闭读写，无法向套接字读写数据。 有 close 为何还要用 shutdown 这是因为：close 的调用是在最后一个活动关闭时才释放，而 shutdown 可以使套接字处于非活动状态，不用关心引用的多少；同时，也可以关闭一端。 关于地址字节序字节序是处理器的架构特性，指示像整数这样的大数据类型的内部字节顺序。分为大端字节序（big-endian）和小端模式（little-endian）。TCP/IP协议使用的是大端字节序，异构计算机可以直接进行通信，不会混淆。字节序的转换可以在本地计算机上完成，常用到的函数为：123456#include &lt;arpa/inet.h&gt;uint32_t htonl(uint32_t hostint32);//返回以网络字节序表示的32位整数uint16_t htons(uint16_t hostint16);//返回以网络字节序表示的16位整数uint32_t ntohl(uint32_t netint32);//返回以主机字节序表示的32位整数uint32_t ntohs(uint16_t netint16);//返回以主机字节序表示的16位整数 大端：低地址放着高位数据，高地址放着低位数据。小端：低地址放着低位数据，高地址放着高位数据。 地址格式地址标识了特定通信域的套接字端点，不同格式的地址传入套接字函数，可以用一个统一的结构来保存这个地址，被转换为 sockaddr 结构。因特网地址则定义在：12345678910#include &lt;netinet/in.h&gt;struct in_addr &#123; in_addr_t s_addr; //IPv4地址&#125;;struct sockaddr_in &#123; sa_family_t sin_family; in_port_t sin_port; struct in_addr sin_addr;&#125; 其中，in_port_t 为 uint16_t 类型的，而 in_addr_t 是 uint32_t 类型的。不同的系统下可以自由实现和添加额外的字段。有时，地址的格式不易于人去查看，因此要转换为表达式格式（p），点分十进制。计算机理解的是数值格式（n）。BSD网络软件提供了函数 inet_addr 和 inet_ntoa 用于两者之间的转换。只用于IPv4。下面的函数则可以适用不同协议。12345#include &lt;arpa/inet.h&gt;const char *inet_ntop(int domain, const void *restrict addr, char *restrict str,\ socklen_t size);//成功返回地址字符串指针int inet_pton(int domain, const char* restrict str, void *restrict addr);//成功返回1，无效返回0，失败返回-1 地址查询1.获得给定计算机的主机信息通过调用 gethostent 函数，返回一个 hostent 结构的数据结构。 12345678910111213141516#include &lt;netdb.h&gt;struct hostent *gethostent(void); //成功返回指针，失败返回NULLvoid sethostent(int stayopen); //打开主机数据文件，void endhostent(void);//关闭struct hostent &#123; char *h_name; //host name char **h_aliases; //pointer of alternate host name array int h_addrtype; //address type int h_length; char **h_addr_list; //pointer to array of network addresses . . .&#125;; 返回地址为网络字节序。2.获取网络名字和网络号 1234567891011121314#include &lt;netdb.h&gt;struct netent *getnetbyaddr(unint32_t net, int type);struct netent *getnetbyname(const char *name);struct netent *getnet(void);void setnetent(int stayopen);void endnetent(void);struct netent &#123; char *n_name; char **n_aliasses; int n_addrtype; uint32_t n_net;&#125; 同样，网络号按照网络字节序返回，地址类型为一个地址族常量（AF_INET）。3.服务和端口号服务是由地址的端口号部分表示的。每个服务由一个唯一的、熟知的端口号表示。如ssh的端口号是22，http的端口号80等。1234567891011121314151617#include &lt;netdb.h&gt;//由服务名字来获得信息struct servent *getservbyname(const char *name, const char *proto);//由端口号来获得信息struct servent *getservbyport(int port, const char *proto);//顺序扫描服务数据库struct servent *getservenmt(void);void setservent(int stayopen);void endservent(void);struct servent &#123; char *s_name; char **s_aliases; int s_port; char *s_proto;&#125;; 4.两个函数函数 getaddrinfo 允许将一个主机名和服务名映射到一个地址。 123456789101112131415#include &lt;sys/socket.h&gt;#include &lt;netdb.h&gt;int getaddrinfo( const char *hostname, const char *service, \ const struct addrinfo *hints, struct addrinfo **result );typedef struct addrinfo &#123; int ai_flags; //AI_PASSIVE,AI_CANONNAME,AI_NUMERICHOST int ai_family; //AF_INET,AF_INET6 int ai_socktype; //SOCK_STREAM,SOCK_DGRAM int ai_protocol; //IPPROTO_IP, IPPROTO_IPV4, IPPROTO_IPV6 etc. size_t ai_addrlen; //must be zero or a null pointer char* ai_canonname; //must be zero or a null pointer struct sockaddr* ai_addr; //must be zero or a null pointer struct addrinfo* ai_next; //must be zero or a null pointer&#125; hostname:一个主机名或者地址串(IPv4的点分十进制串或者IPv6的16进制串)service：服务名可以是十进制的端口号，也可以是已定义的服务名称，如ftp、http等hints：可以是一个空指针，也可以是一个指向某个addrinfo结构体的指针，调用者在这个结构中填入关于期望返回的信息类型的暗示。举例来说：如果指定的服务既支持TCP也支持UDP，那么调用者可以把hints结构中的ai_socktype成员设置成SOCK_DGRAM使得返回的仅仅是适用于数据报套接口的信息。result：本函数通过result指针参数返回一个指向addrinfo结构体链表的指针。返回值：0成功，非0出错 函数 getnameinfo 将地址转换成主机名或服务名。 12int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host, \ size_t hostlen, char *serv, size_t servlen, int flags); 例子： 123456789101112131415161718192021222324252627282930313233343536#include "apue.h"#include &lt;sys/socket.h&gt;#include &lt;netdb.h&gt;#include &lt;arpa/inet.h&gt;//using getnameinfo()#define MAX_HO 128int main(int argc, char *argv[])&#123; struct sockaddr_in sa_in; char host[MAX_HO], service[MAX_HO]; int flags; int err; if(argc != 3) err_sys("Usage: a.out &lt;IP&gt; &lt;port&gt;"); int port = atoi(argv[2]); //init addr sa_in.sin_family = AF_INET; sa_in.sin_port = htons(port); inet_pton(AF_INET, argv[1], &amp;sa_in.sin_addr.s_addr); flags = 0; err = getnameinfo((struct sockaddr *)(&amp;sa_in), sizeof(struct sockaddr),\ host, sizeof(host), service, sizeof(service), flags); if(err != 0) &#123; gai_strerror(err); exit(0); &#125; printf("host := %s ; service := %s\n", host, service); exit(0);&#125; 套接字与地址套接字中没有包含太多信息，只是一个描述符，并不知道通信的端口和I地址，而建立客户和服务器之间的连接时，往往需要这些信息，所以，在编程过程中要将socket函数产生的套接字与地址相关联。地址结构类似： 12345678910111213//IPv4 struct sockaddr_in &#123; unsigned short sin_len; //IPv4地址长度 short int sin_family; //指代协议簇，在TCP套接字编程只能是AF_INET unsigned short sin_port; //存储端口号（使用网络字节顺序），数据类型是一个16为的无符号整形类型 struct in_addr sin_addr;//存储IP地址，IP地址是一个in_add结构体（结构在下面） unsigned char sin_zero[8]; //为了让sockaddr与sockaddr_in两个数据结构保持大小相同而保留的空字节 &#125;; struct in_addr &#123; unsigned long s_addr; //按照网络字节顺序存储IP地址 &#125;; 这时需要一个函数： 1int bind(int sockfd, const struct sockaddr *addr, socklen_t len); 第二个参数就是套接字地址结构对象了，它将与第一个参数套接字描述符进行绑定，这里的套接字地址结构参数的类型是通用套接字地址结构类型，因此，在实际调用的时候需要强制转换了。 建立连接在处理面向连接的网络服务时，开始交换数据前，必须在请求服务的套接字（客户端）和提供服务的套接字（服务器）之间建立连接。 connect 函数可以建立这样一个连接。 123#include &lt;sys/socket.h&gt;int connect(int sockfd, const struct sockaddr *addr, socklen_t len);//成功返回0，失败返回-1 addr 表示是想与之通信的服务器地址。 服务器调用 listen 来宣告可以接受连接请求。 1234int listen(int sockfd, int backlog);int accept(int sockfd, struct sockaddr *restrict addr, socklen_t *restrict len);//成功返回文件描述符，失败返回-1 backlog 指定了可以连接的数量，超过这一个值则拒绝连接。服务器能够接受到请求，那么会再调用 accept 来获得连接请求并建立连接。它返回的是调用 connect 函数的客户端的套接字描述符。如果不关心客户端的地址信息，则可以忽略后两个参数，将它们设为NULL。当 accept 没有连接请求时，服务器会阻塞直到下一个请求的到来，另外可以使用 pool 和 select 来等待一个请求的到来。基本流程：1234567891011121314151617181920212223242526272829303132/** * 套接字类型，地址，长度，可以连接数量 */int initserver(int type, const struct sockaddr *addr, socklen_t alen, int qlen)&#123; int fd; int err = 0; //1.创建套接字 if((fd = socket(addr-&gt;sa_family, type, 0)) &lt; 0) return (-1); //2.绑定套接字和地址 if(bind(fd, addr, alen) &lt; 0) &#123; err = errno; goto errout; &#125; //3.准备连接 if(type == SOCK_STREAM || type == SOCK_SEQPACKET) &#123; if(listen(fd, qlen) &lt; 0) &#123; err = errno; goto errout; &#125; &#125;errout: close(fd); errno = err; return (-1);&#125; 数据传输send和recv函数123#include &lt;sys/socket.h&gt; ssize_t recv(int sockfd, void *buff, size_t nbytes, int flags); ssize_t send(int sockfd, const void *buff, size_t nbytes, int flags); 它们的前三个参数类似于read 和 write函数，最后一个参数一般为0。send函数的参数 sockfd：指定发送端套接字描述符。 buff：存放要发送数据的缓冲区 nbytes: 实际要发送的数据的字节数 flags： 一般设置为0 recv函数的参数 sockfd: 接收端套接字描述符 buff：用来存放recv函数接收到的数据的缓冲区 nbytes: 指明buff的长度 flags: 一般设置为0 sendto和recvfrom函数这是面向无连接的数据传输，sockfd中不包含地址信息，所以需要指定地址。1234int sendto(int sockfd, const void *msg, size_t nbytes, int flags, const struct sockaddr *destaddr, int destlen);int recvfrom(int sockfd, void *restrict buf, size_t len, int flags, struct sockaddr *restrict addr, socklen_t *restrict addrlen); 例子]]></content>
@@ -204,8 +216,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -217,8 +229,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -278,8 +290,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -302,8 +314,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -358,8 +370,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -392,8 +404,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -404,8 +416,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -428,8 +440,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>

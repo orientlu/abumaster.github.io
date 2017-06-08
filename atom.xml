@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-06-07T02:37:54.501Z</updated>
+  <updated>2017-06-08T13:39:25.446Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,90 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx源码学习-内存池</title>
+    <link href="http://abumaster.com/2017/06/08/Nginx%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0-%E5%86%85%E5%AD%98%E6%B1%A0/"/>
+    <id>http://abumaster.com/2017/06/08/Nginx源码学习-内存池/</id>
+    <published>2017-06-08T08:45:30.000Z</published>
+    <updated>2017-06-08T13:39:25.446Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>Nginx</strong> 是一款轻量级的 Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，供俄国大型的入口网站及搜索引擎Rambler（俄文：Рамблер）使用。其特点是占用内存少，并发能力强。其编写简洁高效，有诸多学习之处。</p>
+<a id="more"></a>
+<div class="note info"><p>C/C++ 的内存管理，往往让人头痛。要时刻注意分配足够的内存，并在不用的时候记得释放内存，直接使用系统调用 <code>malloc/free, new/delete</code> 会有如下的一些弊端：  </p>
+<ul>
+<li>系统调用时根据最先匹配、最优匹配原则，有时会合并，产生额外的开销；  </li>
+<li>频繁使用，会产生大量的内存碎片，降低程序运行速度；  </li>
+<li>稍有不慎容易造成内存泄漏。  </li>
+</ul>
+<p><strong>内存池（memory pool）</strong>的出现代替了直接的系统调用。它是首先向系统申请足够大的空间，当需要时向内存池申请，而不是来进行系统调用，使用内存池可以对应解决以上的缺陷。  </p>
+</div>  
+<h4 id="基本数据结构"><a href="#基本数据结构" class="headerlink" title="基本数据结构"></a>基本数据结构</h4><p><em>注：Nginx源码中用 xx_xx_t 来表示type；用 xx_xx_s 表示struct。</em><br>在源码 <code>/Src/Core/Ngx_palloc.h{c}</code> 中<br><strong>内存池数据块类型 ngx_pool_data_t</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</div><div class="line">    u_char               *last;<span class="comment">//指向已用的数据结尾</span></div><div class="line">    u_char               *end;<span class="comment">//指向存储空间结尾(内存池结束位置)</span></div><div class="line">    <span class="keyword">ngx_pool_t</span>           *next;<span class="comment">//下一个内存块</span></div><div class="line">    <span class="keyword">ngx_uint_t</span>            failed;<span class="comment">//内存池分配错误次数</span></div><div class="line">&#125; <span class="keyword">ngx_pool_data_t</span>;</div></pre></td></tr></table></figure></p>
+<p><strong>内存池头部结构 ngx_pool_s</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> ngx_pool_s &#123;</div><div class="line">    <span class="keyword">ngx_pool_data_t</span>       d; <span class="comment">//内存池数据块</span></div><div class="line">    <span class="keyword">size_t</span>                max; <span class="comment">//内存池数据块的最大值</span></div><div class="line">    <span class="keyword">ngx_pool_t</span>           *current; <span class="comment">//指向当前的内存池</span></div><div class="line">    <span class="keyword">ngx_chain_t</span>          *chain;</div><div class="line">    <span class="keyword">ngx_pool_large_t</span>     *large; <span class="comment">//指向大块内存</span></div><div class="line">    <span class="keyword">ngx_pool_cleanup_t</span>   *cleanup; <span class="comment">//释放内存时的回调函数</span></div><div class="line">    <span class="keyword">ngx_log_t</span>            *<span class="built_in">log</span>; <span class="comment">//日志信息</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ngx_pool_s 	<span class="keyword">ngx_pool_t</span>;</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-6-8/29000766.jpg" alt="">  </p>
+<h4 id="内存池的基本操作"><a href="#内存池的基本操作" class="headerlink" title="内存池的基本操作"></a>内存池的基本操作</h4><p>内存池对外提供的函数如下：  </p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>函数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建内存池</td>
+<td><code>ngx_pool_t *ngx_create_pool(size_t size, ngx_log_t *log);</code></td>
+</tr>
+<tr>
+<td>销毁内存池</td>
+<td><code>void ngx_destroy_pool(ngx_pool_t *pool);</code></td>
+</tr>
+<tr>
+<td>重置内存池</td>
+<td><code>void ngx_reset_pool(ngx_pool_t *pool);</code></td>
+</tr>
+<tr>
+<td>内存申请（对齐）</td>
+<td><code>void *ngx_palloc(ngx_pool_t *pool, size_t size);</code></td>
+</tr>
+<tr>
+<td>内存申请（不对齐）</td>
+<td><code>void *ngx_pnalloc(ngx_pool_t *pool, size_t size);</code></td>
+</tr>
+<tr>
+<td>内存申请并且置为0</td>
+<td><code>void *ngx_pcalloc(ngx_pool_t *pool, size_t size);</code></td>
+</tr>
+<tr>
+<td>内存清除</td>
+<td><code>ngx_int_t ngx_pfree(ngx_pool_t *pool, void *p);</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="封装的系统调用"><a href="#封装的系统调用" class="headerlink" title="封装的系统调用"></a>封装的系统调用</h5><p>两个函数 <code>ngx_alloc</code> 和 <code>ngx_calloc</code> 对系统调用 <code>malloc</code> 进行封装。源码<code>./src/Os/Unix（Win32）/ngx_alloc.h/.c</code>。<br>调用malloc申请内存。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_alloc</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">ngx_log_t</span> *<span class="built_in">log</span>)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">void</span>  *p;</div><div class="line"></div><div class="line">    p = <span class="built_in">malloc</span>(size);</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        ngx_log_error(NGX_LOG_EMERG, <span class="built_in">log</span>, ngx_errno,</div><div class="line">                      <span class="string">"malloc(%uz) failed"</span>, size);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ngx_log_debug2(NGX_LOG_DEBUG_ALLOC, <span class="built_in">log</span>, <span class="number">0</span>, <span class="string">"malloc: %p:%uz"</span>, p, size);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>申请内存并且置0
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ngx_memzero(buf, n)       (void) memset(buf, 0, n)</span></div><div class="line"><span class="function"><span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_calloc</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">ngx_log_t</span> *<span class="built_in">log</span>)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">void</span>  *p;</div><div class="line"></div><div class="line">    p = ngx_alloc(size, <span class="built_in">log</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (p) &#123;</div><div class="line">        ngx_memzero(p, size);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="内存池的创建"><a href="#内存池的创建" class="headerlink" title="内存池的创建"></a>内存池的创建</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ngx_pool_t</span> *</div><div class="line">ngx_create_pool(<span class="keyword">size_t</span> size, <span class="keyword">ngx_log_t</span> *<span class="built_in">log</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">ngx_pool_t</span>  *p;</div><div class="line"><span class="comment">//申请内存并对齐</span></div><div class="line">    p = ngx_memalign(NGX_POOL_ALIGNMENT, size, <span class="built_in">log</span>);</div><div class="line">    <span class="keyword">if</span> (p == <span class="literal">NULL</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//sizeof(ngx_pool_t) = 40B	sizeof(ngx_pool_data_t) = 16B</span></div><div class="line">    p-&gt;d.last = (u_char *) p + <span class="keyword">sizeof</span>(<span class="keyword">ngx_pool_t</span>);<span class="comment">//指针设置到跳过内存池的头结构</span></div><div class="line">    p-&gt;d.end = (u_char *) p + size;<span class="comment">//内存池的结尾</span></div><div class="line">    p-&gt;d.next = <span class="literal">NULL</span>;</div><div class="line">    p-&gt;d.failed = <span class="number">0</span>;</div><div class="line"><span class="comment">//可用的最大字节数</span></div><div class="line">    size = size - <span class="keyword">sizeof</span>(<span class="keyword">ngx_pool_t</span>);</div><div class="line">    p-&gt;max = (size &lt; NGX_MAX_ALLOC_FROM_POOL) ? size : NGX_MAX_ALLOC_FROM_POOL;</div><div class="line"><span class="comment">//其他的一些设置</span></div><div class="line">    p-&gt;current = p;</div><div class="line">    p-&gt;chain = <span class="literal">NULL</span>;</div><div class="line">    p-&gt;large = <span class="literal">NULL</span>;</div><div class="line">    p-&gt;cleanup = <span class="literal">NULL</span>;</div><div class="line">    p-&gt;<span class="built_in">log</span> = <span class="built_in">log</span>;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> p;</div><div class="line">&#125;</div><div class="line"><span class="comment">//它调用了系统函数</span></div><div class="line"><span class="comment">/*</div><div class="line">函数：void * memalign (size_t boundary, size_t size) </div><div class="line">函数memalign将分配一个由size指定大小，地址是boundary的倍数的内存块。</div><div class="line">参数boundary必须是2的幂！函数memalign可以分配较大的内存块，并且可以为返回的地址指定粒度。</div><div class="line">*/</span></div></pre></td></tr></table></figure>
+<p>nginx对内存的管理分为大内存与小内存，当某一个申请的内存大于某一个值时，就需要从大内存中分配空间，否则从小内存中分配空间。<br>nginx中的内存池是在创建的时候就设定好了大小，在以后分配小块内存的时候，如果内存不够，则是重新创建一块内存串到内存池中，而不是将原有的内存池进行扩张。当要分配大块内存是，则是在内存池外面再分配空间进行管理的，称为大块内存池。  </p>
+<h5 id="内存的申请"><a href="#内存的申请" class="headerlink" title="内存的申请"></a>内存的申请</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_palloc</span><span class="params">(<span class="keyword">ngx_pool_t</span> *pool, <span class="keyword">size_t</span> size)</span></div><div class="line"></span>&#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> !(NGX_DEBUG_PALLOC)</span></div><div class="line">    <span class="keyword">if</span> (size &lt;= pool-&gt;max) &#123;<span class="comment">//申请的空间小于内存池的最大空间</span></div><div class="line">        <span class="keyword">return</span> ngx_palloc_small(pool, size, <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">    <span class="keyword">return</span> ngx_palloc_large(pool, size);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//申请小内存</span></div><div class="line"><span class="function"><span class="keyword">static</span> ngx_inline <span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_palloc_small</span><span class="params">(<span class="keyword">ngx_pool_t</span> *pool, <span class="keyword">size_t</span> size, <span class="keyword">ngx_uint_t</span> align)</span></div><div class="line"></span>&#123;</div><div class="line">    u_char      *m;</div><div class="line">    <span class="keyword">ngx_pool_t</span>  *p;</div><div class="line"></div><div class="line">    p = pool-&gt;current;</div><div class="line"></div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        m = p-&gt;d.last;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (align) &#123;</div><div class="line">            m = ngx_align_ptr(m, NGX_ALIGNMENT);</div><div class="line">        &#125;<span class="comment">//是否需要对齐，需要则按NGX_ALIGNMENT对齐</span></div><div class="line">	</div><div class="line">        <span class="keyword">if</span> ((<span class="keyword">size_t</span>) (p-&gt;d.end - m) &gt;= size) &#123;</div><div class="line">        	<span class="comment">//未使用的空间大于申请的，则不需要链接新的内存块了</span></div><div class="line">            p-&gt;d.last = m + size;<span class="comment">//移动使用空间末尾指针</span></div><div class="line">            <span class="keyword">return</span> m;<span class="comment">//返回新申请空间开始的指针(m, m+size)空间</span></div><div class="line">        &#125;</div><div class="line">		<span class="comment">//空间不够向链表的下一个节点查询</span></div><div class="line">        p = p-&gt;d.next;</div><div class="line"></div><div class="line">    &#125; <span class="keyword">while</span> (p);</div><div class="line">    <span class="comment">//遍历完还是没有找到，那么再申请</span></div><div class="line">    <span class="keyword">return</span> ngx_palloc_block(pool, size);</div><div class="line">&#125;</div><div class="line"><span class="comment">//内存对齐</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ngx_align_ptr(p, a)                                                   \</div><div class="line">    (u_char *) (((uintptr_t) (p) + ((uintptr_t) a - 1)) &amp; ~((uintptr_t) a - 1))</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_palloc_block</span><span class="params">(<span class="keyword">ngx_pool_t</span> *pool, <span class="keyword">size_t</span> size)</span></div><div class="line"></span>&#123;</div><div class="line">    u_char      *m;</div><div class="line">    <span class="keyword">size_t</span>       psize;</div><div class="line">    <span class="keyword">ngx_pool_t</span>  *p, *<span class="keyword">new</span>;</div><div class="line"><span class="comment">//计算第一块的大小</span></div><div class="line">    psize = (<span class="keyword">size_t</span>) (pool-&gt;d.end - (u_char *) pool);</div><div class="line"><span class="comment">//申请与第一块内存相同大小的空间并用m指向</span></div><div class="line">    m = ngx_memalign(NGX_POOL_ALIGNMENT, psize, pool-&gt;<span class="built_in">log</span>);</div><div class="line">    <span class="keyword">if</span> (m == <span class="literal">NULL</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//新的内存块，变为内存池类型</span></div><div class="line">    <span class="keyword">new</span> = (<span class="keyword">ngx_pool_t</span> *) m;</div><div class="line"><span class="comment">//初始化其中的数据</span></div><div class="line">    <span class="keyword">new</span>-&gt;d.end = m + psize;</div><div class="line">    <span class="keyword">new</span>-&gt;d.next = <span class="literal">NULL</span>;</div><div class="line">    <span class="keyword">new</span>-&gt;d.failed = <span class="number">0</span>;</div><div class="line"><span class="comment">//申请内存的结尾设置</span></div><div class="line">    m += <span class="keyword">sizeof</span>(<span class="keyword">ngx_pool_data_t</span>);</div><div class="line">    m = ngx_align_ptr(m, NGX_ALIGNMENT);</div><div class="line">    <span class="keyword">new</span>-&gt;d.last = m + size;</div><div class="line"><span class="comment">//将新的内存块连接到内存池链表中</span></div><div class="line">    <span class="keyword">for</span> (p = pool-&gt;current; p-&gt;d.next; p = p-&gt;d.next) &#123;</div><div class="line">        <span class="keyword">if</span> (p-&gt;d.failed++ &gt; <span class="number">4</span>) &#123;</div><div class="line">            pool-&gt;current = p-&gt;d.next;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    p-&gt;d.next = <span class="keyword">new</span>;</div><div class="line"><span class="comment">//返回size大小的内存的起始指针(m, m+size)空间</span></div><div class="line">    <span class="keyword">return</span> m;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于申请小的内存（申请大小 &lt; 设定的内存池数据块大小），基本流程就是，在内存池的链表中找空闲的内存，不满足条件的话再创建新的内存块并连接到内存池链表中，注意在内存池中申请内存，只是<strong>控制移动指针</strong>而已，这时注意字节的对齐，保证读写的高效。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;Nginx&lt;/strong&gt; 是一款轻量级的 Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，并在一个BSD-like 协议下发行。由俄罗斯的程序设计师Igor Sysoev所开发，供俄国大型的入口网站及搜索引擎Rambler（俄文：Рамблер）使用。其特点是占用内存少，并发能力强。其编写简洁高效，有诸多学习之处。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>UNIX环境高级编程-网络IPC</title>
@@ -1315,9 +1399,9 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
@@ -1353,36 +1437,11 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>网易2017春招笔试编程题</title>
-    <link href="http://abumaster.com/2017/04/14/%E7%BD%91%E6%98%932017%E6%98%A5%E6%8B%9B%E7%AC%94%E8%AF%95%E7%BC%96%E7%A8%8B%E9%A2%98/"/>
-    <id>http://abumaster.com/2017/04/14/网易2017春招笔试编程题/</id>
-    <published>2017-04-14T06:14:18.000Z</published>
-    <updated>2017-04-14T06:45:55.647Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>感悟</strong>：读的算法书，练习的算法题目都学到狗身上去了？不能活学活用，也就不能灵光乍现，难以进步。看似简单的题目，往往没有经过深思熟虑，导致复杂度高，无法通过。欠缺思考。<br><a id="more"></a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;感悟&lt;/strong&gt;：读的算法书，练习的算法题目都学到狗身上去了？不能活学活用，也就不能灵光乍现，难以进步。看似简单的题目，往往没有经过深思熟虑，导致复杂度高，无法通过。欠缺思考。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
   </entry>
   
