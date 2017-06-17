@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-06-09T08:40:44.377Z</updated>
+  <updated>2017-06-11T00:20:28.488Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>笔记：虚函数实现机制</title>
+    <link href="http://abumaster.com/2017/06/10/%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/"/>
+    <id>http://abumaster.com/2017/06/10/笔记：虚函数实现机制/</id>
+    <published>2017-06-10T15:26:43.000Z</published>
+    <updated>2017-06-11T00:20:28.488Z</updated>
+    
+    <content type="html"><![CDATA[<p>C++的虚函数是实现多态的一种方法，那么它的实现机制如何，笔记记录如下。  </p>
+<a id="more"></a>
+<p>虚函数的实现机制就是：虚表和虚指针。虚函数在运行期间来确定类型，即动态绑定，而构造函数在构造对象的时候就应该知道类型，这也是构造函数不能声明为虚函数的原因。<br>先看一个例子，假设两个类A和B：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">h</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> a;</div><div class="line">&#125;</div><div class="line"><span class="keyword">class</span> B :<span class="keyword">public</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="https://ooo.0o0.ooo/2017/06/11/593c8c1a67649.png" alt="">  </p>
+<p>虚函数地址的获得<br><code>A *p = new B;</code><br>p:是个指针。<br><code>(int *)p</code>：转换成 int 类型的指针<br><code>*(int *)p</code>：把转换成int 类型指针p 的内容取出<br><code>(int *)( *(int *)p)</code>：在转换成 int 类型的指针<br><code>(int *)( *(int *)p) +0</code>：取出第一个元素的地址<br><code>*((int *)( *(int *)p) +0)</code>：得到第一个元素的内容<br><code>(void *)(*((int *)( *(int *)p) +0))</code>：得到第一个元素的地址  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;C++的虚函数是实现多态的一种方法，那么它的实现机制如何，笔记记录如下。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>Nginx源码学习-内存池</title>
@@ -99,9 +126,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
       <category term="C" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
     
   </entry>
   
@@ -1398,44 +1425,6 @@ Segmentation 利用上下文信息提高分割图的精度。从两个方面入�
       &lt;blockquote&gt;
 &lt;p&gt;cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
 Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  &lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
-      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>拉普拉斯重建和细化用于图像语义分割</title>
-    <link href="http://abumaster.com/2017/04/16/%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E9%87%8D%E5%BB%BA%E5%92%8C%E7%BB%86%E5%8C%96%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
-    <id>http://abumaster.com/2017/04/16/拉普拉斯重建和细化用于图像语义分割/</id>
-    <published>2017-04-16T08:05:56.000Z</published>
-    <updated>2017-04-17T07:21:41.177Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  </p>
-</blockquote>
-<a id="more"></a>
-<p><em>空间语义不确定性原则</em>，探索在CNN特征层次结构中的空间和语义正确性。网络的顶层图像语义预测准确，但是带来的缺陷是在低分辨率下的图像空间上的定位，边界清晰但是标签有噪声。提出了一种重建模型在给定层次上提高空间定位的准确性，和一种细化技术用来融合多层的信息来优化图像的语义分割结果。<br>与传统FCN的区别：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-16/29818085-file_1492332368566_59f2.png" alt=""><br>不同之处在于，上采样和重建。<br><strong>CNN 特征图固有的缺少空间细节信息</strong>用一些不同的方法可以解决，如条件随机场、超像素、边界检测。还有一些成对的特征映射，可以进行反向传播进行训练。此论文的方法是<strong>直接提高输出激活图空间分辨率</strong>。<br><strong>双线性上采样是从低分辨率特征图中计算出高分辨率分割图的一种标准方法</strong>，首先卷积网络从特征图中计算出低分辨率的得分图，然后使用线性过滤器上采样为高分辨率的得分图。这种方法<em>可能会从多通道低分辨率特征图中丢失定位信息</em>。为了保留更多的空间信息，论文避免了将高维特征图折叠成低分辨率的类别预测。取而代之的是利用高分辨率基函数的线性组合对高分辨率的分类得分图的空间模式进行编码，这些函数的权重被高维特征图预测得到。实现：将高分辨率的特征图分成不重叠的图像块，大小取决于网络中池化层的个数次幂，通过一个卷积网络预测从高纬度低分辨率到特征图像块的映射。这些特征图像块和类别系数与一个基本函数集合相乘，再与一个基本的去卷积层相加，得到期望的全分辨率类别图。<br><strong>连接样条插值</strong><br>更高阶的样条插值替代上采样。<br><strong>学习基本函数</strong><br><strong>基本结构</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/25758666-file_1492397377051_a8d3.png" alt=""><br>首先，网络从上到下，分辨率越来越小。在每一次缩小时，特征图重建，再进行组合，产生对应倍数特征图的分割得分图，上图的水平方向，通过组合不同倍数的得分图。<br>一种从高分辨率中减去低频成分的方法，边界masking，孤立出边界成分。<br>金字塔的应用：<br>下层分割图得分上采样作为上一层采样的参考，用于得分图和像素对的产生。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/99567344-file_1492411678446_ecd2.png" alt=""><br><strong>Conclusion</strong>  </p>
-<ul>
-<li>以特定类重建为基础作为上采样；  </li>
-<li>合成低分辨率的语义丰富的特征图和拥有更多空间特性的高分辨率特征图，多层拉普拉斯金字塔重建结构。  </li>
-<li>最后可以加上CRF进行后期处理，优化结果。</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;来自论文：Laplacian Reconstruction and Refinement for Semantic Segmentation，论文有两个贡献：1）证明了卷积特征图的空间低分辨率，但是在高维特征表示中包含重要的子像素定位信息；2）提出了一种类似拉普拉斯金字塔的多分辨率重建结构，对高分辨率特征图的跳跃连接可以从低分辨率特征图重建并成功细化分割图像的边界。  &lt;/p&gt;
 &lt;/blockquote&gt;
     
     </summary>
