@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-06-11T00:20:28.488Z</updated>
+  <updated>2017-06-18T13:15:16.690Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,45 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx源码学习-数据结构</title>
+    <link href="http://abumaster.com/2017/06/18/Nginx%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <id>http://abumaster.com/2017/06/18/Nginx源码学习-数据结构/</id>
+    <published>2017-06-18T10:29:52.000Z</published>
+    <updated>2017-06-18T13:15:16.690Z</updated>
+    
+    <content type="html"><![CDATA[<p>Nginx源码学习中的数据结构，主要包括数组结构<code>ngx_array_t</code>、链表结构<code>ngx_list_t</code>、队列结构<code>ngx_queue_t</code>、哈希结构<code>ngx_hash_t</code>、字符串结构<code>ngx_string_t</code>。在内存池的基础之上进一步整合组织数据。  </p>
+<a id="more"></a>
+<h4 id="Nginx数组结构ngx-array-t"><a href="#Nginx数组结构ngx-array-t" class="headerlink" title="Nginx数组结构ngx_array_t"></a>Nginx数组结构ngx_array_t</h4><p>数组结构位于源文件<code>\Src\Core\Ngx_array.h{c}</code>  </p>
+<h5 id="数组结构"><a href="#数组结构" class="headerlink" title="数组结构"></a>数组结构</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</div><div class="line">    <span class="keyword">void</span>        *elts; <span class="comment">//指向数组空间的起始地址</span></div><div class="line">    <span class="keyword">ngx_uint_t</span>   nelts; <span class="comment">//数组中实际的元素个数</span></div><div class="line">    <span class="keyword">size_t</span>       size; <span class="comment">//数组元素的大小</span></div><div class="line">    <span class="keyword">ngx_uint_t</span>   nalloc; <span class="comment">//实际分配的空间</span></div><div class="line">    <span class="keyword">ngx_pool_t</span>  *pool; <span class="comment">//数组交由此内存池来管理空间</span></div><div class="line">&#125; <span class="keyword">ngx_array_t</span>;<span class="comment">//数组头占用的空间为20字节，头+数据</span></div></pre></td></tr></table></figure>
+<p>几种数据结构之间的关系图<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-6-18/21845022.jpg" alt="">  </p>
+<h5 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h5><p><strong>1.一个内联函数</strong><br>功能：在内存池<code>pool</code>上分配一块大小为<code>n*size</code>的空间，并将数组的<code>elts</code>指针指向这个空间的首地址。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化数组大小为n，参数：数组指针，内存池，数组空间的，每个元素大小</span></div><div class="line"><span class="function"><span class="keyword">static</span> ngx_inline ngx_int_t</div><div class="line"><span class="title">ngx_array_init</span><span class="params">(<span class="keyword">ngx_array_t</span> *<span class="built_in">array</span>, <span class="keyword">ngx_pool_t</span> *pool, <span class="keyword">ngx_uint_t</span> n, <span class="keyword">size_t</span> size)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">/*</div><div class="line">     * set "array-&gt;nelts" before "array-&gt;elts", otherwise MSVC thinks</div><div class="line">     * that "array-&gt;nelts" may be used without having been initialized</div><div class="line">     */</span></div><div class="line"></div><div class="line">    <span class="built_in">array</span>-&gt;nelts = <span class="number">0</span>;<span class="comment">//数组中的元素个数为0</span></div><div class="line">    <span class="built_in">array</span>-&gt;size = size;<span class="comment">//每个元素的大小</span></div><div class="line">    <span class="built_in">array</span>-&gt;nalloc = n;<span class="comment">//分配n个空间，空间大小(n*size)</span></div><div class="line">    <span class="built_in">array</span>-&gt;pool = pool;</div><div class="line">	<span class="comment">//用内存池函数分配一个大小(n*size)的空间并将首地址返回给数组的elts</span></div><div class="line">    <span class="built_in">array</span>-&gt;elts = ngx_palloc(pool, n * size);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">array</span>-&gt;elts == <span class="literal">NULL</span>) &#123;</div><div class="line">        <span class="keyword">return</span> NGX_ERROR;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">//成功初始化数组</span></div><div class="line">    <span class="keyword">return</span> NGX_OK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2.创建数组</strong><br>功能：提供数组元素的个数并且知道每个元素所占用的空间，在内存池p中创建一个有n个元素的数组。返回数组的指针。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ngx_array_t</span> *</div><div class="line">ngx_array_create(<span class="keyword">ngx_pool_t</span> *p, <span class="keyword">ngx_uint_t</span> n, <span class="keyword">size_t</span> size)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">ngx_array_t</span> *a;</div><div class="line"><span class="comment">//首先为数组的头分配一个空间，这个数组指针指向的是数组头的起始地址</span></div><div class="line">    a = ngx_palloc(p, <span class="keyword">sizeof</span>(<span class="keyword">ngx_array_t</span>));</div><div class="line">    <span class="keyword">if</span> (a == <span class="literal">NULL</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//用内联函数初始化这个数组</span></div><div class="line">    <span class="keyword">if</span> (ngx_array_init(a, p, n, size) != NGX_OK) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> a;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>3.销毁数组</strong><br>功能：销毁数组实际上没有释放数组占用的内存空间，而是移动首尾指针，这样保证了效率。<br>代码如下:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span></div><div class="line"><span class="title">ngx_array_destroy</span><span class="params">(<span class="keyword">ngx_array_t</span> *a)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">ngx_pool_t</span>  *p;</div><div class="line"><span class="comment">//数组所用的内存池</span></div><div class="line">    p = a-&gt;pool;</div><div class="line"><span class="comment">//数组不是内存池中的最后一个？还能删除？</span></div><div class="line">    <span class="keyword">if</span> ((u_char *) a-&gt;elts + a-&gt;size * a-&gt;nalloc == p-&gt;d.last) &#123;</div><div class="line">        p-&gt;d.last -= a-&gt;size * a-&gt;nalloc;<span class="comment">//将内存池的指针向前移动</span></div><div class="line">    &#125;</div><div class="line"><span class="comment">//删除数组头</span></div><div class="line">    <span class="keyword">if</span> ((u_char *) a + <span class="keyword">sizeof</span>(<span class="keyword">ngx_array_t</span>) == p-&gt;d.last) &#123;</div><div class="line">        p-&gt;d.last = (u_char *) a;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>4.向数组中插入元素</strong><br>功能：向数组指针a中插入元素，返回插入元素的空间地址
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *</div><div class="line"><span class="title">ngx_array_push</span><span class="params">(<span class="keyword">ngx_array_t</span> *a)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">void</span>        *elt, *<span class="keyword">new</span>;</div><div class="line">    <span class="keyword">size_t</span>       size;</div><div class="line">    <span class="keyword">ngx_pool_t</span>  *p;</div><div class="line"><span class="comment">//数组中元素已经满了</span></div><div class="line">    <span class="keyword">if</span> (a-&gt;nelts == a-&gt;nalloc) &#123;</div><div class="line">        size = a-&gt;size * a-&gt;nalloc;<span class="comment">//此时数组的占用空间的大小</span></div><div class="line">        p = a-&gt;pool;</div><div class="line">    <span class="comment">//数组后面有多余的空间可以扩展</span></div><div class="line">        <span class="keyword">if</span> ((u_char *) a-&gt;elts + size == p-&gt;d.last</div><div class="line">            &amp;&amp; p-&gt;d.last + a-&gt;size &lt;= p-&gt;d.end)</div><div class="line">        &#123;</div><div class="line">            <span class="comment">/*</div><div class="line">             * the array allocation is the last in the pool</div><div class="line">             * and there is space for new allocation</div><div class="line">             */</span></div><div class="line">	<span class="comment">//向后扩展一个元素的空间</span></div><div class="line">            p-&gt;d.last += a-&gt;size;</div><div class="line">            a-&gt;nalloc++;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">/* allocate a new array */</span></div><div class="line">	<span class="comment">//没有多余的空间进行扩展，则重新申请一个数组，大小为当前的2倍</span></div><div class="line">            <span class="keyword">new</span> = ngx_palloc(p, <span class="number">2</span> * size);</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">new</span> == <span class="literal">NULL</span>) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">            &#125;</div><div class="line">	<span class="comment">//将原数组元素拷贝到新的数组中，并设置新数组的一些参数（老数组没有销毁）</span></div><div class="line">            ngx_memcpy(<span class="keyword">new</span>, a-&gt;elts, size);</div><div class="line">            a-&gt;elts = <span class="keyword">new</span>;</div><div class="line">            a-&gt;nalloc *= <span class="number">2</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">//将指针指向下一个空闲区域</span></div><div class="line">    elt = (u_char *) a-&gt;elts + a-&gt;size * a-&gt;nelts;</div><div class="line">    a-&gt;nelts++;</div><div class="line">	<span class="comment">//返回这个空闲空间的指针</span></div><div class="line">    <span class="keyword">return</span> elt;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>添加n个元素<code>void * ngx_array_push_n(ngx_array_t *a, ngx_uint_t n)</code>。  </p>
+<h4 id="Nginx链表结构ngx-list-t"><a href="#Nginx链表结构ngx-list-t" class="headerlink" title="Nginx链表结构ngx_list_t"></a>Nginx链表结构ngx_list_t</h4><h5 id="链表数据结构"><a href="#链表数据结构" class="headerlink" title="链表数据结构"></a>链表数据结构</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ngx_list_part_s  <span class="keyword">ngx_list_part_t</span>;</div><div class="line"></div><div class="line"><span class="keyword">struct</span> ngx_list_part_s &#123;</div><div class="line">    <span class="keyword">void</span>             *elts;</div><div class="line">    <span class="keyword">ngx_uint_t</span>        nelts;</div><div class="line">    <span class="keyword">ngx_list_part_t</span>  *next;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</div><div class="line">    <span class="keyword">ngx_list_part_t</span>  *last;</div><div class="line">    <span class="keyword">ngx_list_part_t</span>   part;</div><div class="line">    <span class="keyword">size_t</span>            size;</div><div class="line">    <span class="keyword">ngx_uint_t</span>        nalloc;</div><div class="line">    <span class="keyword">ngx_pool_t</span>       *pool;</div><div class="line">&#125; <span class="keyword">ngx_list_t</span>;</div></pre></td></tr></table></figure>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-6-18/25501941.jpg" alt="">  </p>
+<h5 id="基本操作-1"><a href="#基本操作-1" class="headerlink" title="基本操作"></a>基本操作</h5><p><strong>1.内联函数-链表的初始化</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> ngx_inline ngx_int_t</div><div class="line"><span class="title">ngx_list_init</span><span class="params">(<span class="keyword">ngx_list_t</span> *<span class="built_in">list</span>, <span class="keyword">ngx_pool_t</span> *pool, <span class="keyword">ngx_uint_t</span> n, <span class="keyword">size_t</span> size)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="built_in">list</span>-&gt;part.elts = ngx_palloc(pool, n * size);</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">list</span>-&gt;part.elts == <span class="literal">NULL</span>) &#123;</div><div class="line">        <span class="keyword">return</span> NGX_ERROR;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">list</span>-&gt;part.nelts = <span class="number">0</span>;</div><div class="line">    <span class="built_in">list</span>-&gt;part.next = <span class="literal">NULL</span>;</div><div class="line">    <span class="built_in">list</span>-&gt;last = &amp;<span class="built_in">list</span>-&gt;part;</div><div class="line">    <span class="built_in">list</span>-&gt;size = size;</div><div class="line">    <span class="built_in">list</span>-&gt;nalloc = n;</div><div class="line">    <span class="built_in">list</span>-&gt;pool = pool;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> NGX_OK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Nginx源码学习中的数据结构，主要包括数组结构&lt;code&gt;ngx_array_t&lt;/code&gt;、链表结构&lt;code&gt;ngx_list_t&lt;/code&gt;、队列结构&lt;code&gt;ngx_queue_t&lt;/code&gt;、哈希结构&lt;code&gt;ngx_hash_t&lt;/code&gt;、字符串结构&lt;code&gt;ngx_string_t&lt;/code&gt;。在内存池的基础之上进一步整合组织数据。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>笔记：虚函数实现机制</title>
@@ -1392,51 +1431,6 @@ Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate o
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>高效分片训练结构化模型用于图像语义分割</title>
-    <link href="http://abumaster.com/2017/04/17/%E9%AB%98%E6%95%88%E5%88%86%E7%89%87%E8%AE%AD%E7%BB%83%E7%BB%93%E6%9E%84%E5%8C%96%E6%A8%A1%E5%9E%8B%E7%94%A8%E4%BA%8E%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/"/>
-    <id>http://abumaster.com/2017/04/17/高效分片训练结构化模型用于图像语义分割/</id>
-    <published>2017-04-17T08:58:15.000Z</published>
-    <updated>2017-04-18T02:13:45.979Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
-Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  </p>
-</blockquote>
-<a id="more"></a>
-<p><strong>特点：</strong>  </p>
-<ol>
-<li>制定了基于CNN的在CRFs上总体分段潜在函数模型用于衡量语义图像片之间的关系；  </li>
-<li>分段训练CRFs，避免重复推导，提高速度；  </li>
-<li>多尺度图像输入，用于探索图像背景和前景上下文信息；  </li>
-</ol>
-<hr>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-17/28980161-file_1492432013053_14485.png" alt=""><br>Featmap-Net是一个卷积网络，用于输出特征图，低分辨率的特征图；
-创建CRF图，首先对于卷积网络生成的特征图，创建一些边界框，在边界框内被认为空间近似，顶点才会全连接，不同空间会创建不同的边界框。  </p>
-<p><strong>上下文深度CRFs</strong><br>分为一元组的图的顶点和二元组的图的边，分别对应一个能量函数，通过一元和二元网络对应生成了类别的预测。<br><strong>利用背景上下文</strong><br>产生特征图的网络：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/67947492-file_1492479486028_4096.png" alt=""></p>
-<p>首先将输入图像缩放为三个不同的大小，放入网络，共享权重。图像缩放大小为1.2,0.8,0.4，再经过一层独立的卷积产生多尺度特征图，然后经过滑动金字塔池化产生了组合的特征图，金字塔池化如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-4-18/81267394-file_1492479935056_11ffe.png" alt=""><br>使用双线性上采样和简单的边界优化对粗糙的预测结果进行后期处理，可能又更复杂的优化方式，比如：训练反卷积网络，训练复杂的从粗糙到精细的网络，利用中间特征图到高分辨率的预测。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;cvpr 论文：Efficient Piecewise Training of Deep Structured Models for Semantic
-Segmentation 利用上下文信息提高分割图的精度。从两个方面入手：物体与物体之间、物体与背景之间。前者使用CNN结合CRF，来构造临近像素之间的关系；后者通过多尺度图像输入和滑动的金字塔池化。  &lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
-      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
   </entry>
   

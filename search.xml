@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Nginx源码学习-数据结构]]></title>
+    <url>%2F2017%2F06%2F18%2FNginx%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[Nginx源码学习中的数据结构，主要包括数组结构ngx_array_t、链表结构ngx_list_t、队列结构ngx_queue_t、哈希结构ngx_hash_t、字符串结构ngx_string_t。在内存池的基础之上进一步整合组织数据。 Nginx数组结构ngx_array_t数组结构位于源文件\Src\Core\Ngx_array.h{c} 数组结构1234567typedef struct &#123; void *elts; //指向数组空间的起始地址 ngx_uint_t nelts; //数组中实际的元素个数 size_t size; //数组元素的大小 ngx_uint_t nalloc; //实际分配的空间 ngx_pool_t *pool; //数组交由此内存池来管理空间&#125; ngx_array_t;//数组头占用的空间为20字节，头+数据 几种数据结构之间的关系图 基本操作1.一个内联函数功能：在内存池pool上分配一块大小为n*size的空间，并将数组的elts指针指向这个空间的首地址。123456789101112131415161718192021//初始化数组大小为n，参数：数组指针，内存池，数组空间的，每个元素大小static ngx_inline ngx_int_tngx_array_init(ngx_array_t *array, ngx_pool_t *pool, ngx_uint_t n, size_t size)&#123; /* * set "array-&gt;nelts" before "array-&gt;elts", otherwise MSVC thinks * that "array-&gt;nelts" may be used without having been initialized */ array-&gt;nelts = 0;//数组中的元素个数为0 array-&gt;size = size;//每个元素的大小 array-&gt;nalloc = n;//分配n个空间，空间大小(n*size) array-&gt;pool = pool; //用内存池函数分配一个大小(n*size)的空间并将首地址返回给数组的elts array-&gt;elts = ngx_palloc(pool, n * size); if (array-&gt;elts == NULL) &#123; return NGX_ERROR; &#125; //成功初始化数组 return NGX_OK;&#125; 2.创建数组功能：提供数组元素的个数并且知道每个元素所占用的空间，在内存池p中创建一个有n个元素的数组。返回数组的指针。 12345678910111213141516ngx_array_t *ngx_array_create(ngx_pool_t *p, ngx_uint_t n, size_t size)&#123; ngx_array_t *a;//首先为数组的头分配一个空间，这个数组指针指向的是数组头的起始地址 a = ngx_palloc(p, sizeof(ngx_array_t)); if (a == NULL) &#123; return NULL; &#125;//用内联函数初始化这个数组 if (ngx_array_init(a, p, n, size) != NGX_OK) &#123; return NULL; &#125; return a;&#125; 3.销毁数组功能：销毁数组实际上没有释放数组占用的内存空间，而是移动首尾指针，这样保证了效率。代码如下:123456789101112131415voidngx_array_destroy(ngx_array_t *a)&#123; ngx_pool_t *p;//数组所用的内存池 p = a-&gt;pool;//数组不是内存池中的最后一个？还能删除？ if ((u_char *) a-&gt;elts + a-&gt;size * a-&gt;nalloc == p-&gt;d.last) &#123; p-&gt;d.last -= a-&gt;size * a-&gt;nalloc;//将内存池的指针向前移动 &#125;//删除数组头 if ((u_char *) a + sizeof(ngx_array_t) == p-&gt;d.last) &#123; p-&gt;d.last = (u_char *) a; &#125;&#125; 4.向数组中插入元素功能：向数组指针a中插入元素，返回插入元素的空间地址 12345678910111213141516171819202122232425262728293031323334353637383940void *ngx_array_push(ngx_array_t *a)&#123; void *elt, *new; size_t size; ngx_pool_t *p;//数组中元素已经满了 if (a-&gt;nelts == a-&gt;nalloc) &#123; size = a-&gt;size * a-&gt;nalloc;//此时数组的占用空间的大小 p = a-&gt;pool; //数组后面有多余的空间可以扩展 if ((u_char *) a-&gt;elts + size == p-&gt;d.last &amp;&amp; p-&gt;d.last + a-&gt;size &lt;= p-&gt;d.end) &#123; /* * the array allocation is the last in the pool * and there is space for new allocation */ //向后扩展一个元素的空间 p-&gt;d.last += a-&gt;size; a-&gt;nalloc++; &#125; else &#123; /* allocate a new array */ //没有多余的空间进行扩展，则重新申请一个数组，大小为当前的2倍 new = ngx_palloc(p, 2 * size); if (new == NULL) &#123; return NULL; &#125; //将原数组元素拷贝到新的数组中，并设置新数组的一些参数（老数组没有销毁） ngx_memcpy(new, a-&gt;elts, size); a-&gt;elts = new; a-&gt;nalloc *= 2; &#125; &#125; //将指针指向下一个空闲区域 elt = (u_char *) a-&gt;elts + a-&gt;size * a-&gt;nelts; a-&gt;nelts++; //返回这个空闲空间的指针 return elt;&#125; 添加n个元素void * ngx_array_push_n(ngx_array_t *a, ngx_uint_t n)。 Nginx链表结构ngx_list_t链表数据结构123456789101112131415typedef struct ngx_list_part_s ngx_list_part_t;struct ngx_list_part_s &#123; void *elts; ngx_uint_t nelts; ngx_list_part_t *next;&#125;;typedef struct &#123; ngx_list_part_t *last; ngx_list_part_t part; size_t size; ngx_uint_t nalloc; ngx_pool_t *pool;&#125; ngx_list_t; 基本操作1.内联函数-链表的初始化1234567891011121314151617static ngx_inline ngx_int_tngx_list_init(ngx_list_t *list, ngx_pool_t *pool, ngx_uint_t n, size_t size)&#123; list-&gt;part.elts = ngx_palloc(pool, n * size); if (list-&gt;part.elts == NULL) &#123; return NGX_ERROR; &#125; list-&gt;part.nelts = 0; list-&gt;part.next = NULL; list-&gt;last = &amp;list-&gt;part; list-&gt;size = size; list-&gt;nalloc = n; list-&gt;pool = pool; return NGX_OK;&#125;]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[笔记：虚函数实现机制]]></title>
     <url>%2F2017%2F06%2F10%2F%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6%2F</url>
     <content type="text"><![CDATA[C++的虚函数是实现多态的一种方法，那么它的实现机制如何，笔记记录如下。 虚函数的实现机制就是：虚表和虚指针。虚函数在运行期间来确定类型，即动态绑定，而构造函数在构造对象的时候就应该知道类型，这也是构造函数不能声明为虚函数的原因。先看一个例子，假设两个类A和B：1234567891011121314class A &#123;public: virtual void f(); virtual void g(); void h(); int a;&#125;class B :public A &#123;public: void g(); int b;&#125; 虚函数地址的获得A *p = new B;p:是个指针。(int *)p：转换成 int 类型的指针*(int *)p：把转换成int 类型指针p 的内容取出(int *)( *(int *)p)：在转换成 int 类型的指针(int *)( *(int *)p) +0：取出第一个元素的地址*((int *)( *(int *)p) +0)：得到第一个元素的内容(void *)(*((int *)( *(int *)p) +0))：得到第一个元素的地址]]></content>
@@ -289,8 +301,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>caffe</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -439,8 +451,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>caffe</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
