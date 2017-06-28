@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, abumaster" />
+  <meta name="keywords" content="C++,STL," />
 
 
 
@@ -90,15 +90,16 @@
 
 
 
-<meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/categories/deeplearning/index.html">
+<meta name="description" content="STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STL源码剖析-迭代器和traits编程技法">
+<meta property="og:url" content="http://abumaster.com/2017/06/27/STL源码剖析-迭代器和traits编程技法/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。">
+<meta property="og:updated_time" content="2017-06-28T13:07:07.915Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="STL源码剖析-迭代器和traits编程技法">
+<meta name="twitter:description" content="STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。">
 
 
 
@@ -126,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/categories/deeplearning/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/06/27/STL源码剖析-迭代器和traits编程技法/"/>
 
 
 
 
 
-  <title> 分类: 深度学习 | 张国丰 </title>
+  <title> STL源码剖析-迭代器和traits编程技法 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -166,7 +167,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -284,411 +285,180 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        深度学习
-        <small>分类</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/10/High-performance-Semantic-Segmentation-using-VDFC/" itemprop="url">
-              
-                <span itemprop="name">High-performance Semantic Segmentation using VDFC</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-10T15:37:56+08:00"
-              content="2017-05-10" >
-          05-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/05/01/Caffe笔记/" itemprop="url">
-              
-                <span itemprop="name">Caffe笔记</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-05-01T14:41:52+08:00"
-              content="2017-05-01" >
-          05-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/25/尺度感知模型/" itemprop="url">
-              
-                <span itemprop="name">尺度感知模型</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-25T15:02:25+08:00"
-              content="2017-04-25" >
-          04-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/17/高效分片训练结构化模型用于图像语义分割/" itemprop="url">
-              
-                <span itemprop="name">高效分片训练结构化模型用于图像语义分割</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-17T16:58:15+08:00"
-              content="2017-04-17" >
-          04-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/16/拉普拉斯重建和细化用于图像语义分割/" itemprop="url">
-              
-                <span itemprop="name">拉普拉斯重建和细化用于图像语义分割</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-16T16:05:56+08:00"
-              content="2017-04-16" >
-          04-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/11/FCN图像语义分割计算的细节问题/" itemprop="url">
-              
-                <span itemprop="name">FCN图像语义分割计算的细节问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-11T16:59:57+08:00"
-              content="2017-04-11" >
-          04-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/09/caffe提取各层特征/" itemprop="url">
-              
-                <span itemprop="name">caffe提取各层特征</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-09T20:07:29+08:00"
-              content="2017-04-09" >
-          04-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/07/结合特定任务边缘检测的图像语义分割/" itemprop="url">
-              
-                <span itemprop="name">结合特定任务边缘检测的图像语义分割</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-07T15:38:22+08:00"
-              content="2017-04-07" >
-          04-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/05/全卷积网络和全连接条件随机场/" itemprop="url">
-              
-                <span itemprop="name">全卷积网络和全连接条件随机场</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-04-05T15:08:55+08:00"
-              content="2017-04-05" >
-          04-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/30/深度解析网络用于图像语义分割/" itemprop="url">
-              
-                <span itemprop="name">深度解析网络用于图像语义分割</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-30T10:20:52+08:00"
-              content="2017-03-30" >
-          03-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/" itemprop="url">
-              
-                <span itemprop="name">Feedforward semantic segmentation with zoom-out features</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-27T14:21:29+08:00"
-              content="2017-03-27" >
-          03-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/25/全卷积网络用于图像语义分割/" itemprop="url">
-              
-                <span itemprop="name">全卷积网络用于图像语义分割</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-25T15:31:02+08:00"
-              content="2017-03-25" >
-          03-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/24/卷积网络应该注意的问题/" itemprop="url">
-              
-                <span itemprop="name">卷积网络应该注意的问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-24T14:28:18+08:00"
-              content="2017-03-24" >
-          03-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/03/21/CRFs-as-RNN/" itemprop="url">
-              
-                <span itemprop="name">Conditional Random Fields as Recurrent Neural Networks</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-03-21T16:00:18+08:00"
-              content="2017-03-21" >
-          03-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/06/27/STL源码剖析-迭代器和traits编程技法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                STL源码剖析-迭代器和traits编程技法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-27T14:46:37+08:00">
+                2017-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。</p>
+<a id="more"></a>
+<div class="note info"><p><em>迭代器</em> 是一种类似指针的对象，各种行为中最重要的是内容提领(dereference)和成员访问(member access)。最重要的是对 <code>operator*</code> 和 <code>operator-&gt;</code> 进行重载。  </p>
+</div>  
+<h4 id="迭代器的相应型别"><a href="#迭代器的相应型别" class="headerlink" title="迭代器的相应型别"></a>迭代器的相应型别</h4><p>相应型别（associated type）是迭代器所指之物的型别。<br>应用场景：算法中可能用到一个以迭代器所指型别类型的变量，这时如何获取呢？C++ 不支持<code>typeof</code>。<br>解决方法：利用函数模板的参数推导机制，可以推导出型别。如：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> I, <span class="keyword">class</span> T&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">func_impl</span><span class="params">(I iter, T t)</span></div><div class="line"></span>&#123;</div><div class="line">	T tmp; <span class="comment">// T 所指之物的类别 int</span></div><div class="line">	<span class="comment">// ... 这里做原本func做的工作</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> I&gt;</div><div class="line"><span class="function"><span class="keyword">inline</span></div><div class="line"><span class="keyword">void</span> <span class="title">func</span><span class="params">(I iter)</span></div><div class="line"></span>&#123;</div><div class="line">	func_impl(iter, *iter); <span class="comment">// func 的工作全部移往 func_impl</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	func(&amp;i);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="Traits-编程技法"><a href="#Traits-编程技法" class="headerlink" title="Traits 编程技法"></a>Traits 编程技法</h4><p>上述的参数推导机制，无法推导出函数返回值的型别。有一种方法：内嵌型别来解决，内嵌一个类型声明 value type 。如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div><div class="line"><span class="keyword">struct</span> MyIter &#123;</div><div class="line">	<span class="keyword">typedef</span> T value_type; <span class="comment">// 内嵌式声明（nested type）</span></div><div class="line">	T* ptr;</div><div class="line">	MyIter(T* p=<span class="number">0</span>) : ptr(p) &#123; &#125;</div><div class="line">	T&amp; <span class="keyword">operator</span>*() <span class="keyword">const</span> &#123; <span class="keyword">return</span> *ptr; &#125;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> I&gt;</div><div class="line"><span class="keyword">typename</span> I::value_type <span class="comment">// 这一行是 func 的回返值型別</span></div><div class="line">func(I ite)</div><div class="line">&#123; <span class="keyword">return</span> *ite; &#125;</div><div class="line"><span class="comment">// 调用</span></div><div class="line">MyIter&lt;<span class="keyword">int</span>&gt; ite(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">8</span>));</div><div class="line"><span class="built_in">cout</span> &lt;&lt; func(ite); <span class="comment">// 输出：8</span></div></pre></td></tr></table></figure></p>
+<p><strong>并不是所有的迭代器都可以内嵌型别，如原生指针不是 class type，就无法定义型别。</strong>因此，对一般化概念进行特定情况处理，模板偏特化（template partial specialization）可以做到。<br>所谓<em>偏特化</em>是针对任意template参数更进一步限制条件设计出的一个特化版本。  </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/STL/" rel="tag"># STL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/24/STL源码剖析-空间配置器/" rel="next" title="STL源码剖析-空间配置器">
+                <i class="fa fa-chevron-left"></i> STL源码剖析-空间配置器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
           
           </div>
@@ -696,6 +466,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -715,8 +489,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
@@ -814,6 +597,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代器的相应型别"><span class="nav-number">1.</span> <span class="nav-text">迭代器的相应型别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Traits-编程技法"><span class="nav-number">2.</span> <span class="nav-text">Traits 编程技法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -937,6 +736,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 

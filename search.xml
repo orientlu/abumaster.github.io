@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[STL源码剖析-迭代器和traits编程技法]]></title>
+    <url>%2F2017%2F06%2F27%2FSTL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8Ctraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95%2F</url>
+    <content type="text"><![CDATA[STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。 迭代器 是一种类似指针的对象，各种行为中最重要的是内容提领(dereference)和成员访问(member access)。最重要的是对 operator* 和 operator-&gt; 进行重载。 迭代器的相应型别相应型别（associated type）是迭代器所指之物的型别。应用场景：算法中可能用到一个以迭代器所指型别类型的变量，这时如何获取呢？C++ 不支持typeof。解决方法：利用函数模板的参数推导机制，可以推导出型别。如：1234567891011121314151617template &lt;class I, class T&gt;void func_impl(I iter, T t)&#123; T tmp; // T 所指之物的类别 int // ... 这里做原本func做的工作&#125;;template &lt;class I&gt;inlinevoid func(I iter)&#123; func_impl(iter, *iter); // func 的工作全部移往 func_impl&#125;int main()&#123; int i; func(&amp;i);&#125; Traits 编程技法上述的参数推导机制，无法推导出函数返回值的型别。有一种方法：内嵌型别来解决，内嵌一个类型声明 value type 。如：123456789101112131415template &lt;class T&gt;struct MyIter &#123; typedef T value_type; // 内嵌式声明（nested type） T* ptr; MyIter(T* p=0) : ptr(p) &#123; &#125; T&amp; operator*() const &#123; return *ptr; &#125; // ...&#125;;template &lt;class I&gt;typename I::value_type // 这一行是 func 的回返值型別func(I ite)&#123; return *ite; &#125;// 调用MyIter&lt;int&gt; ite(new int(8));cout &lt;&lt; func(ite); // 输出：8 并不是所有的迭代器都可以内嵌型别，如原生指针不是 class type，就无法定义型别。因此，对一般化概念进行特定情况处理，模板偏特化（template partial specialization）可以做到。所谓偏特化是针对任意template参数更进一步限制条件设计出的一个特化版本。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[STL源码剖析-空间配置器]]></title>
     <url>%2F2017%2F06%2F24%2FSTL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E5%99%A8%2F</url>
     <content type="text"><![CDATA[《STL 源码剖析》读书笔记，第2章 空间配置器（allocator）。 空间的配置和释放 内存配置 -&gt; 对象构造 -&gt; 对象析构 -&gt; 内存释放 考虑到小内存块可能造成内存碎片的问题，SGI设计了双层配置器，对于大的内存块直接使用以及配置器，直接调用 malloc() 和 free() 函数，其中定义了内存不足的处理函数机制；而对于较小的内存申请（128 bytes 为界限），使用二级配置器，使用了内存池技术（内存的申请和释放交由内存池管理），可以保证效率和减少内存碎片。两个配置器的使用取决于 __USE__MALLOC 宏的定义。123456789# ifdef __USE_MALLOC...typedef __malloc_alloc_template&lt;0&gt; malloc_alloc;typedef malloc_alloc alloc; // 令 alloc 为第一级配置器# else...// 令 alloc 为第二级配置器typedef __default_alloc_template&lt;__NODE_ALLOCATOR_THREADS, 0&gt; alloc;#endif /* ! __USE_MALLOC */ 包装一个接口提供给用户使用，如下：123456789101112template&lt;class T, class Alloc&gt;class simple_alloc &#123;public: static T *allocate(size_t n) &#123; return 0 == n? 0 : (T*) Alloc::allocate (n * sizeof (T)); &#125; static T *allocate(void) &#123; return (T*) Alloc::allocate(sizeof (T)); &#125; static void deallocate(T *p, size_t n) &#123; if (0 != n) Alloc::deallocate(p, n * sizeof (T)); &#125; static void deallocate(T *p) &#123; Alloc::deallocate(p, sizeof (T)); &#125;&#125;; 第二级配置器剖析规定申请的空间小于 128 bytes 时，使用二级配置器完成。二级配置器由自由链表（free-list）组成。内存需求以8的倍数对齐。16个 free-lists 各自管理大小分别为 8,16,24,32,40,48,56,64,72,80,88,96,104,112,120,128 bytes 的小额区块。需要哪个大小直接从链表中调拨。链表结构1234union obj &#123; union obj * free_list_link; char client_data[1];&#125; 分析：union共用存储空间。free_list_link 指向下一个 obj ；第二个字段，可以看成一个指针，指向了实际的区块。client_data 为数组名称，是数组的首地址，因此是一个指针，指向了obj的地址，即&amp;obj == obj-&gt;client_data。实现了链表结点只使用一个指针的大小空间, 却能同时做索引和指向内存区域。空间配置函数 allocate()1234567891011121314151617181920// n must be &gt; 0static void * allocate(size_t n)&#123; obj * volatile * my_free_list; obj * result; // 大于128的调用一级配置器 if (n &gt; (size_t) __MAX_BYTES) return(malloc_alloc::allocate(n)); // 寻找自由链表中的合适的大小 my_free_list = free_list + FREELIST_INDEX(n); result = *my_free_list; if (result == 0) &#123; // 沒找到可用的 free list ，重新填充 void *r = refill(ROUND_UP(n)); // return r; &#125; // 调整空闲链表 *my_free_list = result -&gt; free_list_link; return (result);&#125;; 示意图如下：空间释放函数 deallocate()12345678910111213141516// p 不可以是 0static void deallocate(void *p, size_t n)&#123; obj *q = (obj *)p; obj * volatile * my_free_list; // 大於 128 请求一级配置器 if (n &gt; (size_t) __MAX_BYTES) &#123; malloc_alloc::deallocate(p, n); return; &#125; // 根据大小寻找对应的 free list my_free_list = free_list + FREELIST_INDEX(n); // 重新调整 free list ，回收区块进链表 q -&gt; free_list_link = *my_free_list; *my_free_list = q;&#125; 示意图如下：配置和释放的过程： 根据请求的大小，找到16个free lists中对应的list或者请求一级配置器； 然后将第一块空闲区返回给用户，没有空闲的可以到内存池中再重新注入一些空闲的数据块。重新填充 free lists分配时，发现free list中没有空闲的区块，则从内存池中填充一部分新区快，默认为20个新区快。内存池中没有那么多也可能会少于20个。 1234567891011121314151617181920212223242526272829303132//返回一个大小为n的对象，恰当时候可以为free list增加新的节点//n已经是8的倍数template &lt;bool threads, int inst&gt;void* __default_alloc_template&lt;threads, inst&gt;::refill(size_t n)&#123; int nobjs = 20; //从内存池中申请 nobjs 个大小为 n 的对象(n*objs)，chunk指向这块内存 char * chunk = chunk_alloc(n, nobjs);//nobjs为引用参数 obj * volatile * my_free_list; obj * result; obj * current_obj, * next_obj; int i; //只得到了一块，那么直接返回，不需要加入free list中了 if (1 == nobjs) return(chunk); //找到合适的free list my_free_list = free_list + FREELIST_INDEX(n); result = (obj*)chunk;//返回的空间 //指向下一个空闲块 *my_free_list = next_obj = (obj *)(chunk + n); //开始加入free list中 for (i = 1; ; i++) &#123; // 0的已经返回给用户 current_obj = next_obj; next_obj = (obj *)((char *)next_obj + n); if (nobjs - 1 == i) &#123;//最后一个 current_obj -&gt; free_list_link = 0; break; &#125; else &#123;//分成大小n的块，并连成链表 current_obj -&gt; free_list_link = next_obj; &#125; &#125; return(result);&#125; 内存池12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667 template &lt;bool threads, int inst&gt; char* __default_alloc_template&lt;threads, inst&gt;::chunk_alloc(size_t size, int&amp; nobjs) &#123; char * result; size_t total_bytes = size * nobjs; size_t bytes_left = end_free - start_free; // 计算内存池剩余容量 // 如果内存池中剩余内存&gt;=需要分配的内内存, 返回start_free指向的内存块, // 并且重新设置内存池起始点 if (bytes_left &gt;= total_bytes) &#123; result = start_free; start_free += total_bytes; return(result); &#125; // 如果内存池中剩余的容量不够分配, 但是能至少分配一个节点时, // 返回所能分配的最多的节点, 返回start_free指向的内存块 // 并且重新设置内存池起始点 else if (bytes_left &gt;= size) &#123; nobjs = bytes_left/size; total_bytes = size * nobjs; result = start_free; start_free += total_bytes; return(result); &#125; // 内存池剩余内存连一个节点也不够分配 else &#123; size_t bytes_to_get = 2 * total_bytes + ROUND_UP(heap_size &gt;&gt; 4); // 将剩余的内存分配给指定的free_list[FREELIST_INDEX(bytes_left)] if (bytes_left &gt; 0) &#123; obj * __VOLATILE * my_free_list = free_list + FREELIST_INDEX(bytes_left); ((obj *)start_free) -&gt; free_list_link = *my_free_list; *my_free_list = (obj *)start_free; &#125; start_free = (char *)malloc(bytes_to_get); // 分配失败, 搜索原来已经分配的内存块, 看是否有大于等于当前请求的内存块 if (0 == start_free) &#123; int i; obj * __VOLATILE * my_free_list, *p; //不打算配置较小的内存块 //检索在free list中足够大的空闲块 for (i = size; i &lt;= __MAX_BYTES; i += __ALIGN) &#123; my_free_list = free_list + FREELIST_INDEX(i); p = *my_free_list; // 找到了一个, 将其加入内存池中 if (0 != p) &#123; *my_free_list = p -&gt; free_list_link; start_free = (char *)p; end_free = start_free + i; // 内存池更新完毕, 重新分配需要的内存 //递归调用 return(chunk_alloc(size, nobjs)); // 内存零头被编到了对应free list中 &#125; &#125; // 再次失败, 直接调用一级配置器分配, 期待异常处理函数能提供帮助 // 不过在我看来, 内存分配失败进行其它尝试已经没什么意义了, // 最好直接log, 然后让程序崩溃 end_free = 0; // In case of exception. start_free = (char *)malloc_alloc::allocate(bytes_to_get); &#125; heap_size += bytes_to_get; end_free = start_free + bytes_to_get; // 内存池更新完毕, 重新分配需要的内存 return(chunk_alloc(size, nobjs)); &#125; &#125; 参考链接。]]></content>
@@ -169,8 +181,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -192,8 +204,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>深度学习</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -239,8 +251,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>深度学习</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -251,8 +263,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
         <tag>论文</tag>
       </tags>
   </entry>
@@ -264,8 +276,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
         <tag>论文</tag>
       </tags>
   </entry>
