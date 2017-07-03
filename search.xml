@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[c语言中的struct-option结构]]></title>
+    <url>%2F2017%2F07%2F03%2Fc%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84struct-option%E7%BB%93%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[C语言知识拾遗，struct option 结构体。 struct option 指明了一个长参数，在一些控制台程序中经常用到，需要指明不同的参数来运行程序。如开源软件webbench运行./webbench -h后会出现一些可选项，指定不同的参数，程序会做出不同的相应。123456struct option &#123; const char *name; //name表示的是长参数名 int has_arg； int *flag; int val; &#125; 参数说明：name 表示长参数的名称；has_arg 表示参数名称后面是否需要跟着参数，no_argument(0)不需要，required_argument(1)一定要跟个参数，optional_argument(2)可以有也可以没有；flag 决定了getopt_long的返回值，如果为NULL，返回val字段的数值；如果不为NULL，则会使其指向的内容变为val中的值，并且返回0；若未发现长选项，那么指向不变；val 指定的默认值。 长命令参数的解析123int getopt_long(int argc, char * const argv[], const char *optstring, const struct option *longopts, int *longindex); 参数说明：argc 和 argv 是命令行参数；optstring 选项参数组成的字符串，如果一个字母后面跟着一个冒号如 t:，那么表示这个选项后需要参数；longopts 是需要的自定义的option结构体；longindex 指定一个索引指针。 例子：]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>技巧</tag>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[STL源码剖析-迭代器和traits编程技法]]></title>
     <url>%2F2017%2F06%2F27%2FSTL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8Ctraits%E7%BC%96%E7%A8%8B%E6%8A%80%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。 迭代器 是一种类似指针的对象，各种行为中最重要的是内容提领(dereference)和成员访问(member access)。最重要的是对 operator* 和 operator-&gt; 进行重载。 迭代器的相应型别相应型别（associated type）是迭代器所指之物的型别。应用场景：算法中可能用到一个以迭代器所指型别类型的变量，这时如何获取呢？C++ 不支持typeof。解决方法：利用函数模板的参数推导机制，可以推导出型别。如：1234567891011121314151617template &lt;class I, class T&gt;void func_impl(I iter, T t)&#123; T tmp; // T 所指之物的类别 int // ... 这里做原本func做的工作&#125;;template &lt;class I&gt;inlinevoid func(I iter)&#123; func_impl(iter, *iter); // func 的工作全部移往 func_impl&#125;int main()&#123; int i; func(&amp;i);&#125; Traits 编程技法上述的参数推导机制，无法推导出函数返回值的型别。有一种方法：内嵌型别来解决，内嵌一个类型声明 value type 。如：123456789101112131415template &lt;class T&gt;struct MyIter &#123; typedef T value_type; // 内嵌式声明（nested type） T* ptr; MyIter(T* p=0) : ptr(p) &#123; &#125; T&amp; operator*() const &#123; return *ptr; &#125; // ...&#125;;template &lt;class I&gt;typename I::value_type // 这一行是 func 的回返值型別func(I ite)&#123; return *ite; &#125;// 调用MyIter&lt;int&gt; ite(new int(8));cout &lt;&lt; func(ite); // 输出：8 并不是所有的迭代器都可以内嵌型别，如原生指针不是 class type，就无法定义型别。因此，对一般化概念进行特定情况处理，模板偏特化（template partial specialization）可以做到。所谓偏特化是针对任意template参数更进一步限制条件设计出的一个特化版本。]]></content>
+    <content type="text"><![CDATA[STL源码剖析，第三章 迭代器和traits编程技法的读书笔记。 迭代器 是一种类似指针的对象，各种行为中最重要的是内容提领(dereference)和成员访问(member access)。最重要的是对 operator* 和 operator-&gt; 进行重载。 迭代器的相应型别相应型别（associated type）是迭代器所指之物的型别。应用场景：算法中可能用到一个以迭代器所指型别类型的变量，这时如何获取呢？C++ 不支持typeof。解决方法：利用函数模板的参数推导机制，可以推导出型别。如：1234567891011121314151617template &lt;class I, class T&gt;void func_impl(I iter, T t)&#123; T tmp; // T 所指之物的类别 int // ... 这里做原本func做的工作&#125;;template &lt;class I&gt;inlinevoid func(I iter)&#123; func_impl(iter, *iter); // func 的工作全部移往 func_impl&#125;int main()&#123; int i; func(&amp;i);&#125; Traits 编程技法上述的参数推导机制，无法推导出函数返回值的型别。有一种方法：内嵌型别来解决，内嵌一个类型声明 value type 。如：123456789101112131415template &lt;class T&gt;struct MyIter &#123; typedef T value_type; // 内嵌式声明（nested type） T* ptr; MyIter(T* p=0) : ptr(p) &#123; &#125; T&amp; operator*() const &#123; return *ptr; &#125; // ...&#125;;template &lt;class I&gt;typename I::value_type // 这一行是 func 的回返值型別func(I ite)&#123; return *ite; &#125;// 调用MyIter&lt;int&gt; ite(new int(8));cout &lt;&lt; func(ite); // 输出：8 并不是所有的迭代器都可以内嵌型别，如原生指针不是 class type，就无法定义型别。因此，对一般化概念进行特定情况处理，模板偏特化（template partial specialization）可以做到。所谓偏特化是针对任意template参数更进一步限制条件设计出的一个特化版本。如：12template&lt;typeneme T&gt;class C&lt;T*&gt; &#123;...&#125;//T为原生指针的情况，是T为任何类型的进一步条件限制 特征萃取机负责将迭代器或者原生指针中的特征提取出来。12345678template &lt;class I&gt;struct iterator_traits &#123; typedef typename I::iterator_category iterator_category; typedef typename I::value_type value_type; typedef typename I::difference_type difference_type; typedef typename I::pointer pointer; typedef typename I::reference reference;&#125;; 迭代器各个型别的意义：value type 迭代器所指对象的型别。difference_type 两个迭代器之间的距离，也可以用来表示一个容器的最大容量。reference 引用类型。pointer 指针类型。iterator_category 迭代器的分类。迭代器通常分为五类： 类型 描述 Input Iterator 不允许外部改变，只读 Output Iterator 只写 Forward Iterator 单向移动，可读可写 Bidirectional Iterator 双向移动，区间内可读可写 Random Access Iterator 随机访问，涵盖所有指针的算术能力 Traits编程技法。部分源码剖析，参考。123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142// 用于标记迭代器类型struct input_iterator_tag &#123;&#125;;struct output_iterator_tag &#123;&#125;;struct forward_iterator_tag : public input_iterator_tag &#123;&#125;;struct bidirectional_iterator_tag : public forward_iterator_tag &#123;&#125;;struct random_access_iterator_tag : public bidirectional_iterator_tag &#123;&#125;;template &lt;class T, class Distance&gt; struct input_iterator&#123; typedef input_iterator_tag iterator_category; typedef T value_type; typedef Distance difference_type; typedef T* pointer; typedef T&amp; reference;&#125;;struct output_iterator&#123; typedef output_iterator_tag iterator_category; typedef void value_type; typedef void difference_type; typedef void pointer; typedef void reference;&#125;;template &lt;class T, class Distance&gt; struct forward_iterator&#123; typedef forward_iterator_tag iterator_category; typedef T value_type; typedef Distance difference_type; typedef T* pointer; typedef T&amp; reference;&#125;;template &lt;class T, class Distance&gt; struct bidirectional_iterator&#123; typedef bidirectional_iterator_tag iterator_category; typedef T value_type; typedef Distance difference_type; typedef T* pointer; typedef T&amp; reference;&#125;;template &lt;class T, class Distance&gt; struct random_access_iterator&#123; typedef random_access_iterator_tag iterator_category; typedef T value_type; typedef Distance difference_type; typedef T* pointer; typedef T&amp; reference;&#125;;#ifdef __STL_USE_NAMESPACEStemplate &lt;class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&amp;&gt;struct iterator &#123; typedef Category iterator_category; typedef T value_type; typedef Distance difference_type; typedef Pointer pointer; typedef Reference reference;&#125;;#endif /* __STL_USE_NAMESPACES */#ifdef __STL_CLASS_PARTIAL_SPECIALIZATION////////////////////////////////////////////////////////////////////////////////// iterator_traits定义////////////////////////////////////////////////////////////////////////////////// 用于traits出迭代其所指对象的型别template &lt;class Iterator&gt;struct iterator_traits&#123; // 迭代器类型, STL提供五种迭代器 typedef typename Iterator::iterator_category iterator_category; // 迭代器所指对象的型别 // 如果想与STL算法兼容, 那么在类内需要提供value_type定义 typedef typename Iterator::value_type value_type; // 这个是用于处理两个迭代器间距离的类型 typedef typename Iterator::difference_type difference_type; // 直接指向对象的原生指针类型 typedef typename Iterator::pointer pointer; // 这个是对象的引用类型 typedef typename Iterator::reference reference;&#125;;// 针对指针提供特化版本template &lt;class T&gt;struct iterator_traits&lt;T*&gt;&#123; typedef random_access_iterator_tag iterator_category; typedef T value_type; typedef ptrdiff_t difference_type; typedef T* pointer; typedef T&amp; reference;&#125;;// 针对指向常对象的指针提供特化template &lt;class T&gt;struct iterator_traits&lt;const T*&gt;&#123; typedef random_access_iterator_tag iterator_category; typedef T value_type; typedef ptrdiff_t difference_type; typedef const T* pointer; typedef const T&amp; reference;&#125;;////////////////////////////////////////////////////////////////////////////////// iterator_traits支持函数////////////////////////////////////////////////////////////////////////////////// iterator_category(const Iterator&amp;) 返回迭代器类别// distance_type(const Iterator&amp;) 返回表示迭代器距离的类型// value_type(const Iterator&amp;) 返回迭代器所指对象的类型////////////////////////////////////////////////////////////////////////////////template &lt;class Iterator&gt;inline typename iterator_traits&lt;Iterator&gt;::iterator_categoryiterator_category(const Iterator&amp;)&#123; typedef typename iterator_traits&lt;Iterator&gt;::iterator_category category; return category();&#125;template &lt;class Iterator&gt;inline typename iterator_traits&lt;Iterator&gt;::difference_type*distance_type(const Iterator&amp;)&#123; return static_cast&lt;typename iterator_traits&lt;Iterator&gt;::difference_type*&gt;(0);&#125;template &lt;class Iterator&gt;inline typename iterator_traits&lt;Iterator&gt;::value_type*value_type(const Iterator&amp;)&#123; return static_cast&lt;typename iterator_traits&lt;Iterator&gt;::value_type*&gt;(0);&#125; 例子：使用，如一个动物接收机构，不同的动物对应不同的处理，但是对于外界来说只有一个共同的接口，内部不同的动物有不同的方法，用虚函数可以实现，但是用traits编程技巧，也能很好的实现这个需求。123456789101112131415161718192021222324252627282930313233//定义不同的动物标签struct cat_tag&#123;&#125;;struct dog_tag&#123;&#125;;//不同的动物类struct dog&#123; typedef dog_tag animal_type;//内嵌动物类型 //typedef T value_type; //...&#125;;struct cat &#123; typedef cat_tag animal_type; //typedef T value_type;&#125;;//获取动物类型template &lt;class T&gt; struct AnimalTraits &#123; typedef typename T::animal_type animal_type;&#125;;//不同的动物有不同的处理template &lt;class T&gt; void _Accept(T dog, dog_tag)&#123; cout &lt;&lt; "this is dog accept..." &lt;&lt; endl;&#125;template &lt;class T&gt; void _Accept(T cat, cat_tag)&#123; cout &lt;&lt; "this is cat accept..." &lt;&lt; endl;&#125;//提供外部通用的接口template &lt;class T&gt; void Accept(T animal)&#123; typedef typename AnimalTraits&lt;T&gt;::animal_type type; _Accept(animal, type());//依据类别的临时变量决定调用哪个&#125;]]></content>
       <categories>
         <category>编程</category>
       </categories>
@@ -32,8 +44,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>C</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -55,8 +67,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>C</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -204,8 +216,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>C++</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -228,8 +240,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>论文</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -251,8 +263,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>C++</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -263,9 +275,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
-        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -276,9 +288,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
-        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -337,8 +349,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -361,8 +373,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -417,8 +429,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -451,8 +463,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -463,8 +475,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -487,8 +499,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
