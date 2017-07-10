@@ -53,31 +53,31 @@
   </entry>
   
   <entry>
-    <title>���߳̿�c++11</title>
+    <title>多线程库c++11</title>
     <link href="http://abumaster.com/2017/07/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%93c-11/"/>
     <id>http://abumaster.com/2017/07/09/多线程库c-11/</id>
     <published>2017-07-09T10:32:25.000Z</published>
-    <updated>2017-07-10T04:04:48.533Z</updated>
+    <updated>2017-07-10T13:48:30.784Z</updated>
     
-    <content type="html"><![CDATA[<p>C++ 11 ��׼�еĶ��߳̿⣬�����˷�װ��thread���Լ�����ͬ����mutex��atomic������������<br><a id="more"></a></p>
-<h4 id="thread��"><a href="#thread��" class="headerlink" title="thread��"></a>thread��</h4><p>ʹ�ð���ͷ�ļ�<thread>��std::thread��<br><strong>���캯��</strong><br>���õĹ��캯����
+    <content type="html"><![CDATA[<p>C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。<br><a id="more"></a></p>
+<h4 id="thread类"><a href="#thread类" class="headerlink" title="thread类"></a>thread类</h4><p>使用包含头文件<thread>，std::thread。<br><strong>构造函数</strong><br>常用的构造函数：
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> Fn, <span class="keyword">class</span>... Args&gt;</div><div class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">thread</span> <span class="params">(Fn&amp;&amp; fn, Args&amp;&amp;... args)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>��һ������ָ�����߳�ִ�к������ڶ�����ѡ���̺߳��������Ĳ�����<br>Ϊ�˿����߳�ͬ������������ԭ�ӱ���atomic���͵�ȫ�ֱ��������ߴ���һ��ԭ�ӱ������������ã�����ʹ��һ����Ա������<a href="http://www.cplusplus.com/reference/thread/thread/thread/">����</a>���μ�cplusplus��վ��<br>��ֵ������������ֱ���ƶ����䣬��������<br><strong>�ȴ��Ͷ�������</strong><br>�����̺߳����Ե���<code>join</code>�������ȴ��̵߳Ľ�����ͬ��Ҳ�ṩ��һ������<code>joinable</code>�������߳��Ƿ����Ա�join�����������̶߳��������̺߳�̨���п��Ե���<code>detach</code>��ʹ�̷߳�����ȥ�ں�̨���У����ǲ����ܷ���join�򷵻ص���false��ͬ�����߳�Ҳ���ܵ���join���ȴ��̵߳Ľ�����<br><strong>this_thread ��</strong><br>��ʾ��ǰ���̣��ṩ��һ�麯����  </p>
+<p>第一个参数指定了线程执行函数，第二个可选的线程函数所需的参数。<br>为了控制线程同步，可以设置原子变量atomic类型的全局变量；或者传入一个原子变量参数的引用；或者使用一个成员变量。<a href="http://www.cplusplus.com/reference/thread/thread/thread/">例子</a>，参见cplusplus网站。<br>赋值运算符，可以直接移动分配，不拷贝。<br><strong>等待和独立运行</strong><br>创建线程后可以调用<code>join</code>来阻塞等待线程的结束，同样也提供了一个函数<code>joinable</code>来测试线程是否可以被join，如果想让线程独立于主线程后台运行可以调用<code>detach</code>，使线程分离出去在后台运行，这是测试能否被join则返回的是false，同样主线程也不能调用join来等待线程的结束。<br><strong>this_thread 类</strong><br>表示当前进程，提供了一组函数。  </p>
 <ul>
-<li><code>get_id</code> ����һ��<code>thread::id</code>���ͣ���ʶ�˵�ǰ�̵߳�id��  </li>
-<li><code>yield</code> �ò���Ϊ�����߳��ṩ���õĻ��ᡣ  </li>
-<li><code>sleep_until</code> ����ֱ�����õ�ʱ�䵽�ˣ����Ե�ʱ�䡣  </li>
-<li><code>sleep_for</code> ������ָ����ʱ�䣬����ʱ�䡣  </li>
+<li><code>get_id</code> 返回一个<code>thread::id</code>类型，标识了当前线程的id。  </li>
+<li><code>yield</code> 让步，为其他线程提供调用的机会。  </li>
+<li><code>sleep_until</code> 阻塞直到设置的时间到了，绝对的时间。  </li>
+<li><code>sleep_for</code> 阻塞到指定的时间，相对时间。  </li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;C++ 11 ��׼�еĶ��߳̿⣬�����˷�װ��thread���Լ�����ͬ����mutex��atomic������������&lt;br&gt;
+      &lt;p&gt;C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。&lt;br&gt;
     
     </summary>
     
-      <category term="����" scheme="http://abumaster.com/categories/%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD/"/>
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>

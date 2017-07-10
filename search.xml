@@ -13,11 +13,11 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[���߳̿�c++11]]></title>
+    <title><![CDATA[多线程库c++11]]></title>
     <url>%2F2017%2F07%2F09%2F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%93c-11%2F</url>
-    <content type="text"><![CDATA[C++ 11 ��׼�еĶ��߳̿⣬�����˷�װ��thread���Լ�����ͬ����mutex��atomic������������ thread��ʹ�ð���ͷ�ļ���std::thread�����캯�����õĹ��캯���� 12template &lt;class Fn, class... Args&gt;explicit thread (Fn&amp;&amp; fn, Args&amp;&amp;... args); ��һ������ָ�����߳�ִ�к������ڶ�����ѡ���̺߳��������Ĳ�����Ϊ�˿����߳�ͬ������������ԭ�ӱ���atomic���͵�ȫ�ֱ��������ߴ���һ��ԭ�ӱ������������ã�����ʹ��һ����Ա�������������μ�cplusplus��վ����ֵ������������ֱ���ƶ����䣬���������ȴ��Ͷ������������̺߳����Ե���join�������ȴ��̵߳Ľ�����ͬ��Ҳ�ṩ��һ������joinable�������߳��Ƿ����Ա�join�����������̶߳��������̺߳�̨���п��Ե���detach��ʹ�̷߳�����ȥ�ں�̨���У����ǲ����ܷ���join�򷵻ص���false��ͬ�����߳�Ҳ���ܵ���join���ȴ��̵߳Ľ�����this_thread ����ʾ��ǰ���̣��ṩ��һ�麯���� get_id ����һ��thread::id���ͣ���ʶ�˵�ǰ�̵߳�id�� yield �ò���Ϊ�����߳��ṩ���õĻ��ᡣ sleep_until ����ֱ�����õ�ʱ�䵽�ˣ����Ե�ʱ�䡣 sleep_for ������ָ����ʱ�䣬����ʱ�䡣]]></content>
+    <content type="text"><![CDATA[C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。 thread类使用包含头文件，std::thread。构造函数常用的构造函数： 12template &lt;class Fn, class... Args&gt;explicit thread (Fn&amp;&amp; fn, Args&amp;&amp;... args); 第一个参数指定了线程执行函数，第二个可选的线程函数所需的参数。为了控制线程同步，可以设置原子变量atomic类型的全局变量；或者传入一个原子变量参数的引用；或者使用一个成员变量。例子，参见cplusplus网站。赋值运算符，可以直接移动分配，不拷贝。等待和独立运行创建线程后可以调用join来阻塞等待线程的结束，同样也提供了一个函数joinable来测试线程是否可以被join，如果想让线程独立于主线程后台运行可以调用detach，使线程分离出去在后台运行，这是测试能否被join则返回的是false，同样主线程也不能调用join来等待线程的结束。this_thread 类表示当前进程，提供了一组函数。 get_id 返回一个thread::id类型，标识了当前线程的id。 yield 让步，为其他线程提供调用的机会。 sleep_until 阻塞直到设置的时间到了，绝对的时间。 sleep_for 阻塞到指定的时间，相对时间。]]></content>
       <categories>
-        <category>����</category>
+        <category>编程</category>
       </categories>
       <tags>
         <tag>C++</tag>
@@ -263,8 +263,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>论文</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -298,9 +298,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
-        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -311,9 +311,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
-        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -372,8 +372,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -396,8 +396,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -452,8 +452,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -486,8 +486,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -498,8 +498,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -522,8 +522,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
