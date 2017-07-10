@@ -97,7 +97,7 @@
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都">
 <meta property="og:image" content="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg">
-<meta property="og:updated_time" content="2017-04-01T06:16:33.910Z">
+<meta property="og:updated_time" content="2017-07-04T09:10:32.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构-红黑二叉树">
 <meta name="twitter:description" content="红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都">
@@ -397,9 +397,12 @@
 <li>根节点是黑色   </li>
 <li>叶子节点（空节点）是黑色的  </li>
 <li>每个红色节点的两个子节点都是黑色的，叶子到根的路径上不能有连续的红色节点  </li>
-<li>从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点<br><strong>基本操作</strong><br>左旋、右旋、重新着色三个操作。<br><img src="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg" alt="左旋"><br>右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。  </li>
+<li>从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点<br><strong>基本操作</strong><br>左旋、右旋、重新着色三个操作。<br><img src="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg" alt="左旋"><br>右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。<br><strong>插入</strong><br>根据规则4，可知新增节点必须为红；根据规则3，新增节点的父节点必须为黑，当未符合条件的时候必须进行一定的调整。<br>假设新的节点 <strong>X</strong>，其父节点为 <strong>P</strong>，祖父节点 <strong>G</strong>，伯父节点 <strong>S</strong>，曾祖父节点 <strong>GG</strong>，根据 <strong>X</strong> 的插入位置以及外围节点的颜色，通常null节点为黑色。分为四种情况讨论：  </li>
+<li>状况 1：<strong>S</strong> 为黑且 <strong>X</strong> 为外侧插入，对此情况，先对 <strong>P</strong> 和 <strong>G</strong> 做一次单旋转，并更改 <strong>P</strong> 和 <strong>G</strong> 的颜色，可以重新满足红黑树规则。  </li>
+<li>状况 2：<strong>S</strong> 为黑色且 <strong>X</strong> 为内侧插入。必须先对 <strong>P，X</strong> 做一次单旋转并更改<strong>G,X</strong>的颜色，再将结果对G做一次单旋转。  </li>
+<li>状况 3：<strong>S</strong> 为红且 <strong>X</strong> 为外侧插入，先对<strong>P,G</strong>做一次单旋转，并且改变 <strong>X</strong> 的颜色，此时，如果GG为黑色，一切调整完毕，如果<strong>GG</strong>为红色，那么继续向上调整…  </li>
+<li>状况 4：<strong>S</strong> 为红色且 <strong>X</strong> 为外侧插入，这种情况，先对<strong>P,G</strong> 做一次单旋转并且改变 <strong>X</strong> 的颜色。此时 <strong>GG</strong> 为红色，则继续往上做，直到父子不连续为红。<br><strong>自上而下的程序设计</strong> 为了避免状况4的出现。<em>top down procedure</em> : 假设新增一个节点为 A，那么就沿着 A 的路径，只要发现某个节点 X 的两个孩子都是红色，就把 X 改为红色，并把两个孩子的颜色改为黑色。这样调整可能 X 的父节点 P 也是红色，可以像状况 1 一样做一次单旋转并改变颜色，或者像状况2 一样做一次双旋转并改变颜色。再一次插入新的节点就容易了。  </li>
 </ul>
-<p><strong>插入</strong>  </p>
 
       
     </div>
@@ -511,7 +514,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -522,7 +525,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

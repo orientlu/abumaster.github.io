@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用深度学习技术的图像语义分割最新综述]]></title>
+    <url>%2F2017%2F07%2F10%2F%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%9C%80%E6%96%B0%E7%BB%BC%E8%BF%B0%2F</url>
+    <content type="text"><![CDATA[A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22 文章的主要贡献： 对现有用于图像语义分割的数据集的研究； 深度有组织地对使用深度学习的图像语义分割重要算法它们的起源和贡献进行回顾； 对它们的性能进行粗略的评估； 对上述结果进行讨论，并对未来的研究方向进行探讨。 术语和背景概念图像语义分割不是一个孤立的领域，而是一个从粗略到精细的自然的推理过程：预测输入图像中物体的类别，如果多类物体则预测多个类别；定位不同类别物体的位置；为图像中的每一个像素分类（图像语义分割）；对同一类物体的不同物体进行区分（实例分割）。 数据预处理和增强 对于小的数据集，可以相应作出改变来增大数据集，往往会带来更好的效果。比如1500张图像的数据集可以缩放成不同的尺度，进行不同的旋转，进行不同的伽马变换，生成大数据集。 方法总结]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[���߳̿�c++11]]></title>
+    <url>%2F2017%2F07%2F09%2F%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%93c-11%2F</url>
+    <content type="text"><![CDATA[C++ 11 ��׼�еĶ��߳̿⣬�����˷�װ��thread���Լ�����ͬ����mutex��atomic������������ thread��ʹ�ð���ͷ�ļ���std::thread�����캯�����õĹ��캯���� 12template &lt;class Fn, class... Args&gt;explicit thread (Fn&amp;&amp; fn, Args&amp;&amp;... args); ��һ������ָ�����߳�ִ�к������ڶ�����ѡ���̺߳��������Ĳ�����Ϊ�˿����߳�ͬ������������ԭ�ӱ���atomic���͵�ȫ�ֱ��������ߴ���һ��ԭ�ӱ������������ã�����ʹ��һ����Ա�������������μ�cplusplus��վ����ֵ������������ֱ���ƶ����䣬���������ȴ��Ͷ������������̺߳����Ե���join�������ȴ��̵߳Ľ�����ͬ��Ҳ�ṩ��һ������joinable�������߳��Ƿ����Ա�join�����������̶߳��������̺߳�̨���п��Ե���detach��ʹ�̷߳�����ȥ�ں�̨���У����ǲ����ܷ���join�򷵻ص���false��ͬ�����߳�Ҳ���ܵ���join���ȴ��̵߳Ľ�����this_thread ����ʾ��ǰ���̣��ṩ��һ�麯���� get_id ����һ��thread::id���ͣ���ʶ�˵�ǰ�̵߳�id�� yield �ò���Ϊ�����߳��ṩ���õĻ��ᡣ sleep_until ����ֱ�����õ�ʱ�䵽�ˣ����Ե�ʱ�䡣 sleep_for ������ָ����ʱ�䣬����ʱ�䡣]]></content>
+      <categories>
+        <category>����</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[c语言中的struct-option结构]]></title>
     <url>%2F2017%2F07%2F03%2Fc%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84struct-option%E7%BB%93%E6%9E%84%2F</url>
     <content type="text"><![CDATA[C语言知识拾遗，struct option 结构体。 struct option 指明了一个长参数，在一些控制台程序中经常用到，需要指明不同的参数来运行程序。如开源软件webbench运行./webbench -h后会出现一些可选项，指定不同的参数，程序会做出不同的相应。123456struct option &#123; const char *name; //name表示的是长参数名 int has_arg； int *flag; int val; &#125; 参数说明：name 表示长参数的名称；has_arg 表示参数名称后面是否需要跟着参数，no_argument(0)不需要，required_argument(1)一定要跟个参数，optional_argument(2)可以有也可以没有；flag 决定了getopt_long的返回值，如果为NULL，返回val字段的数值；如果不为NULL，则会使其指向的内容变为val中的值，并且返回0；若未发现长选项，那么指向不变；val 指定的默认值。 长命令参数的解析123int getopt_long(int argc, char * const argv[], const char *optstring, const struct option *longopts, int *longindex); 参数说明：argc 和 argv 是命令行参数；optstring 选项参数组成的字符串，如果一个字母后面跟着一个冒号如 t:，那么表示这个选项后需要参数；longopts 是需要的自定义的option结构体；longindex 指定一个索引指针。 例子：]]></content>
@@ -240,8 +263,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -275,9 +298,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -288,9 +311,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -349,8 +372,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -373,8 +396,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -402,7 +425,7 @@
   <entry>
     <title><![CDATA[数据结构-红黑二叉树]]></title>
     <url>%2F2017%2F04%2F01%2F%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%A2%E9%BB%91%E4%BA%8C%E5%8F%89%E6%A0%91%2F</url>
-    <content type="text"><![CDATA[红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。 它虽然是复杂的，但它的最坏情况运行时间也是非常良好的，并且在实践中是高效的： 它可以在O(log n)时间内做查找，插入和删除，这里的n是树中元素的数目。性质红黑树是每个节点都带有黑色或者红色的二叉查找树。具有二叉树的性质，并且具有以下几个性质： 根节点是黑色 叶子节点（空节点）是黑色的 每个红色节点的两个子节点都是黑色的，叶子到根的路径上不能有连续的红色节点 从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点基本操作左旋、右旋、重新着色三个操作。右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。 插入]]></content>
+    <content type="text"><![CDATA[红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。 它虽然是复杂的，但它的最坏情况运行时间也是非常良好的，并且在实践中是高效的： 它可以在O(log n)时间内做查找，插入和删除，这里的n是树中元素的数目。性质红黑树是每个节点都带有黑色或者红色的二叉查找树。具有二叉树的性质，并且具有以下几个性质： 根节点是黑色 叶子节点（空节点）是黑色的 每个红色节点的两个子节点都是黑色的，叶子到根的路径上不能有连续的红色节点 从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点基本操作左旋、右旋、重新着色三个操作。右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。插入根据规则4，可知新增节点必须为红；根据规则3，新增节点的父节点必须为黑，当未符合条件的时候必须进行一定的调整。假设新的节点 X，其父节点为 P，祖父节点 G，伯父节点 S，曾祖父节点 GG，根据 X 的插入位置以及外围节点的颜色，通常null节点为黑色。分为四种情况讨论： 状况 1：S 为黑且 X 为外侧插入，对此情况，先对 P 和 G 做一次单旋转，并更改 P 和 G 的颜色，可以重新满足红黑树规则。 状况 2：S 为黑色且 X 为内侧插入。必须先对 P，X 做一次单旋转并更改G,X的颜色，再将结果对G做一次单旋转。 状况 3：S 为红且 X 为外侧插入，先对P,G做一次单旋转，并且改变 X 的颜色，此时，如果GG为黑色，一切调整完毕，如果GG为红色，那么继续向上调整… 状况 4：S 为红色且 X 为外侧插入，这种情况，先对P,G 做一次单旋转并且改变 X 的颜色。此时 GG 为红色，则继续往上做，直到父子不连续为红。自上而下的程序设计 为了避免状况4的出现。top down procedure : 假设新增一个节点为 A，那么就沿着 A 的路径，只要发现某个节点 X 的两个孩子都是红色，就把 X 改为红色，并把两个孩子的颜色改为黑色。这样调整可能 X 的父节点 P 也是红色，可以像状况 1 一样做一次单旋转并改变颜色，或者像状况2 一样做一次双旋转并改变颜色。再一次插入新的节点就容易了。]]></content>
       <categories>
         <category>编程</category>
       </categories>
@@ -429,8 +452,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -463,8 +486,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -475,8 +498,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -499,8 +522,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
