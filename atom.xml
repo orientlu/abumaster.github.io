@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-07-10T13:23:49.220Z</updated>
+  <updated>2017-07-24T07:30:10.581Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,25 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>像素反卷积网络</title>
+    <link href="http://abumaster.com/2017/07/24/%E5%83%8F%E7%B4%A0%E5%8F%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C/"/>
+    <id>http://abumaster.com/2017/07/24/像素反卷积网络/</id>
+    <published>2017-07-24T07:30:10.000Z</published>
+    <updated>2017-07-24T07:30:10.581Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>使用深度学习技术的图像语义分割最新综述</title>
     <link href="http://abumaster.com/2017/07/10/%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%9C%80%E6%96%B0%E7%BB%BC%E8%BF%B0/"/>
     <id>http://abumaster.com/2017/07/10/使用深度学习技术的图像语义分割最新综述/</id>
     <published>2017-07-10T08:32:14.000Z</published>
-    <updated>2017-07-10T13:23:49.220Z</updated>
+    <updated>2017-07-18T08:30:21.050Z</updated>
     
     <content type="html"><![CDATA[<p>A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22  </p>
 <a id="more"></a>
@@ -35,6 +49,14 @@
 <h4 id="术语和背景概念"><a href="#术语和背景概念" class="headerlink" title="术语和背景概念"></a>术语和背景概念</h4><p>图像语义分割不是一个孤立的领域，而是一个从粗略到精细的自然的推理过程：预测输入图像中物体的类别，如果多类物体则预测多个类别；定位不同类别物体的位置；为图像中的每一个像素分类（图像语义分割）；对同一类物体的不同物体进行区分（实例分割）。  </p>
 <p><strong>数据预处理和增强</strong> 对于小的数据集，可以相应作出改变来增大数据集，往往会带来更好的效果。比如1500张图像的数据集可以缩放成不同的尺度，进行不同的旋转，进行不同的伽马变换，生成大数据集。  </p>
 <h4 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/64022244.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/39234174.jpg" alt="">  </p>
+<p>当前，大多数优秀的深度学习技术用于图像语义分割都来自一个共同的先导者：全卷积网络（Long），这种方法的优势就是利用当前存在的CNNs作为有力的视觉模型，可以学习分层特征。通过改变一些著名的分类网络：改变最后的全连接层为全卷积层，输出特征图来取代分类得分。这些特征图（空域图）通过分数阶卷积（也被称为反卷积）来产生稠密像素级标记的输出图。反卷积网络的工作是一个里程碑式的工作，因为它展示了如何用CNNs训练端对端来解决视觉问题，是深度学习用于图像语义分割的基石。<br><strong>缺陷</strong>：缺少不同特征的感知，阻碍了在具体问题和场景中的应用。固有的空间不变性，使它不能将全局的上下文信息考虑进去，默认不能感知实例，在高分辨率上不能达到实时的处理速度，不能适应无结构的数据，例如3-D点云和模型。<br>对于它的种种缺陷，不同的方法提供不同的改善方向和效果，主要分为以下几个方向。  </p>
+<h5 id="解码变种"><a href="#解码变种" class="headerlink" title="解码变种"></a>解码变种</h5><p>这是一种具有两个组件的网络，分别包含了编码器（卷积网络）和解码器（反卷积网络）。与普通的全卷积网络不同之处在于对低分辨率的特征图的处理，通过一个解码网络的东西。<br>SegNet，解码阶段是由一系列的上采样和卷积层组成的，上采样对应了编码过程的最大池化。上采样过的特征图通过一组可以训练的卷积核进行卷积生成了稠密特征图。经过解码后的图像与原始输入图像具有了相同的分辨率，然后经过一层softmax层分类器产生最终的分割图。  </p>
+<h5 id="整合上下文信息"><a href="#整合上下文信息" class="headerlink" title="整合上下文信息"></a>整合上下文信息</h5><p><em>图像语义分割的一个问题就是需要整合不同空间尺度的信息</em>。这意味着局部信息和全局信息的平衡，一方面，细粒度或者局部信息对于获得良好的像素级预测精度是非常重要的，另一方面，整合全局上下文信息，可以解决分割图局部模糊性。传统的CNNs网络因为池化层的存在是不能感知全局信息的，有许多方法可以使CNNs感知全局信息，比如，使用条件随机场作为后续的处理，膨胀卷积，多尺度聚合，甚至将上下文模型推广到另一种深度网络中如RNNs。<br><strong>条件随机场</strong>  </p>
+<p><strong>膨胀卷积</strong>  </p>
+<p><strong>多尺度聚合</strong>  </p>
+<p><strong>特征融合</strong>  </p>
+<p><strong>递归神经网络</strong>  </p>
+<h5 id="实例分割"><a href="#实例分割" class="headerlink" title="实例分割"></a>实例分割</h5><p>实例分割是语义分割之后的一步，同时也是与其他低级像素分割技术相比最具有挑战性的问题。主要是将同类物品的不同实例区别开。  </p>
 ]]></content>
     
     <summary type="html">
@@ -1459,54 +1481,6 @@ shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><t
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>宏定义</title>
-    <link href="http://abumaster.com/2017/05/09/%E5%AE%8F%E5%AE%9A%E4%B9%89/"/>
-    <id>http://abumaster.com/2017/05/09/宏定义/</id>
-    <published>2017-05-09T12:36:26.000Z</published>
-    <updated>2017-05-09T13:35:49.257Z</updated>
-    
-    <content type="html"><![CDATA[<p>宏定义进入编译器之前展开替换。<br><a id="more"></a>
-<strong>宏常量</strong><br><code>#define MAX 100</code>用100替换符号MAX，c++中一般不推荐使用，通常用常量const定义；<br><strong>用于条件编译的宏</strong><br>如避免包含重复头文件的宏：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#ifdefine XXX </span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> XXX </span></div><div class="line"><span class="comment">//some include file</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">`</div></pre></td></tr></table></figure></p>
-<p><strong>宏函数</strong><br>避免函数调用，提高执行效率，以空间换取时间。<br>对于一些重复的函数可以声明为宏函数，就像内联函数一样…<br>例子：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*Onefunction)</span><span class="params">()</span></span>;<span class="comment">//定义函数指针</span></div><div class="line"><span class="keyword">typedef</span> <span class="built_in">map</span>&lt;<span class="built_in">string</span>, Onefunction&gt; OneMap;<span class="comment">//名称，函数指针相关联的map</span></div><div class="line">OneMap g_one_map;<span class="comment">//全局变量保存</span></div><div class="line"></div><div class="line"><span class="comment">//注册函数的宏，其中展开为一个按名定义的类，</span></div><div class="line"><span class="comment">//构造函数,将函数地址和函数名称放入全局的map中</span></div><div class="line"><span class="comment">//最后一个简单的类对象声明，可以保证构造函数的执行，</span></div><div class="line"><span class="comment">//作用域可以保证在执行完后对象的销毁，用过即销毁。</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> RegisterOneFunction(func) \</div><div class="line">&#123; \</div><div class="line">class __Register_##func &#123; \</div><div class="line">public: \</div><div class="line">__Register_##func() &#123; \</div><div class="line">g_one_map[#func] = &amp;func; \</div><div class="line">&#125; \</div><div class="line">&#125;; \</div><div class="line">__Register_##func g_register_##func; \</div><div class="line">&#125;</span></div><div class="line"><span class="comment">//自定义的函数，无参，返回int</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">func1</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"func1 out...\n"</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">func2</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"func2 out...222\n"</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//调用宏，注册函数</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">WrapperRegisterFunction</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	RegisterOneFunction(func1);</div><div class="line">	RegisterOneFunction(func2);</div><div class="line">&#125;</div><div class="line"><span class="comment">//根据函数名称获得函数的指针</span></div><div class="line"><span class="function">Onefunction <span class="title">GetOneFunction</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span>&amp; fname)</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">if</span>(g_one_map.count(fname))</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> g_one_map[fname];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"not found"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">for</span>(OneMap::iterator it=g_one_map.begin();</div><div class="line">			it!=g_one_map.end(); it++)</div><div class="line">		&#123;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt;it-&gt;first&lt;&lt;<span class="string">" "</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="built_in">string</span> funNmae;</div><div class="line"></div><div class="line">	WrapperRegisterFunction();</div><div class="line"></div><div class="line">	<span class="built_in">cin</span> &gt;&gt; funNmae;</div><div class="line">	<span class="comment">//以名称来使用函数</span></div><div class="line">	GetOneFunction(funNmae)();</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>注意事项</strong>  </p>
-<p>1.普通宏定义  </p>
-<ul>
-<li>宏名一般用大写  </li>
-<li>使用宏可提高程序的通用性和易读性，减少不一致性，减少输入错误和便于修改  </li>
-<li>预处理是在编译之前的处理，而编译工作的任务之一就是语法检查，预处理不做语法检查  </li>
-<li>宏定义末尾不加分号  </li>
-<li>宏定义写在函数的花括号外边，作用域为其后的程序，通常在文件的最开头  </li>
-<li>可以用#undef命令终止宏定义的作用域  </li>
-<li>宏定义可以嵌套   </li>
-<li>字符串””中永远不包含宏  </li>
-<li>宏定义不分配内存，变量定义分配内存<br>2.带参宏定义  </li>
-<li>实参如果是表达式容易出问题  </li>
-<li>宏名和参数的括号间不能有空格  </li>
-<li>宏替换只作替换，不做计算，不做表达式求解  </li>
-<li>函数调用在编译后程序运行时进行，并且分配内存。宏替换在编译前进行，不分配内存  </li>
-<li>宏的哑实结合不存在类型，也没有类型转换  </li>
-<li>函数只有一个返回值，利用宏则可以设法得到多个值  </li>
-<li>宏展开使源程序变长，函数调用不会  </li>
-<li>宏展开不占运行时间，只占编译时间，函数调用占运行时间（分配内存、保留现场、值传递、返回值）  </li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;宏定义进入编译器之前展开替换。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
