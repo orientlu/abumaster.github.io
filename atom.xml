@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-07-24T07:30:10.581Z</updated>
+  <updated>2017-07-25T09:07:16.132Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -17,15 +17,35 @@
   
   <entry>
     <title>像素反卷积网络</title>
-    <link href="http://abumaster.com/2017/07/24/%E5%83%8F%E7%B4%A0%E5%8F%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C/"/>
-    <id>http://abumaster.com/2017/07/24/像素反卷积网络/</id>
-    <published>2017-07-24T07:30:10.000Z</published>
-    <updated>2017-07-24T07:30:10.581Z</updated>
+    <link href="http://abumaster.com/2017/07/11/%E5%83%8F%E7%B4%A0%E5%8F%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C/"/>
+    <id>http://abumaster.com/2017/07/11/像素反卷积网络/</id>
+    <published>2017-07-11T07:30:10.000Z</published>
+    <updated>2017-07-25T09:07:16.132Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>Pixel Deconvolutional Networks Hongyang Gao etc. 2017.1.7 主要介绍了对于传统反卷积操作的新解读。读此论文，做如下笔记。  </p>
+</blockquote>
+<a id="more"></a>
+<p><strong>1.引子</strong><br>反卷积层被广泛地应用在各种各样的深度模型中用于上采样，其中包括了用于语义分割的编码-解码网络、用于无监督学习的深度生成模型。反卷积层容易造成棋盘问题，使得输出的特征图的临近像素没有直接的关系。为了解决这个问题，提出了一种像素反卷积层，在输出特征图的临近像素之间建立一个直接的关系。是对反卷积操作的新的解读，因此可以取代任何的使用反卷积层的网络模型中的反卷积层。效率有所下降但是可以通过实现来解决。实验结果比较良好。  </p>
+<p><strong>2.像素反卷积层</strong><br>新的层中的中间特征图是按照顺序生成，后面的特征图的生成依赖前面的。如此。<br>反卷积网络中的棋盘问题。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-24/77481511.jpg" alt=""><br>卷积层对输入特征图进行不同的卷积核卷积生成了中间特征图，然后上采样生成了输出特征图，其相邻的像素是没有直接联系的，因为是不同的卷积核操作生成的。<br>输入特征图Fin，输出特征图Fout，中间特征图的计算：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/57088763.jpg" alt=""><br>像素反卷积层，PixelDCL，改用了一种中间特征图的关联生成形式，生成了序列化的特征图，彼此依赖，如图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-24/26503601.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/92585659.jpg" alt=""><br>移除中间特征图和输入特征图之间的关联，因为，中间特征已经包含了输入特征图的信息，去掉不但可以提高计算效率，还能减小模型的参数。计算时只需第一个中间特征图依赖输入特征图，其他的中间特征图依赖前面计算过的特征图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/42661592.jpg" alt=""><br><strong>分析（ 4*4 的输入特征图，上采样为 8*8 的特征图）：</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/85425689.jpg" alt=""><br>第一步：2*2的卷积核对输入特征进行卷积操作生成第一个中间特征图，紫色的；<br>第二步：对第一个中间特征进行卷积操作生成第二个中间特征；<br>第三步：扩展和组合前两个特征图，生成8*8的特征图；<br>第四步：对此特征图进行marked卷积，卷积核大小改为3，保持8的大小；<br>第五步：组合两个大小为8的特征图，生成最终的大小为8的输出特征图。  </p>
+<p><a href="https://github.com/divelab/PixelDCN">源码地址</a>  </p>
+<p><strong>3.结果</strong><br>在图像语义分割上的结果：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/55128940.jpg" alt="">  </p>
+]]></content>
     
     <summary type="html">
     
+      &lt;blockquote&gt;
+&lt;p&gt;Pixel Deconvolutional Networks Hongyang Gao etc. 2017.1.7 主要介绍了对于传统反卷积操作的新解读。读此论文，做如下笔记。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
     </summary>
     
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
   </entry>
   
