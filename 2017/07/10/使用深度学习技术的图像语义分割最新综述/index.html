@@ -98,7 +98,9 @@
 <meta property="og:description" content="A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/64022244.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/39234174.jpg">
-<meta property="og:updated_time" content="2017-07-18T08:30:21.050Z">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/13339329.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/27217990.jpg">
+<meta property="og:updated_time" content="2017-07-29T06:58:05.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用深度学习技术的图像语义分割最新综述">
 <meta name="twitter:description" content="A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22">
@@ -406,12 +408,16 @@
 <p><strong>数据预处理和增强</strong> 对于小的数据集，可以相应作出改变来增大数据集，往往会带来更好的效果。比如1500张图像的数据集可以缩放成不同的尺度，进行不同的旋转，进行不同的伽马变换，生成大数据集。  </p>
 <h4 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/64022244.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/39234174.jpg" alt="">  </p>
 <p>当前，大多数优秀的深度学习技术用于图像语义分割都来自一个共同的先导者：全卷积网络（Long），这种方法的优势就是利用当前存在的CNNs作为有力的视觉模型，可以学习分层特征。通过改变一些著名的分类网络：改变最后的全连接层为全卷积层，输出特征图来取代分类得分。这些特征图（空域图）通过分数阶卷积（也被称为反卷积）来产生稠密像素级标记的输出图。反卷积网络的工作是一个里程碑式的工作，因为它展示了如何用CNNs训练端对端来解决视觉问题，是深度学习用于图像语义分割的基石。<br><strong>缺陷</strong>：缺少不同特征的感知，阻碍了在具体问题和场景中的应用。固有的空间不变性，使它不能将全局的上下文信息考虑进去，默认不能感知实例，在高分辨率上不能达到实时的处理速度，不能适应无结构的数据，例如3-D点云和模型。<br>对于它的种种缺陷，不同的方法提供不同的改善方向和效果，主要分为以下几个方向。  </p>
-<h5 id="解码变种"><a href="#解码变种" class="headerlink" title="解码变种"></a>解码变种</h5><p>这是一种具有两个组件的网络，分别包含了编码器（卷积网络）和解码器（反卷积网络）。与普通的全卷积网络不同之处在于对低分辨率的特征图的处理，通过一个解码网络的东西。<br>SegNet，解码阶段是由一系列的上采样和卷积层组成的，上采样对应了编码过程的最大池化。上采样过的特征图通过一组可以训练的卷积核进行卷积生成了稠密特征图。经过解码后的图像与原始输入图像具有了相同的分辨率，然后经过一层softmax层分类器产生最终的分割图。  </p>
-<h5 id="整合上下文信息"><a href="#整合上下文信息" class="headerlink" title="整合上下文信息"></a>整合上下文信息</h5><p><em>图像语义分割的一个问题就是需要整合不同空间尺度的信息</em>。这意味着局部信息和全局信息的平衡，一方面，细粒度或者局部信息对于获得良好的像素级预测精度是非常重要的，另一方面，整合全局上下文信息，可以解决分割图局部模糊性。传统的CNNs网络因为池化层的存在是不能感知全局信息的，有许多方法可以使CNNs感知全局信息，比如，使用条件随机场作为后续的处理，膨胀卷积，多尺度聚合，甚至将上下文模型推广到另一种深度网络中如RNNs。<br><strong>条件随机场</strong>  </p>
-<p><strong>膨胀卷积</strong>  </p>
-<p><strong>多尺度聚合</strong>  </p>
-<p><strong>特征融合</strong>  </p>
-<p><strong>递归神经网络</strong>  </p>
+<h5 id="解码变种"><a href="#解码变种" class="headerlink" title="解码变种"></a>解码变种</h5><p>这是一种具有两个组件的网络，分别包含了编码器（卷积网络）和解码器（反卷积网络）。与普通的全卷积网络不同之处在于对低分辨率的特征图的处理，通过一个解码网络的东西。<br>SegNet，解码阶段是由一系列的上采样和卷积层组成的，上采样对应了编码过程的最大池化。上采样过的特征图通过一组可以训练的卷积核进行卷积生成了稠密特征图。经过解码后的图像与原始输入图像具有了相同的分辨率，然后经过一层softmax层分类器产生最终的分割图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/13339329.jpg" alt="">  </p>
+<h5 id="整合上下文信息"><a href="#整合上下文信息" class="headerlink" title="整合上下文信息"></a>整合上下文信息</h5><p><em>图像语义分割的一个问题就是需要整合不同空间尺度的信息</em>。这意味着局部信息和全局信息的平衡，一方面，细粒度或者局部信息对于获得良好的像素级预测精度是非常重要的，另一方面，整合全局上下文信息，可以解决分割图局部模糊性。传统的CNNs网络因为池化层的存在是不能感知全局信息的，有许多方法可以使CNNs感知全局信息，比如，使用条件随机场作为后续的处理，膨胀卷积，多尺度聚合，甚至将上下文模型推广到另一种深度网络中如RNNs。<br><strong>条件随机场</strong><br>解决上述的问题，一种可能的方法优化输出图，提高捕捉细节的能力，是用条件随机场作为后期处理。条件随机场（CRF）可以组合低层次的像素级别的信息，这些是CNN无法做到的，其中DeepLab应用了全连接的条件随机场作为分割图的后续处理，像素作为图的节点，建立全连接充分考虑了短程和远程的连接。另一个CRFasRNN，将条件随机场作为网络的一部分进行端对端的训练。  </p>
+<blockquote>
+<p>[1] Semantic image segmentation with deep convolutional nets and fully connected crfs<br>[2] Conditional random fields as recurrent neural networks</p>
+</blockquote>
+<p><strong>膨胀卷积</strong><br>也叫阿托斯卷积，通过增大卷积核的步伐来进行卷积操作，获得更宽的接受域。<br><strong>多尺度聚合</strong><br>首先[1]提出了将全卷积网络分为两个路径，图像分为原图和二倍图，分别放入浅层网络和全卷积网络，将全卷积网络的输出上采样结合浅层输出经过一系列的卷积的到最终的输出图。对尺度感知非常敏感？<br>[2]用了不同的思路，四个相同的网络，感知由粗糙到精细的尺度信息，如图，序列进行处理得到最终的输出。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/27217990.jpg" alt=""><br>[4]提出了n个全卷积网络的结构，分别对应处理不同的尺度，分为两个阶段学习：第一个分别独立训练，第二融合各网络的输出，得到最终的输出图。  </p>
+<blockquote>
+<p>[1] Multi-scale convolutional architecture for semantic segmentation<br>[2] A multi-scale cnn for affordance segmentation in rgb images<br>[3] Predicting depth, surface normals and semantic labels with a common multi-scale convolutional architecture<br>[4] Multiscale fully convolutional network with application to industrial inspection  </p>
+</blockquote>
+<p><strong>特征融合</strong><br>提取不同层的特征，包含了不同的局部上下文信息，将之融合。<br><strong>递归神经网络</strong>  </p>
 <h5 id="实例分割"><a href="#实例分割" class="headerlink" title="实例分割"></a>实例分割</h5><p>实例分割是语义分割之后的一步，同时也是与其他低级像素分割技术相比最具有挑战性的问题。主要是将同类物品的不同实例区别开。  </p>
 
       
@@ -535,7 +541,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
