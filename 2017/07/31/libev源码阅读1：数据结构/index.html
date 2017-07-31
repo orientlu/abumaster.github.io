@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C++," />
+  <meta name="keywords" content="C,Linux,libev," />
 
 
 
@@ -90,18 +90,19 @@
 
 
 
-<meta name="description" content="红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都">
+<meta name="description" content="libev 是一个高性能事件循环网络库，用于开发高性能网络应用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构-红黑二叉树">
-<meta property="og:url" content="http://abumaster.com/2017/04/01/数据结构-红黑二叉树/index.html">
+<meta property="og:title" content="libev源码阅读1：数据结构">
+<meta property="og:url" content="http://abumaster.com/2017/07/31/libev源码阅读1：数据结构/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都">
-<meta property="og:image" content="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg">
-<meta property="og:updated_time" content="2017-07-04T09:10:32.403Z">
+<meta property="og:description" content="libev 是一个高性能事件循环网络库，用于开发高性能网络应用。">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/44673487.jpg">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/72453924.jpg">
+<meta property="og:updated_time" content="2017-07-31T07:32:55.837Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据结构-红黑二叉树">
-<meta name="twitter:description" content="红黑树（Red Black Tree）是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。红黑树和AVL树（平衡二叉树）类似，都">
-<meta name="twitter:image" content="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg">
+<meta name="twitter:title" content="libev源码阅读1：数据结构">
+<meta name="twitter:description" content="libev 是一个高性能事件循环网络库，用于开发高性能网络应用。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/44673487.jpg">
 
 
 
@@ -129,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/2017/04/01/数据结构-红黑二叉树/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/07/31/libev源码阅读1：数据结构/"/>
 
 
 
 
 
-  <title> 数据结构-红黑二叉树 | 张国丰 </title>
+  <title> libev源码阅读1：数据结构 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +298,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/04/01/数据结构-红黑二叉树/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/07/31/libev源码阅读1：数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -318,7 +319,7 @@
             
             
               
-                数据结构-红黑二叉树
+                libev源码阅读1：数据结构
               
             
           </h1>
@@ -333,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-01T12:25:53+08:00">
-                2017-04-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T10:08:24+08:00">
+                2017-07-31
               </time>
             
 
@@ -391,17 +392,80 @@
       
 
       
-        <p><a href="http://baike.baidu.com/link?url=mBopTNvEQOoavVU5s3cuRGbnLKZpEqoY3bjObubuenp_uCcLmyRAwh1PuuWb_GG-uLYrHyVtzC1h4hVP6pOO87s2UyvehOgd136FgM3x8IcRcaXalJMpEG1KfjIbmCcA">红黑树（Red Black Tree）</a>是一种自平衡二叉查找树，是在计算机科学中用到的一种数据结构，典型的用途是实现关联数组。<br>它是在1972年由Rudolf Bayer发明的，当时被称为平衡二叉B树（symmetric binary B-trees）。后来，在1978年被 Leo J. Guibas 和 Robert Sedgewick 修改为如今的“红黑树”。<br>红黑树和<a href="http://baike.baidu.com/item/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91">AVL树（平衡二叉树）</a>类似，都是在进行插入和删除操作时通过特定操作保持二叉查找树的平衡，从而获得较高的查找性能，而统计性能要优于AVL树，广泛应用到各种程序库中。<br><a id="more"></a>
-它虽然是复杂的，但它的最坏情况运行时间也是非常良好的，并且在实践中是高效的： 它可以在O(log n)时间内做查找，插入和删除，这里的n是树中元素的数目。<br><strong>性质</strong><br>红黑树是每个节点都带有黑色或者红色的二叉查找树。具有二叉树的性质，并且具有以下几个性质：  </p>
+        <p>libev 是一个高性能事件循环网络库，用于开发高性能网络应用。  </p>
+<a id="more"></a>
+<p><strong>1.基础宏定义</strong><br>libev中的监视器数据结构的实现是用宏定义以及结构体来实现继承关系，基本的宏定义，展开。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 所有的监视器共有的数据 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER(type)            \</div><div class="line">  int active; <span class="comment">/* private */</span>         \</div><div class="line">  int pending; <span class="comment">/* private */</span>            \</div><div class="line">  <span class="comment">//EV_DECL_PRIORITY /* private */        \</span></span></div><div class="line">  <span class="keyword">int</span> priority; \</div><div class="line">  <span class="comment">//EV_COMMON /* rw */                \</span></div><div class="line">  <span class="keyword">void</span> *data; \</div><div class="line">  <span class="comment">//EV_CB_DECLARE (type) /* private */</span></div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER_LIST(type)           \</div><div class="line">  EV_WATCHER (type)             \</div><div class="line">  struct ev_watcher_list *next; <span class="comment">/* private */</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER_TIME(type)           \</div><div class="line">  EV_WATCHER (type)             \</div><div class="line">  ev_tstamp at;     <span class="comment">/* private */</span></span></div></pre></td></tr></table></figure></p>
+<p><strong>2.监视器基类</strong><br>由上面的宏定义可以推断，libev的监视器的实现是从watcher，watcher_list和watcher_time三类中派生出去，分为这三个大类，三个基类。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//基本监视器 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">&#125; ev_watcher;</div><div class="line"><span class="comment">//监视器链表 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher_list</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="comment">//list的下一个节点</span></div><div class="line">  <span class="keyword">struct</span> ev_watcher_list *next;</div><div class="line">&#125; ev_watcher_list;</div><div class="line"><span class="comment">//时间监视器 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher_time</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="comment">//计时器时间</span></div><div class="line">  ev_tstamp at;</div><div class="line">&#125; ev_watcher_time;</div></pre></td></tr></table></figure></p>
+<p><strong>3.监视的事件</strong><br>libev从三个监视器基类中派生出以下几种类，用于监视事件的变化，主要的分类和作用如下：  </p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ev_io</code></td>
+<td>IO 可读可写</td>
+</tr>
+<tr>
+<td><code>ev_singnal</code></td>
+<td>信号处理</td>
+</tr>
+<tr>
+<td><code>ev_timer</code></td>
+<td>定时器</td>
+</tr>
+<tr>
+<td><code>ev_periodic</code></td>
+<td>周期任务</td>
+</tr>
+<tr>
+<td><code>ev_child</code></td>
+<td>子进程状态变化</td>
+</tr>
+<tr>
+<td><code>ev_fork</code></td>
+<td>开辟子进程</td>
+</tr>
+<tr>
+<td><code>ev_stat</code></td>
+<td>文件属性变化</td>
+</tr>
+<tr>
+<td><code>ev_async</code></td>
+<td>激活线程</td>
+</tr>
+<tr>
+<td><code>ev_cleanup</code></td>
+<td>退出触发</td>
+</tr>
+<tr>
+<td><code>ev_idle</code></td>
+<td>空闲时执行</td>
+</tr>
+<tr>
+<td><code>ev_embed</code></td>
+<td>嵌入其他事件循环</td>
+</tr>
+<tr>
+<td><code>ev_prepare</code></td>
+<td>eventloop之前</td>
+</tr>
+<tr>
+<td><code>ev_check</code></td>
+<td>eventloop之后</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//io监视器</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_io</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER_LIST (ev_io) //展开宏</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="keyword">struct</span> ev_watcher_list *next;</div><div class="line"></div><div class="line">  <span class="keyword">int</span> fd;     <span class="comment">/* ro */</span></div><div class="line">  <span class="keyword">int</span> events; <span class="comment">/* ro */</span></div><div class="line">&#125; ev_io;</div><div class="line"><span class="comment">//定时器</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_timer</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER_TIME (ev_timer) //展开</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  ev_tstamp at;</div><div class="line"></div><div class="line">  ev_tstamp repeat; <span class="comment">/* rw */</span></div><div class="line">&#125; ev_timer;</div><div class="line"><span class="comment">//空闲时触发</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_idle</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER (ev_idle) 展开</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line"></div><div class="line">&#125; ev_idle;</div></pre></td></tr></table></figure>
+<p>关系图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/44673487.jpg" alt=""><br>这种继承关系，可以用指针进行类型自由转换。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/72453924.jpg" alt=""><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//激活监测器，不管是何类型</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ev_start</span> <span class="params">(<span class="keyword">struct</span> ev_loop *loop, ev_watcher* w, <span class="keyword">int</span> active)</span>  </div><div class="line"></span>&#123;  </div><div class="line">  <span class="comment">//...  </span></div><div class="line">  w-&gt;active = active;  </div><div class="line">  <span class="comment">//...  </span></div><div class="line">&#125;  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">wlist_add</span> <span class="params">(ev_watcher_list **head, ev_watcher_list *elem)</span>  </div><div class="line"></span>&#123;  </div><div class="line">  elem-&gt;next = *head;  </div><div class="line">  *head = elem;  </div><div class="line">&#125;  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ev_io_start</span> <span class="params">(<span class="keyword">struct</span> ev_loop *loop, ev_io *w)</span>  </div><div class="line"></span>&#123;   </div><div class="line">  <span class="comment">//将ev_io退化为ev_watcher使用这个ev_start函数</span></div><div class="line">  ev_start (loop, (ev_watcher*)w, <span class="number">1</span>);  </div><div class="line">  <span class="comment">//转换成ev_watcher_list指针插入到list中</span></div><div class="line">  wlist_add (&amp;anfds[fd].head, (ev_watcher_list *)w);  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>4.监视事件的初始化和设置</strong><br>ev的设置也被定义为宏macro，提供了两种方式：  </p>
 <ul>
-<li>根节点是黑色   </li>
-<li>叶子节点（空节点）是黑色的  </li>
-<li>每个红色节点的两个子节点都是黑色的，叶子到根的路径上不能有连续的红色节点  </li>
-<li>从任一节点开始到其每个叶子节点的所有路径包含相同数目的黑色节点<br><strong>基本操作</strong><br>左旋、右旋、重新着色三个操作。<br><img src="http://i2.muimg.com/567571/b5b8879e1ac59d7d.jpg" alt="左旋"><br>右旋操作类似，左旋就是将旋转的节点变为左子树，提取右节点上来，右旋是将右旋节点变为右子树，提取左节点上来。<br><strong>插入</strong><br>根据规则4，可知新增节点必须为红；根据规则3，新增节点的父节点必须为黑，当未符合条件的时候必须进行一定的调整。<br>假设新的节点 <strong>X</strong>，其父节点为 <strong>P</strong>，祖父节点 <strong>G</strong>，伯父节点 <strong>S</strong>，曾祖父节点 <strong>GG</strong>，根据 <strong>X</strong> 的插入位置以及外围节点的颜色，通常null节点为黑色。分为四种情况讨论：  </li>
-<li>状况 1：<strong>S</strong> 为黑且 <strong>X</strong> 为外侧插入，对此情况，先对 <strong>P</strong> 和 <strong>G</strong> 做一次单旋转，并更改 <strong>P</strong> 和 <strong>G</strong> 的颜色，可以重新满足红黑树规则。  </li>
-<li>状况 2：<strong>S</strong> 为黑色且 <strong>X</strong> 为内侧插入。必须先对 <strong>P，X</strong> 做一次单旋转并更改<strong>G,X</strong>的颜色，再将结果对G做一次单旋转。  </li>
-<li>状况 3：<strong>S</strong> 为红且 <strong>X</strong> 为外侧插入，先对<strong>P,G</strong>做一次单旋转，并且改变 <strong>X</strong> 的颜色，此时，如果GG为黑色，一切调整完毕，如果<strong>GG</strong>为红色，那么继续向上调整…  </li>
-<li>状况 4：<strong>S</strong> 为红色且 <strong>X</strong> 为外侧插入，这种情况，先对<strong>P,G</strong> 做一次单旋转并且改变 <strong>X</strong> 的颜色。此时 <strong>GG</strong> 为红色，则继续往上做，直到父子不连续为红。<br><strong>自上而下的程序设计</strong> 为了避免状况4的出现。<em>top down procedure</em> : 假设新增一个节点为 A，那么就沿着 A 的路径，只要发现某个节点 X 的两个孩子都是红色，就把 X 改为红色，并把两个孩子的颜色改为黑色。这样调整可能 X 的父节点 P 也是红色，可以像状况 1 一样做一次单旋转并改变颜色，或者像状况2 一样做一次双旋转并改变颜色。再一次插入新的节点就容易了。  </li>
+<li><code>ev_init</code> 和 <code>ev_TYPE_set</code> 一起使用；  </li>
+<li>使用 <code>ev_TYPE_init</code> 进行初始化。  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_init(ev,cb_) do &#123;            \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;active  =   \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;pending = 0;    \</div><div class="line">  ev_set_priority ((ev), 0);            \</div><div class="line">  ev_set_cb ((ev), cb_);            \</div><div class="line">&#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_io_set(ev,fd_,events_)  \</div><div class="line"> do &#123; (ev)-&gt;fd = (fd_); (ev)-&gt;events = (events_) | EV__IOFDSET; &#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_io_init(ev,cb,fd,events)   \</div><div class="line"> do &#123; ev_init ((ev), (cb)); \</div><div class="line">    ev_io_set ((ev),(fd),(events)); &#125; while (0)</span></div></pre></td></tr></table></figure>
+</li>
 </ul>
 
       
@@ -426,7 +490,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"># C++</a>
+            <a href="/tags/C/" rel="tag"># C</a>
+          
+            <a href="/tags/linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/libev/" rel="tag"># libev</a>
           
         </div>
       
@@ -439,8 +507,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/31/动态规划-背包问题/" rel="next" title="动态规划-背包问题">
-                <i class="fa fa-chevron-left"></i> 动态规划-背包问题
+              <a href="/2017/07/19/STL源码剖析-容器/" rel="next" title="STL源码剖析-容器">
+                <i class="fa fa-chevron-left"></i> STL源码剖析-容器
               </a>
             
           </div>
@@ -449,8 +517,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/02/C-类构造函数/" rel="prev" title="C++类构造函数">
-                C++类构造函数 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/31/libev源码阅读2：运行流程/" rel="prev" title="libev源码阅读2：运行流程">
+                libev源码阅读2：运行流程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

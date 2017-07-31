@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/20670842.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/87239144.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/26926563.jpg">
-<meta property="og:updated_time" content="2017-07-29T08:58:42.319Z">
+<meta property="og:updated_time" content="2017-07-30T12:10:52.356Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL源码剖析-容器">
 <meta name="twitter:description" content="容器概述容器 用于存放数据，数据在其中的排列具有一定的规律。STL中根据数据的排列方式将容器分为了 序列式容器 和 关联式容器 两种。其中的分类关系如下图所示：  
@@ -400,7 +400,12 @@
 <h4 id="序列式容器"><a href="#序列式容器" class="headerlink" title="序列式容器"></a>序列式容器</h4><h5 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h5><p>vector连续线性空间存储，支持随机访问，类似数组。<br>vector的迭代器是一个T类型的原生指针；<br>vector的空间不是按需分配而是按照多分配的原则，比实际需要的空间要大，也就是说会保留一部分的备用空间用于插入元素，分别定义了三个迭代器指向了目前使用空间的头和尾，可用空间的尾。<code>start finish end_of_storage</code> 定义了函数 <code>size() 和 capacity</code> 分别表示使用空间的大小，以及最大容纳的大小；<br>vector的空间扩充，当没有足够的备用空间用于插入新的元素的时候，这时vecto需要进行空间的扩展，会申请一块原始大小二倍的新空间然后将旧的空间中的元素拷贝入新的空间，也就是说原始的迭代器在执行插入操作后会失效；<br>vector存在的缺点，就是可能浪费一部分空间。  </p>
 <h5 id="list"><a href="#list" class="headerlink" title="list"></a>list</h5><p>list 在stl中的实现是一个双向链表，节点结构是有一个指向后一个节点和前一个节点的指针以及节点中的数据，每次插入和删除元素都要重新配置和释放节点，空间按需分配，插入操作不会改变迭代器。<br>list迭代器设计，内部依然是一个指针，指向了list的节点，内部定义了stl迭代器标准的接口，并实现了双向迭代器具有的操作，自增，自减，取值，比较等；<br>list数据结构，双向循环链表，一些操作就是链表的指针的移动；<br>一个内部函数<code>transfer(position, first, last)</code>将[first,last)内的元素移动到position之前。为splice、merge、sort提供基础。操作见图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/87239144.jpg" alt=""><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(iterator position, iterator first, iterator last)</span> </div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (position != last) </div><div class="line">    &#123;</div><div class="line">        (*(link_type((*last.node).prev))).next = position.node; <span class="comment">// (1)</span></div><div class="line">        (*(link_type((*first.node).prev))).next = last.node; <span class="comment">// (2)</span></div><div class="line">        (*(link_type((*position.node).prev))).next = first.node; <span class="comment">// (3)</span></div><div class="line">        link_type tmp = link_type((*position.node).prev); <span class="comment">// (4)</span></div><div class="line">        (*position.node).prev = (*last.node).prev; <span class="comment">// (5)</span></div><div class="line">        (*last.node).prev = (*first.node).prev;  <span class="comment">// (6)</span></div><div class="line">        (*first.node).prev = tmp; <span class="comment">// (7)</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>list 本身提供了排序的成员函数，不用stl算法（接受随机迭代器）。  </p>
-<h5 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h5><p>deque由一些列连续的空间组成，可以分别在头尾扩展插入。有一个中控器map指向连续的一段段的缓冲区。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/26926563.jpg" alt="">  </p>
+<h5 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h5><p>deque由一些列连续的空间组成，可以分别在头尾扩展插入。有一个中控器map指向连续的一段段的缓冲区。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/26926563.jpg" alt=""><br>deque的迭代器，包括了
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/***</div><div class="line">-----------------------------</div><div class="line">| cur | first | last | node |</div><div class="line">-----------------------------</div><div class="line">当前指向，缓冲区的开始和结束</div><div class="line">在map中的位置</div><div class="line">***/</span></div></pre></td></tr></table></figure></p>
+<p>deque的数据结构，迭代器start指向第一个节点，finish指向最后一个节点，map指向中控器，是连续的空间，每个元素都是一个指针，指向了一个节点（缓冲区）。<br>在deque上进行元素操作时，考虑在中控器的移动。  </p>
+<h5 id="stack和queue"><a href="#stack和queue" class="headerlink" title="stack和queue"></a>stack和queue</h5><p>stack先进后出，没有迭代器，queue先进先出，它们都是以deque为底部数据结构（默认），进行一定的限制保证它们各自的特性，不被称为容器，而是被称为配接器。  </p>
+<h5 id="heap算法和优先级队列"><a href="#heap算法和优先级队列" class="headerlink" title="heap算法和优先级队列"></a>heap算法和优先级队列</h5><p>堆不是stl容器组件，但是却是优先级队列的底层实现。<br>它是一棵二叉树，根节点元素是最大或者最小元素，每次插入和取出根节点后都会重新排列保持它的这个特性。  </p>
+<h5 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h5><h4 id="关联式容器"><a href="#关联式容器" class="headerlink" title="关联式容器"></a>关联式容器</h4><p>主要有set集合和map映射表两种，底部以红黑二叉树实现。  </p>
 
       
     </div>
@@ -448,6 +453,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/31/libev源码阅读1：数据结构/" rel="prev" title="libev源码阅读1：数据结构">
+                libev源码阅读1：数据结构 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -519,7 +528,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-count">50</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -541,7 +550,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -612,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#容器概述"><span class="nav-number">1.</span> <span class="nav-text">容器概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#序列式容器"><span class="nav-number">2.</span> <span class="nav-text">序列式容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#vector"><span class="nav-number">2.1.</span> <span class="nav-text">vector</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#list"><span class="nav-number">2.2.</span> <span class="nav-text">list</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#deque"><span class="nav-number">2.3.</span> <span class="nav-text">deque</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#容器概述"><span class="nav-number">1.</span> <span class="nav-text">容器概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#序列式容器"><span class="nav-number">2.</span> <span class="nav-text">序列式容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#vector"><span class="nav-number">2.1.</span> <span class="nav-text">vector</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#list"><span class="nav-number">2.2.</span> <span class="nav-text">list</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#deque"><span class="nav-number">2.3.</span> <span class="nav-text">deque</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#stack和queue"><span class="nav-number">2.4.</span> <span class="nav-text">stack和queue</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#heap算法和优先级队列"><span class="nav-number">2.5.</span> <span class="nav-text">heap算法和优先级队列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#单链表"><span class="nav-number">2.6.</span> <span class="nav-text">单链表</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联式容器"><span class="nav-number">3.</span> <span class="nav-text">关联式容器</span></a></li></ol></div>
             
 
           </div>
