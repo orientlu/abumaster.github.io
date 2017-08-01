@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-07-31T13:38:14.246Z</updated>
+  <updated>2017-08-01T13:12:55.814Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>libev源码阅读3：定时器</title>
+    <link href="http://abumaster.com/2017/08/01/libev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB3%EF%BC%9A%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
+    <id>http://abumaster.com/2017/08/01/libev源码阅读3：定时器/</id>
+    <published>2017-08-01T06:51:24.000Z</published>
+    <updated>2017-08-01T13:12:55.814Z</updated>
+    
+    <content type="html"><![CDATA[<p>定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。  </p>
+<a id="more"></a>
+<h4 id="堆的概念"><a href="#堆的概念" class="headerlink" title="堆的概念"></a>堆的概念</h4><p>堆是一种树形结构，分为最大堆和最小堆，分别是根节点是最大元素或最小元素，stl中利用二叉大顶堆实现优先级队列以及堆算法。<br>堆的节点一般存放在数组中，在数组的排列有一定的规律，堆没有节点漏洞，按层依次排列的，如堆是从数组array的索引为1的位置开始排列，那么某个节点位于i的位置，其左孩子位于2i处，右孩子位于2i+1处，父节点位于i/2处（/ 为取整）。从0开始排列，节点i的左右孩子节点的索引分别为2i+1，2i+2，父节点为(i-1)/2 。n叉堆的孩子[ni+1,…,ni+n]<br>对于堆的调整，一般用到向上调整和向下调整两种方式，下面结合代码详细注释。  </p>
+<h4 id="四叉堆"><a href="#四叉堆" class="headerlink" title="四叉堆"></a>四叉堆</h4><p>libev中的四叉堆的根节点索引是3，从3开始依次向后排列，那么i节点的孩子的范围为[4(i-3)+1+3,…,4(i-3)+4+3]，父节点为(i-3-1)/4+3 。<br>堆元素的结构
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//使用缓存的情况下</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</div><div class="line">    ev_tstamp at;</div><div class="line">    WT w;</div><div class="line">  &#125; ANHE;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_w(he)        (he).w     <span class="comment">/* access watcher, read-write */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_at(he)       (he).at    <span class="comment">/* access cached at, read-only */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_at_cache(he) (he).at = (he).w-&gt;at <span class="comment">/* update at from watcher */</span></span></div></pre></td></tr></table></figure></p>
+<p>堆算法实现如下：<br><strong>downheap 函数：</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_4HEAP <span class="comment">//如果定义了4叉堆</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DHEAP 4</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> HEAP0 (DHEAP - 1) <span class="comment">/* index of first element in heap */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> HPARENT(k) ((((k) - HEAP0 - 1) / DHEAP) + HEAP0) <span class="comment">//获得k的父节点</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> UPHEAP_DONE(p,k) ((p) == (k)) <span class="comment">//是否更新完成</span></span></div><div class="line"></div><div class="line"><span class="comment">//从根向下调整，N为堆的元素个数，k表示要调整元素的索引</span></div><div class="line"><span class="function">inline_speed <span class="keyword">void</span></div><div class="line"><span class="title">downheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">    ANHE he = heap [k];<span class="comment">//先获得调整</span></div><div class="line">    ANHE *E = heap + N + HEAP0;<span class="comment">//结束的指针</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> (;;)</div><div class="line">    &#123;</div><div class="line">        ev_tstamp minat; <span class="comment">//最小的元素</span></div><div class="line">        ANHE *minpos; <span class="comment">//最小元素的指针</span></div><div class="line">        ANHE *pos = heap + DHEAP * (k - HEAP0) + HEAP0 + <span class="number">1</span>;<span class="comment">//k的第一个孩子的指针</span></div><div class="line"></div><div class="line">        <span class="comment">//查找k的最小孩子</span></div><div class="line">        <span class="keyword">if</span> (expect_true (pos + DHEAP - <span class="number">1</span> &lt; E))<span class="comment">//最后一个孩子没有越界，有四个孩子</span></div><div class="line">        &#123;</div><div class="line">            <span class="comment">//在四个孩子中找最小的</span></div><div class="line">            (minpos = pos + <span class="number">0</span>), (minat = ANHE_at (*minpos));<span class="comment">//设置初值</span></div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">1</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">1</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">2</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">2</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">3</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">3</span>), (minat = ANHE_at (*minpos));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pos &lt; E)<span class="comment">//有孩子，但是不是4个孩子</span></div><div class="line">        &#123;</div><div class="line">            (minpos = pos + <span class="number">0</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">1</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">1</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">1</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">2</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">2</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">2</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">3</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">3</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">3</span>), (minat = ANHE_at (*minpos));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="comment">//其他情况，没孩子，不用调整退出循环</span></div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="comment">//当前节点小于最小孩子，已经是最小堆，不用调整退出</span></div><div class="line">        <span class="keyword">if</span> (ANHE_at (he) &lt;= minat)</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="comment">//否则将最小元素调到k的位置</span></div><div class="line">        heap [k] = *minpos;</div><div class="line">        ev_active (ANHE_w (*minpos)) = k;<span class="comment">//将时间监测器设置为索引k</span></div><div class="line"></div><div class="line">        k = minpos - heap;<span class="comment">//设置下一次调整的根节点</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    heap [k] = he;<span class="comment">//将元素填充到k中</span></div><div class="line">    ev_active (ANHE_w (he)) = k;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果没有定义四叉堆的宏，那么就是简单的二叉堆的定义和调整。<br><strong>upheap 函数：</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//从k向根调整</span></div><div class="line"><span class="function">inline_speed <span class="keyword">void</span></div><div class="line"><span class="title">upheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">    ANHE he = heap [k];<span class="comment">//先记录k位置的元素</span></div><div class="line">    <span class="comment">//循环调整</span></div><div class="line">    <span class="keyword">for</span> (;;)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> p = HPARENT (k);<span class="comment">//获得k的父节点</span></div><div class="line">        <span class="comment">//是否等于父节点（调整完成）或者父节点的元素小于当前的</span></div><div class="line">        <span class="keyword">if</span> (UPHEAP_DONE (p, k) || ANHE_at (heap [p]) &lt;= ANHE_at (he))</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        heap [k] = heap [p];<span class="comment">//</span></div><div class="line">        ev_active (ANHE_w (heap [k])) = k;</div><div class="line">        k = p;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  heap [k] = he;</div><div class="line">  ev_active (ANHE_w (he)) = k;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>adjust 和 reheap 函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* move an element suitably so it is in a correct place */</span></div><div class="line"><span class="function">inline_size <span class="keyword">void</span></div><div class="line"><span class="title">adjustheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">if</span> (k &gt; HEAP0 &amp;&amp; ANHE_at (heap [k]) &lt;= ANHE_at (heap [HPARENT (k)]))</div><div class="line">    upheap (heap, k);<span class="comment">//k的元素小于父节点的元素，向上调整</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    downheap (heap, N, k);<span class="comment">//向下调整</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/* rebuild the heap: this function is used only once and executed rarely */</span></div><div class="line"><span class="function">inline_size <span class="keyword">void</span></div><div class="line"><span class="title">reheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">int</span> i;</div><div class="line"></div><div class="line">  <span class="comment">/* we don't use floyds algorithm, upheap is simpler and is more cache-efficient */</span></div><div class="line">  <span class="comment">/* also, this is easy to implement and correct for both 2-heaps and 4-heaps */</span></div><div class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; ++i)<span class="comment">//直接向上调整，简单高效</span></div><div class="line">    upheap (heap, i + HEAP0);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="超时监视器"><a href="#超时监视器" class="headerlink" title="超时监视器"></a>超时监视器</h4><p><strong>基本数据结构</strong><br>相对时间。
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_timer</div><div class="line">&#123;</div><div class="line">    <span class="comment">//EV_WATCHER_TIME (ev_timer)</span></div><div class="line">    <span class="keyword">int</span> active;   </div><div class="line">    <span class="keyword">int</span> pending;  </div><div class="line">    <span class="keyword">int</span> priority;  </div><div class="line">    <span class="keyword">void</span> *data;  </div><div class="line">    <span class="keyword">void</span> (*cb)(<span class="keyword">struct</span> ev_loop *loop, <span class="keyword">struct</span> ev_timer *w, <span class="keyword">int</span> revents);    </div><div class="line">  </div><div class="line">    ev_tstamp at; <span class="comment">//定时器第一次触发的时间点</span></div><div class="line">    ev_tstamp repeat; <span class="comment">/* rw */</span> <span class="comment">//每隔几秒触发一次，0表示只触发一次</span></div><div class="line">&#125; ev_timer;</div></pre></td></tr></table></figure></p>
+<p><strong>初始化超时监视器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化，调用两个宏来初始化成员</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_timer_init(ev,cb,after,repeat) \</div><div class="line">do &#123; ev_init ((ev), (cb)); \</div><div class="line">    ev_timer_set ((ev),(after),(repeat)); \</div><div class="line">    &#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_init(ev,cb_) do &#123;            \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;active  =   \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;pending = 0;    \</div><div class="line">  ev_set_priority ((ev), 0);            \</div><div class="line">  ev_set_cb ((ev), cb_);            \</div><div class="line">&#125; while (0)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_timer_set(ev,after_,repeat_)      \</div><div class="line">do &#123; ((ev_watcher_time *)(ev))-&gt;at = (after_); \</div><div class="line">    (ev)-&gt;repeat = (repeat_); &#125; while (0)</span></div></pre></td></tr></table></figure></p>
+<p><strong>启动超时器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function">noinline</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="title">ev_timer_start</span> <span class="params">(EV_P_ ev_timer *w)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (expect_false (ev_is_active (w)))</div><div class="line">        <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    ev_at (w) += mn_now;<span class="comment">//设置at时间点，此时间点触发，相对于mn_now，当前日历时间</span></div><div class="line"></div><div class="line">    assert ((<span class="string">"libev: ev_timer_start called with negative timer repeat value"</span>, w-&gt;repeat &gt;= <span class="number">0.</span>));</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">    <span class="comment">//将timer加入到堆中并向上调整，active表示的是堆数组中的下标</span></div><div class="line">    ++timercnt;</div><div class="line">    ev_start (EV_A_ (W)w, timercnt + HEAP0 - <span class="number">1</span>);</div><div class="line">    array_needsize (ANHE, timers, timermax, ev_active (w) + <span class="number">1</span>, EMPTY2);</div><div class="line">    ANHE_w (timers [ev_active (w)]) = (WT)w;</div><div class="line">    ANHE_at_cache (timers [ev_active (w)]);</div><div class="line">    upheap (timers, ev_active (w));</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">    <span class="comment">/*assert (("libev: internal timer heap corruption", timers [ev_active (w)] == (WT)w));*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>停止计时器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function">noinline</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="title">ev_timer_stop</span> <span class="params">(EV_P_ ev_timer *w)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">    clear_pending (EV_A_ (W)w);<span class="comment">//从pending中移除</span></div><div class="line">    <span class="keyword">if</span> (expect_false (!ev_is_active (w)))</div><div class="line">        <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line"></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> active = ev_active (w);<span class="comment">//获得定时器在堆中的索引</span></div><div class="line">        assert ((<span class="string">"libev: internal timer heap corruption"</span>, ANHE_w (timers [active]) == (WT)w));</div><div class="line">        --timercnt;<span class="comment">//数量减一</span></div><div class="line">        <span class="keyword">if</span> (expect_true (active &lt; timercnt + HEAP0))</div><div class="line">        &#123;</div><div class="line">            timers [active] = timers [timercnt + HEAP0];<span class="comment">//最后一个元素补充上来</span></div><div class="line">            adjustheap (timers, timercnt, active);<span class="comment">//调整</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    ev_at (w) -= mn_now;</div><div class="line">    ev_stop (EV_A_ (W)w);</div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="周期定时器"><a href="#周期定时器" class="headerlink" title="周期定时器"></a>周期定时器</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+      <category term="libev" scheme="http://abumaster.com/tags/libev/"/>
+    
+  </entry>
   
   <entry>
     <title>libev源码阅读2：运行流程</title>
@@ -1436,83 +1473,6 @@ shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><t
     
     
       <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>UNIX环境高级编程-标准IO库</title>
-    <link href="http://abumaster.com/2017/05/18/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E6%A0%87%E5%87%86IO%E5%BA%93/"/>
-    <id>http://abumaster.com/2017/05/18/UNIX环境高级编程-标准IO库/</id>
-    <published>2017-05-18T00:39:42.000Z</published>
-    <updated>2017-05-18T02:11:33.522Z</updated>
-    
-    <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。<br><a id="more"></a></p>
-<p><strong>1.文件I/O和标准I/O区别</strong><br>标准I/O使用了缓冲机制，文件I/O不使用，而是直接调用内核中的一个系统调用完成。操作的对象不同，文件io操作的是文件描述符，标准io操作的是流，流与磁盘等外围设备关联。他们的函数对比。  </p>
-<table>
-<thead>
-<tr>
-<th>操作</th>
-<th>标准I/O</th>
-<th>文件I/O</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>打开</td>
-<td>fopen, froen, fdopen</td>
-<td>open</td>
-</tr>
-<tr>
-<td>关闭</td>
-<td>fclose</td>
-<td>close</td>
-</tr>
-<tr>
-<td>读</td>
-<td>getc, fgetc, getchar,<br>fgets, gets,<br>fread</td>
-<td>read</td>
-</tr>
-<tr>
-<td>写</td>
-<td>putc, fputc, putchar,<br>fputs, puts,<br>fwrite</td>
-<td>write</td>
-</tr>
-</tbody>
-</table>
-<p><strong>2.缓冲</strong>  </p>
-<blockquote>
-<p>标准I/O提供的几种缓冲及其区别。  </p>
-</blockquote>
-<ul>
-<li>全缓冲，填满缓冲区后再进行实际的I/O操作，磁盘文件通常使用全缓冲。填满缓冲区后，调用fflush来刷新缓冲区，flush(冲洗)用来将缓冲区的内容写到磁盘上；flush(刷清)丢弃已经存储在缓冲区中的数据，用在终端驱动程序方面。  </li>
-<li>行缓冲，用在终端的输入输出，遇到换行符的时候，或者缓冲区满。  </li>
-<li>无缓冲，标准出错流，stderr，错误信息及时显示出来。  </li>
-</ul>
-<p>对于一个打开的流，设置更改缓冲区。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setvbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf, <span class="keyword">int</span> mode, <span class="keyword">size_t</span> size)</span></span>;</div><div class="line"><span class="comment">/* 	mode 参数：</div><div class="line">	_IOFBF 全缓冲；_IOLBF 行缓冲；_IONBF 不带缓冲</div><div class="line"> */</span></div><div class="line"><span class="comment">//强制冲洗流</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *fp)</span></span>;</div></pre></td></tr></table></figure></p>
-<p><strong>3.操作</strong><br><strong>打开关闭流</strong><br>打开关闭标准I/O流，如上表的函数所示。<br><strong>读写流</strong><br>打开了流，有三种类型的方式进行读写操作：  </p>
-<ul>
-<li>每次一个字符的I/O;  </li>
-<li>每次一行的I/O;  </li>
-<li>直接I/O。  </li>
-</ul>
-<p>每个流在FILE对象上维持了两个标志：出错标志，文件结束标志。<br><code>gets</code> 和<code>fgets</code>，不推荐使用前者，因为不能指定缓冲区大小，容易造成缓冲区溢出，另外，<code>gets</code>不保留换行符。<br><strong>4.临时文件</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">tmpnam</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span>;<span class="comment">//指向唯一路径的指针</span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">tmpfile</span><span class="params">(<span class="keyword">void</span>)</span></span>; <span class="comment">//返回文件指针</span></div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
-    
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-      <category term="c" scheme="http://abumaster.com/tags/c/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   

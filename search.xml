@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[libev源码阅读3：定时器]]></title>
+    <url>%2F2017%2F08%2F01%2Flibev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB3%EF%BC%9A%E5%AE%9A%E6%97%B6%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。 堆的概念堆是一种树形结构，分为最大堆和最小堆，分别是根节点是最大元素或最小元素，stl中利用二叉大顶堆实现优先级队列以及堆算法。堆的节点一般存放在数组中，在数组的排列有一定的规律，堆没有节点漏洞，按层依次排列的，如堆是从数组array的索引为1的位置开始排列，那么某个节点位于i的位置，其左孩子位于2i处，右孩子位于2i+1处，父节点位于i/2处（/ 为取整）。从0开始排列，节点i的左右孩子节点的索引分别为2i+1，2i+2，父节点为(i-1)/2 。n叉堆的孩子[ni+1,…,ni+n]对于堆的调整，一般用到向上调整和向下调整两种方式，下面结合代码详细注释。 四叉堆libev中的四叉堆的根节点索引是3，从3开始依次向后排列，那么i节点的孩子的范围为[4(i-3)+1+3,…,4(i-3)+4+3]，父节点为(i-3-1)/4+3 。堆元素的结构 12345678//使用缓存的情况下typedef struct &#123; ev_tstamp at; WT w; &#125; ANHE;#define ANHE_w(he) (he).w /* access watcher, read-write */#define ANHE_at(he) (he).at /* access cached at, read-only */#define ANHE_at_cache(he) (he).at = (he).w-&gt;at /* update at from watcher */ 堆算法实现如下：downheap 函数：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#if EV_USE_4HEAP //如果定义了4叉堆#define DHEAP 4#define HEAP0 (DHEAP - 1) /* index of first element in heap */#define HPARENT(k) ((((k) - HEAP0 - 1) / DHEAP) + HEAP0) //获得k的父节点#define UPHEAP_DONE(p,k) ((p) == (k)) //是否更新完成//从根向下调整，N为堆的元素个数，k表示要调整元素的索引inline_speed voiddownheap (ANHE *heap, int N, int k)&#123; ANHE he = heap [k];//先获得调整 ANHE *E = heap + N + HEAP0;//结束的指针 for (;;) &#123; ev_tstamp minat; //最小的元素 ANHE *minpos; //最小元素的指针 ANHE *pos = heap + DHEAP * (k - HEAP0) + HEAP0 + 1;//k的第一个孩子的指针 //查找k的最小孩子 if (expect_true (pos + DHEAP - 1 &lt; E))//最后一个孩子没有越界，有四个孩子 &#123; //在四个孩子中找最小的 (minpos = pos + 0), (minat = ANHE_at (*minpos));//设置初值 if (ANHE_at (pos [1]) &lt; minat) (minpos = pos + 1), (minat = ANHE_at (*minpos)); if (ANHE_at (pos [2]) &lt; minat) (minpos = pos + 2), (minat = ANHE_at (*minpos)); if (ANHE_at (pos [3]) &lt; minat) (minpos = pos + 3), (minat = ANHE_at (*minpos)); &#125; else if (pos &lt; E)//有孩子，但是不是4个孩子 &#123; (minpos = pos + 0), (minat = ANHE_at (*minpos)); if (pos + 1 &lt; E &amp;&amp; ANHE_at (pos [1]) &lt; minat) (minpos = pos + 1), (minat = ANHE_at (*minpos)); if (pos + 2 &lt; E &amp;&amp; ANHE_at (pos [2]) &lt; minat) (minpos = pos + 2), (minat = ANHE_at (*minpos)); if (pos + 3 &lt; E &amp;&amp; ANHE_at (pos [3]) &lt; minat) (minpos = pos + 3), (minat = ANHE_at (*minpos)); &#125; else //其他情况，没孩子，不用调整退出循环 break; //当前节点小于最小孩子，已经是最小堆，不用调整退出 if (ANHE_at (he) &lt;= minat) break; //否则将最小元素调到k的位置 heap [k] = *minpos; ev_active (ANHE_w (*minpos)) = k;//将时间监测器设置为索引k k = minpos - heap;//设置下一次调整的根节点 &#125; heap [k] = he;//将元素填充到k中 ev_active (ANHE_w (he)) = k;&#125; 如果没有定义四叉堆的宏，那么就是简单的二叉堆的定义和调整。upheap 函数：1234567891011121314151617181920//从k向根调整inline_speed voidupheap (ANHE *heap, int k)&#123; ANHE he = heap [k];//先记录k位置的元素 //循环调整 for (;;) &#123; int p = HPARENT (k);//获得k的父节点 //是否等于父节点（调整完成）或者父节点的元素小于当前的 if (UPHEAP_DONE (p, k) || ANHE_at (heap [p]) &lt;= ANHE_at (he)) break; heap [k] = heap [p];// ev_active (ANHE_w (heap [k])) = k; k = p; &#125; heap [k] = he; ev_active (ANHE_w (he)) = k;&#125; adjust 和 reheap 函数1234567891011121314151617181920/* move an element suitably so it is in a correct place */inline_size voidadjustheap (ANHE *heap, int N, int k)&#123; if (k &gt; HEAP0 &amp;&amp; ANHE_at (heap [k]) &lt;= ANHE_at (heap [HPARENT (k)])) upheap (heap, k);//k的元素小于父节点的元素，向上调整 else downheap (heap, N, k);//向下调整&#125;/* rebuild the heap: this function is used only once and executed rarely */inline_size voidreheap (ANHE *heap, int N)&#123; int i; /* we don't use floyds algorithm, upheap is simpler and is more cache-efficient */ /* also, this is easy to implement and correct for both 2-heaps and 4-heaps */ for (i = 0; i &lt; N; ++i)//直接向上调整，简单高效 upheap (heap, i + HEAP0);&#125; 超时监视器基本数据结构相对时间。 123456789101112typedef struct ev_timer&#123; //EV_WATCHER_TIME (ev_timer) int active; int pending; int priority; void *data; void (*cb)(struct ev_loop *loop, struct ev_timer *w, int revents); ev_tstamp at; //定时器第一次触发的时间点 ev_tstamp repeat; /* rw */ //每隔几秒触发一次，0表示只触发一次&#125; ev_timer; 初始化超时监视器123456789101112131415//初始化，调用两个宏来初始化成员#define ev_timer_init(ev,cb,after,repeat) \do &#123; ev_init ((ev), (cb)); \ ev_timer_set ((ev),(after),(repeat)); \ &#125; while (0)#define ev_init(ev,cb_) do &#123; \ ((ev_watcher *)(void *)(ev))-&gt;active = \ ((ev_watcher *)(void *)(ev))-&gt;pending = 0; \ ev_set_priority ((ev), 0); \ ev_set_cb ((ev), cb_); \&#125; while (0)#define ev_timer_set(ev,after_,repeat_) \do &#123; ((ev_watcher_time *)(ev))-&gt;at = (after_); \ (ev)-&gt;repeat = (repeat_); &#125; while (0) 启动超时器1234567891011121314151617181920212223noinlinevoidev_timer_start (EV_P_ ev_timer *w) EV_THROW&#123; if (expect_false (ev_is_active (w))) return; ev_at (w) += mn_now;//设置at时间点，此时间点触发，相对于mn_now，当前日历时间 assert (("libev: ev_timer_start called with negative timer repeat value", w-&gt;repeat &gt;= 0.)); EV_FREQUENT_CHECK; //将timer加入到堆中并向上调整，active表示的是堆数组中的下标 ++timercnt; ev_start (EV_A_ (W)w, timercnt + HEAP0 - 1); array_needsize (ANHE, timers, timermax, ev_active (w) + 1, EMPTY2); ANHE_w (timers [ev_active (w)]) = (WT)w; ANHE_at_cache (timers [ev_active (w)]); upheap (timers, ev_active (w)); EV_FREQUENT_CHECK; /*assert (("libev: internal timer heap corruption", timers [ev_active (w)] == (WT)w));*/&#125; 停止计时器123456789101112131415161718192021222324noinlinevoidev_timer_stop (EV_P_ ev_timer *w) EV_THROW&#123; clear_pending (EV_A_ (W)w);//从pending中移除 if (expect_false (!ev_is_active (w))) return; EV_FREQUENT_CHECK; &#123; int active = ev_active (w);//获得定时器在堆中的索引 assert (("libev: internal timer heap corruption", ANHE_w (timers [active]) == (WT)w)); --timercnt;//数量减一 if (expect_true (active &lt; timercnt + HEAP0)) &#123; timers [active] = timers [timercnt + HEAP0];//最后一个元素补充上来 adjustheap (timers, timercnt, active);//调整 &#125; &#125; ev_at (w) -= mn_now; ev_stop (EV_A_ (W)w); EV_FREQUENT_CHECK;&#125; 周期定时器]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>libev</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[libev源码阅读2：运行流程]]></title>
     <url>%2F2017%2F07%2F31%2Flibev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB2%EF%BC%9A%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B%2F</url>
     <content type="text"><![CDATA[一般的流程：创建默认的事件循环，创建一个事件监测器和回调函数并初始化（init），将监测器放入事件循环（start）中，循环开始等待事件（run）的到来。 1.主要流程如果在libev中创建一个IO监测器，主循环等待IO事件的触发，触发后调用回调函数，执行相关操作。其主要流程如下： 首先调用ev_default_loop初始化struct ev_loop结构； 然后调用ev_io_init初始化监视器中的属性，该宏主要就是调用ev_init和ev_io_set； 然后调用ev_io_start启动该监视器，该函数主要是将监视器添加到loop-&gt;anfds结构中，将监视的描述符添加到((loop)-&gt;fdchanges)中； 调用ev_run开始等待事件的触发。 使用，官方提供的代码如下：1234567891011121314151617181920212223242526272829303132333435363738394041424344// a single header file is required#include &lt;ev.h&gt;#include &lt;stdio.h&gt; // for puts// every watcher type has its own typedef'd struct// with the name ev_TYPEev_io stdin_watcher;ev_timer timeout_watcher;// all watcher callbacks have a similar signature// this callback is called when data is readable on stdinstatic voidstdin_cb (EV_P_ ev_io *w, int revents)&#123; puts ("stdin ready"); // for one-shot events, one must manually stop the watcher // with its corresponding stop function. ev_io_stop (EV_A_ w); // this causes all nested ev_run's to stop iterating ev_break (EV_A_ EVBREAK_ALL);&#125;// another callback, this time for a time-outstatic voidtimeout_cb (EV_P_ ev_timer *w, int revents)&#123; puts ("timeout"); // this causes the innermost ev_run to stop iterating ev_break (EV_A_ EVBREAK_ONE);&#125;int main (void)&#123; // use the default event loop unless you have special needs struct ev_loop *loop = EV_DEFAULT; // initialise an io watcher, then start it // this one will watch for stdin to become readable ev_io_init (&amp;stdin_watcher, stdin_cb, /*STDIN_FILENO*/ 0, EV_READ); ev_io_start (loop, &amp;stdin_watcher); // initialise a timer watcher, then start it // simple non-repeating 5.5 second timeout ev_timer_init (&amp;timeout_watcher, timeout_cb, 5.5, 0.); ev_timer_start (loop, &amp;timeout_watcher); // now wait for events to arrive ev_run (loop, 0); // break was called, so exit return 0;&#125; 其中有几个奇怪的宏EV_P EV_P_ EV_A EV_A_，它们代表了： 1234EV_P == struct ev_loop* loop //event parameterEV_P_ == EV_P, == struct ev_loop* loop, EV_A == loop //event argumentEV_A_ == EV_A, == loop, 2.ev_default_loop 函数假设定义了EV_MULTIPLICITY，多循环支持，返回一个ev_loop结构指针，否则返回一个整数。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121struct ev_loop * ev_default_loop (unsigned int flags) EV_THROW&#123; if (!ev_default_loop_ptr) &#123;#if EV_MULTIPLICITY EV_P = ev_default_loop_ptr = &amp;default_loop_struct;#else ev_default_loop_ptr = 1;#endif//调用此函数初始化 loop_init (EV_A_ flags); if (ev_backend (EV_A)) &#123;#if EV_CHILD_ENABLE ev_signal_init (&amp;childev, childcb, SIGCHLD); ev_set_priority (&amp;childev, EV_MAXPRI); ev_signal_start (EV_A_ &amp;childev); ev_unref (EV_A); /* child watcher should not keep loop alive */#endif &#125; else ev_default_loop_ptr = 0; &#125; return ev_default_loop_ptr;&#125;//以下是loop_init函数，初始化loop中的各个成员/* initialise a loop structure, must be zero-initialised */noinline ecb_coldstatic voidloop_init (EV_P_ unsigned int flags) EV_THROW&#123; if (!backend) &#123; origflags = flags;#if EV_USE_REALTIME if (!have_realtime) &#123; struct timespec ts; if (!clock_gettime (CLOCK_REALTIME, &amp;ts)) have_realtime = 1; &#125;#endif#if EV_USE_MONOTONIC if (!have_monotonic) &#123; struct timespec ts; if (!clock_gettime (CLOCK_MONOTONIC, &amp;ts)) have_monotonic = 1; &#125;#endif#ifndef _WIN32 if (flags &amp; EVFLAG_FORKCHECK) curpid = getpid ();#endif if (!(flags &amp; EVFLAG_NOENV) &amp;&amp; !enable_secure () &amp;&amp; getenv ("LIBEV_FLAGS")) flags = atoi (getenv ("LIBEV_FLAGS")); ev_rt_now = ev_time (); mn_now = get_clock (); now_floor = mn_now; rtmn_diff = ev_rt_now - mn_now;#if EV_FEATURE_API invoke_cb = ev_invoke_pending;#endif io_blocktime = 0.; timeout_blocktime = 0.; backend = 0; backend_fd = -1; sig_pending = 0;#if EV_ASYNC_ENABLE async_pending = 0;#endif pipe_write_skipped = 0; pipe_write_wanted = 0; evpipe [0] = -1; evpipe [1] = -1;#if EV_USE_INOTIFY fs_fd = flags &amp; EVFLAG_NOINOTIFY ? -1 : -2;#endif#if EV_USE_SIGNALFD sigfd = flags &amp; EVFLAG_SIGNALFD ? -2 : -1;#endif if (!(flags &amp; EVBACKEND_MASK)) flags |= ev_recommended_backends ();#if EV_USE_IOCP if (!backend &amp;&amp; (flags &amp; EVBACKEND_IOCP )) backend = iocp_init (EV_A_ flags);#endif#if EV_USE_PORT if (!backend &amp;&amp; (flags &amp; EVBACKEND_PORT )) backend = port_init (EV_A_ flags);#endif#if EV_USE_KQUEUE if (!backend &amp;&amp; (flags &amp; EVBACKEND_KQUEUE)) backend = kqueue_init (EV_A_ flags);#endif#if EV_USE_EPOLL if (!backend &amp;&amp; (flags &amp; EVBACKEND_EPOLL )) backend = epoll_init (EV_A_ flags);#endif#if EV_USE_POLL if (!backend &amp;&amp; (flags &amp; EVBACKEND_POLL )) backend = poll_init (EV_A_ flags);#endif#if EV_USE_SELECT if (!backend &amp;&amp; (flags &amp; EVBACKEND_SELECT)) backend = select_init (EV_A_ flags);#endif //如上一章介绍的函数，初始化调用前事件，准备好了，其实什么也没做 //表示在此期间等待监测器到来 ev_prepare_init (&amp;pending_w, pendingcb);#if EV_SIGNAL_ENABLE || EV_ASYNC_ENABLE ev_init (&amp;pipe_w, pipecb);//初始化监测器的pipe ev_set_priority (&amp;pipe_w, EV_MAXPRI);//设置为最大优先级#endif &#125;&#125; 3.ev_io_init 函数初始化io监测器，初始化结构中的成员，上一节中介绍了。4.ev_io_start 函数1234567891011121314151617181920212223242526272829303132333435363738394041void ev_io_start (EV_P_ ev_io *w) EV_THROW&#123; int fd = w-&gt;fd;//获得监视器的描述符 //监视器没开始 if (expect_false (ev_is_active (w))) return; assert (("libev: ev_io_start called with negative fd", fd &gt;= 0)); //屏蔽其他的 //0x80 0x01 0x02 events的取值 assert (("libev: ev_io_start called with illegal event mask", !(w-&gt;events &amp; ~(EV__IOFDSET | EV_READ | EV_WRITE)))); EV_FREQUENT_CHECK; //调整优先级并设置为活动状态， ev_start (EV_A_ (W)w, 1); //调整loop-&gt;anfds数组的大小，并将监测器加入到[fd]的链表中 array_needsize (ANFD, anfds, anfdmax, fd + 1, array_init_zero); wlist_add (&amp;anfds[fd].head, (WL)w); /* common bug, apparently */ assert (("libev: ev_io_start called with corrupted watcher", ((WL)w)-&gt;next != (WL)w)); fd_change (EV_A_ fd, w-&gt;events &amp; EV__IOFDSET | EV_ANFD_REIFY); w-&gt;events &amp;= ~EV__IOFDSET;//掩码消除 EV_FREQUENT_CHECK;&#125;//fd_change函数/* something about the given fd changed */inline_size void fd_change (EV_P_ int fd, int flags)&#123; unsigned char reify = anfds [fd].reify; anfds [fd].reify |= flags; if (expect_true (!reify))//以前不存在，调整大小加入变化数组中 &#123; ++fdchangecnt; array_needsize (int, fdchanges, fdchangemax, fdchangecnt, EMPTY2); fdchanges [fdchangecnt - 1] = fd; &#125;&#125; 4.ev_run 函数主要功能循环等待事件的到来。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168int ev_run (EV_P_ int flags)&#123;#if EV_FEATURE_API ++loop_depth;#endif assert (("libev: ev_loop recursion during release detected", loop_done != EVBREAK_RECURSE)); loop_done = EVBREAK_CANCEL; EV_INVOKE_PENDING; /* in case we recurse, ensure ordering stays nice and clean */ do &#123;#if EV_VERIFY &gt;= 2 ev_verify (EV_A);#endif#ifndef _WIN32 if (expect_false (curpid)) /* penalise the forking check even more */ if (expect_false (getpid () != curpid)) &#123; curpid = getpid (); postfork = 1; &#125;#endif#if EV_FORK_ENABLE /* we might have forked, so queue fork handlers */ if (expect_false (postfork)) if (forkcnt) &#123; queue_events (EV_A_ (W *)forks, forkcnt, EV_FORK); EV_INVOKE_PENDING; &#125;#endif#if EV_PREPARE_ENABLE /* queue prepare watchers (and execute them) */ if (expect_false (preparecnt)) &#123; queue_events (EV_A_ (W *)prepares, preparecnt, EV_PREPARE); EV_INVOKE_PENDING; &#125;#endif if (expect_false (loop_done)) break; /* we might have forked, so reify kernel state if necessary */ if (expect_false (postfork)) loop_fork (EV_A); //检测fd fd_reify (EV_A); /* 计算阻塞的时间 */ &#123; ev_tstamp waittime = 0.; ev_tstamp sleeptime = 0.; /* remember old timestamp for io_blocktime calculation */ ev_tstamp prev_mn_now = mn_now; /* update time to cancel out callback processing overhead */ time_update (EV_A_ 1e100); /* from now on, we want a pipe-wake-up */ pipe_write_wanted = 1; ECB_MEMORY_FENCE; /* make sure pipe_write_wanted is visible before we check for potential skips */ if (expect_true (!(flags &amp; EVRUN_NOWAIT || idleall || !activecnt || pipe_write_skipped))) &#123; waittime = MAX_BLOCKTIME; if (timercnt) &#123; ev_tstamp to = ANHE_at (timers [HEAP0]) - mn_now; if (waittime &gt; to) waittime = to; &#125;#if EV_PERIODIC_ENABLE if (periodiccnt) &#123; ev_tstamp to = ANHE_at (periodics [HEAP0]) - ev_rt_now; if (waittime &gt; to) waittime = to; &#125;#endif /* don't let timeouts decrease the waittime below timeout_blocktime */ if (expect_false (waittime &lt; timeout_blocktime)) waittime = timeout_blocktime; /* at this point, we NEED to wait, so we have to ensure */ /* to pass a minimum nonzero value to the backend */ if (expect_false (waittime &lt; backend_mintime)) waittime = backend_mintime; /* extra check because io_blocktime is commonly 0 */ if (expect_false (io_blocktime)) &#123; sleeptime = io_blocktime - (mn_now - prev_mn_now); if (sleeptime &gt; waittime - backend_mintime) sleeptime = waittime - backend_mintime; if (expect_true (sleeptime &gt; 0.)) &#123; ev_sleep (sleeptime); waittime -= sleeptime; &#125; &#125; &#125;#if EV_FEATURE_API ++loop_count;#endif assert ((loop_done = EVBREAK_RECURSE, 1)); /* assert for side effect */ backend_poll (EV_A_ waittime); assert ((loop_done = EVBREAK_CANCEL, 1)); /* assert for side effect */ pipe_write_wanted = 0; /* just an optimisation, no fence needed */ ECB_MEMORY_FENCE_ACQUIRE; if (pipe_write_skipped) &#123; assert (("libev: pipe_w not active, but pipe not written", ev_is_active (&amp;pipe_w))); ev_feed_event (EV_A_ &amp;pipe_w, EV_CUSTOM); &#125; /* update ev_rt_now, do magic */ time_update (EV_A_ waittime + sleeptime); &#125; /* queue pending timers and reschedule them */ timers_reify (EV_A); /* relative timers called last */#if EV_PERIODIC_ENABLE periodics_reify (EV_A); /* absolute timers called first */#endif#if EV_IDLE_ENABLE /* queue idle watchers unless other events are pending */ idle_reify (EV_A);#endif#if EV_CHECK_ENABLE /* queue check watchers, to be executed first */ if (expect_false (checkcnt)) queue_events (EV_A_ (W *)checks, checkcnt, EV_CHECK);#endif EV_INVOKE_PENDING; &#125; while (expect_true ( activecnt &amp;&amp; !loop_done &amp;&amp; !(flags &amp; (EVRUN_ONCE | EVRUN_NOWAIT)) )); if (loop_done == EVBREAK_ONE) loop_done = EVBREAK_CANCEL;#if EV_FEATURE_API --loop_depth;#endif return activecnt;&#125;]]></content>
@@ -347,8 +359,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -360,8 +372,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -421,8 +433,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -445,8 +457,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -501,8 +513,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -535,8 +547,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -547,8 +559,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -571,8 +583,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
