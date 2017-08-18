@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-08-01T13:12:55.814Z</updated>
+  <updated>2017-08-18T12:02:44.305Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,45 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>牛客网校招模拟编程题(1-5)笔记</title>
+    <link href="http://abumaster.com/2017/08/18/%E7%89%9B%E5%AE%A2%E7%BD%91%E6%A0%A1%E6%8B%9B%E6%A8%A1%E6%8B%9F%E7%BC%96%E7%A8%8B%E9%A2%98-1-5-%E7%AC%94%E8%AE%B0/"/>
+    <id>http://abumaster.com/2017/08/18/牛客网校招模拟编程题-1-5-笔记/</id>
+    <published>2017-08-18T06:43:17.000Z</published>
+    <updated>2017-08-18T12:02:44.305Z</updated>
+    
+    <content type="html"><![CDATA[<p>牛客网上的2017年校招全国统一模拟试题的编程题目，比较难的一些题目汇总，做下记录。  </p>
+<a id="more"></a>
+<p><strong>1.猜数字游戏</strong><br><div class="note primary"><p>题目描述：<a href="https://www.nowcoder.com/test/5986669/summary">题目链接</a><br>牛牛和羊羊在玩一个有趣的猜数游戏。在这个游戏中,牛牛玩家选择一个正整数,羊羊根据已给的提示猜这个数字。第i个提示是”Y”或者”N”,表示牛牛选择的数是否是i的倍数。<br>例如,如果提示是”YYNYY”,它表示这个数使1,2,4,5的倍数,但不是3的倍数。<br>注意到一些提示会出现错误。例如: 提示”NYYY”是错误的,因为所有的整数都是1的倍数,所以起始元素肯定不会是”N”。此外,例如”YNNY”的提示也是错误的,因为结果不可能是4的倍数但不是2的倍数。<br>现在给出一个整数n,表示已给的提示的长度。请计算出长度为n的合法的提示的个数。<br>例如 n = 5:<br>合法的提示有:<br>YNNNN YNNNY YNYNN YNYNY YYNNN YYNNY<br>YYNYN YYNYY YYYNN YYYNY YYYYN YYYYY<br>所以输出12  </p>
+</div>  </p>
+<p>合法的条件是存在倍数依赖的数字要么是全为Y要么全为N，分析：  </p>
+<ul>
+<li>第 i 个数是素数（如2,3,5,7…），那么在这一位上是Y或N与前面没有依赖，因此当前位的可能数目sum(i)是前面数目sum(i-1)的2倍；  </li>
+<li>第 i 个数是偶数，但是却不是素数的幂，（如6,10…），那么这一位是Y或N完全取决于它的两个因子，如6取决于2和3,2和3是Y，6一定是Y。因此，sum(i)为sum(i-1)；  </li>
+<li>第 i 个数是素数的幂，（如4,9,8…），它是不能唯一确定的，2取Y，4可以取Y也可以取N，所以对于4，将2,4加入集合取值的组合为NN，YN，YY三种情况，对于8来说，由2,4,8组成，共有NNN，YNN，YYN，YYY四种情况，依次类推就行了，相乘。  </li>
+</ul>
+<p>关键代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">long</span> <span class="keyword">long</span> ans = <span class="number">1</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> (vis[i])<span class="comment">//是倍数直接可以忽略掉不要重复计算</span></div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = i + i; j &lt;= n; j += i)<span class="comment">//倍数</span></div><div class="line">    &#123;</div><div class="line">        vis[j] = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//求i的幂次</span></div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> mi = i;</div><div class="line">    <span class="keyword">while</span> (mi &lt;= n)</div><div class="line">    &#123;</div><div class="line">        cnt++;<span class="comment">//记录幂的数目</span></div><div class="line">        mi *= i;</div><div class="line">    &#125;</div><div class="line">    ans = ans * (cnt + <span class="number">1</span>) % MOD;</div><div class="line">&#125;</div><div class="line"><span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;牛客网上的2017年校招全国统一模拟试题的编程题目，比较难的一些题目汇总，做下记录。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
+    
+  </entry>
   
   <entry>
     <title>libev源码阅读3：定时器</title>
@@ -198,9 +237,9 @@
     <link href="http://abumaster.com/2017/07/19/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90-%E5%AE%B9%E5%99%A8/"/>
     <id>http://abumaster.com/2017/07/19/STL源码剖析-容器/</id>
     <published>2017-07-19T07:04:58.000Z</published>
-    <updated>2017-07-30T12:10:52.356Z</updated>
+    <updated>2017-08-18T06:41:03.766Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="容器概述"><a href="#容器概述" class="headerlink" title="容器概述"></a>容器概述</h4><p><em>容器</em> 用于存放数据，数据在其中的排列具有一定的规律。STL中根据数据的排列方式将容器分为了 <strong>序列式容器</strong> 和 <strong>关联式容器</strong> 两种。其中的分类关系如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/20670842.jpg" alt="">  </p>
+    <content type="html"><![CDATA[<h4 id="容器概述"><a href="#容器概述" class="headerlink" title="容器概述"></a>容器概述</h4><p><em>容器</em> 用于存放数据，数据在其中的排列具有一定的规律。STL中根据数据的排列方式将容器分为了 <strong>序列式容器</strong> 和 <strong>关联式容器</strong> 两种。其中的分类关系如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/20670842.jpg" alt=""><br><a id="more"></a></p>
 <h4 id="序列式容器"><a href="#序列式容器" class="headerlink" title="序列式容器"></a>序列式容器</h4><h5 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h5><p>vector连续线性空间存储，支持随机访问，类似数组。<br>vector的迭代器是一个T类型的原生指针；<br>vector的空间不是按需分配而是按照多分配的原则，比实际需要的空间要大，也就是说会保留一部分的备用空间用于插入元素，分别定义了三个迭代器指向了目前使用空间的头和尾，可用空间的尾。<code>start finish end_of_storage</code> 定义了函数 <code>size() 和 capacity</code> 分别表示使用空间的大小，以及最大容纳的大小；<br>vector的空间扩充，当没有足够的备用空间用于插入新的元素的时候，这时vecto需要进行空间的扩展，会申请一块原始大小二倍的新空间然后将旧的空间中的元素拷贝入新的空间，也就是说原始的迭代器在执行插入操作后会失效；<br>vector存在的缺点，就是可能浪费一部分空间。  </p>
 <h5 id="list"><a href="#list" class="headerlink" title="list"></a>list</h5><p>list 在stl中的实现是一个双向链表，节点结构是有一个指向后一个节点和前一个节点的指针以及节点中的数据，每次插入和删除元素都要重新配置和释放节点，空间按需分配，插入操作不会改变迭代器。<br>list迭代器设计，内部依然是一个指针，指向了list的节点，内部定义了stl迭代器标准的接口，并实现了双向迭代器具有的操作，自增，自减，取值，比较等；<br>list数据结构，双向循环链表，一些操作就是链表的指针的移动；<br>一个内部函数<code>transfer(position, first, last)</code>将[first,last)内的元素移动到position之前。为splice、merge、sort提供基础。操作见图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-29/87239144.jpg" alt=""><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(iterator position, iterator first, iterator last)</span> </div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (position != last) </div><div class="line">    &#123;</div><div class="line">        (*(link_type((*last.node).prev))).next = position.node; <span class="comment">// (1)</span></div><div class="line">        (*(link_type((*first.node).prev))).next = last.node; <span class="comment">// (2)</span></div><div class="line">        (*(link_type((*position.node).prev))).next = first.node; <span class="comment">// (3)</span></div><div class="line">        link_type tmp = link_type((*position.node).prev); <span class="comment">// (4)</span></div><div class="line">        (*position.node).prev = (*last.node).prev; <span class="comment">// (5)</span></div><div class="line">        (*last.node).prev = (*first.node).prev;  <span class="comment">// (6)</span></div><div class="line">        (*first.node).prev = tmp; <span class="comment">// (7)</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>list 本身提供了排序的成员函数，不用stl算法（接受随机迭代器）。  </p>
@@ -214,7 +253,7 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;容器概述&quot;&gt;&lt;a href=&quot;#容器概述&quot; class=&quot;headerlink&quot; title=&quot;容器概述&quot;&gt;&lt;/a&gt;容器概述&lt;/h4&gt;&lt;p&gt;&lt;em&gt;容器&lt;/em&gt; 用于存放数据，数据在其中的排列具有一定的规律。STL中根据数据的排列方式将容器分为了 &lt;strong
+      &lt;h4 id=&quot;容器概述&quot;&gt;&lt;a href=&quot;#容器概述&quot; class=&quot;headerlink&quot; title=&quot;容器概述&quot;&gt;&lt;/a&gt;容器概述&lt;/h4&gt;&lt;p&gt;&lt;em&gt;容器&lt;/em&gt; 用于存放数据，数据在其中的排列具有一定的规律。STL中根据数据的排列方式将容器分为了 &lt;strong&gt;序列式容器&lt;/strong&gt; 和 &lt;strong&gt;关联式容器&lt;/strong&gt; 两种。其中的分类关系如下图所示：&lt;br&gt;&lt;img src=&quot;http://oo7zsi4t8.bkt.clouddn.com/17-7-29/20670842.jpg&quot; alt=&quot;&quot;&gt;&lt;br&gt;
     
     </summary>
     
@@ -1427,52 +1466,6 @@ shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><t
       <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
       <category term="测试" scheme="http://abumaster.com/tags/test/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>UNIX环境高级编程-进程</title>
-    <link href="http://abumaster.com/2017/05/19/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B/"/>
-    <id>http://abumaster.com/2017/05/19/UNIX环境高级编程-进程/</id>
-    <published>2017-05-19T02:22:59.000Z</published>
-    <updated>2017-05-20T10:10:09.644Z</updated>
-    
-    <content type="html"><![CDATA[<p>Unix环境高级编程，第7、8、9章有关进程的读书笔记。<br><a id="more"></a></p>
-<h3 id="进程环境"><a href="#进程环境" class="headerlink" title="进程环境"></a>进程环境</h3><p>进程的启动和终止。一般c程序从入口函数<code>main</code>开始，调用一系列用户函数等；进程终止有正常终止和异常终止两种，其中，正常终止是程序从main函数返回(return)，或者正常调用退出函数<code>exit _exit _Exit</code>，或者线程的返回或退出，异常终止通常会调用<code>abort</code>或者信号中断。<br><strong>命令行参数和环境表</strong><br>它们都是有外界给程序的参数，就像标注的 ISO C 规定的主函数书写格式
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[]</span></span></div></pre></td></tr></table></figure></p>
-<p>将命令行参数保存，而环境变量表则被取消了，仍可以通过函数访问环境表。 
-查看和设置环境变量，<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* envname)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">putenv</span><span class="params">(<span class="keyword">char</span> *str)</span></span>;<span class="comment">//不会分配空间</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">setenv</span><span class="params">(<span class="keyword">char</span> *name, <span class="keyword">char</span> *value, <span class="keyword">int</span> rewrite)</span></span>;<span class="comment">//分配空间</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</div></pre></td></tr></table></figure></p>
-<p><strong>C 程序的存储空间分布</strong><br>如图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/39758826-file_1495161867318_14f4a.png" alt="">   </p>
-<ul>
-<li>正文段，存放程序运行所需的机器指令部分，具有只读属性；  </li>
-<li>初始化数据段，明确初始化的变量；</li>
-<li>未初始化的数据；  </li>
-<li>栈，存放自动变量或者临时变量；  </li>
-<li>堆，动态分配的空间。  </li>
-</ul>
-<p><strong>非局部goto</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span>;<span class="comment">//设置返回的位置</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env, <span class="keyword">int</span> val)</span></span>;<span class="comment">//开始返回</span></div></pre></td></tr></table></figure></p>
-<p>回滚一些变量的值，如果不想回滚到之前的值，可以将变量定义为：volatile，全局或静态变量的值也会保持不变。  </p>
-<h3 id="进程控制"><a href="#进程控制" class="headerlink" title="进程控制"></a>进程控制</h3><p><strong>进程标识符</strong><br>非负整型来表示唯一进程ID，但是可以重用，通常ID=0表示交换进程或者调度进程，ID=1表示init进程，ID=2表示页守护进程。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> getpid();<span class="comment">//进程ID</span></div><div class="line"><span class="keyword">pid_t</span> getppid();<span class="comment">//父进程ID</span></div></pre></td></tr></table></figure></p>
-<p><strong>fork函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> fork(<span class="keyword">void</span>);</div></pre></td></tr></table></figure></p>
-<p>两个返回，子进程返回0，通过getppid获得父进程id，ID为0，是交换进程使用，父进程返回子进程的ID，因为，这是父进程获得子进程ID的唯一方式。<br><strong>exec函数</strong><br>fork创建新进程，exec可以执行新程序，exit处理终止，wait等待终止。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">const</span> <span class="keyword">char</span> *arg0, ...)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">char</span> * <span class="keyword">const</span> argv[])</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">const</span> <span class="keyword">char</span> *argv0, ..., <span class="comment">/*char *const envp[]*/</span>)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">char</span> *<span class="keyword">const</span> argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp[])</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *argv0, ...)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv[])</span></span>;</div></pre></td></tr></table></figure>
-区别前四个函数取路径名，后两个取文件名作为参数。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-20/96247138-file_1495261874685_e1b6.png" alt="exec函数区别"><br><strong>system函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">system</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cmdstring)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>用于执行一个命令字符串，调用了<code>fork</code>函数，<code>exec</code>函数，<code>waitpid</code>函数。  </p>
-<h3 id="进程关系"><a href="#进程关系" class="headerlink" title="进程关系"></a>进程关系</h3><p>终端登录和网络登录的进程关系图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-20/25743922-file_1495274895570_15325.png" alt="">
-<img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-20/24107374-file_1495274948060_6d4e.png" alt="">  </p>
-<p><strong>进程组</strong><br>进程组是一个或多个进程的集合，通常与一个作业关联。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="keyword">pid_t</span> getpgrp(<span class="keyword">void</span>);<span class="comment">//调用进程的进程组ID</span></div><div class="line"><span class="keyword">pid_t</span> getpgid(<span class="keyword">pid_t</span> pid);<span class="comment">//pid的进程组ID</span></div><div class="line"><span class="comment">//getpgrp()等价于getpgid(0);</span></div></pre></td></tr></table></figure></p>
-<p><strong>会话</strong><br>会话是一个或多个进程组的集合。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Unix环境高级编程，第7、8、9章有关进程的读书笔记。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
-    
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
     
   </entry>
   

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[牛客网校招模拟编程题(1-5)笔记]]></title>
+    <url>%2F2017%2F08%2F18%2F%E7%89%9B%E5%AE%A2%E7%BD%91%E6%A0%A1%E6%8B%9B%E6%A8%A1%E6%8B%9F%E7%BC%96%E7%A8%8B%E9%A2%98-1-5-%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[牛客网上的2017年校招全国统一模拟试题的编程题目，比较难的一些题目汇总，做下记录。 1.猜数字游戏题目描述：题目链接牛牛和羊羊在玩一个有趣的猜数游戏。在这个游戏中,牛牛玩家选择一个正整数,羊羊根据已给的提示猜这个数字。第i个提示是”Y”或者”N”,表示牛牛选择的数是否是i的倍数。例如,如果提示是”YYNYY”,它表示这个数使1,2,4,5的倍数,但不是3的倍数。注意到一些提示会出现错误。例如: 提示”NYYY”是错误的,因为所有的整数都是1的倍数,所以起始元素肯定不会是”N”。此外,例如”YNNY”的提示也是错误的,因为结果不可能是4的倍数但不是2的倍数。现在给出一个整数n,表示已给的提示的长度。请计算出长度为n的合法的提示的个数。例如 n = 5:合法的提示有:YNNNN YNNNY YNYNN YNYNY YYNNN YYNNYYYNYN YYNYY YYYNN YYYNY YYYYN YYYYY所以输出12 合法的条件是存在倍数依赖的数字要么是全为Y要么全为N，分析： 第 i 个数是素数（如2,3,5,7…），那么在这一位上是Y或N与前面没有依赖，因此当前位的可能数目sum(i)是前面数目sum(i-1)的2倍； 第 i 个数是偶数，但是却不是素数的幂，（如6,10…），那么这一位是Y或N完全取决于它的两个因子，如6取决于2和3,2和3是Y，6一定是Y。因此，sum(i)为sum(i-1)； 第 i 个数是素数的幂，（如4,9,8…），它是不能唯一确定的，2取Y，4可以取Y也可以取N，所以对于4，将2,4加入集合取值的组合为NN，YN，YY三种情况，对于8来说，由2,4,8组成，共有NNN，YNN，YYN，YYY四种情况，依次类推就行了，相乘。 关键代码：1234567891011121314151617181920long long ans = 1;for (int i = 2; i &lt;= n; i++)&#123; int cnt = 0; if (vis[i])//是倍数直接可以忽略掉不要重复计算 continue; for (int j = i + i; j &lt;= n; j += i)//倍数 &#123; vis[j] = 1; &#125; //求i的幂次 long long mi = i; while (mi &lt;= n) &#123; cnt++;//记录幂的数目 mi *= i; &#125; ans = ans * (cnt + 1) % MOD;&#125;cout &lt;&lt; ans &lt;&lt; endl;]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编程</tag>
+        <tag>算法</tag>
+        <tag>面试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[libev源码阅读3：定时器]]></title>
     <url>%2F2017%2F08%2F01%2Flibev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB3%EF%BC%9A%E5%AE%9A%E6%97%B6%E5%99%A8%2F</url>
     <content type="text"><![CDATA[定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。 堆的概念堆是一种树形结构，分为最大堆和最小堆，分别是根节点是最大元素或最小元素，stl中利用二叉大顶堆实现优先级队列以及堆算法。堆的节点一般存放在数组中，在数组的排列有一定的规律，堆没有节点漏洞，按层依次排列的，如堆是从数组array的索引为1的位置开始排列，那么某个节点位于i的位置，其左孩子位于2i处，右孩子位于2i+1处，父节点位于i/2处（/ 为取整）。从0开始排列，节点i的左右孩子节点的索引分别为2i+1，2i+2，父节点为(i-1)/2 。n叉堆的孩子[ni+1,…,ni+n]对于堆的调整，一般用到向上调整和向下调整两种方式，下面结合代码详细注释。 四叉堆libev中的四叉堆的根节点索引是3，从3开始依次向后排列，那么i节点的孩子的范围为[4(i-3)+1+3,…,4(i-3)+4+3]，父节点为(i-3-1)/4+3 。堆元素的结构 12345678//使用缓存的情况下typedef struct &#123; ev_tstamp at; WT w; &#125; ANHE;#define ANHE_w(he) (he).w /* access watcher, read-write */#define ANHE_at(he) (he).at /* access cached at, read-only */#define ANHE_at_cache(he) (he).at = (he).w-&gt;at /* update at from watcher */ 堆算法实现如下：downheap 函数：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556#if EV_USE_4HEAP //如果定义了4叉堆#define DHEAP 4#define HEAP0 (DHEAP - 1) /* index of first element in heap */#define HPARENT(k) ((((k) - HEAP0 - 1) / DHEAP) + HEAP0) //获得k的父节点#define UPHEAP_DONE(p,k) ((p) == (k)) //是否更新完成//从根向下调整，N为堆的元素个数，k表示要调整元素的索引inline_speed voiddownheap (ANHE *heap, int N, int k)&#123; ANHE he = heap [k];//先获得调整 ANHE *E = heap + N + HEAP0;//结束的指针 for (;;) &#123; ev_tstamp minat; //最小的元素 ANHE *minpos; //最小元素的指针 ANHE *pos = heap + DHEAP * (k - HEAP0) + HEAP0 + 1;//k的第一个孩子的指针 //查找k的最小孩子 if (expect_true (pos + DHEAP - 1 &lt; E))//最后一个孩子没有越界，有四个孩子 &#123; //在四个孩子中找最小的 (minpos = pos + 0), (minat = ANHE_at (*minpos));//设置初值 if (ANHE_at (pos [1]) &lt; minat) (minpos = pos + 1), (minat = ANHE_at (*minpos)); if (ANHE_at (pos [2]) &lt; minat) (minpos = pos + 2), (minat = ANHE_at (*minpos)); if (ANHE_at (pos [3]) &lt; minat) (minpos = pos + 3), (minat = ANHE_at (*minpos)); &#125; else if (pos &lt; E)//有孩子，但是不是4个孩子 &#123; (minpos = pos + 0), (minat = ANHE_at (*minpos)); if (pos + 1 &lt; E &amp;&amp; ANHE_at (pos [1]) &lt; minat) (minpos = pos + 1), (minat = ANHE_at (*minpos)); if (pos + 2 &lt; E &amp;&amp; ANHE_at (pos [2]) &lt; minat) (minpos = pos + 2), (minat = ANHE_at (*minpos)); if (pos + 3 &lt; E &amp;&amp; ANHE_at (pos [3]) &lt; minat) (minpos = pos + 3), (minat = ANHE_at (*minpos)); &#125; else //其他情况，没孩子，不用调整退出循环 break; //当前节点小于最小孩子，已经是最小堆，不用调整退出 if (ANHE_at (he) &lt;= minat) break; //否则将最小元素调到k的位置 heap [k] = *minpos; ev_active (ANHE_w (*minpos)) = k;//将时间监测器设置为索引k k = minpos - heap;//设置下一次调整的根节点 &#125; heap [k] = he;//将元素填充到k中 ev_active (ANHE_w (he)) = k;&#125; 如果没有定义四叉堆的宏，那么就是简单的二叉堆的定义和调整。upheap 函数：1234567891011121314151617181920//从k向根调整inline_speed voidupheap (ANHE *heap, int k)&#123; ANHE he = heap [k];//先记录k位置的元素 //循环调整 for (;;) &#123; int p = HPARENT (k);//获得k的父节点 //是否等于父节点（调整完成）或者父节点的元素小于当前的 if (UPHEAP_DONE (p, k) || ANHE_at (heap [p]) &lt;= ANHE_at (he)) break; heap [k] = heap [p];// ev_active (ANHE_w (heap [k])) = k; k = p; &#125; heap [k] = he; ev_active (ANHE_w (he)) = k;&#125; adjust 和 reheap 函数1234567891011121314151617181920/* move an element suitably so it is in a correct place */inline_size voidadjustheap (ANHE *heap, int N, int k)&#123; if (k &gt; HEAP0 &amp;&amp; ANHE_at (heap [k]) &lt;= ANHE_at (heap [HPARENT (k)])) upheap (heap, k);//k的元素小于父节点的元素，向上调整 else downheap (heap, N, k);//向下调整&#125;/* rebuild the heap: this function is used only once and executed rarely */inline_size voidreheap (ANHE *heap, int N)&#123; int i; /* we don't use floyds algorithm, upheap is simpler and is more cache-efficient */ /* also, this is easy to implement and correct for both 2-heaps and 4-heaps */ for (i = 0; i &lt; N; ++i)//直接向上调整，简单高效 upheap (heap, i + HEAP0);&#125; 超时监视器基本数据结构相对时间。 123456789101112typedef struct ev_timer&#123; //EV_WATCHER_TIME (ev_timer) int active; int pending; int priority; void *data; void (*cb)(struct ev_loop *loop, struct ev_timer *w, int revents); ev_tstamp at; //定时器第一次触发的时间点 ev_tstamp repeat; /* rw */ //每隔几秒触发一次，0表示只触发一次&#125; ev_timer; 初始化超时监视器123456789101112131415//初始化，调用两个宏来初始化成员#define ev_timer_init(ev,cb,after,repeat) \do &#123; ev_init ((ev), (cb)); \ ev_timer_set ((ev),(after),(repeat)); \ &#125; while (0)#define ev_init(ev,cb_) do &#123; \ ((ev_watcher *)(void *)(ev))-&gt;active = \ ((ev_watcher *)(void *)(ev))-&gt;pending = 0; \ ev_set_priority ((ev), 0); \ ev_set_cb ((ev), cb_); \&#125; while (0)#define ev_timer_set(ev,after_,repeat_) \do &#123; ((ev_watcher_time *)(ev))-&gt;at = (after_); \ (ev)-&gt;repeat = (repeat_); &#125; while (0) 启动超时器1234567891011121314151617181920212223noinlinevoidev_timer_start (EV_P_ ev_timer *w) EV_THROW&#123; if (expect_false (ev_is_active (w))) return; ev_at (w) += mn_now;//设置at时间点，此时间点触发，相对于mn_now，当前日历时间 assert (("libev: ev_timer_start called with negative timer repeat value", w-&gt;repeat &gt;= 0.)); EV_FREQUENT_CHECK; //将timer加入到堆中并向上调整，active表示的是堆数组中的下标 ++timercnt; ev_start (EV_A_ (W)w, timercnt + HEAP0 - 1); array_needsize (ANHE, timers, timermax, ev_active (w) + 1, EMPTY2); ANHE_w (timers [ev_active (w)]) = (WT)w; ANHE_at_cache (timers [ev_active (w)]); upheap (timers, ev_active (w)); EV_FREQUENT_CHECK; /*assert (("libev: internal timer heap corruption", timers [ev_active (w)] == (WT)w));*/&#125; 停止计时器123456789101112131415161718192021222324noinlinevoidev_timer_stop (EV_P_ ev_timer *w) EV_THROW&#123; clear_pending (EV_A_ (W)w);//从pending中移除 if (expect_false (!ev_is_active (w))) return; EV_FREQUENT_CHECK; &#123; int active = ev_active (w);//获得定时器在堆中的索引 assert (("libev: internal timer heap corruption", ANHE_w (timers [active]) == (WT)w)); --timercnt;//数量减一 if (expect_true (active &lt; timercnt + HEAP0)) &#123; timers [active] = timers [timercnt + HEAP0];//最后一个元素补充上来 adjustheap (timers, timercnt, active);//调整 &#125; &#125; ev_at (w) -= mn_now; ev_stop (EV_A_ (W)w); EV_FREQUENT_CHECK;&#125; 周期定时器]]></content>
@@ -359,8 +373,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -372,8 +386,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -433,8 +447,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -457,8 +471,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -513,8 +527,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -547,8 +561,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -559,8 +573,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -583,8 +597,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
