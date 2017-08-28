@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技巧,C," />
+  <meta name="keywords" content="C++,编程,算法,笔试," />
 
 
 
@@ -90,18 +90,16 @@
 
 
 
-<meta name="description" content="C语言知识拾遗，struct option 结构体。">
+<meta name="description" content="记录学习生活的点滴">
 <meta property="og:type" content="article">
-<meta property="og:title" content="c语言中的struct-option结构">
-<meta property="og:url" content="http://abumaster.com/2017/07/03/c语言中的struct-option结构/index.html">
+<meta property="og:title" content="2018秋招-今日头条">
+<meta property="og:url" content="http://abumaster.com/2017/08/27/2018秋招-今日头条/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="C语言知识拾遗，struct option 结构体。">
-<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-3/68613055.jpg">
-<meta property="og:updated_time" content="2017-07-03T13:27:20.575Z">
+<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:updated_time" content="2017-08-28T07:39:16.740Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="c语言中的struct-option结构">
-<meta name="twitter:description" content="C语言知识拾遗，struct option 结构体。">
-<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-7-3/68613055.jpg">
+<meta name="twitter:title" content="2018秋招-今日头条">
+<meta name="twitter:description" content="记录学习生活的点滴">
 
 
 
@@ -129,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/2017/07/03/c语言中的struct-option结构/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/08/27/2018秋招-今日头条/"/>
 
 
 
 
 
-  <title> c语言中的struct-option结构 | 张国丰 </title>
+  <title> 2018秋招-今日头条 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +295,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/07/03/c语言中的struct-option结构/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/08/27/2018秋招-今日头条/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -318,7 +316,7 @@
             
             
               
-                c语言中的struct-option结构
+                2018秋招-今日头条
               
             
           </h1>
@@ -333,8 +331,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-03T20:52:19+08:00">
-                2017-07-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-27T17:09:22+08:00">
+                2017-08-27
               </time>
             
 
@@ -391,14 +389,7 @@
       
 
       
-        <p>C语言知识拾遗，struct option 结构体。</p>
-<a id="more"></a>
-<p><code>struct option</code> 指明了一个长参数，在一些控制台程序中经常用到，需要指明不同的参数来运行程序。如开源软件<strong>webbench</strong>运行<code>./webbench -h</code>后会出现一些可选项，指定不同的参数，程序会做出不同的相应。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-3/68613055.jpg" alt=""><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> option &#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *name; <span class="comment">//name表示的是长参数名</span></div><div class="line">	<span class="keyword">int</span> has_arg；</div><div class="line">	<span class="keyword">int</span> *flag;</div><div class="line">	<span class="keyword">int</span> val; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>参数说明：<br><em>name</em> 表示长参数的名称；<br><em>has_arg</em> 表示参数名称后面是否需要跟着参数，no_argument(0)不需要，required_argument(1)一定要跟个参数，optional_argument(2)可以有也可以没有；<br><em>flag</em> 决定了<code>getopt_long</code>的返回值，如果为NULL，返回val字段的数值；如果不为NULL，则会使其指向的内容变为val中的值，并且返回0；若未发现长选项，那么指向不变；<br><em>val</em> 指定的默认值。  </p>
-<p><strong>长命令参数的解析</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getopt_long</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> argv[],</div><div class="line">                  <span class="keyword">const</span> <span class="keyword">char</span> *optstring,</div><div class="line">                  <span class="keyword">const</span> <span class="keyword">struct</span> option *longopts, <span class="keyword">int</span> *longindex)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>参数说明：<br><code>argc</code> 和 <code>argv</code> 是命令行参数；<br><code>optstring</code> 选项参数组成的字符串，如果一个字母后面跟着一个冒号如 <code>t:</code>，那么表示这个选项后需要参数；<br><code>longopts</code> 是需要的自定义的option结构体；<br><code>longindex</code> 指定一个索引指针。  </p>
-<p><strong>例子</strong>：  </p>
-
+        
       
     </div>
 
@@ -421,9 +412,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jq/" rel="tag"># 技巧</a>
+            <a href="/tags/C/" rel="tag"># C++</a>
           
-            <a href="/tags/C/" rel="tag"># C</a>
+            <a href="/tags/编程/" rel="tag"># 编程</a>
+          
+            <a href="/tags/algorithm/" rel="tag"># 算法</a>
+          
+            <a href="/tags/笔试/" rel="tag"># 笔试</a>
           
         </div>
       
@@ -436,8 +431,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/27/STL源码剖析-迭代器和traits编程技法/" rel="next" title="STL源码剖析-迭代器和traits编程技法">
-                <i class="fa fa-chevron-left"></i> STL源码剖析-迭代器和traits编程技法
+              <a href="/2017/08/18/牛客网校招模拟编程题-1-5-笔记/" rel="next" title="牛客网校招模拟编程题(1-5)笔记">
+                <i class="fa fa-chevron-left"></i> 牛客网校招模拟编程题(1-5)笔记
               </a>
             
           </div>
@@ -446,8 +441,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/09/多线程库c-11/" rel="prev" title="多线程库c++11">
-                多线程库c++11 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/27/2018秋招-360/" rel="prev" title="2018秋招-360">
+                2018秋招-360 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
