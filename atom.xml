@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-09-04T12:19:58.596Z</updated>
+  <updated>2017-09-12T13:56:34.502Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,38 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>常见算法模板</title>
+    <link href="http://abumaster.com/2017/09/06/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A8%A1%E6%9D%BF/"/>
+    <id>http://abumaster.com/2017/09/06/常见算法模板/</id>
+    <published>2017-09-06T13:12:25.000Z</published>
+    <updated>2017-09-12T13:56:34.502Z</updated>
+    
+    <content type="html"><![CDATA[<p>常见的算法模板，如并查集、字典树等。
+<a id="more"></a></p>
+<p><strong>1.并查集</strong>  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;常见的算法模板，如并查集、字典树等。
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+  </entry>
+  
+  <entry>
     <title>知识点</title>
     <link href="http://abumaster.com/2017/09/04/%E7%9F%A5%E8%AF%86%E7%82%B9/"/>
     <id>http://abumaster.com/2017/09/04/知识点/</id>
     <published>2017-09-04T05:54:29.000Z</published>
-    <updated>2017-09-04T12:19:58.596Z</updated>
+    <updated>2017-09-12T13:11:48.532Z</updated>
     
     <content type="html"><![CDATA[<p>总结前辈们面试知识点，备忘。<br><a id="more"></a></p>
 <h4 id="C-语言特性"><a href="#C-语言特性" class="headerlink" title="C++语言特性"></a>C++语言特性</h4><h5 id="C-内存管理"><a href="#C-内存管理" class="headerlink" title="C++内存管理"></a>C++内存管理</h5><p>可以参考<a href="http://www.cnblogs.com/Azhu/p/4436531.html">博文</a>。<br>内存划分：<br>在C++中，内存分成5个区，他们分别是 <strong>堆</strong>、<strong>栈</strong>、<strong>自由存储区</strong>、<strong>全局/静态存储区</strong>和 <strong>常量存储区</strong>。<br><strong>栈</strong>：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。<br><strong>堆</strong>：就是那些由 new分配的内存块，他们的释放编译器不去管，由我们的应用程序去控制，一般一个new就要对应一个 delete。如果程序员没有释放掉，那么在程序结束后，操作系统会自动回收。<br><strong>自由存储区</strong>：就是那些由malloc等分配的内存块，他和堆是十分相似的，不过它是用free来结束自己的生命的。<br><strong>全局/静态存储区</strong>：全局变量和静态变量被分配到同一块内存中，在以前的C语言中，全局变量又分为初始化的和未初始化的，在C++里面没有这个区分了，他们共同占用同一块内存区。<br><strong>常量存储区</strong>：这是一块比较特殊的存储区，他们里面存放的是常量，不允许修改。<br>分配和释放：<br>C++中使用<code>new</code>和<code>delete</code>运算符用于申请和释放内存块，要配对使用。对于对象来说，可以调用默认构造函数。栈是由编译器自动管理，堆由程序员控制；栈的空间小速度快，堆的空间大，速度相对慢；生长方向，堆是向地址增大的方向，栈是向地址减小的方向。  </p>
@@ -29,11 +56,15 @@
 <p>2.指针和数组，数组名不是指针，只是在一定的情况下退化为指针（数组名作为参数传递）。同样数组名也不可以直接赋值给一个指针，或者比较，要用标准函数<code>strcpy strcmp</code>。  </p>
 <h5 id="C-多态或虚函数实现机制"><a href="#C-多态或虚函数实现机制" class="headerlink" title="C++多态或虚函数实现机制"></a>C++多态或虚函数实现机制</h5><p>C++多态是通过虚函数实现的。<a href="http://www.cnblogs.com/malecrab/p/5572730.html">C++虚函数的实现的基本原理</a>。<br><strong>虚函数</strong>的实现：虚函数表和虚表指针。<br>虚函数表，就是在一个类的内存分布上起始地址是一个虚表指针，指向虚函数的表。虚函数表是在构造函数时产生，所以构造函数不能为虚函数。例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Base&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">int</span> a;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">funa</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">funb</span><span class="params">()</span></span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">/**内存分布          虚表</div><div class="line">|   *pvtable |--&gt;| funa | funb |</div><div class="line">|      a     |</div><div class="line">***/</span></div></pre></td></tr></table></figure></p>
 <p>如果实例一个Base类对象，<code>Base b</code>，然后，虚表指针为 <code>(int *)(&amp;b)</code> 将地址转换成4字节的地址就位虚指针，第一个虚函数的地址为<code>(int *)*(int *)(&amp;b)</code>。<br>当继承时，子类也继承了父类的虚表并在其中重写虚函数或增加虚函数。动态绑定 <code>Base pb= new Derive();</code> ，然后调用虚函数，偏移地址是一定的，如果子类重写了虚函数，那么会调用子类的虚函数，完成动态绑定，实现了多态。<br><em>引用和指针都可以实现动态绑定，是实现多态的两种方式。</em>  </p>
-<h5 id="虚构造函数和虚析构函数"><a href="#虚构造函数和虚析构函数" class="headerlink" title="虚构造函数和虚析构函数"></a>虚构造函数和虚析构函数</h5><p>构造函数和析构函数不能被继承。<br>构造函数不能声明为虚函数，构造函数在进行调用时还不存在父类和子类的概念，父类只会调用父类的构造函数，子类调用子类的，因此不存在动态绑定的概念；但是构造函数中可以调用虚函数，不过并没有动态效果，只会调用本类中的对应函数。构造函数后才会产生虚表。<br><strong>虚析构函数</strong>是为了使子类调用自己的析构函数来释放内存空间，而不是单纯调用父类的构造函数，造成内存泄漏。<br>如<code>Base *pb=new Derive(); delete pb;</code>，如果基类的析构函数不是虚函数的话，delete操作只调用了父类的析构函数，子类的构造函数没有调用，造成了内存泄漏。<br><em>析构函数的执行不应该抛出异常，如果有异常，最好不要抛出函数之外。</em>   </p>
+<h5 id="虚构造函数和虚析构函数"><a href="#虚构造函数和虚析构函数" class="headerlink" title="虚构造函数和虚析构函数"></a>虚构造函数和虚析构函数</h5><p>构造函数和析构函数不能被继承。<br>构造函数不能声明为虚函数，构造函数在进行调用时还不存在父类和子类的概念，父类只会调用父类的构造函数，子类调用子类的，因此不存在动态绑定的概念；但是构造函数中可以调用虚函数，不过并没有动态效果，只会调用本类中的对应函数。构造函数后才会产生虚表。<br><strong>虚析构函数</strong>是为了使子类调用自己的析构函数来释放内存空间，而不是单纯调用父类的构造函数，造成内存泄漏。<br>如<code>Base *pb=new Derive(); delete pb;</code>，如果基类的析构函数不是虚函数的话，delete操作只调用了父类的析构函数，子类的构造函数没有调用，造成了内存泄漏。<br><em>析构函数的执行不应该抛出异常，如果有异常，最好不要抛出函数之外。</em><br>静态成员函数不能是虚函数，<em>虚函数</em>是一种特殊的成员函数，为了实现运行时多态，<em>静态函数</em>和类不相关，是一种限定了命名空间的特殊函数，所以。  </p>
 <h5 id="重载和重写"><a href="#重载和重写" class="headerlink" title="重载和重写"></a>重载和重写</h5><p>方法的重写（Overriding）和重载（overloading）是多态性的不同表现。<br>重写是父类和子类之间多态性的一种表现，重载是一个类中多态的表现。<br>如果父类定义了一个虚函数，子类定义了同名的函数，且函数参数以及返回值都相同，那么称为重写，父类中的定义被覆盖了；如果在一个类中定义了多个同名的方法，它们的区别在于参数的个数和类型，并且返回值也可以不同，那么这就是重载了。  </p>
 <h4 id="STL相关和数据结构"><a href="#STL相关和数据结构" class="headerlink" title="STL相关和数据结构"></a>STL相关和数据结构</h4><h5 id="红黑树的特性及其应用"><a href="#红黑树的特性及其应用" class="headerlink" title="红黑树的特性及其应用"></a>红黑树的特性及其应用</h5><p>满足下列条件的二叉搜索树是红黑树<br>性质1. 节点是红色或黑色<br>性质2. 根是黑色<br>性质3. 所有叶子都是黑色（叶子是Null节点）<br>性质4. 如果一个节点是红的，则它的两个儿子都是黑的<br>性质5. 从任一节点到其叶子的所有简单路径都包含相同数目的黑色节点。<br><a href="http://abumaster.com/2017/04/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%A2%E9%BB%91%E4%BA%8C%E5%8F%89%E6%A0%91/">调整详细</a>。<br>STL中<code>set、multiset、map、multimap</code>底层是红黑树实现的，而<code>unordered_map</code>、<code>unordered_set</code> 底层是哈希表实现的。  </p>
-<h5 id="Bloom过滤器"><a href="#Bloom过滤器" class="headerlink" title="Bloom过滤器"></a>Bloom过滤器</h5><p><a href="https://segmentfault.com/a/1190000002729689">Bloom布隆过滤器</a>是一种空间效率很高的数据结构。  </p>
-<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><h4 id="Linux相关"><a href="#Linux相关" class="headerlink" title="Linux相关"></a>Linux相关</h4><h4 id="网络和数据库"><a href="#网络和数据库" class="headerlink" title="网络和数据库"></a>网络和数据库</h4>]]></content>
+<h5 id="Bloom过滤器"><a href="#Bloom过滤器" class="headerlink" title="Bloom过滤器"></a>Bloom过滤器</h5><p><a href="https://segmentfault.com/a/1190000002729689">Bloom布隆过滤器</a>是一种空间效率很高的数据结构。<br>相当于一个哈希表，将一个大的数据集通过hash函数映射到小的集合上，比hash表更节省空间，但是也带来了一定的错误率。通常用于实现数据字典，快速查询，数据的去重，集合求交集等。<br>如何实现？m位数的数组，全置为0，和k个hash函数，当有一个数字，经过每一个hash函数，映射到对应位数的数组中，置为1。查询时，如果通过hash函数计算的每一位都为1，则认为这个数字使存在的，否则不存在。问题：一个数不存在，可能会被认为存在。<br>可以快速识别一个元素是否为一个集合中的元素，如将url映射为1bit，用来识别恶意链接，检测辣鸡邮箱。<br><div class="note info"><p>A,B 两个文件，各存放 50 亿条 URL，每条 URL 占用 64 字节，内存限制是 4G，让你找出 A,B 文件共同的 URL。如果是三个乃至 n 个文件呢？<br>分析 ：如果允许有一定的错误率，可以使用 Bloom filter，4G 内存大概可以表示 340 亿 bit。将其中一个文件中的 url 使用 Bloom filter 映射为这 340 亿 bit，然后挨个读取另外一个文件的 url，检查是否与 Bloom filter，如果是，那么该 url 应该是共同的 url（注意会有一定的错误率）。  </p>
+</div>  </p>
+<h5 id="B树家族"><a href="#B树家族" class="headerlink" title="B树家族"></a>B树家族</h5><p><a href="http://www.cnblogs.com/oldhorse/archive/2009/11/16/1604009.html">参考</a>。<br><strong>B树</strong> 二叉搜索树，非叶子节点至多拥有两个儿子，所有节点存放着一个关键字，左子树比父节点小，右子树比父节点元素大。搜索类似二分查找，若树不平衡则退化为顺序查找。所以有时加一个平衡条件，称为平衡二叉树。<br><strong>B-树</strong>  多路搜索树，<br><strong>B+树</strong><br><strong>B*树</strong>   </p>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><h4 id="Linux相关"><a href="#Linux相关" class="headerlink" title="Linux相关"></a>Linux相关</h4><h5 id="Linux下的IO模型"><a href="#Linux下的IO模型" class="headerlink" title="Linux下的IO模型"></a>Linux下的IO模型</h5><p><a href="http://www.cnblogs.com/chy2055/p/5220793.html">IO模型</a>。</p>
+<h4 id="网络和数据库"><a href="#网络和数据库" class="headerlink" title="网络和数据库"></a>网络和数据库</h4><h5 id="MySQL数据库复制关系"><a href="#MySQL数据库复制关系" class="headerlink" title="MySQL数据库复制关系"></a>MySQL数据库复制关系</h5><p>master将改变记录到二进制日志文件中；slave将master的二进制日志拷贝到它的中继日志中；slave重做中继日志中的事件，将改变反映它自己的数据。<br>MySQL Binlog 有三种格式，分别是Statement(语句)、Row(行)、Mixd(混合)。<br>Statement记录了用户执行的原始SQL，而Row则是记录了行的修改情况，在MySQL 5.6以上的版本默认是Mixd格式，但为了保证复制数据的完整性，建议生产环境都使用Row格式，就前面所说的Row记录的是行数据的修改情况，而不是原始SQL。<br><a href="http://blog.csdn.net/nanamasuda/article/details/52089499">详细</a>  </p>
+]]></content>
     
     <summary type="html">
     
@@ -120,9 +151,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -174,9 +205,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -225,9 +256,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
@@ -973,116 +1004,6 @@
     <summary type="html">
     
       &lt;p&gt;Unix环境高级编程， 第16章 网络IPC：套接字 读书笔记。不同计算机进行通信的机制。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
-    
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>UNIX环境高级编程-进程间通信</title>
-    <link href="http://abumaster.com/2017/05/30/UNIX%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/"/>
-    <id>http://abumaster.com/2017/05/30/UNIX环境高级编程-进程间通信/</id>
-    <published>2017-05-30T07:12:26.000Z</published>
-    <updated>2017-06-04T13:00:38.863Z</updated>
-    
-    <content type="html"><![CDATA[<p>Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。</p>
-<a id="more"></a>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/36378614.jpg" alt="">  </p>
-<div class="note primary"><p><strong>进程间通信</strong>( <em>inteprocess communication</em> ) 的目的是：
-进行数据传输，不同进程协作处理一些数据；资源共享，多个进程间共享数据；通知事件，一个进程向其他进程通知一个事件发生；<br>进程间的通信主要分为：pipe，fifo，消息队列，信号量，共享存储，uds，套接字。</p>
-</div>  
-<h4 id="pipe和fifo"><a href="#pipe和fifo" class="headerlink" title="pipe和fifo"></a>pipe和fifo</h4><h5 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h5><p>pipe又称管道，提供了一个半双工的父子进程之间通信的机制。创建管道很简单：
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> fd[<span class="number">2</span>])</span></span>;</div></pre></td></tr></table></figure></p>
-<p>fd[0]可以用来读数据，fd[1]可以用来写数据。它们中间会有一个缓冲区。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></div><div class="line"><span class="function">FILE* <span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* cmd,<span class="keyword">const</span> <span class="keyword">char</span>* type)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pclose</span><span class="params">(FILE* fp)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>打开的是一个可执行的命令，<code>type</code>只能是 <code>r</code> 和 <code>w</code> 可能会返回执行命令的结果。实现上我们值得思考一下，就是 <code>popen</code> 通常来说肯定是创建了一个进程，然后FILE里面记录的 <code>fd</code> 必然和这个进程号做了一个绑定。不然我们在 <code>pclose</code> 使用 <code>FILE*</code>必须能够找到，我们应该 <code>wait</code> 什么进程终止。 在 <code>pclose</code> 必须 <code>fclose</code> 掉句柄，不然如果作为一输入命令的话那么会一直等待输入完成。  </p>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/1955979.jpg" alt=""><br><strong>实例</strong><br>通过 <code>popen</code> 对输入进行变换的程序。向标准输出一个提示，从标准输入读取一行，使用 <code>popen</code> 可以在标准输入和输出之间添加一个程序来对输入进行变换处理，（当然也可以写成一个函数的形式来解决），基本流程如图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/54057635.jpg" alt=""><br>从标准输入读入字符，将其转换成小写的程序。<br><figure class="highlight c"><figcaption><span>myuclc.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">int</span> c;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>((c = getchar()) != EOF)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">isupper</span>(c))</div><div class="line">			c=<span class="built_in">tolower</span>(c);</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">putchar</span>(c) == EOF)</div><div class="line">			err_sys(<span class="string">"output error"</span>);</div><div class="line">		<span class="keyword">if</span>(c==<span class="string">'\n'</span>)</div><div class="line">			fflush(<span class="built_in">stdout</span>);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>编译为可执行文件myuclc，然后通过程序调用它。<br><figure class="highlight c"><figcaption><span>main.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">char</span> line[MAXLINE];</div><div class="line">	FILE *fpin;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>((fpin=popen(<span class="string">"./myuclc"</span>,<span class="string">"r"</span>)) == <span class="literal">NULL</span>)</div><div class="line">		err_sys(<span class="string">"popen error"</span>);</div><div class="line">	<span class="keyword">for</span>( ; ;)</div><div class="line">	&#123;</div><div class="line">		<span class="built_in">fputs</span>(<span class="string">"prompt&gt; "</span>, <span class="built_in">stdout</span>);</div><div class="line">		fflush(<span class="built_in">stdout</span>);</div><div class="line">		<span class="keyword">if</span>(fgets(line, MAXLINE, fpin) == <span class="literal">NULL</span>)</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">if</span>(<span class="built_in">fputs</span>(line, <span class="built_in">stdout</span>) == EOF)</div><div class="line">			err_sys(<span class="string">"fputs error to pipe"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span>(pclose(fpin) == <span class="number">-1</span>)</div><div class="line">		err_sys(<span class="string">"pclose error"</span>);</div><div class="line">	<span class="built_in">putchar</span>(<span class="string">'\n'</span>);</div><div class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>  </p>
-<p><strong>协同进程</strong><br>当一个程序产生某个过滤程序的输入，并且又读取该过滤程序的输出时，该过滤程序被称为 <em>协同进程coprocess</em> ，<code>popen</code> 只提供连接到另一进程的单向管道，所以需要两个单向管道。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/12251209.jpg" alt="">  </p>
-<h5 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h5><blockquote>
-<p>FIFO通常被称为命名管道，它是一种文件类型.stat结构中的st_mode指明其类型，可以用宏S_ISFIFO 进行测试。</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">mode_t</span> mode)</span></span>;</div><div class="line"><span class="comment">//成功返回0，失败返回-1</span></div></pre></td></tr></table></figure>
-<p>类似于管道，若用<code>write</code>写一个没有进程为读而打开的FIFO，则会产生SIG_PIPE信号，若FIFO最后一个写进程关闭了该FIFO，那么会为读进程产生一个文件结束标志。 
-FIFO用途：  </p>
-<ul>
-<li>将数据从一条管道线传送到另一条，无需创建临时文件；  </li>
-<li>用于客户进程-服务器进程的程序中，客户服务器之间传送数据。  </li>
-</ul>
-<p><strong>实例</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/10176095.jpg" alt=""><br>通常打开FIFO的方式有四种：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY);<span class="comment">//读，阻塞</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_RDONLY | O_NONBLOCK);<span class="comment">//非阻塞  </span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY);<span class="comment">//写，阻塞，一直等待</span></div><div class="line">open(<span class="keyword">const</span> <span class="keyword">char</span> *path, O_WRONLY | O_NONBLOCK);<span class="comment">//写，非阻塞</span></div><div class="line"><span class="comment">//阻塞情况下，没有对应端打开也会一直等待不返回</span></div></pre></td></tr></table></figure></p>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-31/70265253.jpg" alt="">  </p>
-<div class="note primary"><p><strong>XPS IPC</strong> 即消息队列、信号量、共享存储。</p>
-</div>  
-<h4 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h4><p>消息队列是消息的链接表，存放在内核中并由消息队列标识符标识。<br>流程： <code>msgget</code> 创建或打开一个现存的队列， <code>msgsnd</code> 将消息添加到队列尾端， <code>msgrcv</code> 用于从队列中取消息。 
-使用 <code>key_t ftok(const char *path, int id);</code>来创建键值， <em>path</em> 必须存在，使用 <em>id</em> 的8位，组合。
-消息队列相关的 API 有四个，必须包含的头文件。 
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></div></pre></td></tr></table></figure></p>
-<p><strong>1.打开或者创建一个队列</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>参数key是一个键值，由ftok获得；msgflg参数是一些标志位。该调用返回与健值key相对应的消息队列描述字。<br>如果没有消息队列与健值key相对应，并且msgflg中包含了IPC_CREAT标志位或key参数为IPC_PRIVATE时创建新的队列。<br>参数msgflg可以为以下：IPC_CREAT、IPC_EXCL、IPC_NOWAIT或三者的或结果。<br>调用返回：成功返回消息队列描述字，否则返回-1。  </p>
-<p><strong>2.读取消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgrcv</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">long</span> msgtyp, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>该系统调用从msgid代表的消息队列中读取一个消息，并把消息存储在msgp指向的msgbuf结构中。msqid为消息队列描述字；消息返回后存储在msgp指向的地址，msgsz指定msgbuf的mtext成员的长度（即消息内容的长度），msgtyp为请求读取的消息类型；读消息标志msgflg可以为以下几个常值的或：  </p>
-<ul>
-<li>IPC_NOWAIT 如果没有满足条件的消息，调用立即返回，此时，errno=ENOMSG</li>
-<li>IPC_EXCEPT 与msgtyp&gt;0配合使用，返回队列中第一个类型不为msgtyp的消息</li>
-<li>IPC_NOERROR 如果队列中满足条件的消息内容大于所请求的msgsz字节，则把该消息截断，截断部分将丢失。</li>
-</ul>
-<p>调用返回：成功返回读出消息的实际字节数，否则返回-1。  </p>
-<p><strong>3.向队列发送一个消息</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgsnd</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">struct</span> msgbuf *msgp, <span class="keyword">int</span> msgsz, <span class="keyword">int</span> msgflg)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>向msgid代表的消息队列发送一个消息，即将发送的消息存储在msgp指向的msgbuf结构中，消息的大小由msgze指定。对发送消息来说，有意义的msgflg标志为IPC_NOWAIT，指明在消息队列没有足够空间容纳要发送的消息时，msgsnd是否等待。造成msgsnd()等待的条件有两种：</p>
-<ul>
-<li>当前消息的大小与当前消息队列中的字节数之和超过了消息队列的总容量；</li>
-<li>当前消息队列的消息数（单位”个”）不小于消息队列的总容量（单位”字节数”），此时，虽然消息队列中的消息数目很多，但基本上都只有一个字节。</li>
-</ul>
-<p>调用返回：成功返回0，否则返回-1。  </p>
-<p><strong>4.垃圾桶函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgctl</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> msqid_ds *buf)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>该系统调用对由msqid标识的消息队列执行cmd操作，共有三种cmd操作：IPC_STAT、IPC_SET 、IPC_RMID。  </p>
-<ul>
-<li>IPC_STAT：该命令用来获取消息队列信息，返回的信息存贮在buf指向的msqid结构中；</li>
-<li>IPC_SET：该命令用来设置消息队列的属性，要设置的属性存储在buf指向的msqid结构中；可设置属性包括：msg_perm.uid、msg_perm.gid、msg_perm.mode以及msg_qbytes，同时，也影响msg_ctime成员。</li>
-<li>IPC_RMID：删除msqid标识的消息队列；</li>
-</ul>
-<p><strong>消息队列编程模型：</strong><br>接受消息端：申明消息类型——&gt; msgget建立消息队列 ——&gt;循环接收消息msgrcv——&gt;结束判断strcmp——&gt;msgctl(IPC_RMID)删除消息<br>发送消息端：申明消息类型——&gt;msgget建立消息队列——&gt;循环输入数据到消息中——&gt;msgsend向队列发送消息——结束判断strcmp——&gt;msgctl删除消息  </p>
-<h4 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h4><p><em>信号量（semaphore）</em> 是一个计数器，用于多进程对共享数据的访问。<br><strong>工作原理</strong>，为了获得共享资源，进程需要：  </p>
-<ul>
-<li>测试控制资源的信号量；  </li>
-<li>若此信号量值为正，则可以使用信号量，并将信号量减1，表示使用了一个资源单位；  </li>
-<li>若此信号量值为0，进程休眠，直到信号量大于0，进程唤醒，重复上述。  </li>
-</ul>
-<p><strong>1.semget函数</strong><br>获取或者创建信号量集。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/sem.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> nsems, <span class="keyword">int</span> flag)</span></span>;</div><div class="line"><span class="comment">//成功返回信号量ID，失败返回-1</span></div></pre></td></tr></table></figure></p>
-<p>第一个参数key是整数值（唯一非零），不相关的进程可以通过它访问一个信号量，它代表程序可能要使用的某个资源，程序对所有信号量的访问都是间接的，程序先通过调用semget函数并提供一个键，再由系统生成一个相应的信号标识符（semget函数的返回值），只有semget函数才直接使用信号量键，所有其他的信号量函数使用由semget函数返回的信号量标识符。<br>第二个参数nsems指定需要的信号量数目，创建新集合的时候非零指定值，引用现有的集合则可以为0。<br>第三个参数flag，当想要当信号量不存在时创建一个新的信号量，可以和值IPC_CREAT做按位或操作。设置了IPC_CREAT标志后，即使给出的键是一个已有信号量的键，也不会产生错误。而IPC_CREAT | IPC_EXCL则可以创建一个新的，唯一的信号量，如果信号量已存在，返回一个错误。  </p>
-<p><strong>2.semop函数</strong><br>自动执行信号量集合上的操作数组，原子操作，改变信号量的值。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semop</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">struct</span> sembuf semoparray[], <span class="keyword">size_t</span> nops)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>sem_id是由semget返回的信号量标识符，sembuf结构的定义如下：
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> sembuf&#123;  </div><div class="line">    <span class="keyword">short</span> sem_num;<span class="comment">//除非使用一组信号量，否则它为0  </span></div><div class="line">    <span class="keyword">short</span> sem_op;<span class="comment">//信号量在一次操作中需要改变的数据，通常是两个数，一个是-1，即P（等待）操作，  </span></div><div class="line">                    <span class="comment">//一个是+1，即V（发送信号）操作。  </span></div><div class="line">    <span class="keyword">short</span> sem_flg;<span class="comment">//通常为SEM_UNDO,使操作系统跟踪信号，  </span></div><div class="line">                    <span class="comment">//并在进程没有释放该信号量而终止时，操作系统释放信号量  </span></div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p><strong>一个例子</strong><br>设置一个信号量，使多进程之间共享。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> semun</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	<span class="keyword">struct</span> semid_ds *buf;</div><div class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span> *<span class="built_in">array</span>;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//创建信号量</span></div><div class="line">sem_id = semget((<span class="keyword">key_t</span>)<span class="number">1234</span>, <span class="number">1</span>, <span class="number">0666</span>|IPC_CREAT);</div><div class="line"></div><div class="line"><span class="comment">//初始化信号量，使用前必须这样做</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">set_semvalue</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">union</span> semun sem_union;</div><div class="line"></div><div class="line">	sem_union.val = <span class="number">1</span>;</div><div class="line">	<span class="keyword">if</span>(semctl(sem_id, <span class="number">0</span>, SETVAL, sem_union)==<span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">del_semvalue</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">union</span> semun sem_union;</div><div class="line">	<span class="keyword">if</span>(semctl(sem_id, <span class="number">0</span>, IPC_RMID, sem_union) == <span class="number">-1</span>)</div><div class="line">		err_sys(<span class="string">"del semvalue error"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">//p操作</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">semaphore_p</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">struct</span> sembuf sem_b;</div><div class="line">	sem_b.sem_num = <span class="number">0</span>;</div><div class="line">	sem_b.sem_op = <span class="number">-1</span>;</div><div class="line">	sem_b.sem_flg = SEM_UNDO;</div><div class="line">	<span class="keyword">if</span>(semop(sem_id, &amp;sem_b, <span class="number">1</span>) == <span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//v操作</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">semaphore_v</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">	<span class="keyword">struct</span> sembuf sem_b;</div><div class="line">	sem_b.sem_num = <span class="number">0</span>;</div><div class="line">	sem_b.sem_op = <span class="number">1</span>;</div><div class="line">	sem_b.sem_flg = SEM_UNDO;</div><div class="line">	<span class="keyword">if</span>(semop(sem_id, &amp;sem_b, <span class="number">1</span>) == <span class="number">-1</span>)</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3.semctl函数</strong><br>控制信号量信息。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">semctl</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">int</span> semnum, <span class="keyword">int</span> cmd,...<span class="comment">/* union semun arg */</span>)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>如果有第四个参数，它通常是一个union semum结构，定义如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">union</span> semun&#123;  </div><div class="line">    <span class="keyword">int</span> val;  </div><div class="line">    <span class="keyword">struct</span> semid_ds *buf;  </div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> *arry;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<h4 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h4><p>共享存储允许两个或更多的进程共享以给定的存储区。无需进程间的复制，是一种最快的IPC。多个进程对同一存储区的同步访问。<br><strong>1.shmget函数</strong><br>获取一个共享存储标识符。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/shm.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flag)</span></span>;</div><div class="line"><span class="comment">//成功返回共享存储ID，出错返回-1</span></div></pre></td></tr></table></figure></p>
-<p>第一个参数，与信号量的semget函数一样，程序需要提供一个参数key（非0整数），它有效地为共享内存段命名，shmget函数成功时返回一个与key相关的共享内存标识符（非负整数），用于后续的共享内存函数。<br>不相关的进程可以通过该函数的返回值访问同一共享内存，它代表程序可能要使用的某个资源，程序对所有共享内存的访问都是间接的，程序先通过调用shmget函数并提供一个键，再由系统生成一个相应的共享内存标识符（shmget函数的返回值），只有shmget函数才直接使用信号量键，所有其他的信号量函数使用由semget函数返回的信号量标识符。<br>第二个参数，size以字节为单位指定需要共享的内存容量。<br>第三个参数，flag是权限标志，它的作用与open函数的mode参数一样，如果要想在key标识的共享内存不存在时，创建它的话，可以与IPC_CREAT做或操作。共享内存的权限标志与文件的读写权限一样，举例来说，0644,它表示允许一个进程创建的共享内存被内存创建者所拥有的进程向共享内存读取和写入数据，同时其他用户创建的进程只能读取共享内存。<br><strong>2.shmat函数</strong><br>第一次创建完共享内存时，它还不能被任何进程访问，shmat函数的作用就是用来启动对该共享内存的访问，并把共享内存连接到当前进程的地址空间。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *<span class="title">shmat</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">int</span> flag)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>第一个参数，是semget返回的存储空间标识；<br>第二个参数，为0，则连接到第一个可用的地址上，推荐使用；非0并且没有指定SHM_RND，则连接到<em>addr</em>指定的地址；<br>第三个参数，是一组标志位，通常为0。<br><strong>3.shmdt函数</strong><br>用于将共享内存从当前进程中分离。注意，将共享内存分离并不是删除它，只是使该共享内存对当前进程不再可用。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmdt</span><span class="params">(<span class="keyword">void</span> *addr)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>addr 参数是调用 <code>shmat</code> 的返回值。<br><strong>4.shmctl函数</strong><br>对共享存储段进行多种操作。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>第一个参数，shmid是shmget函数返回的共享内存标识符。<br>第二个参数，cmd是要采取的操作，它可以取下面的三个值 ：  </p>
-<ul>
-<li>IPC_STAT：把shmid_ds结构中的数据设置为共享内存的当前关联值，即用共享内存的当前关联值覆盖shmid_ds的值。  </li>
-<li>IPC_SET：如果进程有足够的权限，就把共享内存的当前关联值设置为shmid_ds结构中给出的值。  </li>
-<li>IPC_RMID：删除共享内存段。<br>第三个参数，buf是一个结构指针，它指向共享内存模式和访问权限的结构。
-shmid_ds结构至少包括以下成员：  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> shmid_ds  </div><div class="line">&#123;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.uid;  </div><div class="line">    <span class="keyword">uid_t</span> shm_perm.gid;  </div><div class="line">    <span class="keyword">mode_t</span> shm_perm.mode;  </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><strong>例子</strong><br>设计流程，注意多进程同时读写的问题。<br>创建共享存储，获得共享存储标识符；将共享存储连接到进程空间，获得首地址指针；设置存储空间格式；读写存储区。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Unix环境高级编程读书笔记，第14章 进程间通信IPC读书笔记。&lt;/p&gt;
     
     </summary>
     
