@@ -84,9 +84,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="动态规划" scheme="http://abumaster.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
@@ -116,9 +116,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -127,7 +127,7 @@
     <link href="http://abumaster.com/2017/09/04/%E7%9F%A5%E8%AF%86%E7%82%B9/"/>
     <id>http://abumaster.com/2017/09/04/知识点/</id>
     <published>2017-09-04T05:54:29.000Z</published>
-    <updated>2017-09-26T13:37:47.141Z</updated>
+    <updated>2017-10-10T13:35:43.811Z</updated>
     
     <content type="html"><![CDATA[<p>总结前辈们面试知识点，备忘。<br><a id="more"></a></p>
 <h4 id="C-语言特性"><a href="#C-语言特性" class="headerlink" title="C++语言特性"></a>C++语言特性</h4><h5 id="C-内存管理"><a href="#C-内存管理" class="headerlink" title="C++内存管理"></a>C++内存管理</h5><p>可以参考<a href="http://www.cnblogs.com/Azhu/p/4436531.html">博文</a>。<br>内存划分：<br>在C++中，内存分成5个区，他们分别是 <strong>堆</strong>、<strong>栈</strong>、<strong>自由存储区</strong>、<strong>全局/静态存储区</strong>和 <strong>常量存储区</strong>。<br><strong>栈</strong>：在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。<br><strong>堆</strong>：就是那些由 new分配的内存块，他们的释放编译器不去管，由我们的应用程序去控制，一般一个new就要对应一个 delete。如果程序员没有释放掉，那么在程序结束后，操作系统会自动回收。<br><strong>自由存储区</strong>：就是那些由malloc等分配的内存块，他和堆是十分相似的，不过它是用free来结束自己的生命的。<br><strong>全局/静态存储区</strong>：全局变量和静态变量被分配到同一块内存中，在以前的C语言中，全局变量又分为初始化的和未初始化的，在C++里面没有这个区分了，他们共同占用同一块内存区。<br><strong>常量存储区</strong>：这是一块比较特殊的存储区，他们里面存放的是常量，不允许修改。<br>分配和释放：<br>C++中使用<code>new</code>和<code>delete</code>运算符用于申请和释放内存块，要配对使用。对于对象来说，可以调用默认构造函数。栈是由编译器自动管理，堆由程序员控制；栈的空间小速度快，堆的空间大，速度相对慢；生长方向，堆是向地址增大的方向，栈是向地址减小的方向。  </p>
@@ -151,6 +151,15 @@
 <li>模板的实现在整个头文件中，工程比较大的时候编译时间会比较长。  </li>
 </ul>
 <h5 id="动态链接库和静态链接库"><a href="#动态链接库和静态链接库" class="headerlink" title="动态链接库和静态链接库"></a>动态链接库和静态链接库</h5><p><strong>优缺点：</strong><br>动态链接库节省内存和减少页面的交换，dll与可执行文件相互独立，只有遵循接口定义则更换dll不会影响程序的运行；不同编程语言都可以调用，程序的契合度小模块化。缺点：动态加载时，如果不存在，程序终止出错，运行时加载，不存在，调用不存在的函数，出错。<br>静态链接库代码执行速度快，运行速度也略快，链接到到程序中，发行版本不再需要。但是程序的可执行文件大，代码重复多，可重用性低。<br><strong>使用方法：</strong><br>静态链接库的使用：使用静态链接库，需要包含<code>.h</code>文件和<code>#pragma comment(lib,&quot;**.lib&quot;)</code>编译开关，就可以直接用链接库中的文件了。<br>动态链接库的使用：一种静态连接，启动前加入<code>#pragmaa comment(lib,&quot;**.lib&quot;)</code>编译开关，声明链接库中的函数，可以直接用；动态加载，用时加载<code>LoadLibrary(&quot;.dll&quot;)</code>，然后声明导出函数指针并获得函数的指针，用完释放。  </p>
+<h5 id="内联函数的优缺点"><a href="#内联函数的优缺点" class="headerlink" title="内联函数的优缺点"></a>内联函数的优缺点</h5><p>优点：  </p>
+<ul>
+<li>减少函数的进栈、出栈、跳转的开销；  </li>
+<li>像宏一样展开，在调用处展开，省去了调用开销，提高了函数执行效率；  </li>
+<li>编译器在调用内联函数时会检查参数，消除错误和局限性引用。<br>缺点：  </li>
+<li>如果函数代码太长，使用内联会造成耗费内存过多；  </li>
+<li>如果内联函数中有循环，开销比普通的函数调用还打；  </li>
+<li>调用处复制代码，使得代码的量增大，耗费更多的内存。  </li>
+</ul>
 <h4 id="STL相关和数据结构"><a href="#STL相关和数据结构" class="headerlink" title="STL相关和数据结构"></a>STL相关和数据结构</h4><h5 id="红黑树的特性及其应用"><a href="#红黑树的特性及其应用" class="headerlink" title="红黑树的特性及其应用"></a>红黑树的特性及其应用</h5><p>满足下列条件的二叉搜索树是红黑树<br>性质1. 节点是红色或黑色<br>性质2. 根是黑色<br>性质3. 所有叶子都是黑色（叶子是Null节点）<br>性质4. 如果一个节点是红的，则它的两个儿子都是黑的<br>性质5. 从任一节点到其叶子的所有简单路径都包含相同数目的黑色节点。<br><a href="http://abumaster.com/2017/04/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%A2%E9%BB%91%E4%BA%8C%E5%8F%89%E6%A0%91/">调整详细</a>。<br>STL中<code>set、multiset、map、multimap</code>底层是红黑树实现的，而<code>unordered_map</code>、<code>unordered_set</code> 底层是哈希表实现的。  </p>
 <h5 id="手写实现智能指针"><a href="#手写实现智能指针" class="headerlink" title="手写实现智能指针"></a>手写实现智能指针</h5><p>智能指针不用显示调用delete来清理内存。
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">template&lt;class T&gt;</div><div class="line">class auto_ptr &#123;</div><div class="line">public:</div><div class="line">    explicit auto_ptr(T *p=0):pointer(p)&#123;&#125;</div><div class="line">    ~auto_ptr()&#123;delete pointer;&#125;//析构函数自动调用用来清理内存</div><div class="line">    T&amp; operator*() const &#123;return *pointer;&#125;//解指针</div><div class="line">    T* operator-&gt;() const &#123;return pointer;&#125;</div><div class="line">private:</div><div class="line">    T* pointer;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
@@ -298,13 +307,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
-      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -352,13 +361,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
-      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -403,11 +412,11 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
