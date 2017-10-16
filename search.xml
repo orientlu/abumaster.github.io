@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[UML基础学习]]></title>
+    <url>%2F2017%2F10%2F11%2FUML%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0%2F</url>
+    <content type="text"><![CDATA[UML，Unified Modeling Language，统一建模语言，一种有特殊用途的语言。从用途和分类，到简单应用做一个总结。其他学习网站CSDN专栏。在线 UML 工具 ProcessOn。 UML 分类UML 可分为两类：结构型、行为型。结构性的UML有： 类图，显示了系统的静态结构，用于对系统中的各种概念建模，并描绘他们之间的关系，类是相同数据结构行为和关系的一组对象； 对象图，类的实例化； 构件图，将可重用的代码或模块封装成可替换的物理单元，称为构件，描述构件之间的关系； 部署图 包图行为型的图有： 活动图 状态机图 顺序图 通信图 用例图 时间图 类图参考C++中的类，具有类名称、类的属性以及操作。属性和操作对其他类的可见性通过三种方式进行控制，公有私有和保护。类图之间的关系：类与类之间的关系通常有4种，即依赖关系（Dependency）、泛化关系（Generalization）、关联关系（Association）、实现关系（Realization）。参考。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>编程</tag>
+        <tag>uml</tag>
+        <tag>软件设计</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[一面攒人品-趋势科技]]></title>
     <url>%2F2017%2F09%2F19%2F%E4%B8%80%E9%9D%A2%E6%94%92%E4%BA%BA%E5%93%81-%E8%B6%8B%E5%8A%BF%E7%A7%91%E6%8A%80%2F</url>
     <content type="text"><![CDATA[趋势科技面试题目汇总，不是太难，面试官人很好，基础还是很薄弱的，好多东西都忘了。 1.知道迭代器吗，迭代器失效我回答了迭代器是一个指针，vector在插入和删除会引起迭代器的失效，记得在stl源码剖析中看到过，但是没有系统的回答出来。标准回答：vector在进行插入和删除操作后会使部分或者全部的迭代器失效，因为vector是顺序存储的，当容量不够时会删除原有的旧空间，然后将元素拷贝到新的空间中，导致所有的原空间上的迭代器失败。删除操作后，指向删除点的迭代器和其后的迭代器全部失效。deque容器在首部尾部插入迭代器不会失效，首部和尾部删除元素会使删除元素的迭代器失效，在中间删除元素会使所有的迭代器失效。list很少失效，只有删除的元素的迭代器失效。 2.删除容器中值为2的元素123456789for (auto it = vec.begin(); it != vec.end();) &#123; if (*it == 2) &#123; it = vec.erase(it); &#125; else ++it; &#125; 3.进程同步，共享存储在一个进程失效后，会如何回收共享内存共享内存的介绍：共享内存是一种高效的进程间通信，直接读写内存是一种高效的数据拷贝；内核中专门开辟一块内存区，进程直接映射到自己的私有地址空间中，直接读取不需要拷贝，所以更加高效；多个进程共享这块内存，所以需要一种同步机制。流程： 创建或者打开共享存储； 映射共享内存，将指定的内存映射到进程地址空间便于访问； 撤销共享内存的映射； 删除共享内存对象。控制共享内存： 1234int shmctl(int shmid, int cmd, struct shmid_ds *buf);//shmid 共享内存标识//cmd :IPC_STAT 得到共享内存的状态；IPC_SET 改变共享内存的状态；IPC_RMID 删除共享内存//buf 是一个结构体指针。IPC_STAT的时候，取得的状态放在这个结构体中。如果要改变共享内存的状态，用这个结构体指定； IPC_RMID命令实际上不从内核删除一个段，而是仅仅把这个段标记为删除，实际的删除发生最后一个进程离开这个共享段时。当cmd为IPC_RMID时，第三个参数应为NULL。呵呵，大部分我们都是这样做,用这个函数删除共享内存。 4.程序崩溃一种方法，程序崩溃一般通过COREDUMP文件进行调试，在windows下面这部分需要自己在程序中添加代码，网上有源代码，添加到程序中即可。程序崩溃是点击COREDUMP文件，运行VS2010即可快速定位。 另外一种方法，没有COREDUMP时，先运行程序，然后在VS2010中，把工程附加到进程，注意工程中运行涉及的所有文件必须是VS2010最新代码编译的。这种情况下，VS2010工程中不需要打断点，当程序运行出现崩溃时，自动跳转VS2010的代码中。这种情况非常适合服务器程序，尤其是崩溃发生的条件不清楚，无法再现的情况。尤其服务器运行几天后，崩溃，这种情况非常有用。 5.sql数据库加锁数据库加锁处理多用户并发访问的方法是加锁。锁是防止其他事务访问指定的资源控制、实现并发控制的一种主要手段。当一个用户锁住数据库中的某个对象时，其他用户就不能再访问该对象。加锁对并发访问的影响体现在锁的粒度上。为了控制锁定的资源，应该首先了解系统的空间管理。]]></content>
@@ -426,8 +439,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -461,9 +474,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -474,9 +487,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -535,8 +548,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -559,8 +572,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -615,8 +628,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -649,8 +662,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -661,8 +674,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -685,8 +698,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>

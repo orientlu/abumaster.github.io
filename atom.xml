@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-09-20T09:14:32.366Z</updated>
+  <updated>2017-10-16T10:39:42.593Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>UML基础学习</title>
+    <link href="http://abumaster.com/2017/10/11/UML%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://abumaster.com/2017/10/11/UML基础学习/</id>
+    <published>2017-10-11T02:03:05.000Z</published>
+    <updated>2017-10-16T10:39:42.593Z</updated>
+    
+    <content type="html"><![CDATA[<p>UML，Unified Modeling Language，统一建模语言，一种有特殊用途的语言。从用途和分类，到简单应用做一个总结。其他学习<a href="http://blog.csdn.net/column/details/u-m-l.html">网站CSDN专栏</a>。在线 UML 工具 <a href="https://www.processon.com/">ProcessOn</a>。  </p>
+<a id="more"></a>
+<h4 id="UML-分类"><a href="#UML-分类" class="headerlink" title="UML 分类"></a>UML 分类</h4><p>UML 可分为两类：结构型、行为型。<br>结构性的UML有：  </p>
+<ul>
+<li>类图，显示了系统的静态结构，用于对系统中的各种概念建模，并描绘他们之间的关系，类是相同数据结构行为和关系的一组对象；  </li>
+<li>对象图，类的实例化；  </li>
+<li>构件图，将可重用的代码或模块封装成可替换的物理单元，称为构件，描述构件之间的关系；  </li>
+<li>部署图  </li>
+<li>包图<br>行为型的图有：  </li>
+<li>活动图  </li>
+<li>状态机图  </li>
+<li>顺序图  </li>
+<li>通信图  </li>
+<li>用例图  </li>
+<li>时间图  </li>
+</ul>
+<h5 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h5><p>参考C++中的类，具有类名称、类的属性以及操作。属性和操作对其他类的可见性通过三种方式进行控制，公有私有和保护。<br>类图之间的关系：<br>类与类之间的关系通常有4种，即依赖关系（Dependency）、泛化关系（Generalization）、关联关系（Association）、实现关系（Realization）。<br><a href="http://blog.csdn.net/jiuqiyuliang/article/details/8568303">参考</a>。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;UML，Unified Modeling Language，统一建模语言，一种有特殊用途的语言。从用途和分类，到简单应用做一个总结。其他学习&lt;a href=&quot;http://blog.csdn.net/column/details/u-m-l.html&quot;&gt;网站CSDN专栏&lt;/a&gt;。在线 UML 工具 &lt;a href=&quot;https://www.processon.com/&quot;&gt;ProcessOn&lt;/a&gt;。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="uml" scheme="http://abumaster.com/tags/uml/"/>
+    
+      <category term="软件设计" scheme="http://abumaster.com/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>一面攒人品-趋势科技</title>
@@ -973,33 +1016,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="C" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>笔记：虚函数实现机制</title>
-    <link href="http://abumaster.com/2017/06/10/%E7%AC%94%E8%AE%B0%EF%BC%9A%E8%99%9A%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/"/>
-    <id>http://abumaster.com/2017/06/10/笔记：虚函数实现机制/</id>
-    <published>2017-06-10T15:26:43.000Z</published>
-    <updated>2017-06-11T00:20:28.488Z</updated>
-    
-    <content type="html"><![CDATA[<p>C++的虚函数是实现多态的一种方法，那么它的实现机制如何，笔记记录如下。  </p>
-<a id="more"></a>
-<p>虚函数的实现机制就是：虚表和虚指针。虚函数在运行期间来确定类型，即动态绑定，而构造函数在构造对象的时候就应该知道类型，这也是构造函数不能声明为虚函数的原因。<br>先看一个例子，假设两个类A和B：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">h</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> a;</div><div class="line">&#125;</div><div class="line"><span class="keyword">class</span> B :<span class="keyword">public</span> A &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><img src="https://ooo.0o0.ooo/2017/06/11/593c8c1a67649.png" alt="">  </p>
-<p>虚函数地址的获得<br><code>A *p = new B;</code><br>p:是个指针。<br><code>(int *)p</code>：转换成 int 类型的指针<br><code>*(int *)p</code>：把转换成int 类型指针p 的内容取出<br><code>(int *)( *(int *)p)</code>：在转换成 int 类型的指针<br><code>(int *)( *(int *)p) +0</code>：取出第一个元素的地址<br><code>*((int *)( *(int *)p) +0)</code>：得到第一个元素的内容<br><code>(void *)(*((int *)( *(int *)p) +0))</code>：得到第一个元素的地址  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;C++的虚函数是实现多态的一种方法，那么它的实现机制如何，笔记记录如下。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
