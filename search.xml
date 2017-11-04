@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[ACE学习笔记-1]]></title>
+    <url>%2F2017%2F11%2F04%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1%2F</url>
+    <content type="text"><![CDATA[ACE (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 中间件 提供了众多功能和特性。第一章安装。 平台Windows 10 + vs2013 + ACE6.4.0 下载 地址。解压得到文件夹 ACE_wrappers，其中包含了源文件以及工程文件； 目录下有 ACE-INSTALL.html 包含了安装指导，在ace文件夹下新建一个 config.h 文件，其中添加头文件和宏定义 123#define ACE_HAS_STANDARD_CPP_LIBRARY 1#include "config-win32.h"#define ACE_NO_INLINE 打开 ace_vc12.sln 解决方案，根据情况编译 Debug 或者 Release 版本的ace库，编译完成后在 ACE_wrappers/lib 下生成了 lib 和 dll 。 使用，新建工程可以将头文件目录以及库目录添加到工程中。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>框架</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[秋招之路-反思]]></title>
+    <url>%2F2017%2F10%2F25%2F%E7%A7%8B%E6%8B%9B%E4%B9%8B%E8%B7%AF-%E5%8F%8D%E6%80%9D%2F</url>
+    <content type="text"><![CDATA[七八月开始准备找工作，期间看了几本书，做了不少的算法题。从八月底开始投递简历，开始做笔试。然后九月开始四处跑宣讲会，做笔试，面试，累。等到十月的中旬才找到了工作，算是比较垫底的薪资水准了，我的水平难道是不过如此了吗？第一份工作就不过如此了。 不乱于心，不困于情，不畏将来，不念过往，如此，安好。–丰子恺 《不宠无惊过一生》]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>其他</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[curl库的使用]]></title>
     <url>%2F2017%2F10%2F20%2Fcurl%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8%2F</url>
     <content type="text"><![CDATA[curl是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。libcurl是一种开发库，支持多种协议多个平台的文件传输库。libcurl。方便网络应用的开发。 编译安装从上述的官网下载源码，Linux平台configure和make就行了。说一下在 Windows 平台下的编译使用。打开源码目录下的winbuild文件夹，按照BUILD.WINDOWS.txt文档中提供的编译信息，然后利用vs提供的命令行工具进行编译生成.lib或.dll文件。使用，将lib文件和头文件加入到自己的工程中，然后添加预编译定义CURL_STATICLIB，或者在curl.h文件中添加一行宏定义#define CURL_STATICLIB。然后就可以编译使用了。 常用函数1.CURLcode curl_global_init(long flags);描述：用于全局初始化，清理之前，只能被调用一次，如果在函数curl_easy_init前没有显示调用，则lcurl库会自动调用，所以多线程中应在主线程中显示调用此函数来初始化。初始化参数包括：1234CURL_GLOBAL_ALL //初始化所有的可能的调用。CURL_GLOBAL_SSL //初始化支持 安全套接字层。CURL_GLOBAL_WIN32 //初始化win32套接字库。CURL_GLOBAL_NOTHING //没有额外的初始化。 2.void curl_global_cleanup(void);与上述初始化函数类似，在结束使用的时候，调用此函数进行清理工作，这个函数仍然不是线程安全的，因此多线程环境下保证在主线程中调用一次来完成清理工作。 3.CURL *curl_easy_init( );初始化一个CURL指针，类似文件指针那样，意味着一个会话的开始。 4.void curl_easy_cleanup(CURL *handle);调用此函数来释放初始化的指针，完成清理工作。 5.char *curl_version( );描述当前库的版本信息。 6.CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);重要的一个函数，设置选项。告知程序要有何种行为。第一个参数表示初始化获得指针，第二个参数表示选项，第三个参数可以是函数指针、对象指针或者是一个long型变量，主要依赖第二个参数。选项：CURLOPT_URL 设置访问URL；CURLOPT_WRITEFUNCTION，CURLOPT_WRITEDATA 写数据，回调函数原型为：size_t function( void *ptr, size_t size, size_t nmemb, void *stream); 函数将在libcurl接收到数据后被调用，因此函数多做数据保存的功能，如处理下载文件。 CURLOPT_WRITEDATA 用于表明 CURLOPT_WRITEFUNCTION 函数中的stream指针的来源。如果你没有通过 CURLOPT_WRITEFUNCTION 属性给easy handle设置回调函数，libcurl会提供一个默认的回调函数，它只是简单的将接收到的数据打印到标准输出。你也可以通过 CURLOPT_WRITEDATA 属性给默认回调函数传递一个已经打开的文件指针，用于将数据输出到文件里。CURLOPT_HEADERFUNCTION，CURLOPT_HEADERDATA 回调函数原型为 size_t function( void *ptr, size_t size,size_t nmemb, void *stream); libcurl一旦接收到http 头部数据后将调用该函数。CURLOPT_WRITEDATA 传递指针给libcurl，该指针表明 CURLOPT_HEADERFUNCTION 函数的stream指针的来源。CURLOPT_READFUNCTION CURLOPT_READDATA libCurl需要读取数据传递给远程主机时将调用 CURLOPT_READFUNCTION 指定的函数，函数原型是：size_t function(void *ptr, size_t size, size_t nmemb,void *stream) 。CURLOPT_NOPROGRESS，CURLOPT_PROGRESSFUNCTION，CURLOPT_PROGRESSDATA跟数据传输进度相关的参数。CURLOPT_PROGRESSFUNCTION 指定的函数正常情况下每秒被libcurl调用一次，为了使 CURLOPT_PROGRESSFUNCTION被调用，CURLOPT_NOPROGRESS 必须被设置为false，CURLOPT_PROGRESSDATA 指定的参数将作为 CURLOPT_PROGRESSFUNCTION 指定函数的第一个参数。CURLOPT_FOLLOWLOCATION 设置重定位URL。CURLOPT_RANGE: CURLOPT_RESUME_FROM: 断点重传相关设置。CURLOPT_RANGE 指定char *参数传递给libcurl，用于指明http域的RANGE头域，例如：表示头500个字节：bytes=0-499。CURLOPT_RESUME_FROM 传递一个long参数给libcurl，指定你希望开始传递的偏移量。7.CURLcode curl_easy_perform(CURL *handle);让前面设置过选型的程序运行起来。参数为指针。返回值为0表示成功，非零表示错误，可以调用const char *curl_easy_strerror(CURLcode errornum )函数来获取错误信息。]]></content>
@@ -488,8 +511,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -501,8 +524,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -562,8 +585,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -586,8 +609,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -642,8 +665,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -676,8 +699,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -688,8 +711,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -712,8 +735,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
