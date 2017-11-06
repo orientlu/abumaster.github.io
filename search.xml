@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[ACE学习笔记2：内存分配]]></title>
+    <url>%2F2017%2F11%2F06%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%EF%BC%9A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%2F</url>
+    <content type="text"><![CDATA[一个成熟的框架或软件，都会有一个丰富的内存管理类，用于方便高效地管理内存。如STL中的内存池、Nginx中的内存池，通过预先从堆中申请空间，使用的时候可以从空闲存储中取（只是移动指针），避免频繁调用api和操作符从堆中申请释放空间，更有效率。ACE 中提供了两种不同的类用于管理内存（从堆中申请的内存或进程间共享的内存）。根据不同的开发应用选择合适的内存管理方案。 概况ACE 提供了两组不同的类进行内存管理： 基于 ACE_Allocator 类，用于局部的动态内存分配，使用动态绑定和策略模式来提供灵活性和扩展性； 基于 ACE_Malloc 模板类，用于局部动态内存管理类和共享内存类，通过C++模板和外部多态性为内存分配提供灵活性。 分配器（ACE_Allocator）分配器用于动态内存管理，提供了若干不同策略的分配器，提供相同的功能但是具有不同的特性。不同策略的分配器及其特性的描述： ACE_Allocator ACE 中的分配器类的接口类。这些类使用继承和动态绑定来提供灵活性。 ACE_Static_Allocator 该分配器管理固定大小的内存。每当收到分配内存的请求时，它就移动内部指针、以返回内存块。它还假定内存一旦被分配，就再也不会被释放。 ACE_Cached_Allocator 使用内存池预先分配一定大小的内存块，连成空闲链表，内存的申请和释放只是取和放内存块。 ACE_New_Allocator 封装了C++中的 new 和 delete 运算符。 使用：12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061#define _CRT_SECURE_NO_WARNINGS#include "ace/Malloc.h"#include "ace/Log_Msg.h"#include "ace/Thread_Mutex.h"#include "ace/Malloc_T.h"//分配 1k 大小的内存块，内存块简单的为char//也可以用合适的结构和类typedef char MEMORY_BLOCK[1024];typedef ACE_Cached_Allocator&lt;MEMORY_BLOCK, ACE_SYNCH_MUTEX&gt; Allocator;class MessageManager&#123;public: MessageManager(int n_blocks) :allocator_(n_blocks), message_count_(0) &#123; msg_array_ = new char *[n_blocks]; &#125; void allocate_msg(const char *msg) &#123; msg_array_[message_count_] = (char*)allocator_.malloc(ACE_OS::strlen(msg) + 1); ACE_OS::strcpy(msg_array_[message_count_], msg); ++message_count_; &#125; void free_all_msg() &#123; for (int i = 0; i &lt; message_count_; ++i) allocator_.free(msg_array_[i]); message_count_ = 0; &#125; void display_all_msg() &#123; for (int i = 0; i &lt; message_count_; ++i) printf("msg: %s\n", msg_array_[i]); &#125;private: char **msg_array_; Allocator allocator_; int message_count_;&#125;;int main(int argc, char **argv)&#123; int n; scanf("%d", &amp;n); char *message = new char[100]; MessageManager manage(n); for (int i = 0; i &lt; n; ++i) &#123; sprintf(message, "msg id %d, hello", i); manage.allocate_msg(message); &#125; manage.display_all_msg(); return 0;&#125; ACE_MallocACE_Malloc 模板类进行内存管理，有两个模板参数，一个是内存池，另一个是锁。应用有自己的空闲内存表，当内存不够用时，则向底层内存池申请，释放时不会释放给内存池，而是连接到自己的空闲链表中，所以内存只会增大不会减小，可以调用remove()方法将内存还给系统。使用：首先选定内存池和锁机制实例化一个ACE_Malloc模板，生成一个分配器。用该分配器实例化一个对象，这就是应用中可以使用的分配器。可用的内存池：12345#include "ace/Local_Memory_Pool.h" //使用c++的new和delete创建的局部内存池，不可进程间共享#include "ace/MMAP_Memory_Pool.h" //mmap创建的内存池，可以进程间共享#include "ace/Sbrk_Memory_Pool.h" //sbrk调用创建的内存池#include "ace/Shared_Memory_Pool.h" //shmget调用创建#include "ace/Pagefile_Memory_Pool.h" 例子1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586#include "ace/Shared_Memory_MM.h"#include "ace/Malloc.h"#include "ace/Malloc_T.h"#define DATA_SIZE 100#define MESSAGE1 "Hiya over there client process"#define MESSAGE2 "Did you hear me the first time?"LPCTSTR poolname="My_Pool";typedef ACE_Malloc&lt;ACE_SHARED_MEMORY_POOL,ACE_Null_Mutex&gt; Malloc_Allocator;static void server (void)&#123; //Create the memory allocator passing it the shared memory //pool that you want to use Malloc_Allocator shm_allocator(poolname); //Create a message, allocate memory for it and bind it with //a name so that the client can the find it in the memory //pool char* Message1=(char*)shm_allocator.malloc(strlen(MESSAGE1)); ACE_OS::strcpy(Message1,MESSAGE1); shm_allocator.bind("FirstMessage",Message1); ACE_DEBUG((LM_DEBUG,"&lt;&lt;%s\n",Message1)); //How about a second message char* Message2=(char*)shm_allocator.malloc(strlen(MESSAGE2)); ACE_OS::strcpy(Message2,MESSAGE2); shm_allocator.bind("SecondMessage",Message2); ACE_DEBUG((LM_DEBUG,"&lt;&lt;%s\n",Message2)); //Set the Server to go to sleep for a while so that the client has //a chance to do its stuff ACE_DEBUG((LM_DEBUG, "Server done writing.. going to sleep zzz..\n\n\n")); ACE_OS::sleep(2); //Get rid of all resources allocated by the server. In other //words get rid of the shared memory pool that had been //previously allocated shm_allocator.remove();&#125;static void client(void)&#123; //Create a memory allocator. Be sure that the client passes // in the "right" name here so that both the client and the //server use the same memory pool. We wouldn’t want them to // BOTH create different underlying pools. Malloc_Allocator shm_allocator(poolname); //Get that first message. Notice that the find is looking up the //memory based on the "name" that was bound to it by the server. void *Message1; if(shm_allocator.find("FirstMessage",Message1)==-1) &#123; ACE_ERROR((LM_ERROR, "Client: Problem cant find data that server has sent\n")); ACE_OS::exit(1); &#125; ACE_OS::printf("&gt;&gt;%s\n",(char*) Message1); ACE_OS::fflush(stdout); //Lets get that second message now. void *Message2; if(shm_allocator.find("SecondMessage",Message2)==-1) &#123; ACE_ERROR((LM_ERROR, "Client: Problem cant find data that server has sent\n")); ACE_OS::exit(1); &#125; ACE_OS::printf("&gt;&gt;%s\n",(char*)Message2); ACE_OS::fflush(stdout); ACE_DEBUG((LM_DEBUG,"Client done reading! BYE NOW\n")); ACE_OS::fflush(stdout);&#125;int main (int, char *[])&#123; switch (ACE_OS::fork ()) &#123; case -1: ACE_ERROR_RETURN ((LM_ERROR, "%p\n", "fork"), 1); case 0: // Make sure the server starts up first. ACE_OS::sleep (1); client (); break; default: server (); break; &#125; return 0;&#125; Windows 平台下将上述代码中改为typedef ACE_Malloc&lt;ACE_MMAP_MEMORY_POOL, ACE_Null_Mutex&gt; Malloc_Allocator; ，并且，不能用fork来创建子进程，需要分两个程序来测试。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>C++</tag>
+        <tag>ACE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[ACE学习笔记-1]]></title>
     <url>%2F2017%2F11%2F04%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1%2F</url>
     <content type="text"><![CDATA[ACE (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 中间件 提供了众多功能和特性。第一章安装。 平台Windows 10 + vs2013 + ACE6.4.0 下载 地址。解压得到文件夹 ACE_wrappers，其中包含了源文件以及工程文件； 目录下有 ACE-INSTALL.html 包含了安装指导，在ace文件夹下新建一个 config.h 文件，其中添加头文件和宏定义 123#define ACE_HAS_STANDARD_CPP_LIBRARY 1#include "config-win32.h"#define ACE_NO_INLINE 打开 ace_vc12.sln 解决方案，根据情况编译 Debug 或者 Release 版本的ace库，编译完成后在 ACE_wrappers/lib 下生成了 lib 和 dll 。 使用，新建工程可以将头文件目录以及库目录添加到工程中。]]></content>
@@ -8,8 +21,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -69,8 +82,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -82,8 +95,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -118,10 +131,10 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -132,10 +145,10 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -146,9 +159,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
         <tag>面试</tag>
       </tags>
   </entry>
@@ -511,8 +524,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -524,8 +537,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -585,8 +598,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -609,8 +622,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -665,8 +678,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -699,8 +712,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -711,8 +724,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -735,8 +748,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
