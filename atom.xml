@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-11-06T14:16:34.625Z</updated>
+  <updated>2017-11-07T13:43:01.795Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ACE学习笔记3：线程管理</title>
+    <link href="http://abumaster.com/2017/11/07/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%EF%BC%9A%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/"/>
+    <id>http://abumaster.com/2017/11/07/ACE学习笔记3：线程管理/</id>
+    <published>2017-11-07T05:20:10.000Z</published>
+    <updated>2017-11-07T13:43:01.795Z</updated>
+    
+    <content type="html"><![CDATA[<p>不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 <code>ACE_Thread</code> 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。  </p>
+<a id="more"></a>
+<h4 id="创建和取消线程"><a href="#创建和取消线程" class="headerlink" title="创建和取消线程"></a>创建和取消线程</h4><p>ACE_Thread 对 OS 的线程函数进行简单的封装，提供了一组与平台无关的接口。<br>头文件：<code>ace/Thread.h</code><br>线程标识：<code>ACE_thread_t</code>，线程句柄：<code>ACE_hthread_t</code><br>提供的函数：<code>ACE_Thread::spawn_n</code> 或 <code>ACE_Thread::spawn</code> 可以用 <code>ACE_Thread::join()</code> 函数等待线程的结束<br>与普通的创建线程过程无异。  </p>
+<h4 id="ACE-同步原语"><a href="#ACE-同步原语" class="headerlink" title="ACE 同步原语"></a>ACE 同步原语</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 &lt;code&gt;ACE_Thread&lt;/code&gt; 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+  </entry>
   
   <entry>
     <title>ACE学习笔记2：内存分配</title>
@@ -51,9 +80,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
@@ -90,9 +119,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
   </entry>
   
@@ -276,9 +305,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
       <category term="动态规划" scheme="http://abumaster.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
@@ -308,9 +337,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
   </entry>
   
@@ -499,13 +528,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -553,13 +582,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -604,11 +633,11 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
@@ -907,38 +936,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>多线程库c++11</title>
-    <link href="http://abumaster.com/2017/07/09/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%BA%93c-11/"/>
-    <id>http://abumaster.com/2017/07/09/多线程库c-11/</id>
-    <published>2017-07-09T10:32:25.000Z</published>
-    <updated>2017-07-10T13:48:30.784Z</updated>
-    
-    <content type="html"><![CDATA[<p>C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。<br><a id="more"></a></p>
-<h4 id="thread类"><a href="#thread类" class="headerlink" title="thread类"></a>thread类</h4><p>使用包含头文件<thread>，std::thread。<br><strong>构造函数</strong><br>常用的构造函数：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> Fn, <span class="keyword">class</span>... Args&gt;</div><div class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">thread</span> <span class="params">(Fn&amp;&amp; fn, Args&amp;&amp;... args)</span></span>;</div></pre></td></tr></table></figure></p>
-<p>第一个参数指定了线程执行函数，第二个可选的线程函数所需的参数。<br>为了控制线程同步，可以设置原子变量atomic类型的全局变量；或者传入一个原子变量参数的引用；或者使用一个成员变量。<a href="http://www.cplusplus.com/reference/thread/thread/thread/">例子</a>，参见cplusplus网站。<br>赋值运算符，可以直接移动分配，不拷贝。<br><strong>等待和独立运行</strong><br>创建线程后可以调用<code>join</code>来阻塞等待线程的结束，同样也提供了一个函数<code>joinable</code>来测试线程是否可以被join，如果想让线程独立于主线程后台运行可以调用<code>detach</code>，使线程分离出去在后台运行，这是测试能否被join则返回的是false，同样主线程也不能调用join来等待线程的结束。<br><strong>this_thread 类</strong><br>表示当前进程，提供了一组函数。  </p>
-<ul>
-<li><code>get_id</code> 返回一个<code>thread::id</code>类型，标识了当前线程的id。  </li>
-<li><code>yield</code> 让步，为其他线程提供调用的机会。  </li>
-<li><code>sleep_until</code> 阻塞直到设置的时间到了，绝对的时间。  </li>
-<li><code>sleep_for</code> 阻塞到指定的时间，相对时间。  </li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
