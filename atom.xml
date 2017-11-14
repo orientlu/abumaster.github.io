@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-11-07T13:43:01.795Z</updated>
+  <updated>2017-11-10T06:55:19.590Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -20,12 +20,23 @@
     <link href="http://abumaster.com/2017/11/07/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%EF%BC%9A%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/"/>
     <id>http://abumaster.com/2017/11/07/ACE学习笔记3：线程管理/</id>
     <published>2017-11-07T05:20:10.000Z</published>
-    <updated>2017-11-07T13:43:01.795Z</updated>
+    <updated>2017-11-10T06:55:19.590Z</updated>
     
     <content type="html"><![CDATA[<p>不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 <code>ACE_Thread</code> 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。  </p>
 <a id="more"></a>
 <h4 id="创建和取消线程"><a href="#创建和取消线程" class="headerlink" title="创建和取消线程"></a>创建和取消线程</h4><p>ACE_Thread 对 OS 的线程函数进行简单的封装，提供了一组与平台无关的接口。<br>头文件：<code>ace/Thread.h</code><br>线程标识：<code>ACE_thread_t</code>，线程句柄：<code>ACE_hthread_t</code><br>提供的函数：<code>ACE_Thread::spawn_n</code> 或 <code>ACE_Thread::spawn</code> 可以用 <code>ACE_Thread::join()</code> 函数等待线程的结束<br>与普通的创建线程过程无异。  </p>
-<h4 id="ACE-同步原语"><a href="#ACE-同步原语" class="headerlink" title="ACE 同步原语"></a>ACE 同步原语</h4>]]></content>
+<h4 id="ACE-同步原语"><a href="#ACE-同步原语" class="headerlink" title="ACE 同步原语"></a>ACE 同步原语</h4><h5 id="ACE-Lock-类属"><a href="#ACE-Lock-类属" class="headerlink" title="ACE Lock 类属"></a>ACE Lock 类属</h5><p>其中包含了一些锁类机制：互斥锁、信号量、读写锁、令牌。<br><code>ACE_Mutex</code> 封装互斥机制的包装类，用于简单有效地对共享资源访问的序列化，可用于线程和进程之间的同步。<br><code>ACE_Thread_Mutex</code> 和 <code>ACE_Process_Mutex</code> 用于线程和进程之间同步，可以替换。<br><code>ACE_RW_Mutex</code> 封装读写的包装类，分别对读写获取锁。<br><code>ACE_Semaphore</code> 实现计数信号量。<br><code>ACE_Token</code> 提供递归互斥体，一个获取锁的，可以多次获取不发生阻塞。<br><code>ACE_Lock</code> 定义锁定接口的接口类，是一个纯虚类。<br><code>ACE_Lock_Adapter</code> 基于模板的适配类，用于将前面的锁类型适配到纯虚类上。  </p>
+<h5 id="ACE-守卫类属"><a href="#ACE-守卫类属" class="headerlink" title="ACE 守卫类属"></a>ACE 守卫类属</h5><p>用于自动获取和释放锁，守卫类的对象定义一个代码块，进入时获取，退出时释放。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">worker</span><span class="params">(<span class="keyword">void</span> *arguments)</span></div><div class="line"></span>&#123;</div><div class="line">    Args *arg = (Args*)arguments;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arg-&gt;iterations_; ++i)</div><div class="line">    &#123;</div><div class="line">        ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) trying to get a hold of this iteration\n"</span>));</div><div class="line">        <span class="comment">//关键段</span></div><div class="line">        ACE_Guard&lt;ACE_Thread_Mutex&gt; quard(arg-&gt;mutex_);</div><div class="line">        &#123;</div><div class="line">            ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) this iteration is %d\n"</span>, i));</div><div class="line">            ACE_OS::sleep(<span class="number">2</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="ACE-条件类属"><a href="#ACE-条件类属" class="headerlink" title="ACE 条件类属"></a>ACE 条件类属</h5><p>条件变量原语的包装类，特定条件满足后线程才能继续进行。<br>使用条件变量的步骤：  </p>
+<ul>
+<li>获取全局资源的锁；  </li>
+<li>检查条件；  </li>
+<li>如果条件满足执行，不满足调用 <code>wait()</code> 等待未来条件满足；  </li>
+<li>当另一个线程在此全局资源上进行操作时，向其他测试条件的线程发送信号；  </li>
+<li>线程醒来后，测试条件是否为真。  </li>
+</ul>
+<h4 id="线程管理类"><a href="#线程管理类" class="headerlink" title="线程管理类"></a>线程管理类</h4><p>使用 <code>ACE_THREAD_MANAGER</code> 进行线程管理。简单的 <code>ACE_Thread</code> 包装类用于创建和销毁线程，功能有限。 <code>ACE_Thread_Manager</code> 提供了它全部的功能，并能成组创建销毁线程，提供了丰富的管理功能，对一组线程进行管理。  </p>
+]]></content>
     
     <summary type="html">
     
@@ -36,11 +47,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -80,11 +91,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -119,9 +130,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -130,17 +141,24 @@
     <link href="http://abumaster.com/2017/10/25/%E7%A7%8B%E6%8B%9B%E4%B9%8B%E8%B7%AF-%E5%8F%8D%E6%80%9D/"/>
     <id>http://abumaster.com/2017/10/25/秋招之路-反思/</id>
     <published>2017-10-25T01:18:24.000Z</published>
-    <updated>2017-10-25T12:24:13.534Z</updated>
+    <updated>2017-11-14T13:28:20.741Z</updated>
     
     <content type="html"><![CDATA[<p>七八月开始准备找工作，期间看了几本书，做了不少的算法题。从八月底开始投递简历，开始做笔试。然后九月开始四处跑宣讲会，做笔试，面试，累。等到十月的中旬才找到了工作，算是比较垫底的薪资水准了，我的水平难道是不过如此了吗？第一份工作就不过如此了。<br><a id="more"></a></p>
-<p><blockquote class="blockquote-center">
+<blockquote class="blockquote-center">
 不乱于心，不困于情，不畏将来，不念过往，如此，安好。<br>–丰子恺 《不宠无惊过一生》
 </blockquote>
-<img src="http://oo7zsi4t8.bkt.clouddn.com/17-10-25/34678281.jpg" alt="">  </p>
-<p><center>
-<img src="http://oo7zsi4t8.bkt.clouddn.com/17-10-25/32122326.jpg" alt="">
-</center>
-<img src="http://oo7zsi4t8.bkt.clouddn.com/17-10-25/36429024.jpg" alt=""> </p>
+
+<center>
+<img src="http://oo7zsi4t8.bkt.clouddn.com/17-10-25/34678281.jpg" alt=""><br></center>
+
+<div class="note primary"><p>第一次面试  </p>
+</div>  
+<p>第一次面试的公司是<strong>富途证券</strong>，算是第一次正式面试的公司吧，印象有点深刻。校招流程很简单：线下宣讲会，然后笔试，隔天开始通知面试，现场多轮面试。很有幸过了笔试（后来才发现与线上的笔试相比，线下的笔试要简单许多）。然后通知去面试，时间2017年9月16号。<br>面试是在一个酒店里面，公司的一票人在那里订了房间，有hr和随行的技术人员，一晚上的时间来改完试卷开始通知面试。面试官在房间里等着，hr挨个喊人进去面试，第一次很紧张，说不紧张都是假的。同行的还有徐蔚和石多。我们等了一会就被叫进房间开始各自的面试了。<br>面试我的是一个和我差不多大小的年轻老师（暂且叫面试官老师吧），做技术的一般不是太讲究，然后首先让我自我介绍一下，我就随便说说，也没有组织的太多，想到哪里就说到哪里。然后，他开始问我问题，感觉对我的期望还是蛮高的，可能是卷面的成绩有点高吧。问了我Linux下的一些问题及编译程序，coredump出现时的解决办法。哎，这些问题平时都是在用到的时候到网上查，并没有太多的总结，所以在这吃亏了，回答的并不是太全面。问了我一个程序改错题，我还是不知道是紧张还是程序阅读能力太低，对此没有回答的太全面。最后，一面挂了。对了，还有一道算法题，我和他说这个我以前是刷过，但是忘了，太诚实了，太幼稚了。面试时间也就二十分钟左右，可能是尬聊了，问啥啥不会。。<br>面试也不过如此了，我真的是不擅长表达！还是心态不好，紧张。  </p>
+<div class="note info"><p>面啥挂啥，我能怎么办？  </p>
+</div>
+<p>金九银十，我们的状态是跑宣讲会，听公司吹牛，顺便做一做他们的笔试题，然后去参加他们的面试，也就是去积累一些经验，见识一些题目，见识一些面试问题，见识一些比你牛很多的人。<br>一般笔试的题目都很简单，一般都可以进面试的，最重要的是面试的时候，该怎么聊才能给面试官留下很深的印象，或者认为你这个人有潜力，值得公司培养，或者公司付出小的成本，你能给公司带来巨大的收益。他们的期望与你自己的表现之间的差值。<br>有时感觉自己聊的很好啊，但是没有亮点还是不行的。比如蓝港集团，一家游戏公司。也没有问什么项目问题、技术问题也没有问，只是让我在那里自己陈述自己做过什么，他在就此回答问题。其中我说我比较熟悉stl中的内存管理机制，其实这一方面的细节我都忘的差不多了，我就简单的说了一下，可能是没有说清楚吧，他也没有细问，估计也不是很懂。然后到最后的提问环节，我问了一些技术问题，我不知道的，他没有回答，而是问问我的看法，我不懂啊，我说了不知道（后来才知道这种干脆的回答是致命的错误，你给面试官一个信息：你不擅长思考，不能就问题提出自己的见解和判断）。其实，问题并没有标准的答案，只要是想一想能回答个大概，我当时就是因为不确定是否正确。才没有回答，这是一个缺点：对于不确定的事物，我不想回答，连思考都懒得去思考。<br>后来参加了多家，趋势科技，绿盟，58集团，wps，烽火科技等，自己的能力确实太差劲了。<br><strong>最糟糕的面试体验</strong>，任子行公司的面试体验真是差劲到爆。刚开始群面，也是服了，你说搞技术的人有多少能聊的，确实有，不过也只是只会动动嘴皮子罢了。这也没得说的。然后第二天是上机，说是分开时间段，但是你只准备一台机器，让几个人挨个上机是怎么回事啊，还只有一个面试官老师，上午九点去的，然后下午三点多才搞完。技术面试的时候两个人一起是怎么回事啊。无语了。  </p>
+<div class="note sucess"><p>不好意思的拒绝  </p>
+</div>
 ]]></content>
     
     <summary type="html">
@@ -528,9 +546,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -582,9 +600,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -633,9 +651,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
