@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-11-10T06:55:19.590Z</updated>
+  <updated>2017-11-27T13:09:10.186Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,56 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+  </entry>
   
   <entry>
     <title>ACE学习笔记3：线程管理</title>
@@ -47,11 +97,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -91,11 +141,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -130,9 +180,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
   </entry>
   
@@ -141,7 +191,7 @@
     <link href="http://abumaster.com/2017/10/25/%E7%A7%8B%E6%8B%9B%E4%B9%8B%E8%B7%AF-%E5%8F%8D%E6%80%9D/"/>
     <id>http://abumaster.com/2017/10/25/秋招之路-反思/</id>
     <published>2017-10-25T01:18:24.000Z</published>
-    <updated>2017-11-14T13:28:20.741Z</updated>
+    <updated>2017-11-16T06:02:52.588Z</updated>
     
     <content type="html"><![CDATA[<p>七八月开始准备找工作，期间看了几本书，做了不少的算法题。从八月底开始投递简历，开始做笔试。然后九月开始四处跑宣讲会，做笔试，面试，累。等到十月的中旬才找到了工作，算是比较垫底的薪资水准了，我的水平难道是不过如此了吗？第一份工作就不过如此了。<br><a id="more"></a></p>
 <blockquote class="blockquote-center">
@@ -157,8 +207,9 @@
 <div class="note info"><p>面啥挂啥，我能怎么办？  </p>
 </div>
 <p>金九银十，我们的状态是跑宣讲会，听公司吹牛，顺便做一做他们的笔试题，然后去参加他们的面试，也就是去积累一些经验，见识一些题目，见识一些面试问题，见识一些比你牛很多的人。<br>一般笔试的题目都很简单，一般都可以进面试的，最重要的是面试的时候，该怎么聊才能给面试官留下很深的印象，或者认为你这个人有潜力，值得公司培养，或者公司付出小的成本，你能给公司带来巨大的收益。他们的期望与你自己的表现之间的差值。<br>有时感觉自己聊的很好啊，但是没有亮点还是不行的。比如蓝港集团，一家游戏公司。也没有问什么项目问题、技术问题也没有问，只是让我在那里自己陈述自己做过什么，他在就此回答问题。其中我说我比较熟悉stl中的内存管理机制，其实这一方面的细节我都忘的差不多了，我就简单的说了一下，可能是没有说清楚吧，他也没有细问，估计也不是很懂。然后到最后的提问环节，我问了一些技术问题，我不知道的，他没有回答，而是问问我的看法，我不懂啊，我说了不知道（后来才知道这种干脆的回答是致命的错误，你给面试官一个信息：你不擅长思考，不能就问题提出自己的见解和判断）。其实，问题并没有标准的答案，只要是想一想能回答个大概，我当时就是因为不确定是否正确。才没有回答，这是一个缺点：对于不确定的事物，我不想回答，连思考都懒得去思考。<br>后来参加了多家，趋势科技，绿盟，58集团，wps，烽火科技等，自己的能力确实太差劲了。<br><strong>最糟糕的面试体验</strong>，任子行公司的面试体验真是差劲到爆。刚开始群面，也是服了，你说搞技术的人有多少能聊的，确实有，不过也只是只会动动嘴皮子罢了。这也没得说的。然后第二天是上机，说是分开时间段，但是你只准备一台机器，让几个人挨个上机是怎么回事啊，还只有一个面试官老师，上午九点去的，然后下午三点多才搞完。技术面试的时候两个人一起是怎么回事啊。无语了。  </p>
-<div class="note sucess"><p>不好意思的拒绝  </p>
-</div>
+<div class="note sucess"><p>选择  </p>
+</div>  
+<p>总会面临一些选择，对错？很难确定。杭州的一家游戏公司也给我发了offer，感觉公司的氛围很不错的，而且待遇什么的都很好，在杭州这个充满了奇迹的地方。</p>
 ]]></content>
     
     <summary type="html">
@@ -546,9 +597,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -600,9 +651,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -651,9 +702,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
@@ -896,55 +947,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       &lt;blockquote&gt;
 &lt;p&gt;Pixel Deconvolutional Networks Hongyang Gao etc. 2017.1.7 主要介绍了对于传统反卷积操作的新解读。读此论文，做如下笔记。  &lt;/p&gt;
 &lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用深度学习技术的图像语义分割最新综述</title>
-    <link href="http://abumaster.com/2017/07/10/%E4%BD%BF%E7%94%A8%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E6%9C%AF%E7%9A%84%E5%9B%BE%E5%83%8F%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%9C%80%E6%96%B0%E7%BB%BC%E8%BF%B0/"/>
-    <id>http://abumaster.com/2017/07/10/使用深度学习技术的图像语义分割最新综述/</id>
-    <published>2017-07-10T08:32:14.000Z</published>
-    <updated>2017-07-29T06:58:05.506Z</updated>
-    
-    <content type="html"><![CDATA[<p>A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22  </p>
-<a id="more"></a>
-<div class="note sucess"><p>文章的主要贡献：  </p>
-<ul>
-<li>对现有用于图像语义分割的数据集的研究；  </li>
-<li>深度有组织地对使用深度学习的图像语义分割重要算法它们的起源和贡献进行回顾；  </li>
-<li>对它们的性能进行粗略的评估；  </li>
-<li>对上述结果进行讨论，并对未来的研究方向进行探讨。  </li>
-</ul>
-</div>
-<h4 id="术语和背景概念"><a href="#术语和背景概念" class="headerlink" title="术语和背景概念"></a>术语和背景概念</h4><p>图像语义分割不是一个孤立的领域，而是一个从粗略到精细的自然的推理过程：预测输入图像中物体的类别，如果多类物体则预测多个类别；定位不同类别物体的位置；为图像中的每一个像素分类（图像语义分割）；对同一类物体的不同物体进行区分（实例分割）。  </p>
-<p><strong>数据预处理和增强</strong> 对于小的数据集，可以相应作出改变来增大数据集，往往会带来更好的效果。比如1500张图像的数据集可以缩放成不同的尺度，进行不同的旋转，进行不同的伽马变换，生成大数据集。  </p>
-<h4 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/64022244.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-10/39234174.jpg" alt="">  </p>
-<p>当前，大多数优秀的深度学习技术用于图像语义分割都来自一个共同的先导者：全卷积网络（Long），这种方法的优势就是利用当前存在的CNNs作为有力的视觉模型，可以学习分层特征。通过改变一些著名的分类网络：改变最后的全连接层为全卷积层，输出特征图来取代分类得分。这些特征图（空域图）通过分数阶卷积（也被称为反卷积）来产生稠密像素级标记的输出图。反卷积网络的工作是一个里程碑式的工作，因为它展示了如何用CNNs训练端对端来解决视觉问题，是深度学习用于图像语义分割的基石。<br><strong>缺陷</strong>：缺少不同特征的感知，阻碍了在具体问题和场景中的应用。固有的空间不变性，使它不能将全局的上下文信息考虑进去，默认不能感知实例，在高分辨率上不能达到实时的处理速度，不能适应无结构的数据，例如3-D点云和模型。<br>对于它的种种缺陷，不同的方法提供不同的改善方向和效果，主要分为以下几个方向。  </p>
-<h5 id="解码变种"><a href="#解码变种" class="headerlink" title="解码变种"></a>解码变种</h5><p>这是一种具有两个组件的网络，分别包含了编码器（卷积网络）和解码器（反卷积网络）。与普通的全卷积网络不同之处在于对低分辨率的特征图的处理，通过一个解码网络的东西。<br>SegNet，解码阶段是由一系列的上采样和卷积层组成的，上采样对应了编码过程的最大池化。上采样过的特征图通过一组可以训练的卷积核进行卷积生成了稠密特征图。经过解码后的图像与原始输入图像具有了相同的分辨率，然后经过一层softmax层分类器产生最终的分割图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/13339329.jpg" alt="">  </p>
-<h5 id="整合上下文信息"><a href="#整合上下文信息" class="headerlink" title="整合上下文信息"></a>整合上下文信息</h5><p><em>图像语义分割的一个问题就是需要整合不同空间尺度的信息</em>。这意味着局部信息和全局信息的平衡，一方面，细粒度或者局部信息对于获得良好的像素级预测精度是非常重要的，另一方面，整合全局上下文信息，可以解决分割图局部模糊性。传统的CNNs网络因为池化层的存在是不能感知全局信息的，有许多方法可以使CNNs感知全局信息，比如，使用条件随机场作为后续的处理，膨胀卷积，多尺度聚合，甚至将上下文模型推广到另一种深度网络中如RNNs。<br><strong>条件随机场</strong><br>解决上述的问题，一种可能的方法优化输出图，提高捕捉细节的能力，是用条件随机场作为后期处理。条件随机场（CRF）可以组合低层次的像素级别的信息，这些是CNN无法做到的，其中DeepLab应用了全连接的条件随机场作为分割图的后续处理，像素作为图的节点，建立全连接充分考虑了短程和远程的连接。另一个CRFasRNN，将条件随机场作为网络的一部分进行端对端的训练。  </p>
-<blockquote>
-<p>[1] Semantic image segmentation with deep convolutional nets and fully connected crfs<br>[2] Conditional random fields as recurrent neural networks</p>
-</blockquote>
-<p><strong>膨胀卷积</strong><br>也叫阿托斯卷积，通过增大卷积核的步伐来进行卷积操作，获得更宽的接受域。<br><strong>多尺度聚合</strong><br>首先[1]提出了将全卷积网络分为两个路径，图像分为原图和二倍图，分别放入浅层网络和全卷积网络，将全卷积网络的输出上采样结合浅层输出经过一系列的卷积的到最终的输出图。对尺度感知非常敏感？<br>[2]用了不同的思路，四个相同的网络，感知由粗糙到精细的尺度信息，如图，序列进行处理得到最终的输出。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-26/27217990.jpg" alt=""><br>[4]提出了n个全卷积网络的结构，分别对应处理不同的尺度，分为两个阶段学习：第一个分别独立训练，第二融合各网络的输出，得到最终的输出图。  </p>
-<blockquote>
-<p>[1] Multi-scale convolutional architecture for semantic segmentation<br>[2] A multi-scale cnn for affordance segmentation in rgb images<br>[3] Predicting depth, surface normals and semantic labels with a common multi-scale convolutional architecture<br>[4] Multiscale fully convolutional network with application to industrial inspection  </p>
-</blockquote>
-<p><strong>特征融合</strong><br>提取不同层的特征，包含了不同的局部上下文信息，将之融合。<br><strong>递归神经网络</strong>  </p>
-<h5 id="实例分割"><a href="#实例分割" class="headerlink" title="实例分割"></a>实例分割</h5><p>实例分割是语义分割之后的一步，同时也是与其他低级像素分割技术相比最具有挑战性的问题。主要是将同类物品的不同实例区别开。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;A Review on Deep Learning Techniques Applied to Semantic Segmentation [A. Garcia-Garcia, S. Orts-Escolano, S.O. Oprea, V. Villena-Martinez, and J. Garcia-Rodriguez] 2017年4月22  &lt;/p&gt;
     
     </summary>
     
