@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
+    <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
+    <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>C++</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[ACE学习笔记4：任务和主动对象]]></title>
     <url>%2F2017%2F11%2F17%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1%2F</url>
     <content type="text"><![CDATA[主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 主动对象。 任务。 任务的简单使用要创建任务和主动对象，要从 ACE_Task 中派生一个任务子类，然后必须进行以下的工作： 实现初始化和终止方法：open() 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，close() 则是终止方法； 调用启动方法：主动对象实例化必须调用 activate() 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数； 实现任务专有的处理方法：主动对象启动后，各个线程在 svc() 中启动，必须定义此方法。 任务间的通信 每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 getq() 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。使用：假设任务A和任务B之间通信，A-&gt;B 发送消息。首先，定义一个 ACE_Message_Block 类型的消息块*mb，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 B-&gt;putq(mb) 向底层消息管道中压入一个消息快；然后B中用 getq(mb) 获取消息队列中的消息。实现两个任务之间的通信。 主动对象 主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。 ACE主动对象模式实现至少涉及3个类模块: 提供多线程池 ACE_Task_Base 或者 ACE_Task 或者 ACE_Thread_Manager ； 提供请求排队的 ACE_Activation_Queue，其内部维护了 ACE_Message_Queue 的 message_block 消息指针队列； 提供了 ACE_Activation_Queue 队列操作实例的 ACE_Method_Request ，ACE_Method_Request是command模式，最低消耗仅为实现其内部的call方法。 ACE主动对象实现需要依赖以上3个模块，至少构建2个类: 分发器，负责将请求参数排队，并提供数个执行线程。 分发对象。请求队列的排队实例。 ACE 主动对象参考]]></content>
@@ -8,8 +21,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -21,8 +34,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -34,8 +47,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -47,8 +60,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -108,8 +121,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -121,8 +134,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -157,10 +170,10 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -171,10 +184,10 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -185,9 +198,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
         <tag>算法</tag>
+        <tag>编程</tag>
         <tag>面试</tag>
       </tags>
   </entry>
@@ -550,8 +563,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -563,8 +576,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -624,8 +637,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -648,8 +661,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -704,8 +717,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -738,8 +751,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -750,8 +763,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -774,8 +787,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>深度学习</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>

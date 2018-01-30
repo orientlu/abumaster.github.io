@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2017-11-27T13:09:10.186Z</updated>
+  <updated>2018-01-30T07:00:16.126Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,77 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ubuntu 安装 Caffe 深度学习框架</title>
+    <link href="http://abumaster.com/2017/11/17/Ubuntu%E5%AE%89%E8%A3%85caffe/"/>
+    <id>http://abumaster.com/2017/11/17/Ubuntu安装caffe/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2018-01-30T07:00:16.126Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Ubuntu14-04-Caffe-CPU版"><a href="#Ubuntu14-04-Caffe-CPU版" class="headerlink" title="Ubuntu14.04 + Caffe CPU版"></a>Ubuntu14.04 + Caffe CPU版</h2><p><strong>1.安装依赖项</strong><br>包括了Caffe使用的第三方库
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler  </div><div class="line">sudo apt-get install --no-install-recommends libboost-all-dev</div><div class="line">sudo apt-get install libatlas-base-dev</div></pre></td></tr></table></figure></p>
+<p><strong>2.安装python环境</strong><br>使用<a href="https://www.anaconda.com/download/">Anaconda</a>集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 </p>
+<p><strong>3.安装OpenCV</strong>  </p>
+<ul>
+<li><p><a href="https://github.com/jayrambhia/Install-OpenCV">从网上下载安装脚本</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/jayrambhia/Install-OpenCV</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入其中的 <code>Ubuntu</code> 目录下执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo sh ./dependencies.sh</div><div class="line">cd 2.4</div><div class="line">sudo sh opencv2_4_10.sh</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意：</strong>虚拟机环境下CPU核数的限制会发生卡顿死机，要将 <code>opencv_2_4_10.sh</code> 中的一条命令 <code>make -j</code> 改为 <code>make</code> 即可。  </p>
+<p><strong>4.caffe的配置</strong></p>
+<ul>
+<li>从<a href="https://github.com/BVLC/caffe.git">github</a>上下载caffe源码；</li>
+<li><p>拷贝根目录下的 <code>config</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp Makefile.config.example Makefile.config</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">## Refer to http://caffe.berkeleyvision.org/installation.html</div><div class="line"># Contributions simplifying and improving our build system are welcome!</div><div class="line"></div><div class="line"># cuDNN acceleration switch (uncomment to build with cuDNN).</div><div class="line"># USE_CUDNN := 1</div><div class="line"></div><div class="line"># CPU-only switch (uncomment to build without GPU support).</div><div class="line">CPU_ONLY := 1</div><div class="line"></div><div class="line"># To customize your choice of compiler, uncomment and set the following.</div><div class="line"># N.B. the default for Linux is g++ and the default for OSX is clang++</div><div class="line"># CUSTOM_CXX := g++</div><div class="line"></div><div class="line"># CUDA directory contains bin/ and lib/ directories that we need.</div><div class="line"># CUDA_DIR := /usr/local/cuda</div><div class="line"># On Ubuntu 14.04, if cuda tools are installed via</div><div class="line"># "sudo apt-get install nvidia-cuda-toolkit" then use this instead:</div><div class="line"># CUDA_DIR := /usr</div><div class="line"></div><div class="line"># CUDA architecture setting: going with all of them.</div><div class="line"># For CUDA &lt; 6.0, comment the *_50 lines for compatibility.</div><div class="line">#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \</div><div class="line">#       -gencode arch=compute_20,code=sm_21 \</div><div class="line">#       -gencode arch=compute_30,code=sm_30 \</div><div class="line">#       -gencode arch=compute_35,code=sm_35 \</div><div class="line">#       -gencode arch=compute_50,code=sm_50 \</div><div class="line">#       -gencode arch=compute_50,code=compute_50</div><div class="line">#</div><div class="line"># BLAS choice:</div><div class="line"># atlas for ATLAS (default)</div><div class="line"># mkl for MKL</div><div class="line"># open for OpenBlas</div><div class="line">BLAS := atlas</div><div class="line"># Custom (MKL/ATLAS/OpenBLAS) include and lib directories.</div><div class="line"># Leave commented to accept the defaults for your choice of BLAS</div><div class="line"># (which should work)!</div><div class="line"># BLAS_INCLUDE := /path/to/your/blas</div><div class="line"># BLAS_LIB := /path/to/your/blas</div><div class="line"></div><div class="line"># Homebrew puts openblas in a directory that is not on the standard search path</div><div class="line"># BLAS_INCLUDE := $(shell brew --prefix openblas)/include</div><div class="line"># BLAS_LIB := $(shell brew --prefix openblas)/lib</div><div class="line"></div><div class="line"># This is required only if you will compile the matlab interface.</div><div class="line"># MATLAB directory should contain the mex binary in /bin.</div><div class="line"># MATLAB_DIR := /usr/local</div><div class="line"># MATLAB_DIR := /Applications/MATLAB_R2012b.app</div><div class="line"></div><div class="line"># NOTE: this is required only if you will compile the python interface.</div><div class="line"># We need to be able to find Python.h and numpy/arrayobject.h.</div><div class="line">#PYTHON_INCLUDE := /usr/include/python2.7 \</div><div class="line">#       /usr/lib/python2.7/dist-packages/numpy/core/include</div><div class="line"># Anaconda Python distribution is quite popular. Include path:</div><div class="line"># Verify anaconda location, sometimes it's in root.</div><div class="line"> ANACONDA_HOME := $(HOME)/anaconda2</div><div class="line"> PYTHON_INCLUDE := $(ANACONDA_HOME)/include \</div><div class="line">         $(ANACONDA_HOME)/include/python2.7 \</div><div class="line">         $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \</div><div class="line"></div><div class="line"># We need to be able to find libpythonX.X.so or .dylib.</div><div class="line"># PYTHON_LIB := /usr/lib</div><div class="line"> PYTHON_LIB := $(ANACONDA_HOME)/lib</div><div class="line"></div><div class="line"># Homebrew installs numpy in a non standard path (keg only)</div><div class="line"># PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include</div><div class="line"># PYTHON_LIB += $(shell brew --prefix numpy)/lib</div><div class="line"></div><div class="line"># Uncomment to support layers written in Python (will link against Python libs)</div><div class="line">WITH_PYTHON_LAYER := 1</div><div class="line"></div><div class="line"># Whatever else you find you need goes here.</div><div class="line">INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include</div><div class="line">LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib</div><div class="line"></div><div class="line"># If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies</div><div class="line"># INCLUDE_DIRS += $(shell brew --prefix)/include</div><div class="line"># LIBRARY_DIRS += $(shell brew --prefix)/lib</div><div class="line"></div><div class="line"># Uncomment to use `pkg-config` to specify OpenCV library paths.</div><div class="line"># (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)</div><div class="line"># USE_PKG_CONFIG := 1</div><div class="line"></div><div class="line">BUILD_DIR := build</div><div class="line">DISTRIBUTE_DIR := distribute</div><div class="line"></div><div class="line"># Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171</div><div class="line"># DEBUG := 1</div><div class="line"></div><div class="line"># The ID of the GPU that 'make runtest' will use to run unit tests.</div><div class="line">#TEST_GPUID := 0</div><div class="line"></div><div class="line"># enable pretty build (comment to see full commands)</div><div class="line">Q ?= @</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>5.安装caffe</strong><br>编译安装caffe
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">make all   </div><div class="line">make test  </div><div class="line">make runtest  </div><div class="line">make pycaffe</div></pre></td></tr></table></figure></p>
+<h3 id="出错记录"><a href="#出错记录" class="headerlink" title="出错记录"></a>出错记录</h3><ul>
+<li><p><code>Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10</code> 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/lib</div><div class="line">source ~/.bashrc</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用python接口是出错提示没有protobuf模块，解决方法，使用<code>conda install protobuf</code>安装最新的protobuf python模块，<code>exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH</code>。</p>
+</li>
+</ul>
+<h2 id="Ubuntu14-04-Caffe-GPU版"><a href="#Ubuntu14-04-Caffe-GPU版" class="headerlink" title="Ubuntu14.04 + Caffe GPU版"></a>Ubuntu14.04 + Caffe GPU版</h2><p><a href="http://blog.csdn.net/ubunfans/article/details/47724341">参考</a><br><strong>1.安装GPU驱动程序和工具包</strong><br>驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。<br><strong>2.安装cudnn</strong><br>下载过，解压，将头文件放入到指定文件夹下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz  </div><div class="line">cd cuda  </div><div class="line">sudo cp lib/lib* /usr/local/cuda/lib64/  </div><div class="line">sudo cp include/cudnn.h /usr/local/cuda/include/</div></pre></td></tr></table></figure></p>
+<p>更新链接信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/cuda/lib64/</div><div class="line">sudo chmod +r libcudnn.so.5.0.5</div><div class="line">sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5</div><div class="line">sudo ln -sf libcudnn.so.5 libcudnn.so</div><div class="line">sudo ldconfig</div></pre></td></tr></table></figure></p>
+<p>添加cuda环境变量
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/profile</div><div class="line">PATH = /usr/local/cuda/bin:$PATH</div><div class="line">export PATH</div><div class="line">source /etc/profile #使环境变量生效</div></pre></td></tr></table></figure></p>
+<p>添加lib库路径,在 <code>/etc/ld.so.conf.d/</code> 加入文件 <code>cuda.conf</code>，内容为
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/cuda/lib64  </div><div class="line">sudo ldconfig #使路径生效</div></pre></td></tr></table></figure></p>
+<p>接下来的caffe安装与CPU版本一样。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
   
   <entry>
     <title>ACE学习笔记4：任务和主动对象</title>
@@ -57,9 +128,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
@@ -97,9 +168,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
@@ -141,9 +212,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
@@ -180,9 +251,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -374,9 +445,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="动态规划" scheme="http://abumaster.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
@@ -406,9 +477,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -597,13 +668,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -651,13 +722,13 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -702,11 +773,11 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
@@ -922,40 +993,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="STL" scheme="http://abumaster.com/tags/STL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>像素反卷积网络</title>
-    <link href="http://abumaster.com/2017/07/11/%E5%83%8F%E7%B4%A0%E5%8F%8D%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C/"/>
-    <id>http://abumaster.com/2017/07/11/像素反卷积网络/</id>
-    <published>2017-07-11T07:30:10.000Z</published>
-    <updated>2017-07-25T09:07:16.132Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>Pixel Deconvolutional Networks Hongyang Gao etc. 2017.1.7 主要介绍了对于传统反卷积操作的新解读。读此论文，做如下笔记。  </p>
-</blockquote>
-<a id="more"></a>
-<p><strong>1.引子</strong><br>反卷积层被广泛地应用在各种各样的深度模型中用于上采样，其中包括了用于语义分割的编码-解码网络、用于无监督学习的深度生成模型。反卷积层容易造成棋盘问题，使得输出的特征图的临近像素没有直接的关系。为了解决这个问题，提出了一种像素反卷积层，在输出特征图的临近像素之间建立一个直接的关系。是对反卷积操作的新的解读，因此可以取代任何的使用反卷积层的网络模型中的反卷积层。效率有所下降但是可以通过实现来解决。实验结果比较良好。  </p>
-<p><strong>2.像素反卷积层</strong><br>新的层中的中间特征图是按照顺序生成，后面的特征图的生成依赖前面的。如此。<br>反卷积网络中的棋盘问题。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-24/77481511.jpg" alt=""><br>卷积层对输入特征图进行不同的卷积核卷积生成了中间特征图，然后上采样生成了输出特征图，其相邻的像素是没有直接联系的，因为是不同的卷积核操作生成的。<br>输入特征图Fin，输出特征图Fout，中间特征图的计算：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/57088763.jpg" alt=""><br>像素反卷积层，PixelDCL，改用了一种中间特征图的关联生成形式，生成了序列化的特征图，彼此依赖，如图。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-24/26503601.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/92585659.jpg" alt=""><br>移除中间特征图和输入特征图之间的关联，因为，中间特征已经包含了输入特征图的信息，去掉不但可以提高计算效率，还能减小模型的参数。计算时只需第一个中间特征图依赖输入特征图，其他的中间特征图依赖前面计算过的特征图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/42661592.jpg" alt=""><br><strong>分析（ 4*4 的输入特征图，上采样为 8*8 的特征图）：</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/85425689.jpg" alt=""><br>第一步：2*2的卷积核对输入特征进行卷积操作生成第一个中间特征图，紫色的；<br>第二步：对第一个中间特征进行卷积操作生成第二个中间特征；<br>第三步：扩展和组合前两个特征图，生成8*8的特征图；<br>第四步：对此特征图进行marked卷积，卷积核大小改为3，保持8的大小；<br>第五步：组合两个大小为8的特征图，生成最终的大小为8的输出特征图。  </p>
-<p><a href="https://github.com/divelab/PixelDCN">源码地址</a>  </p>
-<p><strong>3.结果</strong><br>在图像语义分割上的结果：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-25/55128940.jpg" alt="">  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;Pixel Deconvolutional Networks Hongyang Gao etc. 2017.1.7 主要介绍了对于传统反卷积操作的新解读。读此论文，做如下笔记。  &lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
-    
-    
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-      <category term="计算机视觉" scheme="http://abumaster.com/tags/computerversion/"/>
     
   </entry>
   

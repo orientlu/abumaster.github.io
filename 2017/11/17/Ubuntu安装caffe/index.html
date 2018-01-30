@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="深度学习,论文," />
+  <meta name="keywords" content="框架,C++,深度学习," />
 
 
 
@@ -90,18 +90,16 @@
 
 
 
-<meta name="description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
+<meta name="description" content="详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Feedforward semantic segmentation with zoom-out features">
-<meta property="og:url" content="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/index.html">
+<meta property="og:title" content="Ubuntu 安装 Caffe 深度学习框架">
+<meta property="og:url" content="http://abumaster.com/2017/11/17/Ubuntu安装caffe/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
-<meta property="og:image" content="http://abumaster.com/photos/zoom-out.jpg">
-<meta property="og:updated_time" content="2017-03-29T02:49:47.429Z">
+<meta property="og:description" content="详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。">
+<meta property="og:updated_time" content="2018-01-30T07:00:16.126Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Feedforward semantic segmentation with zoom-out features">
-<meta name="twitter:description" content="使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间">
-<meta name="twitter:image" content="http://abumaster.com/photos/zoom-out.jpg">
+<meta name="twitter:title" content="Ubuntu 安装 Caffe 深度学习框架">
+<meta name="twitter:description" content="详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。">
 
 
 
@@ -129,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/"/>
+  <link rel="canonical" href="http://abumaster.com/2017/11/17/Ubuntu安装caffe/"/>
 
 
 
 
 
-  <title> Feedforward semantic segmentation with zoom-out features | 张国丰 </title>
+  <title> Ubuntu 安装 Caffe 深度学习框架 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +295,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/03/27/Feedforward-semantic-segmentation-with-zoom-out-features/">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2017/11/17/Ubuntu安装caffe/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="abumaster">
@@ -318,7 +316,7 @@
             
             
               
-                Feedforward semantic segmentation with zoom-out features
+                Ubuntu 安装 Caffe 深度学习框架
               
             
           </h1>
@@ -333,8 +331,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-27T14:21:29+08:00">
-                2017-03-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-17T11:03:02+08:00">
+                2017-11-17
               </time>
             
 
@@ -392,11 +390,48 @@
 
       
         <blockquote>
-<p>使用缩小特征的前馈语义分割 Feedforward semantic segmentation with zoom-out features 2015年CVPR论文，在PASCAL VOC 2012测试集上达到了69.9%的正确率。将小的图像元素（超像素）映射到丰富的特征表示中，这些特征是从嵌套的增加区域中获得。这些区域通过从超像素一直缩小到场景级别的分辨率获得。这种方法充分利用了图像和隐藏空间中的统计结构，而不显式设置结构化预测机制，从而避免了复杂、昂贵的推论。从而超像素是由多层前馈网络进行分类。  </p>
+<p>详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。</p>
 </blockquote>
 <a id="more"></a>
-<p>从大量的现代分割著作中，得到了一种被广泛接受的知识，<strong>分割可以看成一个结构化预测的任务</strong>，可以用条件随机场和结构化支持向量机模型。作者脱离传统，提出<strong>图像语义分割看作单阶段的分类任务，其中每个像素元素（超像素）被标记为一个标签，使用一个前馈模型，依据从图像计算的证据</strong>。用在前馈分类中的证据不是从孤立的局部区域中获得，而是从序列中获得，序列是怎么组成的呢？首先得到一个超像素，再向外扩展，获得一个更大的闭合区域，直到扩展到整张图片。计算每一个层次的丰富特征，结合所有特征，放入分类网络中。<br><img src="/photos/zoom-out.jpg" alt="zoom-out">  </p>
-<p>###缩小的特征融合<br>将图像的类别分割转换成对一组超像素分类。由于我们期望为每个超级像素应用相同的分类机，我们希望超像素的性质是相似的，特别是它们的大小。使用了SLIC。<br><strong>本地</strong><br>超像素本身有很窄的范围，我们希望特征提取器可以捕获更多的本地信息：颜色，上下文，其他一些属性，在临近的超像素之间这些属性有很大的不同。<br><strong>近似</strong><br><strong>距离</strong><br><strong>场景</strong>  </p>
+<h2 id="Ubuntu14-04-Caffe-CPU版"><a href="#Ubuntu14-04-Caffe-CPU版" class="headerlink" title="Ubuntu14.04 + Caffe CPU版"></a>Ubuntu14.04 + Caffe CPU版</h2><p><strong>1.安装依赖项</strong><br>包括了Caffe使用的第三方库
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler  </div><div class="line">sudo apt-get install --no-install-recommends libboost-all-dev</div><div class="line">sudo apt-get install libatlas-base-dev</div></pre></td></tr></table></figure></p>
+<p><strong>2.安装python环境</strong><br>使用<a href="https://www.anaconda.com/download/">Anaconda</a>集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 </p>
+<p><strong>3.安装OpenCV</strong>  </p>
+<ul>
+<li><p><a href="https://github.com/jayrambhia/Install-OpenCV">从网上下载安装脚本</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/jayrambhia/Install-OpenCV</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入其中的 <code>Ubuntu</code> 目录下执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo sh ./dependencies.sh</div><div class="line">cd 2.4</div><div class="line">sudo sh opencv2_4_10.sh</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意：</strong>虚拟机环境下CPU核数的限制会发生卡顿死机，要将 <code>opencv_2_4_10.sh</code> 中的一条命令 <code>make -j</code> 改为 <code>make</code> 即可。  </p>
+<p><strong>4.caffe的配置</strong></p>
+<ul>
+<li>从<a href="https://github.com/BVLC/caffe.git">github</a>上下载caffe源码；</li>
+<li><p>拷贝根目录下的 <code>config</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp Makefile.config.example Makefile.config</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">## Refer to http://caffe.berkeleyvision.org/installation.html</div><div class="line"># Contributions simplifying and improving our build system are welcome!</div><div class="line"></div><div class="line"># cuDNN acceleration switch (uncomment to build with cuDNN).</div><div class="line"># USE_CUDNN := 1</div><div class="line"></div><div class="line"># CPU-only switch (uncomment to build without GPU support).</div><div class="line">CPU_ONLY := 1</div><div class="line"></div><div class="line"># To customize your choice of compiler, uncomment and set the following.</div><div class="line"># N.B. the default for Linux is g++ and the default for OSX is clang++</div><div class="line"># CUSTOM_CXX := g++</div><div class="line"></div><div class="line"># CUDA directory contains bin/ and lib/ directories that we need.</div><div class="line"># CUDA_DIR := /usr/local/cuda</div><div class="line"># On Ubuntu 14.04, if cuda tools are installed via</div><div class="line"># "sudo apt-get install nvidia-cuda-toolkit" then use this instead:</div><div class="line"># CUDA_DIR := /usr</div><div class="line"></div><div class="line"># CUDA architecture setting: going with all of them.</div><div class="line"># For CUDA &lt; 6.0, comment the *_50 lines for compatibility.</div><div class="line">#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \</div><div class="line">#       -gencode arch=compute_20,code=sm_21 \</div><div class="line">#       -gencode arch=compute_30,code=sm_30 \</div><div class="line">#       -gencode arch=compute_35,code=sm_35 \</div><div class="line">#       -gencode arch=compute_50,code=sm_50 \</div><div class="line">#       -gencode arch=compute_50,code=compute_50</div><div class="line">#</div><div class="line"># BLAS choice:</div><div class="line"># atlas for ATLAS (default)</div><div class="line"># mkl for MKL</div><div class="line"># open for OpenBlas</div><div class="line">BLAS := atlas</div><div class="line"># Custom (MKL/ATLAS/OpenBLAS) include and lib directories.</div><div class="line"># Leave commented to accept the defaults for your choice of BLAS</div><div class="line"># (which should work)!</div><div class="line"># BLAS_INCLUDE := /path/to/your/blas</div><div class="line"># BLAS_LIB := /path/to/your/blas</div><div class="line"></div><div class="line"># Homebrew puts openblas in a directory that is not on the standard search path</div><div class="line"># BLAS_INCLUDE := $(shell brew --prefix openblas)/include</div><div class="line"># BLAS_LIB := $(shell brew --prefix openblas)/lib</div><div class="line"></div><div class="line"># This is required only if you will compile the matlab interface.</div><div class="line"># MATLAB directory should contain the mex binary in /bin.</div><div class="line"># MATLAB_DIR := /usr/local</div><div class="line"># MATLAB_DIR := /Applications/MATLAB_R2012b.app</div><div class="line"></div><div class="line"># NOTE: this is required only if you will compile the python interface.</div><div class="line"># We need to be able to find Python.h and numpy/arrayobject.h.</div><div class="line">#PYTHON_INCLUDE := /usr/include/python2.7 \</div><div class="line">#       /usr/lib/python2.7/dist-packages/numpy/core/include</div><div class="line"># Anaconda Python distribution is quite popular. Include path:</div><div class="line"># Verify anaconda location, sometimes it's in root.</div><div class="line"> ANACONDA_HOME := $(HOME)/anaconda2</div><div class="line"> PYTHON_INCLUDE := $(ANACONDA_HOME)/include \</div><div class="line">         $(ANACONDA_HOME)/include/python2.7 \</div><div class="line">         $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \</div><div class="line"></div><div class="line"># We need to be able to find libpythonX.X.so or .dylib.</div><div class="line"># PYTHON_LIB := /usr/lib</div><div class="line"> PYTHON_LIB := $(ANACONDA_HOME)/lib</div><div class="line"></div><div class="line"># Homebrew installs numpy in a non standard path (keg only)</div><div class="line"># PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include</div><div class="line"># PYTHON_LIB += $(shell brew --prefix numpy)/lib</div><div class="line"></div><div class="line"># Uncomment to support layers written in Python (will link against Python libs)</div><div class="line">WITH_PYTHON_LAYER := 1</div><div class="line"></div><div class="line"># Whatever else you find you need goes here.</div><div class="line">INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include</div><div class="line">LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib</div><div class="line"></div><div class="line"># If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies</div><div class="line"># INCLUDE_DIRS += $(shell brew --prefix)/include</div><div class="line"># LIBRARY_DIRS += $(shell brew --prefix)/lib</div><div class="line"></div><div class="line"># Uncomment to use `pkg-config` to specify OpenCV library paths.</div><div class="line"># (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)</div><div class="line"># USE_PKG_CONFIG := 1</div><div class="line"></div><div class="line">BUILD_DIR := build</div><div class="line">DISTRIBUTE_DIR := distribute</div><div class="line"></div><div class="line"># Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171</div><div class="line"># DEBUG := 1</div><div class="line"></div><div class="line"># The ID of the GPU that 'make runtest' will use to run unit tests.</div><div class="line">#TEST_GPUID := 0</div><div class="line"></div><div class="line"># enable pretty build (comment to see full commands)</div><div class="line">Q ?= @</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>5.安装caffe</strong><br>编译安装caffe
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">make all   </div><div class="line">make test  </div><div class="line">make runtest  </div><div class="line">make pycaffe</div></pre></td></tr></table></figure></p>
+<h3 id="出错记录"><a href="#出错记录" class="headerlink" title="出错记录"></a>出错记录</h3><ul>
+<li><p><code>Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10</code> 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/lib</div><div class="line">source ~/.bashrc</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用python接口是出错提示没有protobuf模块，解决方法，使用<code>conda install protobuf</code>安装最新的protobuf python模块，<code>exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH</code>。</p>
+</li>
+</ul>
+<h2 id="Ubuntu14-04-Caffe-GPU版"><a href="#Ubuntu14-04-Caffe-GPU版" class="headerlink" title="Ubuntu14.04 + Caffe GPU版"></a>Ubuntu14.04 + Caffe GPU版</h2><p><a href="http://blog.csdn.net/ubunfans/article/details/47724341">参考</a><br><strong>1.安装GPU驱动程序和工具包</strong><br>驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。<br><strong>2.安装cudnn</strong><br>下载过，解压，将头文件放入到指定文件夹下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz  </div><div class="line">cd cuda  </div><div class="line">sudo cp lib/lib* /usr/local/cuda/lib64/  </div><div class="line">sudo cp include/cudnn.h /usr/local/cuda/include/</div></pre></td></tr></table></figure></p>
+<p>更新链接信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/cuda/lib64/</div><div class="line">sudo chmod +r libcudnn.so.5.0.5</div><div class="line">sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5</div><div class="line">sudo ln -sf libcudnn.so.5 libcudnn.so</div><div class="line">sudo ldconfig</div></pre></td></tr></table></figure></p>
+<p>添加cuda环境变量
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo vim /etc/profile</div><div class="line">PATH = /usr/local/cuda/bin:$PATH</div><div class="line">export PATH</div><div class="line">source /etc/profile #使环境变量生效</div></pre></td></tr></table></figure></p>
+<p>添加lib库路径,在 <code>/etc/ld.so.conf.d/</code> 加入文件 <code>cuda.conf</code>，内容为
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/cuda/lib64  </div><div class="line">sudo ldconfig #使路径生效</div></pre></td></tr></table></figure></p>
+<p>接下来的caffe安装与CPU版本一样。</p>
 
       
     </div>
@@ -420,9 +455,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/deeplearn/" rel="tag"># 深度学习</a>
+            <a href="/tags/frame/" rel="tag"># 框架</a>
           
-            <a href="/tags/lunwen/" rel="tag"># 论文</a>
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/deeplearn/" rel="tag"># 深度学习</a>
           
         </div>
       
@@ -435,8 +472,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/25/全卷积网络用于图像语义分割/" rel="next" title="全卷积网络用于图像语义分割">
-                <i class="fa fa-chevron-left"></i> 全卷积网络用于图像语义分割
+              <a href="/2017/11/17/ACE学习笔记4：任务和主动对象/" rel="next" title="ACE学习笔记4：任务和主动对象">
+                <i class="fa fa-chevron-left"></i> ACE学习笔记4：任务和主动对象
               </a>
             
           </div>
@@ -444,10 +481,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/29/图床测试/" rel="prev" title="图床测试">
-                图床测试 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -494,8 +527,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
@@ -593,6 +635,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu14-04-Caffe-CPU版"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu14.04 + Caffe CPU版</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#出错记录"><span class="nav-number">1.1.</span> <span class="nav-text">出错记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu14-04-Caffe-GPU版"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu14.04 + Caffe GPU版</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
