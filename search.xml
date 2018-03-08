@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Git 使用笔记]]></title>
+    <url>%2F2018%2F03%2F08%2FGit-%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[Git 使用简单总结。 第一步：新建分支代码库中有一个主分支 master ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 master 分支，需要更新时向主分支合并开发分支。Git创建开发分支 devvelop 的命令：12345# 获取 master 的最新代码git checkout mastergit pull# 为 master 创建一个名为 develop 的分支git checkout -b develop master 第二步：提交分支commit分支在修改后，需要提交到本地仓库，和远程仓库中。123456# 将修改的文件加入git add .# 查看文件变化状态git status# 提交修改git commit -m'message' 第三步：与主分支保持一致开发过程中需要与主分支的代码保持一致，命令：12git fetch origingit rebase origin/master 第四步：合并到 master分支当 develop 分支测试没有问题后，合并到 master 中，命令： 1234# 首先切换到 master 分支中git checkout master# 对 develop 分支进行合并git merge --no-ff develop 合并的参数 --no-ff 是在 master 分支中生成一个新节点，将 develop 分支连接到前一个节点和新生成的节点之间。 第五步： 推送到远程仓库两种情况：自己的仓库：如果在master分支上合并开发分支后，可以直接推送master到远程仓库中，命令如下：1git push --force origin master fork的别人的仓库：在 develop 分支上进行修改后，没有在 master 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：1git push --force origin develop-myfeature 提交代码到远程仓库中后，发起 Pull Request 到 master ，请求别人确认合并到 master。 参考链接]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+        <tag>技巧</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
     <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
     <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
@@ -8,8 +20,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>深度学习</tag>
       </tags>
   </entry>
@@ -21,8 +33,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -34,8 +46,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -47,8 +59,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>ACE</tag>
       </tags>
   </entry>
@@ -60,8 +72,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
       </tags>
   </entry>
   <entry>
@@ -121,8 +133,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>算法</tag>
         <tag>编程</tag>
+        <tag>算法</tag>
         <tag>动态规划</tag>
       </tags>
   </entry>
@@ -134,8 +146,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>算法</tag>
         <tag>编程</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -170,10 +182,10 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
-        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -184,10 +196,10 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>编程</tag>
         <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
-        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -198,9 +210,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>编程</tag>
         <tag>C++</tag>
         <tag>算法</tag>
-        <tag>编程</tag>
         <tag>面试</tag>
       </tags>
   </entry>
@@ -516,8 +528,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>技巧</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
