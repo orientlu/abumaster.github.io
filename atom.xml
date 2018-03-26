@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-03-08T12:45:41.434Z</updated>
+  <updated>2018-03-24T08:18:10.224Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cpr阅读笔记</title>
+    <link href="http://abumaster.com/2018/03/18/cpr%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
+    <id>http://abumaster.com/2018/03/18/cpr阅读笔记/</id>
+    <published>2018-03-18T13:15:22.000Z</published>
+    <updated>2018-03-24T08:18:10.224Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong><a href="https://github.com/whoshuu/cpr">C++ Request: Curl for prople request</a></strong> 是一个将<a href="https://github.com/curl/curl">curl</a>用 C++11 标准封装过之后的版本，使得发送网络请求更加方便，本文对源码阅读到库的编译使用做一个详细的总结，对一些 C++ 11 的新标准做一个回顾。  </p>
+<a id="more"></a>
+<h3 id="cpr-源码结构和安装"><a href="#cpr-源码结构和安装" class="headerlink" title="cpr 源码结构和安装"></a>cpr 源码结构和安装</h3><p><strong>cpr源码结构：</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-3-20/58201427.jpg" alt="">  </p>
+<ul>
+<li>cpr中是cpp文件；  </li>
+<li><code>include</code> 下是头文件，用到此库需要包含的；  </li>
+<li><code>opt</code> 中使用的是第三方库，包括了 <code>curl</code> ，用于测试的 <code>googletest</code> 以及web服务端程序；  </li>
+<li><code>test</code> 中包含了单元测试文件  </li>
+</ul>
+<p><strong>编译安装</strong><br>使用 <code>cmake</code> 源码安装，首先下载 <code>opt</code> 下的第三方依赖库到指定目录。然后，在<code>cpr</code>根目录下新建文件夹 <code>build</code> 输入一下命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> build</div><div class="line">cmake ..</div><div class="line"><span class="comment"># 等待cmake完成后</span></div><div class="line"><span class="built_in">cd</span> ..</div><div class="line">make        <span class="comment"># 构建项目</span></div><div class="line">make <span class="built_in">test</span>   <span class="comment"># 进行测试</span></div></pre></td></tr></table></figure></p>
+<p>一切完成后，在 <code>build</code> 目录下生成了 <code>lib</code> 库。  </p>
+<h3 id="cpp-的知识备忘"><a href="#cpp-的知识备忘" class="headerlink" title="cpp 的知识备忘"></a>cpp 的知识备忘</h3><h4 id="初始化列表"><a href="#初始化列表" class="headerlink" title="初始化列表"></a>初始化列表</h4><p><code>initializer_list</code> 初始化的列表，C++ 11中添加的用于列表初始化的模板类型，列表初始化如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="number">0</span>;  <span class="comment">//定义并初始化</span></div><div class="line"><span class="keyword">int</span> a&#123;<span class="number">0</span>&#125;;   <span class="comment">//列表初始化</span></div><div class="line"><span class="keyword">int</span> a = &#123;<span class="number">0</span>&#125;;<span class="comment">//列表初始化</span></div></pre></td></tr></table></figure></p>
+<p><code>initializer_list</code> 的出现丰富了这种列表初始化的应用范围，可以使用如下构造函数来构造初始化列表：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">initializer_list</span>&lt;T&gt; lst;                <span class="comment">//默认初始化；T类型元素的空列表</span></div><div class="line"><span class="built_in">initializer_list</span>&lt;T&gt; lst&#123;a,b,c...&#125;;      <span class="comment">//</span></div><div class="line"><span class="built_in">initializer_list</span>&lt;T&gt; lst = &#123;a,b,c...&#125;;   <span class="comment">//</span></div><div class="line">lst2(lst1);</div></pre></td></tr></table></figure></p>
+<p>注意在初始化列表中其元素是一个常量，无法更改和插入。拷贝和赋值的时候只会发生引用，而不会复制元素。<br>例子：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;initializer_list&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="comment">//自定义结构体，支持使用列表初始化</span></div><div class="line"><span class="comment">//1.template class</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div><div class="line"><span class="keyword">struct</span> MyS &#123;</div><div class="line">    <span class="built_in">vector</span>&lt;T&gt; vec_;</div><div class="line">    MyS(<span class="built_in">initializer_list</span>&lt;T&gt; lst) :vec_(lst)&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"initializer with "</span> &lt;&lt; lst.size() &lt;&lt; <span class="string">" elements\n"</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">append</span><span class="params">(<span class="built_in">initializer_list</span>&lt;T&gt; lst)</span></div><div class="line">    </span>&#123;</div><div class="line">        vec_.insert(vec_.end(), lst.begin(), lst.end());</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">    &#125;</div><div class="line">    pair&lt;T*, <span class="keyword">size_t</span>&gt; c_arr() <span class="keyword">const</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span>&#123; &amp;vec_[<span class="number">0</span>], vec_.size() &#125;;<span class="comment">//返回初始化列表的一个副本</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"><span class="comment">//2.template function</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">template_fn</span><span class="params">(T)</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    MyS&lt;<span class="keyword">int</span>&gt; S = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;;<span class="comment">//列表初始化</span></div><div class="line">    S.print();</div><div class="line">    S.append(&#123; <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span> &#125;);<span class="comment">//初始化列表添加元素</span></div><div class="line">    S.print();</div><div class="line">    <span class="comment">//template_fn(&#123; 1, 2, 3, 4 &#125;);//无法推导出正确的类型</span></div><div class="line">    template_fn&lt;<span class="built_in">initializer_list</span>&lt;<span class="keyword">int</span>&gt;&gt;(&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125;);</div><div class="line">    template_fn&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(&#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;);</div><div class="line">    </div><div class="line">    system(<span class="string">"pause"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="左值和右值-分发"><a href="#左值和右值-分发" class="headerlink" title="左值和右值 分发"></a>左值和右值 分发</h4><p><strong>左值：</strong>是即能放在等号的左边又能放在等号的右边，是在内存中有实体的存在，占有内存空间；<br><strong>右值：</strong>是只能放在等号的右边，不能被赋值，只是一个临时变量，存放在寄存器中，没有分配存储空间。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> a = <span class="number">1</span>;      <span class="comment">//a是左值</span></div><div class="line"><span class="keyword">int</span> b = a + <span class="number">1</span>;  <span class="comment">//a+1是右值</span></div></pre></td></tr></table></figure></p>
+<p><strong>左值引用</strong> 使用 <code>Type &amp;左值引用名 = 左值表达式;</code> 是左值的一个别名，本质是一个指针；<br><strong>右值引用</strong>  用法 <code>Type &amp;&amp;右值引用名 = 右值表达式;</code> 由于右值在内存中没有具体的内存空间，所以不能复制给左值引用，使用右值引用，如在函数的声明过程中
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">function</span><span class="params">(<span class="keyword">int</span> &amp;a)</span></span>&#123;&#125;<span class="comment">//函数</span></div><div class="line"><span class="keyword">int</span> i=<span class="number">1</span>;</div><div class="line">function(i+<span class="number">1</span>);          <span class="comment">//会出现错误</span></div><div class="line"><span class="comment">//可以将函数的定义改为：</span></div><div class="line"><span class="comment">//1 void function(const int &amp;a)&#123;&#125;   常量引用</span></div><div class="line"><span class="comment">//2 void function(int &amp;&amp;a)&#123;&#125;        右值引用</span></div><div class="line"><span class="comment">//也可以在调用前使用 int &amp;&amp;rval = move(a+1); 将其变为右值引用</span></div></pre></td></tr></table></figure></p>
+<p><strong>所谓的 <code>forward</code> 完美转发</strong><br>根据类型T是左值或者右值来转发，在右值引用作为函数的形参的时候，在函数内部，右值引用变为了左值引用，无法保留原始的类型，所以需要使用 <code>forward</code> 来完美转发。原型为：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">wrapper</span><span class="params">(T&amp;&amp; arg)</span> </div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">// arg is always lvalue</span></div><div class="line">    foo(<span class="built_in">std</span>::forward&lt;T&gt;(arg)); <span class="comment">// Forward as lvalue or as rvalue, depending on T</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>通常要将原始的类型转发参数。如下例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="comment">//重载了两个函数，分别以左值引用和右值引用作为参数</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">F</span><span class="params">(<span class="keyword">int</span>&amp; a)</span> </span>&#123;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"lvalue\n"</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">F</span><span class="params">(<span class="keyword">int</span> &amp;&amp;a)</span> </span>&#123;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"rvalue\n"</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> A&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">G</span><span class="params">(A &amp;&amp;a)</span> </span>&#123;               <span class="comment">//使用G函数转发参数</span></div><div class="line">    <span class="comment">//return F(std::forward&lt;A&gt;(a));     //1 完美转发</span></div><div class="line">    <span class="keyword">return</span> F(a);                        <span class="comment">//2 将a作为了左值转发</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> i = <span class="number">2</span>;</div><div class="line">    G(i);</div><div class="line">    G(<span class="number">1</span>);</div><div class="line">    system(<span class="string">"pause"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/whoshuu/cpr&quot;&gt;C++ Request: Curl for prople request&lt;/a&gt;&lt;/strong&gt; 是一个将&lt;a href=&quot;https://github.com/curl/curl&quot;&gt;curl&lt;/a&gt;用 C++11 标准封装过之后的版本，使得发送网络请求更加方便，本文对源码阅读到库的编译使用做一个详细的总结，对一些 C++ 11 的新标准做一个回顾。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
   
   <entry>
     <title>Git 使用笔记</title>
@@ -45,9 +87,59 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
       <category term="Git" scheme="http://abumaster.com/tags/Git/"/>
     
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+  </entry>
+  
+  <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -114,61 +206,11 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记4：任务和主动对象</title>
-    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
-    <published>2017-11-17T03:03:02.000Z</published>
-    <updated>2017-11-27T13:09:10.186Z</updated>
-    
-    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
-<a id="more"></a>
-<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
-<ul>
-<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
-<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
-<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
-</ul>
-<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
-<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
-<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
-</blockquote>
-<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
-<ul>
-<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
-<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
-<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
-</ul>
-<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
-<ul>
-<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
-<li>分发对象。请求队列的排队实例。</li>
-</ul>
-<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
   </entry>
   
@@ -204,11 +246,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -248,11 +290,11 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -287,9 +329,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -704,9 +746,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -758,9 +800,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
     
@@ -809,9 +851,9 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
@@ -889,107 +931,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
     
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-      <category term="libev" scheme="http://abumaster.com/tags/libev/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>libev源码阅读1：数据结构</title>
-    <link href="http://abumaster.com/2017/07/31/libev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB1%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    <id>http://abumaster.com/2017/07/31/libev源码阅读1：数据结构/</id>
-    <published>2017-07-31T02:08:24.000Z</published>
-    <updated>2017-07-31T07:32:55.837Z</updated>
-    
-    <content type="html"><![CDATA[<p>libev 是一个高性能事件循环网络库，用于开发高性能网络应用。  </p>
-<a id="more"></a>
-<p><strong>1.基础宏定义</strong><br>libev中的监视器数据结构的实现是用宏定义以及结构体来实现继承关系，基本的宏定义，展开。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 所有的监视器共有的数据 */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER(type)            \</div><div class="line">  int active; <span class="comment">/* private */</span>         \</div><div class="line">  int pending; <span class="comment">/* private */</span>            \</div><div class="line">  <span class="comment">//EV_DECL_PRIORITY /* private */        \</span></span></div><div class="line">  <span class="keyword">int</span> priority; \</div><div class="line">  <span class="comment">//EV_COMMON /* rw */                \</span></div><div class="line">  <span class="keyword">void</span> *data; \</div><div class="line">  <span class="comment">//EV_CB_DECLARE (type) /* private */</span></div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER_LIST(type)           \</div><div class="line">  EV_WATCHER (type)             \</div><div class="line">  struct ev_watcher_list *next; <span class="comment">/* private */</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> EV_WATCHER_TIME(type)           \</div><div class="line">  EV_WATCHER (type)             \</div><div class="line">  ev_tstamp at;     <span class="comment">/* private */</span></span></div></pre></td></tr></table></figure></p>
-<p><strong>2.监视器基类</strong><br>由上面的宏定义可以推断，libev的监视器的实现是从watcher，watcher_list和watcher_time三类中派生出去，分为这三个大类，三个基类。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//基本监视器 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">&#125; ev_watcher;</div><div class="line"><span class="comment">//监视器链表 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher_list</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="comment">//list的下一个节点</span></div><div class="line">  <span class="keyword">struct</span> ev_watcher_list *next;</div><div class="line">&#125; ev_watcher_list;</div><div class="line"><span class="comment">//时间监视器 基类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_watcher_time</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="comment">//计时器时间</span></div><div class="line">  ev_tstamp at;</div><div class="line">&#125; ev_watcher_time;</div></pre></td></tr></table></figure></p>
-<p><strong>3.监视的事件</strong><br>libev从三个监视器基类中派生出以下几种类，用于监视事件的变化，主要的分类和作用如下：  </p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>ev_io</code></td>
-<td>IO 可读可写</td>
-</tr>
-<tr>
-<td><code>ev_singnal</code></td>
-<td>信号处理</td>
-</tr>
-<tr>
-<td><code>ev_timer</code></td>
-<td>定时器</td>
-</tr>
-<tr>
-<td><code>ev_periodic</code></td>
-<td>周期任务</td>
-</tr>
-<tr>
-<td><code>ev_child</code></td>
-<td>子进程状态变化</td>
-</tr>
-<tr>
-<td><code>ev_fork</code></td>
-<td>开辟子进程</td>
-</tr>
-<tr>
-<td><code>ev_stat</code></td>
-<td>文件属性变化</td>
-</tr>
-<tr>
-<td><code>ev_async</code></td>
-<td>激活线程</td>
-</tr>
-<tr>
-<td><code>ev_cleanup</code></td>
-<td>退出触发</td>
-</tr>
-<tr>
-<td><code>ev_idle</code></td>
-<td>空闲时执行</td>
-</tr>
-<tr>
-<td><code>ev_embed</code></td>
-<td>嵌入其他事件循环</td>
-</tr>
-<tr>
-<td><code>ev_prepare</code></td>
-<td>eventloop之前</td>
-</tr>
-<tr>
-<td><code>ev_check</code></td>
-<td>eventloop之后</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//io监视器</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_io</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER_LIST (ev_io) //展开宏</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  <span class="keyword">struct</span> ev_watcher_list *next;</div><div class="line"></div><div class="line">  <span class="keyword">int</span> fd;     <span class="comment">/* ro */</span></div><div class="line">  <span class="keyword">int</span> events; <span class="comment">/* ro */</span></div><div class="line">&#125; ev_io;</div><div class="line"><span class="comment">//定时器</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_timer</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER_TIME (ev_timer) //展开</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line">  ev_tstamp at;</div><div class="line"></div><div class="line">  ev_tstamp repeat; <span class="comment">/* rw */</span></div><div class="line">&#125; ev_timer;</div><div class="line"><span class="comment">//空闲时触发</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_idle</div><div class="line">&#123;</div><div class="line">  <span class="comment">//EV_WATCHER (ev_idle) 展开</span></div><div class="line">  <span class="keyword">int</span> active;</div><div class="line">  <span class="keyword">int</span> pending;</div><div class="line">  <span class="keyword">int</span> priority;</div><div class="line">  <span class="keyword">void</span> *data;</div><div class="line">  <span class="keyword">void</span> (*cb)(EV_P_ <span class="keyword">struct</span> type *w, <span class="keyword">int</span> revents);</div><div class="line"></div><div class="line">&#125; ev_idle;</div></pre></td></tr></table></figure>
-<p>关系图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/44673487.jpg" alt=""><br>这种继承关系，可以用指针进行类型自由转换。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-7-31/72453924.jpg" alt=""><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//激活监测器，不管是何类型</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ev_start</span> <span class="params">(<span class="keyword">struct</span> ev_loop *loop, ev_watcher* w, <span class="keyword">int</span> active)</span>  </div><div class="line"></span>&#123;  </div><div class="line">  <span class="comment">//...  </span></div><div class="line">  w-&gt;active = active;  </div><div class="line">  <span class="comment">//...  </span></div><div class="line">&#125;  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">wlist_add</span> <span class="params">(ev_watcher_list **head, ev_watcher_list *elem)</span>  </div><div class="line"></span>&#123;  </div><div class="line">  elem-&gt;next = *head;  </div><div class="line">  *head = elem;  </div><div class="line">&#125;  </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ev_io_start</span> <span class="params">(<span class="keyword">struct</span> ev_loop *loop, ev_io *w)</span>  </div><div class="line"></span>&#123;   </div><div class="line">  <span class="comment">//将ev_io退化为ev_watcher使用这个ev_start函数</span></div><div class="line">  ev_start (loop, (ev_watcher*)w, <span class="number">1</span>);  </div><div class="line">  <span class="comment">//转换成ev_watcher_list指针插入到list中</span></div><div class="line">  wlist_add (&amp;anfds[fd].head, (ev_watcher_list *)w);  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>4.监视事件的初始化和设置</strong><br>ev的设置也被定义为宏macro，提供了两种方式：  </p>
-<ul>
-<li><code>ev_init</code> 和 <code>ev_TYPE_set</code> 一起使用；  </li>
-<li>使用 <code>ev_TYPE_init</code> 进行初始化。  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_init(ev,cb_) do &#123;            \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;active  =   \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;pending = 0;    \</div><div class="line">  ev_set_priority ((ev), 0);            \</div><div class="line">  ev_set_cb ((ev), cb_);            \</div><div class="line">&#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_io_set(ev,fd_,events_)  \</div><div class="line"> do &#123; (ev)-&gt;fd = (fd_); (ev)-&gt;events = (events_) | EV__IOFDSET; &#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_io_init(ev,cb,fd,events)   \</div><div class="line"> do &#123; ev_init ((ev), (cb)); \</div><div class="line">    ev_io_set ((ev),(fd),(events)); &#125; while (0)</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;libev 是一个高性能事件循环网络库，用于开发高性能网络应用。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
     

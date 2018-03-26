@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[cpr阅读笔记]]></title>
+    <url>%2F2018%2F03%2F18%2Fcpr%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[C++ Request: Curl for prople request 是一个将curl用 C++11 标准封装过之后的版本，使得发送网络请求更加方便，本文对源码阅读到库的编译使用做一个详细的总结，对一些 C++ 11 的新标准做一个回顾。 cpr 源码结构和安装cpr源码结构： cpr中是cpp文件； include 下是头文件，用到此库需要包含的； opt 中使用的是第三方库，包括了 curl ，用于测试的 googletest 以及web服务端程序； test 中包含了单元测试文件 编译安装使用 cmake 源码安装，首先下载 opt 下的第三方依赖库到指定目录。然后，在cpr根目录下新建文件夹 build 输入一下命令：123456cd buildcmake ..# 等待cmake完成后cd ..make # 构建项目make test # 进行测试 一切完成后，在 build 目录下生成了 lib 库。 cpp 的知识备忘初始化列表initializer_list 初始化的列表，C++ 11中添加的用于列表初始化的模板类型，列表初始化如下：123int a = 0; //定义并初始化int a&#123;0&#125;; //列表初始化int a = &#123;0&#125;;//列表初始化 initializer_list 的出现丰富了这种列表初始化的应用范围，可以使用如下构造函数来构造初始化列表：1234initializer_list&lt;T&gt; lst; //默认初始化；T类型元素的空列表initializer_list&lt;T&gt; lst&#123;a,b,c...&#125;; //initializer_list&lt;T&gt; lst = &#123;a,b,c...&#125;; //lst2(lst1); 注意在初始化列表中其元素是一个常量，无法更改和插入。拷贝和赋值的时候只会发生引用，而不会复制元素。例子： 123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;initializer_list&gt;using namespace std;//自定义结构体，支持使用列表初始化//1.template classtemplate &lt;class T&gt;struct MyS &#123; vector&lt;T&gt; vec_; MyS(initializer_list&lt;T&gt; lst) :vec_(lst)&#123; cout &lt;&lt; "initializer with " &lt;&lt; lst.size() &lt;&lt; " elements\n"; &#125; void append(initializer_list&lt;T&gt; lst) &#123; vec_.insert(vec_.end(), lst.begin(), lst.end()); &#125; void print() &#123; &#125; pair&lt;T*, size_t&gt; c_arr() const &#123; return&#123; &amp;vec_[0], vec_.size() &#125;;//返回初始化列表的一个副本 &#125;&#125;;//2.template functiontemplate &lt;typename T&gt;void template_fn(T)&#123;&#125;int main()&#123; MyS&lt;int&gt; S = &#123; 1, 2, 3, 4 &#125;;//列表初始化 S.print(); S.append(&#123; 5, 6, 7, 8 &#125;);//初始化列表添加元素 S.print(); //template_fn(&#123; 1, 2, 3, 4 &#125;);//无法推导出正确的类型 template_fn&lt;initializer_list&lt;int&gt;&gt;(&#123; 1, 2, 3, 4 &#125;); template_fn&lt;vector&lt;int&gt;&gt;(&#123; 1, 2, 3 &#125;); system("pause"); return 0;&#125; 左值和右值 分发左值：是即能放在等号的左边又能放在等号的右边，是在内存中有实体的存在，占有内存空间；右值：是只能放在等号的右边，不能被赋值，只是一个临时变量，存放在寄存器中，没有分配存储空间。12int a = 1; //a是左值int b = a + 1; //a+1是右值 左值引用 使用 Type &amp;左值引用名 = 左值表达式; 是左值的一个别名，本质是一个指针；右值引用 用法 Type &amp;&amp;右值引用名 = 右值表达式; 由于右值在内存中没有具体的内存空间，所以不能复制给左值引用，使用右值引用，如在函数的声明过程中 1234567void function(int &amp;a)&#123;&#125;//函数int i=1;function(i+1); //会出现错误//可以将函数的定义改为：//1 void function(const int &amp;a)&#123;&#125; 常量引用//2 void function(int &amp;&amp;a)&#123;&#125; 右值引用//也可以在调用前使用 int &amp;&amp;rval = move(a+1); 将其变为右值引用 所谓的 forward 完美转发根据类型T是左值或者右值来转发，在右值引用作为函数的形参的时候，在函数内部，右值引用变为了左值引用，无法保留原始的类型，所以需要使用 forward 来完美转发。原型为：123456template&lt;class T&gt;void wrapper(T&amp;&amp; arg) &#123; // arg is always lvalue foo(std::forward&lt;T&gt;(arg)); // Forward as lvalue or as rvalue, depending on T&#125; 通常要将原始的类型转发参数。如下例子：123456789101112131415161718192021#include &lt;iostream&gt;using namespace std;//重载了两个函数，分别以左值引用和右值引用作为参数void F(int&amp; a) &#123; cout &lt;&lt; "lvalue\n";&#125;void F(int &amp;&amp;a) &#123; cout &lt;&lt; "rvalue\n";&#125;template&lt;class A&gt;void G(A &amp;&amp;a) &#123; //使用G函数转发参数 //return F(std::forward&lt;A&gt;(a)); //1 完美转发 return F(a); //2 将a作为了左值转发&#125;int main() &#123; int i = 2; G(i); G(1); system("pause");&#125;]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Git 使用笔记]]></title>
     <url>%2F2018%2F03%2F08%2FGit-%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
     <content type="text"><![CDATA[Git 使用简单总结。 第一步：新建分支代码库中有一个主分支 master ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 master 分支，需要更新时向主分支合并开发分支。Git创建开发分支 devvelop 的命令：12345# 获取 master 的最新代码git checkout mastergit pull# 为 master 创建一个名为 develop 的分支git checkout -b develop master 第二步：提交分支commit分支在修改后，需要提交到本地仓库，和远程仓库中。123456# 将修改的文件加入git add .# 查看文件变化状态git status# 提交修改git commit -m'message' 第三步：与主分支保持一致开发过程中需要与主分支的代码保持一致，命令：12git fetch origingit rebase origin/master 第四步：合并到 master分支当 develop 分支测试没有问题后，合并到 master 中，命令： 1234# 首先切换到 master 分支中git checkout master# 对 develop 分支进行合并git merge --no-ff develop 合并的参数 --no-ff 是在 master 分支中生成一个新节点，将 develop 分支连接到前一个节点和新生成的节点之间。 第五步： 推送到远程仓库两种情况：自己的仓库：如果在master分支上合并开发分支后，可以直接推送master到远程仓库中，命令如下：1git push --force origin master fork的别人的仓库：在 develop 分支上进行修改后，没有在 master 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：1git push --force origin develop-myfeature 提交代码到远程仓库中后，发起 Pull Request 到 master ，请求别人确认合并到 master。 参考链接]]></content>
@@ -8,21 +19,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>Git</tag>
         <tag>技巧</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
-    <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
-    <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>框架</tag>
-        <tag>深度学习</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -33,9 +31,22 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
+    <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
+    <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>C++</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -46,9 +57,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -59,9 +70,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -72,8 +83,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -182,8 +193,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -196,8 +207,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -210,8 +221,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>算法</tag>
         <tag>面试</tag>
       </tags>
@@ -528,8 +539,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>技巧</tag>
         <tag>深度学习</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
