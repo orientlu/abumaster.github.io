@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[日志库easyloggingpp使用]]></title>
+    <url>%2F2018%2F03%2F28%2F%E6%97%A5%E5%BF%97%E5%BA%93easyloggingpp%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[easyloggingpp 是一个只需引用一个头文件的 C++ 日志库，它具有轻量高效、可扩展、线程安全、可嵌入到自己开发模块等等特性。 下载使用 自定义配置 日志级别 使用配置文件 记录日志 基本操作 下载使用从easyloggingpp下载最新的代码，通过 CMake 编译成独立的链接库，或者直接将 easylogging++.h 和 easylogging++.cc 源文件拷贝到自己的项目中，一起编译。官方示例代码：123456789#include "easylogging++.h" //包含头文件INITIALIZE_EASYLOGGINGPP //用宏来表示初始化日志文件int main(int argc, char* argv[]) &#123; LOG(INFO) &lt;&lt; "My first info log using default logger"; return 0;&#125; 然后使用以下命令编译生成可执行文件，日志在控制台中显示，并且在项目目录下有日志文件生成。 1g++ main.cc easylogging++.cc -o prog -std=c++11 自定义配置日志级别它最大的特性就是日志的高度可配置性，通过配置宏参数可以设置日志的级别和格式。以下列出了日志级别分类： Level Description Global 通用日志级别，全局设置时使用 Trace 回溯某个特定事件的信息，比调试日志更有用 Debug | 开发过程中调试应用程序，调试开关要打开 Fatal | 可能导致应用程序中断的非常严重的错误事件 Error | 程序运行过程中的错误信息，程序继续运行 Warning | 程序运行过程中的错误信息 Info | 应用程序当前的运行信息 Verbose | 处理冗长的日志信息 Unknown | 适用分层日志记录，完全关闭日志记录 使用配置文件12345678910111213141516171819202122232425262728293031323334## log_conf.conf 配置文件* GLOBAL: ENABLED = true TO_FILE = true TO_STANDARD_OUTPUT = true FORMAT = "[%level | %datetime] | %msg" FILENAME = "log\\log_%datetime&#123;%Y%M%d&#125;.log" SUBSECOND_PRECISION = 6 PERFORMANCE_TRACKING = true MAX_LOG_FILE_SIZE = 2097152 ## 2MB - Comment starts with two hashe LOG_FLUSH_THRESHOLD = 100 ## Flush after every 100 logs* TRACE: FILENAME = "log\\trace_log_%datetime&#123;%Y%M%d&#125;.log"* DEBUG: FORMAT = "%datetime&#123;%d/%M&#125; %func %msg" FILENAME = "log\\debug_log_%datetime&#123;%Y%M%d&#125;.log"* FATAL: ENABLED = false* ERROR: FILENAME = "log\\error_log_%datetime&#123;%Y%M%d&#125;.log"* WARNING: FILENAME = "log\\warning_log_%datetime&#123;%Y%M%d&#125;.log"* INFO: FILENAME = "log\\info_log_%datetime&#123;%Y%M%d&#125;.log" FORMAT = "[%host : %user] | %msg"* VERBOSE: ENABLED = false 通过构造日志记录器来加载配置文件完成对日志的自定义，使用： 123456789101112131415#include "easylogging++.h"INITIALIZE_EASYLOGGINGPPint main(int argc, const char** argv) &#123; // 加载配置文件，构造一个配置器对象 el::Configurations conf("/path/to/my-conf.conf"); // 重新配置一个单一日志记录器 el::Loggers::reconfigureLogger("default", conf); // 用配置文件配置所有的日志记录器 el::Loggers::reconfigureAllLoggers(conf); // 所有的日志记录器都是从文件中配置完成的，可以使用 return 0;&#125; 日志格式说明符日志的输出格式可以自定义，库中提供了一些说明符来表示不同的含义： 符号 意义 %logger loggger ID %thread thread ID %thread_name 用来获取线程的名称，是使用 el::Helpers::setThreadName(&quot;name1&quot;) 来设置的线程标识名 %level 日志的级别，诸如 DEBUG、INFO、WARNING等 %levshort 日志级别的缩写 %vlevel 使用详细记录，冗长记录级别 %datetime 当前的时间，可以自定义时间的格式 %user 当前运行程序的用户名 %host 运行程序的机器名称 %file 源程序的名称，包含完整的路径信息 %fbase 只有文件的名称 %line 运行到此处的代码行 %func 函数的名称 %loc 函数的名称以及行号 %msg 日志信息 % 转义字符 日期的格式通过上述的符号 %datetime 获取了时间，可以通过自定义的方式来格式化时间，常用的格式符如下： 符号 意义 %d 一月中的几号 %a 简写的星期几 %A 全称星期几 %Y %M %d %H %m %s 年月日时分秒 记录日志基本操作有两种方式来记录日志 12LOG(LEVEL) &lt;&lt; "info"; //第一种：使用默认的日志记录器CLOG(LEVEL, logger ID) &lt;&lt; "info"; //第二种：指定特定的日志记录器，可以自己注册 库中注册的有三种： 默认的日志记录器 ID: dfault ； 性能日志记录器 ID: performance ； 系统日志记录器 ID: syslog 可以使用以下方式注册自己的日志记录器：1234567891011//注册一个ID为business的日志记录器，没有会自动创建el::Logger* businessLogger = el::Loggers::getLogger("business");//businessLogger -&gt;//info(const char*, const T&amp;, const Args&amp;...)//warn(const char*, const T&amp;, const Args&amp;...)//error(const char*, const T&amp;, const Args&amp;...)//debug(const char*, const T&amp;, const Args&amp;...)//fatal(const char*, const T&amp;, const Args&amp;...)//trace(const char*, const T&amp;, const Args&amp;...)//verbose(int vlevel, const char*, const T&amp;, const Args&amp;...)//来记录日志 可以使用 %v 来格式化数据 条件日志记录满足条件后，开始记录日志，不满足条件不会记录，使用如下： 12LOG_IF(condition, LEVEL)CLOG_IF(condition, LEVEL, logger ID) 记录特定次数日志12345LOG_EVERY_N(n, LEVEL)CLOG_EVERY_N(n, LEVEL, logger ID)LOG_AFTER_N(n, LEVEL); //Only logs when we have reached hit counts of nLOG_N_TIMES(n, LEVEL); //Logs n times 源文件 sample 下有使用示例。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>C++</tag>
+        <tag>日志库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[cpr阅读笔记]]></title>
     <url>%2F2018%2F03%2F18%2Fcpr%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%2F</url>
     <content type="text"><![CDATA[C++ Request: Curl for prople request 是一个将curl用 C++11 标准封装过之后的版本，使得发送网络请求更加方便，本文对源码阅读到库的编译使用做一个详细的总结，对一些 C++ 11 的新标准做一个回顾。 cpr 源码结构和安装cpr源码结构： cpr中是cpp文件； include 下是头文件，用到此库需要包含的； opt 中使用的是第三方库，包括了 curl ，用于测试的 googletest 以及web服务端程序； test 中包含了单元测试文件 编译安装使用 cmake 源码安装，首先下载 opt 下的第三方依赖库到指定目录。然后，在cpr根目录下新建文件夹 build 输入一下命令：123456cd buildcmake ..# 等待cmake完成后cd ..make # 构建项目make test # 进行测试 一切完成后，在 build 目录下生成了 lib 库。 cpp 的知识备忘初始化列表initializer_list 初始化的列表，C++ 11中添加的用于列表初始化的模板类型，列表初始化如下：123int a = 0; //定义并初始化int a&#123;0&#125;; //列表初始化int a = &#123;0&#125;;//列表初始化 initializer_list 的出现丰富了这种列表初始化的应用范围，可以使用如下构造函数来构造初始化列表：1234initializer_list&lt;T&gt; lst; //默认初始化；T类型元素的空列表initializer_list&lt;T&gt; lst&#123;a,b,c...&#125;; //initializer_list&lt;T&gt; lst = &#123;a,b,c...&#125;; //lst2(lst1); 注意在初始化列表中其元素是一个常量，无法更改和插入。拷贝和赋值的时候只会发生引用，而不会复制元素。例子： 123456789101112131415161718192021222324252627282930313233343536373839404142#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;initializer_list&gt;using namespace std;//自定义结构体，支持使用列表初始化//1.template classtemplate &lt;class T&gt;struct MyS &#123; vector&lt;T&gt; vec_; MyS(initializer_list&lt;T&gt; lst) :vec_(lst)&#123; cout &lt;&lt; "initializer with " &lt;&lt; lst.size() &lt;&lt; " elements\n"; &#125; void append(initializer_list&lt;T&gt; lst) &#123; vec_.insert(vec_.end(), lst.begin(), lst.end()); &#125; void print() &#123; &#125; pair&lt;T*, size_t&gt; c_arr() const &#123; return&#123; &amp;vec_[0], vec_.size() &#125;;//返回初始化列表的一个副本 &#125;&#125;;//2.template functiontemplate &lt;typename T&gt;void template_fn(T)&#123;&#125;int main()&#123; MyS&lt;int&gt; S = &#123; 1, 2, 3, 4 &#125;;//列表初始化 S.print(); S.append(&#123; 5, 6, 7, 8 &#125;);//初始化列表添加元素 S.print(); //template_fn(&#123; 1, 2, 3, 4 &#125;);//无法推导出正确的类型 template_fn&lt;initializer_list&lt;int&gt;&gt;(&#123; 1, 2, 3, 4 &#125;); template_fn&lt;vector&lt;int&gt;&gt;(&#123; 1, 2, 3 &#125;); system("pause"); return 0;&#125; 左值和右值 分发左值：是即能放在等号的左边又能放在等号的右边，是在内存中有实体的存在，占有内存空间；右值：是只能放在等号的右边，不能被赋值，只是一个临时变量，存放在寄存器中，没有分配存储空间。12int a = 1; //a是左值int b = a + 1; //a+1是右值 左值引用 使用 Type &amp;左值引用名 = 左值表达式; 是左值的一个别名，本质是一个指针；右值引用 用法 Type &amp;&amp;右值引用名 = 右值表达式; 由于右值在内存中没有具体的内存空间，所以不能复制给左值引用，使用右值引用，如在函数的声明过程中 1234567void function(int &amp;a)&#123;&#125;//函数int i=1;function(i+1); //会出现错误//可以将函数的定义改为：//1 void function(const int &amp;a)&#123;&#125; 常量引用//2 void function(int &amp;&amp;a)&#123;&#125; 右值引用//也可以在调用前使用 int &amp;&amp;rval = move(a+1); 将其变为右值引用 所谓的 forward 完美转发根据类型T是左值或者右值来转发，在右值引用作为函数的形参的时候，在函数内部，右值引用变为了左值引用，无法保留原始的类型，所以需要使用 forward 来完美转发。原型为：123456template&lt;class T&gt;void wrapper(T&amp;&amp; arg) &#123; // arg is always lvalue foo(std::forward&lt;T&gt;(arg)); // Forward as lvalue or as rvalue, depending on T&#125; 通常要将原始的类型转发参数。如下例子：123456789101112131415161718192021#include &lt;iostream&gt;using namespace std;//重载了两个函数，分别以左值引用和右值引用作为参数void F(int&amp; a) &#123; cout &lt;&lt; "lvalue\n";&#125;void F(int &amp;&amp;a) &#123; cout &lt;&lt; "rvalue\n";&#125;template&lt;class A&gt;void G(A &amp;&amp;a) &#123; //使用G函数转发参数 //return F(std::forward&lt;A&gt;(a)); //1 完美转发 return F(a); //2 将a作为了左值转发&#125;int main() &#123; int i = 2; G(i); G(1); system("pause");&#125;]]></content>
@@ -14,26 +27,13 @@
   <entry>
     <title><![CDATA[Git 使用笔记]]></title>
     <url>%2F2018%2F03%2F08%2FGit-%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0%2F</url>
-    <content type="text"><![CDATA[Git 使用简单总结。 第一步：新建分支代码库中有一个主分支 master ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 master 分支，需要更新时向主分支合并开发分支。Git创建开发分支 devvelop 的命令：12345# 获取 master 的最新代码git checkout mastergit pull# 为 master 创建一个名为 develop 的分支git checkout -b develop master 第二步：提交分支commit分支在修改后，需要提交到本地仓库，和远程仓库中。123456# 将修改的文件加入git add .# 查看文件变化状态git status# 提交修改git commit -m'message' 第三步：与主分支保持一致开发过程中需要与主分支的代码保持一致，命令：12git fetch origingit rebase origin/master 第四步：合并到 master分支当 develop 分支测试没有问题后，合并到 master 中，命令： 1234# 首先切换到 master 分支中git checkout master# 对 develop 分支进行合并git merge --no-ff develop 合并的参数 --no-ff 是在 master 分支中生成一个新节点，将 develop 分支连接到前一个节点和新生成的节点之间。 第五步： 推送到远程仓库两种情况：自己的仓库：如果在master分支上合并开发分支后，可以直接推送master到远程仓库中，命令如下：1git push --force origin master fork的别人的仓库：在 develop 分支上进行修改后，没有在 master 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：1git push --force origin develop-myfeature 提交代码到远程仓库中后，发起 Pull Request 到 master ，请求别人确认合并到 master。 参考链接]]></content>
+    <content type="text"><![CDATA[Git 使用简单总结。 第一步：新建分支代码库中有一个主分支 master ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 master 分支，需要更新时向主分支合并开发分支。Git创建开发分支 devvelop 的命令：12345# 获取 master 的最新代码git checkout mastergit pull# 为 master 创建一个名为 develop 的分支git checkout -b develop master 第二步：提交分支commit分支在修改后，需要提交到本地仓库，和远程仓库中。123456# 将修改的文件加入git add .# 查看文件变化状态git status# 提交修改git commit -m'message' 第三步：与主分支保持一致开发过程中需要与主分支的代码保持一致，命令：12git fetch origingit rebase origin/master 第四步：合并到 master分支当 develop 分支测试没有问题后，合并到 master 中，命令： 1234# 首先切换到 master 分支中git checkout master# 对 develop 分支进行合并git merge --no-ff develop 合并的参数 --no-ff 是在 master 分支中生成一个新节点，将 develop 分支连接到前一个节点和新生成的节点之间。 第五步： 推送到远程仓库两种情况：自己的仓库：如果在master分支上合并开发分支后，可以直接推送master到远程仓库中，命令如下：1git push --force origin master fork的别人的仓库：在 develop 分支上进行修改后，没有在 master 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：1git push --force origin develop-myfeature 提交代码到远程仓库中后，发起 Pull Request 到 master ，请求别人确认合并到 master。 参考链接 fork的代码如何与源保持一致从别人仓库中 forke 的一个项目并 clone 到本地进行开发，当源仓库的代码发生更新时，也需要用到最新的代码，一个思路是从源仓库拉取最新的代码到本地，然后合并本地仓库，最后推送到远程自己的仓库中。 首先，创建一个远程仓库，指定源仓库所在的地址，语法为 git remote add [shotname] [url]，可以使用 git remote -v 查看远程仓库的信息，一般会有一个 fetch 和 push 匹配，分别用于取代码和推送代码； 然后从远程仓库抓取数据，git fetch [remote-name] ，fetch 相当于从远程仓库中 pull 了最新的代码并 merge 到当前本地仓库； 再切换到本地的master分支，并将这个远程仓库的本地仓库与主分支合并，git merge [remote-name/origin] master ，这时可能主仓库的代码更改与本地仓库的更改冲突，需要解决合并冲突。按照提示解决冲突文件重新提交即可。 推送到远程仓库，与源仓库的代码保持一致 git push [remote-name] [branch-name] 。]]></content>
       <categories>
         <category>编程</category>
       </categories>
       <tags>
-        <tag>技巧</tag>
         <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[ACE学习笔记4：任务和主动对象]]></title>
-    <url>%2F2017%2F11%2F17%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1%2F</url>
-    <content type="text"><![CDATA[主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 主动对象。 任务。 任务的简单使用要创建任务和主动对象，要从 ACE_Task 中派生一个任务子类，然后必须进行以下的工作： 实现初始化和终止方法：open() 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，close() 则是终止方法； 调用启动方法：主动对象实例化必须调用 activate() 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数； 实现任务专有的处理方法：主动对象启动后，各个线程在 svc() 中启动，必须定义此方法。 任务间的通信 每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 getq() 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。使用：假设任务A和任务B之间通信，A-&gt;B 发送消息。首先，定义一个 ACE_Message_Block 类型的消息块*mb，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 B-&gt;putq(mb) 向底层消息管道中压入一个消息快；然后B中用 getq(mb) 获取消息队列中的消息。实现两个任务之间的通信。 主动对象 主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。 ACE主动对象模式实现至少涉及3个类模块: 提供多线程池 ACE_Task_Base 或者 ACE_Task 或者 ACE_Thread_Manager ； 提供请求排队的 ACE_Activation_Queue，其内部维护了 ACE_Message_Queue 的 message_block 消息指针队列； 提供了 ACE_Activation_Queue 队列操作实例的 ACE_Method_Request ，ACE_Method_Request是command模式，最低消耗仅为实现其内部的call方法。 ACE主动对象实现需要依赖以上3个模块，至少构建2个类: 分发器，负责将请求参数排队，并提供数个执行线程。 分发对象。请求队列的排队实例。 ACE 主动对象参考]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>框架</tag>
-        <tag>ACE</tag>
-        <tag>C++</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
@@ -47,6 +47,19 @@
         <tag>框架</tag>
         <tag>C++</tag>
         <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ACE学习笔记4：任务和主动对象]]></title>
+    <url>%2F2017%2F11%2F17%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1%2F</url>
+    <content type="text"><![CDATA[主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 主动对象。 任务。 任务的简单使用要创建任务和主动对象，要从 ACE_Task 中派生一个任务子类，然后必须进行以下的工作： 实现初始化和终止方法：open() 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，close() 则是终止方法； 调用启动方法：主动对象实例化必须调用 activate() 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数； 实现任务专有的处理方法：主动对象启动后，各个线程在 svc() 中启动，必须定义此方法。 任务间的通信 每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 getq() 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。使用：假设任务A和任务B之间通信，A-&gt;B 发送消息。首先，定义一个 ACE_Message_Block 类型的消息块*mb，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 B-&gt;putq(mb) 向底层消息管道中压入一个消息快；然后B中用 getq(mb) 获取消息队列中的消息。实现两个任务之间的通信。 主动对象 主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。 ACE主动对象模式实现至少涉及3个类模块: 提供多线程池 ACE_Task_Base 或者 ACE_Task 或者 ACE_Thread_Manager ； 提供请求排队的 ACE_Activation_Queue，其内部维护了 ACE_Message_Queue 的 message_block 消息指针队列； 提供了 ACE_Activation_Queue 队列操作实例的 ACE_Method_Request ，ACE_Method_Request是command模式，最低消耗仅为实现其内部的call方法。 ACE主动对象实现需要依赖以上3个模块，至少构建2个类: 分发器，负责将请求参数排队，并提供数个执行线程。 分发对象。请求队列的排队实例。 ACE 主动对象参考]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -284,8 +297,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -296,8 +309,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -504,8 +517,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -551,8 +564,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>论文</tag>
         <tag>计算机视觉</tag>
+        <tag>论文</tag>
       </tags>
   </entry>
   <entry>
@@ -586,9 +599,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
         <tag>论文</tag>
-        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -599,9 +612,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
+        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
         <tag>论文</tag>
-        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>

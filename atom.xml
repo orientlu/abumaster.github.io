@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-03-24T08:18:10.224Z</updated>
+  <updated>2018-03-29T08:29:07.768Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,195 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>日志库easyloggingpp使用</title>
+    <link href="http://abumaster.com/2018/03/28/%E6%97%A5%E5%BF%97%E5%BA%93easyloggingpp%E4%BD%BF%E7%94%A8/"/>
+    <id>http://abumaster.com/2018/03/28/日志库easyloggingpp使用/</id>
+    <published>2018-03-28T12:59:03.000Z</published>
+    <updated>2018-03-29T08:29:07.768Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p><a href="https://github.com/muflihun/easyloggingpp">easyloggingpp</a> 是一个只需引用一个头文件的 <code>C++</code> 日志库，它具有轻量高效、可扩展、线程安全、可嵌入到自己开发模块等等特性。  </p>
+</blockquote>
+<a id="more"></a>
+<pre>
+<a href="#下载使用">下载使用</a>
+<a href="#自定义配置">自定义配置</a>
+    <a href="#日志级别">日志级别</a>
+    <a href="使用配置文件">使用配置文件</a>
+<a href="记录日志">记录日志</a>
+    <a href="基本操作">基本操作</a>
+</pre>
+
+<h3 id="下载使用"><a href="#下载使用" class="headerlink" title="下载使用"></a>下载使用</h3><p>从<a href="https://github.com/muflihun/easyloggingpp">easyloggingpp</a>下载最新的代码，通过 <code>CMake</code> 编译成独立的链接库，或者直接将 <code>easylogging++.h</code> 和 <code>easylogging++.cc</code> 源文件拷贝到自己的项目中，一起编译。官方示例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"easylogging++.h"</span>              <span class="comment">//包含头文件</span></span></div><div class="line"></div><div class="line">INITIALIZE_EASYLOGGINGPP                <span class="comment">//用宏来表示初始化日志文件</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </div><div class="line"></span>&#123;</div><div class="line">   LOG(INFO) &lt;&lt; <span class="string">"My first info log using default logger"</span>;</div><div class="line">   <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后使用以下命令编译生成可执行文件，日志在控制台中显示，并且在项目目录下有日志文件生成。
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">g++ main.cc easylogging++.cc -o prog -std=c++11</div></pre></td></tr></table></figure></p>
+<h3 id="自定义配置"><a href="#自定义配置" class="headerlink" title="自定义配置"></a>自定义配置</h3><h4 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h4><p>它最大的特性就是日志的高度可配置性，通过配置宏参数可以设置日志的级别和格式。以下列出了日志级别分类：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Level</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Global</td>
+<td style="text-align:left">通用日志级别，全局设置时使用</td>
+</tr>
+<tr>
+<td style="text-align:left">Trace</td>
+<td style="text-align:left">回溯某个特定事件的信息，比调试日志更有用</td>
+</tr>
+</tbody>
+</table>
+<p>Debug  | 开发过程中调试应用程序，调试开关要打开
+Fatal  | 可能导致应用程序中断的非常严重的错误事件
+Error   |  程序运行过程中的错误信息，程序继续运行
+Warning |  程序运行过程中的错误信息
+Info    |   应用程序当前的运行信息
+Verbose |   处理冗长的日志信息
+Unknown |   适用分层日志记录，完全关闭日志记录</p>
+<h4 id="使用配置文件"><a href="#使用配置文件" class="headerlink" title="使用配置文件"></a>使用配置文件</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">##  log_conf.conf 配置文件</span></div><div class="line">* GLOBAL:</div><div class="line">    ENABLED                     = <span class="literal">true</span></div><div class="line">    TO_FILE                     = <span class="literal">true</span></div><div class="line">    TO_STANDARD_OUTPUT          = <span class="literal">true</span></div><div class="line">    FORMAT                      = <span class="string">"[%level | %datetime] | %msg"</span></div><div class="line">    FILENAME                    = <span class="string">"log\\log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line">    SUBSECOND_PRECISION         =  6</div><div class="line">    PERFORMANCE_TRACKING        =  <span class="literal">true</span></div><div class="line">    MAX_LOG_FILE_SIZE           =  2097152 <span class="comment">## 2MB - Comment starts with two hashe</span></div><div class="line">    LOG_FLUSH_THRESHOLD         =  100 <span class="comment">## Flush after every 100 logs</span></div><div class="line"></div><div class="line">* TRACE:</div><div class="line">    FILENAME                    =   <span class="string">"log\\trace_log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line"></div><div class="line">* DEBUG:</div><div class="line">    FORMAT                      = <span class="string">"%datetime&#123;%d/%M&#125; %func %msg"</span></div><div class="line">    FILENAME                    = <span class="string">"log\\debug_log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line"></div><div class="line">* FATAL:</div><div class="line">    ENABLED                     = <span class="literal">false</span></div><div class="line"></div><div class="line">* ERROR:</div><div class="line">    FILENAME                    = <span class="string">"log\\error_log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line"></div><div class="line">* WARNING:</div><div class="line">    FILENAME                    = <span class="string">"log\\warning_log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line"></div><div class="line">* INFO:</div><div class="line">    FILENAME                    = <span class="string">"log\\info_log_%datetime&#123;%Y%M%d&#125;.log"</span></div><div class="line">    FORMAT                      = <span class="string">"[%host : %user] | %msg"</span></div><div class="line"></div><div class="line">* VERBOSE:</div><div class="line">    ENABLED                     = <span class="literal">false</span></div></pre></td></tr></table></figure>
+<p>通过构造日志记录器来加载配置文件完成对日志的自定义，使用：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"easylogging++.h"</span></span></div><div class="line"></div><div class="line"><span class="function">INITIALIZE_EASYLOGGINGPP</div><div class="line"></div><div class="line"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span>** argv)</span> </span>&#123;</div><div class="line">    <span class="comment">// 加载配置文件，构造一个配置器对象</span></div><div class="line">    el::<span class="function">Configurations <span class="title">conf</span><span class="params">(<span class="string">"/path/to/my-conf.conf"</span>)</span></span>;</div><div class="line">    <span class="comment">// 重新配置一个单一日志记录器</span></div><div class="line">    el::Loggers::reconfigureLogger(<span class="string">"default"</span>, conf);</div><div class="line">    <span class="comment">// 用配置文件配置所有的日志记录器</span></div><div class="line">    el::Loggers::reconfigureAllLoggers(conf);</div><div class="line">    <span class="comment">// 所有的日志记录器都是从文件中配置完成的，可以使用</span></div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="日志格式说明符"><a href="#日志格式说明符" class="headerlink" title="日志格式说明符"></a>日志格式说明符</h4><p>日志的输出格式可以自定义，库中提供了一些说明符来表示不同的含义：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>%logger</code></td>
+<td style="text-align:left">loggger ID  </td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%thread</code></td>
+<td style="text-align:left">thread ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%thread_name</code></td>
+<td style="text-align:left">用来获取线程的名称，是使用 <code>el::Helpers::setThreadName(&quot;name1&quot;)</code> 来设置的线程标识名</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%level</code></strong></td>
+<td style="text-align:left">日志的级别，诸如 <code>DEBUG</code>、<code>INFO</code>、<code>WARNING</code>等</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%levshort</code></td>
+<td style="text-align:left">日志级别的缩写</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%vlevel</code></td>
+<td style="text-align:left">使用详细记录，冗长记录级别</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%datetime</code></strong></td>
+<td style="text-align:left">当前的时间，可以自定义时间的格式</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%user</code></strong></td>
+<td style="text-align:left">当前运行程序的用户名</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%host</code></strong></td>
+<td style="text-align:left">运行程序的机器名称</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%file</code></strong></td>
+<td style="text-align:left">源程序的名称，包含完整的路径信息</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%fbase</code></td>
+<td style="text-align:left">只有文件的名称</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%line</code></strong></td>
+<td style="text-align:left">运行到此处的代码行</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%func</code></strong></td>
+<td style="text-align:left">函数的名称</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%loc</code></strong></td>
+<td style="text-align:left">函数的名称以及行号</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong><code>%msg</code></strong></td>
+<td style="text-align:left">日志信息</td>
+</tr>
+<tr>
+<td style="text-align:left"><em><code>%</code></em></td>
+<td style="text-align:left">转义字符</td>
+</tr>
+</tbody>
+</table>
+<p><strong>日期的格式</strong><br>通过上述的符号 <code>%datetime</code> 获取了时间，可以通过自定义的方式来格式化时间，常用的格式符如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>%d</code></td>
+<td style="text-align:left">一月中的几号</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%a</code></td>
+<td style="text-align:left">简写的星期几</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%A</code></td>
+<td style="text-align:left">全称星期几</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>%Y %M %d %H %m %s</code></td>
+<td style="text-align:left">年月日时分秒</td>
+</tr>
+</tbody>
+</table>
+<h3 id="记录日志"><a href="#记录日志" class="headerlink" title="记录日志"></a>记录日志</h3><h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><p>有两种方式来记录日志
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">LOG(LEVEL) &lt;&lt; <span class="string">"info"</span>;               <span class="comment">//第一种：使用默认的日志记录器</span></div><div class="line">CLOG(LEVEL, logger ID) &lt;&lt; <span class="string">"info"</span>;   <span class="comment">//第二种：指定特定的日志记录器，可以自己注册</span></div></pre></td></tr></table></figure></p>
+<p>库中注册的有三种：</p>
+<ul>
+<li>默认的日志记录器 ID: <code>dfault</code> ；</li>
+<li>性能日志记录器 ID: <code>performance</code> ；</li>
+<li>系统日志记录器 ID: <code>syslog</code>
+可以使用以下方式注册自己的日志记录器：<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//注册一个ID为business的日志记录器，没有会自动创建</span></div><div class="line">el::Logger* businessLogger = el::Loggers::getLogger(<span class="string">"business"</span>);</div><div class="line"><span class="comment">//businessLogger -&gt;</span></div><div class="line"><span class="comment">//info(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//warn(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//error(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//debug(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//fatal(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//trace(const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//verbose(int vlevel, const char*, const T&amp;, const Args&amp;...)</span></div><div class="line"><span class="comment">//来记录日志 可以使用 %v 来格式化数据</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="条件日志记录"><a href="#条件日志记录" class="headerlink" title="条件日志记录"></a>条件日志记录</h4><p>满足条件后，开始记录日志，不满足条件不会记录，使用如下：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">LOG_IF(condition, LEVEL)</div><div class="line">CLOG_IF(condition, LEVEL, logger ID)</div></pre></td></tr></table></figure></p>
+<h4 id="记录特定次数日志"><a href="#记录特定次数日志" class="headerlink" title="记录特定次数日志"></a>记录特定次数日志</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">LOG_EVERY_N(n, LEVEL)</div><div class="line">CLOG_EVERY_N(n, LEVEL, logger ID)</div><div class="line"></div><div class="line">LOG_AFTER_N(n, LEVEL); <span class="comment">//Only logs when we have reached hit counts of n</span></div><div class="line">LOG_N_TIMES(n, LEVEL); <span class="comment">//Logs n times</span></div></pre></td></tr></table></figure>
+<p>源文件 <code>sample</code> 下有使用示例。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/muflihun/easyloggingpp&quot;&gt;easyloggingpp&lt;/a&gt; 是一个只需引用一个头文件的 &lt;code&gt;C++&lt;/code&gt; 日志库，它具有轻量高效、可扩展、线程安全、可嵌入到自己开发模块等等特性。  &lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="日志库" scheme="http://abumaster.com/tags/%E6%97%A5%E5%BF%97%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>cpr阅读笔记</title>
@@ -62,7 +251,7 @@
     <link href="http://abumaster.com/2018/03/08/Git-%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
     <id>http://abumaster.com/2018/03/08/Git-使用笔记/</id>
     <published>2018-03-08T11:31:17.000Z</published>
-    <updated>2018-03-08T12:45:41.434Z</updated>
+    <updated>2018-03-28T08:55:43.789Z</updated>
     
     <content type="html"><![CDATA[<p>Git 使用简单总结。
 <a id="more"></a></p>
@@ -76,6 +265,13 @@
 <p><strong>fork的别人的仓库：</strong>在 <code>develop</code> 分支上进行修改后，没有在 <code>master</code> 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push --force origin develop-myfeature</div></pre></td></tr></table></figure></p>
 <p>提交代码到远程仓库中后，发起 <code>Pull Request</code> 到 <code>master</code> ，请求别人确认合并到 <code>master</code>。  </p>
 <p><a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html">参考链接</a></p>
+<h4 id="fork的代码如何与源保持一致"><a href="#fork的代码如何与源保持一致" class="headerlink" title="fork的代码如何与源保持一致"></a>fork的代码如何与源保持一致</h4><p>从别人仓库中 <code>forke</code> 的一个项目并 <code>clone</code> 到本地进行开发，当源仓库的代码发生更新时，也需要用到最新的代码，一个思路是从源仓库拉取最新的代码到本地，然后合并本地仓库，最后推送到远程自己的仓库中。  </p>
+<ul>
+<li>首先，创建一个远程仓库，指定源仓库所在的地址，语法为 <code>git remote add [shotname] [url]</code>，可以使用 <code>git remote -v</code> 查看远程仓库的信息，一般会有一个 <code>fetch</code> 和 <code>push</code> 匹配，分别用于取代码和推送代码；  </li>
+<li>然后从远程仓库抓取数据，<code>git fetch [remote-name]</code> ，<code>fetch</code> 相当于从远程仓库中 <code>pull</code> 了最新的代码并 <code>merge</code> 到当前本地仓库；  </li>
+<li>再切换到本地的<code>master</code>分支，并将这个远程仓库的本地仓库与主分支合并，<code>git merge [remote-name/origin] master</code> ，这时可能主仓库的代码更改与本地仓库的更改冲突，需要解决<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/001375840202368c74be33fbd884e71b570f2cc3c0d1dcf000">合并冲突</a>。按照提示解决冲突文件重新提交即可。  </li>
+<li>推送到远程仓库，与源仓库的代码保持一致 <code>git push [remote-name] [branch-name]</code> 。</li>
+</ul>
 ]]></content>
     
     <summary type="html">
@@ -87,59 +283,9 @@
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
-    
       <category term="Git" scheme="http://abumaster.com/tags/Git/"/>
     
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记4：任务和主动对象</title>
-    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
-    <published>2017-11-17T03:03:02.000Z</published>
-    <updated>2017-11-27T13:09:10.186Z</updated>
-    
-    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
-<a id="more"></a>
-<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
-<ul>
-<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
-<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
-<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
-</ul>
-<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
-<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
-<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
-</blockquote>
-<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
-<ul>
-<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
-<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
-<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
-</ul>
-<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
-<ul>
-<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
-<li>分发对象。请求队列的排队实例。</li>
-</ul>
-<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
   </entry>
   
@@ -211,6 +357,56 @@
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -886,46 +1082,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
     <summary type="html">
     
       &lt;p&gt;定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-      <category term="libev" scheme="http://abumaster.com/tags/libev/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>libev源码阅读2：运行流程</title>
-    <link href="http://abumaster.com/2017/07/31/libev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB2%EF%BC%9A%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B/"/>
-    <id>http://abumaster.com/2017/07/31/libev源码阅读2：运行流程/</id>
-    <published>2017-07-31T10:39:49.000Z</published>
-    <updated>2017-07-31T13:38:14.246Z</updated>
-    
-    <content type="html"><![CDATA[<p>一般的流程：创建默认的事件循环，创建一个事件监测器和回调函数并初始化（init），将监测器放入事件循环（start）中，循环开始等待事件（run）的到来。<br><a id="more"></a></p>
-<p><strong>1.主要流程</strong><br>如果在libev中创建一个IO监测器，主循环等待IO事件的触发，触发后调用回调函数，执行相关操作。其主要流程如下：  </p>
-<ul>
-<li>首先调用<code>ev_default_loop</code>初始化<code>struct  ev_loop</code>结构；  </li>
-<li>然后调用<code>ev_io_init</code>初始化监视器中的属性，该宏主要就是调用<code>ev_init</code>和<code>ev_io_set</code>；  </li>
-<li>然后调用<code>ev_io_start</code>启动该监视器，该函数主要是将监视器添加到<code>loop-&gt;anfds</code>结构中，将监视的描述符添加到<code>((loop)-&gt;fdchanges)</code>中；</li>
-<li>调用<code>ev_run</code>开始等待事件的触发。</li>
-</ul>
-<p>使用，官方提供的代码如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// a single header file is required</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ev.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt; // for puts</span></span></div><div class="line"><span class="comment">// every watcher type has its own typedef'd struct</span></div><div class="line"><span class="comment">// with the name ev_TYPE</span></div><div class="line">ev_io stdin_watcher;</div><div class="line">ev_timer timeout_watcher;</div><div class="line"><span class="comment">// all watcher callbacks have a similar signature</span></div><div class="line"><span class="comment">// this callback is called when data is readable on stdin</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span></div><div class="line"><span class="title">stdin_cb</span> <span class="params">(EV_P_ ev_io *w, <span class="keyword">int</span> revents)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="built_in">puts</span> (<span class="string">"stdin ready"</span>);</div><div class="line">  <span class="comment">// for one-shot events, one must manually stop the watcher</span></div><div class="line">  <span class="comment">// with its corresponding stop function.</span></div><div class="line">  ev_io_stop (EV_A_ w);</div><div class="line">  <span class="comment">// this causes all nested ev_run's to stop iterating</span></div><div class="line">  ev_break (EV_A_ EVBREAK_ALL);</div><div class="line">&#125;</div><div class="line"><span class="comment">// another callback, this time for a time-out</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span></div><div class="line"><span class="title">timeout_cb</span> <span class="params">(EV_P_ ev_timer *w, <span class="keyword">int</span> revents)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="built_in">puts</span> (<span class="string">"timeout"</span>);</div><div class="line">  <span class="comment">// this causes the innermost ev_run to stop iterating</span></div><div class="line">  ev_break (EV_A_ EVBREAK_ONE);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">void</span>)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="comment">// use the default event loop unless you have special needs</span></div><div class="line">  <span class="keyword">struct</span> ev_loop *loop = EV_DEFAULT;</div><div class="line">  <span class="comment">// initialise an io watcher, then start it</span></div><div class="line">  <span class="comment">// this one will watch for stdin to become readable</span></div><div class="line">  ev_io_init (&amp;stdin_watcher, stdin_cb, <span class="comment">/*STDIN_FILENO*/</span> <span class="number">0</span>, EV_READ);</div><div class="line">  ev_io_start (loop, &amp;stdin_watcher);</div><div class="line">  <span class="comment">// initialise a timer watcher, then start it</span></div><div class="line">  <span class="comment">// simple non-repeating 5.5 second timeout</span></div><div class="line">  ev_timer_init (&amp;timeout_watcher, timeout_cb, <span class="number">5.5</span>, <span class="number">0.</span>);</div><div class="line">  ev_timer_start (loop, &amp;timeout_watcher);</div><div class="line">  <span class="comment">// now wait for events to arrive</span></div><div class="line">  ev_run (loop, <span class="number">0</span>);</div><div class="line">  <span class="comment">// break was called, so exit</span></div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>其中有几个奇怪的宏<code>EV_P EV_P_ EV_A EV_A_</code>，它们代表了：
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">EV_P  == <span class="keyword">struct</span> ev_loop* loop <span class="comment">//event parameter</span></div><div class="line">EV_P_ == EV_P, == <span class="keyword">struct</span> ev_loop* loop, </div><div class="line">EV_A  == loop <span class="comment">//event argument</span></div><div class="line">EV_A_ == EV_A, == loop,</div></pre></td></tr></table></figure></p>
-<p><strong>2.ev_default_loop 函数</strong><br>假设定义了EV_MULTIPLICITY，多循环支持，返回一个ev_loop结构指针，否则返回一个整数。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">struct</span> ev_loop * <span class="title">ev_default_loop</span> <span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> flags)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">if</span> (!ev_default_loop_ptr)</div><div class="line">    &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_MULTIPLICITY</span></div><div class="line">      EV_P = ev_default_loop_ptr = &amp;default_loop_struct;</div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line">      ev_default_loop_ptr = <span class="number">1</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="comment">//调用此函数初始化</span></div><div class="line">    loop_init (EV_A_ flags);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (ev_backend (EV_A))</div><div class="line">    &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_CHILD_ENABLE</span></div><div class="line">          ev_signal_init (&amp;childev, childcb, SIGCHLD);</div><div class="line">          ev_set_priority (&amp;childev, EV_MAXPRI);</div><div class="line">          ev_signal_start (EV_A_ &amp;childev);</div><div class="line">          ev_unref (EV_A); <span class="comment">/* child watcher should not keep loop alive */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        ev_default_loop_ptr = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">return</span> ev_default_loop_ptr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//以下是loop_init函数，初始化loop中的各个成员</span></div><div class="line"><span class="comment">/* initialise a loop structure, must be zero-initialised */</span></div><div class="line"><span class="function">noinline ecb_cold</div><div class="line"><span class="keyword">static</span> <span class="keyword">void</span></div><div class="line"><span class="title">loop_init</span> <span class="params">(EV_P_ <span class="keyword">unsigned</span> <span class="keyword">int</span> flags)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (!backend)</div><div class="line">    &#123;</div><div class="line">        origflags = flags;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_REALTIME</span></div><div class="line">        <span class="keyword">if</span> (!have_realtime)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">struct</span> timespec ts;</div><div class="line">            <span class="keyword">if</span> (!clock_gettime (CLOCK_REALTIME, &amp;ts))</div><div class="line">                have_realtime = <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_MONOTONIC</span></div><div class="line">        <span class="keyword">if</span> (!have_monotonic)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">struct</span> timespec ts;</div><div class="line">            <span class="keyword">if</span> (!clock_gettime (CLOCK_MONOTONIC, &amp;ts))</div><div class="line">                have_monotonic = <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _WIN32</span></div><div class="line">        <span class="keyword">if</span> (flags &amp; EVFLAG_FORKCHECK)</div><div class="line">            curpid = getpid ();</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!(flags &amp; EVFLAG_NOENV)</div><div class="line">          &amp;&amp; !enable_secure ()</div><div class="line">          &amp;&amp; getenv (<span class="string">"LIBEV_FLAGS"</span>))</div><div class="line">            flags = atoi (getenv (<span class="string">"LIBEV_FLAGS"</span>));</div><div class="line"></div><div class="line">        ev_rt_now          = ev_time ();</div><div class="line">        mn_now             = get_clock ();</div><div class="line">        now_floor          = mn_now;</div><div class="line">        rtmn_diff          = ev_rt_now - mn_now;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_FEATURE_API</span></div><div class="line">        invoke_cb          = ev_invoke_pending;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">        io_blocktime       = <span class="number">0.</span>;</div><div class="line">        timeout_blocktime  = <span class="number">0.</span>;</div><div class="line">        backend            = <span class="number">0</span>;</div><div class="line">        backend_fd         = <span class="number">-1</span>;</div><div class="line">        sig_pending        = <span class="number">0</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_ASYNC_ENABLE</span></div><div class="line">        async_pending      = <span class="number">0</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">        pipe_write_skipped = <span class="number">0</span>;</div><div class="line">        pipe_write_wanted  = <span class="number">0</span>;</div><div class="line">        evpipe [<span class="number">0</span>]         = <span class="number">-1</span>;</div><div class="line">        evpipe [<span class="number">1</span>]         = <span class="number">-1</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_INOTIFY</span></div><div class="line">        fs_fd              = flags &amp; EVFLAG_NOINOTIFY ? <span class="number">-1</span> : <span class="number">-2</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_SIGNALFD</span></div><div class="line">        sigfd              = flags &amp; EVFLAG_SIGNALFD  ? <span class="number">-2</span> : <span class="number">-1</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!(flags &amp; EVBACKEND_MASK))</div><div class="line">            flags |= ev_recommended_backends ();</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_IOCP</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_IOCP  )) backend = iocp_init   (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_PORT</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_PORT  )) backend = port_init   (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_KQUEUE</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_KQUEUE)) backend = kqueue_init (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_EPOLL</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_EPOLL )) backend = epoll_init  (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_POLL</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_POLL  )) backend = poll_init   (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_SELECT</span></div><div class="line">        <span class="keyword">if</span> (!backend &amp;&amp; (flags &amp; EVBACKEND_SELECT)) backend = select_init (EV_A_ flags);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">        <span class="comment">//如上一章介绍的函数，初始化调用前事件，准备好了，其实什么也没做</span></div><div class="line">        <span class="comment">//表示在此期间等待监测器到来</span></div><div class="line">        ev_prepare_init (&amp;pending_w, pendingcb);</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_SIGNAL_ENABLE || EV_ASYNC_ENABLE</span></div><div class="line">        ev_init (&amp;pipe_w, pipecb);<span class="comment">//初始化监测器的pipe</span></div><div class="line">        ev_set_priority (&amp;pipe_w, EV_MAXPRI);<span class="comment">//设置为最大优先级</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3.ev_io_init 函数</strong><br>初始化io监测器，初始化结构中的成员，上一节中介绍了。<br><strong>4.ev_io_start 函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ev_io_start</span> <span class="params">(EV_P_ ev_io *w)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">int</span> fd = w-&gt;fd;<span class="comment">//获得监视器的描述符</span></div><div class="line">  <span class="comment">//监视器没开始</span></div><div class="line">  <span class="keyword">if</span> (expect_false (ev_is_active (w)))</div><div class="line">    <span class="keyword">return</span>;</div><div class="line"></div><div class="line">  assert ((<span class="string">"libev: ev_io_start called with negative fd"</span>, fd &gt;= <span class="number">0</span>));</div><div class="line">  <span class="comment">//屏蔽其他的</span></div><div class="line">  <span class="comment">//0x80 0x01 0x02 events的取值</span></div><div class="line">  assert ((<span class="string">"libev: ev_io_start called with illegal event mask"</span>, !(w-&gt;events &amp; ~(EV__IOFDSET | EV_READ | EV_WRITE))));</div><div class="line"></div><div class="line">  EV_FREQUENT_CHECK;</div><div class="line">  <span class="comment">//调整优先级并设置为活动状态，</span></div><div class="line">  ev_start (EV_A_ (W)w, <span class="number">1</span>);</div><div class="line">  <span class="comment">//调整loop-&gt;anfds数组的大小，并将监测器加入到[fd]的链表中</span></div><div class="line">  array_needsize (ANFD, anfds, anfdmax, fd + <span class="number">1</span>, array_init_zero);</div><div class="line">  wlist_add (&amp;anfds[fd].head, (WL)w);</div><div class="line"></div><div class="line">  <span class="comment">/* common bug, apparently */</span></div><div class="line">  assert ((<span class="string">"libev: ev_io_start called with corrupted watcher"</span>, ((WL)w)-&gt;next != (WL)w));</div><div class="line"></div><div class="line">  fd_change (EV_A_ fd, w-&gt;events &amp; EV__IOFDSET | EV_ANFD_REIFY);</div><div class="line">  w-&gt;events &amp;= ~EV__IOFDSET;<span class="comment">//掩码消除</span></div><div class="line">  EV_FREQUENT_CHECK;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//fd_change函数</span></div><div class="line"><span class="comment">/* something about the given fd changed */</span></div><div class="line"><span class="function">inline_size <span class="keyword">void</span> <span class="title">fd_change</span> <span class="params">(EV_P_ <span class="keyword">int</span> fd, <span class="keyword">int</span> flags)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">unsigned</span> <span class="keyword">char</span> reify = anfds [fd].reify;</div><div class="line">  anfds [fd].reify |= flags;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (expect_true (!reify))<span class="comment">//以前不存在，调整大小加入变化数组中</span></div><div class="line">    &#123;</div><div class="line">      ++fdchangecnt;</div><div class="line">      array_needsize (<span class="keyword">int</span>, fdchanges, fdchangemax, fdchangecnt, EMPTY2);</div><div class="line">      fdchanges [fdchangecnt - <span class="number">1</span>] = fd;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>4.ev_run 函数</strong><br>主要功能循环等待事件的到来。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">ev_run</span> <span class="params">(EV_P_ <span class="keyword">int</span> flags)</span></div><div class="line"></span>&#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_FEATURE_API</span></div><div class="line">  ++loop_depth;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">  assert ((<span class="string">"libev: ev_loop recursion during release detected"</span>, loop_done != EVBREAK_RECURSE));</div><div class="line">  loop_done = EVBREAK_CANCEL;</div><div class="line"></div><div class="line">  EV_INVOKE_PENDING; <span class="comment">/* in case we recurse, ensure ordering stays nice and clean */</span></div><div class="line"></div><div class="line">  <span class="keyword">do</span></div><div class="line">    &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_VERIFY &gt;= 2</span></div><div class="line">      ev_verify (EV_A);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _WIN32</span></div><div class="line">      <span class="keyword">if</span> (expect_false (curpid)) <span class="comment">/* penalise the forking check even more */</span></div><div class="line">        <span class="keyword">if</span> (expect_false (getpid () != curpid))</div><div class="line">          &#123;</div><div class="line">            curpid = getpid ();</div><div class="line">            postfork = <span class="number">1</span>;</div><div class="line">          &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_FORK_ENABLE</span></div><div class="line">      <span class="comment">/* we might have forked, so queue fork handlers */</span></div><div class="line">      <span class="keyword">if</span> (expect_false (postfork))</div><div class="line">        <span class="keyword">if</span> (forkcnt)</div><div class="line">          &#123;</div><div class="line">            queue_events (EV_A_ (W *)forks, forkcnt, EV_FORK);</div><div class="line">            EV_INVOKE_PENDING;</div><div class="line">          &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_PREPARE_ENABLE</span></div><div class="line">      <span class="comment">/* queue prepare watchers (and execute them) */</span></div><div class="line">      <span class="keyword">if</span> (expect_false (preparecnt))</div><div class="line">        &#123;</div><div class="line">          queue_events (EV_A_ (W *)prepares, preparecnt, EV_PREPARE);</div><div class="line">          EV_INVOKE_PENDING;</div><div class="line">        &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">      <span class="keyword">if</span> (expect_false (loop_done))</div><div class="line">        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">      <span class="comment">/* we might have forked, so reify kernel state if necessary */</span></div><div class="line">      <span class="keyword">if</span> (expect_false (postfork))</div><div class="line">        loop_fork (EV_A);</div><div class="line"></div><div class="line">      <span class="comment">//检测fd</span></div><div class="line">      fd_reify (EV_A);</div><div class="line"></div><div class="line">      <span class="comment">/* 计算阻塞的时间 */</span></div><div class="line">      &#123;</div><div class="line">        ev_tstamp waittime  = <span class="number">0.</span>;</div><div class="line">        ev_tstamp sleeptime = <span class="number">0.</span>;</div><div class="line"></div><div class="line">        <span class="comment">/* remember old timestamp for io_blocktime calculation */</span></div><div class="line">        ev_tstamp prev_mn_now = mn_now;</div><div class="line"></div><div class="line">        <span class="comment">/* update time to cancel out callback processing overhead */</span></div><div class="line">        time_update (EV_A_ <span class="number">1e100</span>);</div><div class="line"></div><div class="line">        <span class="comment">/* from now on, we want a pipe-wake-up */</span></div><div class="line">        pipe_write_wanted = <span class="number">1</span>;</div><div class="line"></div><div class="line">        ECB_MEMORY_FENCE; <span class="comment">/* make sure pipe_write_wanted is visible before we check for potential skips */</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> (expect_true (!(flags &amp; EVRUN_NOWAIT || idleall || !activecnt || pipe_write_skipped)))</div><div class="line">          &#123;</div><div class="line">            waittime = MAX_BLOCKTIME;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (timercnt)</div><div class="line">              &#123;</div><div class="line">                ev_tstamp to = ANHE_at (timers [HEAP0]) - mn_now;</div><div class="line">                <span class="keyword">if</span> (waittime &gt; to) waittime = to;</div><div class="line">              &#125;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_PERIODIC_ENABLE</span></div><div class="line">            <span class="keyword">if</span> (periodiccnt)</div><div class="line">              &#123;</div><div class="line">                ev_tstamp to = ANHE_at (periodics [HEAP0]) - ev_rt_now;</div><div class="line">                <span class="keyword">if</span> (waittime &gt; to) waittime = to;</div><div class="line">              &#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">            <span class="comment">/* don't let timeouts decrease the waittime below timeout_blocktime */</span></div><div class="line">            <span class="keyword">if</span> (expect_false (waittime &lt; timeout_blocktime))</div><div class="line">              waittime = timeout_blocktime;</div><div class="line"></div><div class="line">            <span class="comment">/* at this point, we NEED to wait, so we have to ensure */</span></div><div class="line">            <span class="comment">/* to pass a minimum nonzero value to the backend */</span></div><div class="line">            <span class="keyword">if</span> (expect_false (waittime &lt; backend_mintime))</div><div class="line">              waittime = backend_mintime;</div><div class="line"></div><div class="line">            <span class="comment">/* extra check because io_blocktime is commonly 0 */</span></div><div class="line">            <span class="keyword">if</span> (expect_false (io_blocktime))</div><div class="line">              &#123;</div><div class="line">                sleeptime = io_blocktime - (mn_now - prev_mn_now);</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (sleeptime &gt; waittime - backend_mintime)</div><div class="line">                  sleeptime = waittime - backend_mintime;</div><div class="line"></div><div class="line">                <span class="keyword">if</span> (expect_true (sleeptime &gt; <span class="number">0.</span>))</div><div class="line">                  &#123;</div><div class="line">                    ev_sleep (sleeptime);</div><div class="line">                    waittime -= sleeptime;</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_FEATURE_API</span></div><div class="line">        ++loop_count;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">        assert ((loop_done = EVBREAK_RECURSE, <span class="number">1</span>)); <span class="comment">/* assert for side effect */</span></div><div class="line">        backend_poll (EV_A_ waittime);</div><div class="line">        assert ((loop_done = EVBREAK_CANCEL, <span class="number">1</span>)); <span class="comment">/* assert for side effect */</span></div><div class="line"></div><div class="line">        pipe_write_wanted = <span class="number">0</span>; <span class="comment">/* just an optimisation, no fence needed */</span></div><div class="line"></div><div class="line">        ECB_MEMORY_FENCE_ACQUIRE;</div><div class="line">        <span class="keyword">if</span> (pipe_write_skipped)</div><div class="line">          &#123;</div><div class="line">            assert ((<span class="string">"libev: pipe_w not active, but pipe not written"</span>, ev_is_active (&amp;pipe_w)));</div><div class="line">            ev_feed_event (EV_A_ &amp;pipe_w, EV_CUSTOM);</div><div class="line">          &#125;</div><div class="line"></div><div class="line"></div><div class="line">        <span class="comment">/* update ev_rt_now, do magic */</span></div><div class="line">        time_update (EV_A_ waittime + sleeptime);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="comment">/* queue pending timers and reschedule them */</span></div><div class="line">      timers_reify (EV_A); <span class="comment">/* relative timers called last */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_PERIODIC_ENABLE</span></div><div class="line">      periodics_reify (EV_A); <span class="comment">/* absolute timers called first */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_IDLE_ENABLE</span></div><div class="line">      <span class="comment">/* queue idle watchers unless other events are pending */</span></div><div class="line">      idle_reify (EV_A);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_CHECK_ENABLE</span></div><div class="line">      <span class="comment">/* queue check watchers, to be executed first */</span></div><div class="line">      <span class="keyword">if</span> (expect_false (checkcnt))</div><div class="line">        queue_events (EV_A_ (W *)checks, checkcnt, EV_CHECK);</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">      EV_INVOKE_PENDING;</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">while</span> (expect_true (</div><div class="line">    activecnt</div><div class="line">    &amp;&amp; !loop_done</div><div class="line">    &amp;&amp; !(flags &amp; (EVRUN_ONCE | EVRUN_NOWAIT))</div><div class="line">  ));</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (loop_done == EVBREAK_ONE)</div><div class="line">    loop_done = EVBREAK_CANCEL;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_FEATURE_API</span></div><div class="line">  --loop_depth;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">  <span class="keyword">return</span> activecnt;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一般的流程：创建默认的事件循环，创建一个事件监测器和回调函数并初始化（init），将监测器放入事件循环（start）中，循环开始等待事件（run）的到来。&lt;br&gt;
     
     </summary>
     

@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技巧,Git," />
+  <meta name="keywords" content="Git,技巧," />
 
 
 
@@ -96,7 +96,7 @@
 <meta property="og:url" content="http://abumaster.com/2018/03/08/Git-使用笔记/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Git 使用简单总结。">
-<meta property="og:updated_time" content="2018-03-08T12:45:41.434Z">
+<meta property="og:updated_time" content="2018-03-28T08:55:43.789Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 使用笔记">
 <meta name="twitter:description" content="Git 使用简单总结。">
@@ -401,6 +401,13 @@
 <p><strong>fork的别人的仓库：</strong>在 <code>develop</code> 分支上进行修改后，没有在 <code>master</code> 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push --force origin develop-myfeature</div></pre></td></tr></table></figure></p>
 <p>提交代码到远程仓库中后，发起 <code>Pull Request</code> 到 <code>master</code> ，请求别人确认合并到 <code>master</code>。  </p>
 <p><a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html">参考链接</a></p>
+<h4 id="fork的代码如何与源保持一致"><a href="#fork的代码如何与源保持一致" class="headerlink" title="fork的代码如何与源保持一致"></a>fork的代码如何与源保持一致</h4><p>从别人仓库中 <code>forke</code> 的一个项目并 <code>clone</code> 到本地进行开发，当源仓库的代码发生更新时，也需要用到最新的代码，一个思路是从源仓库拉取最新的代码到本地，然后合并本地仓库，最后推送到远程自己的仓库中。  </p>
+<ul>
+<li>首先，创建一个远程仓库，指定源仓库所在的地址，语法为 <code>git remote add [shotname] [url]</code>，可以使用 <code>git remote -v</code> 查看远程仓库的信息，一般会有一个 <code>fetch</code> 和 <code>push</code> 匹配，分别用于取代码和推送代码；  </li>
+<li>然后从远程仓库抓取数据，<code>git fetch [remote-name]</code> ，<code>fetch</code> 相当于从远程仓库中 <code>pull</code> 了最新的代码并 <code>merge</code> 到当前本地仓库；  </li>
+<li>再切换到本地的<code>master</code>分支，并将这个远程仓库的本地仓库与主分支合并，<code>git merge [remote-name/origin] master</code> ，这时可能主仓库的代码更改与本地仓库的更改冲突，需要解决<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/001375840202368c74be33fbd884e71b570f2cc3c0d1dcf000">合并冲突</a>。按照提示解决冲突文件重新提交即可。  </li>
+<li>推送到远程仓库，与源仓库的代码保持一致 <code>git push [remote-name] [branch-name]</code> 。</li>
+</ul>
 
       
     </div>
@@ -424,9 +431,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jq/" rel="tag"># 技巧</a>
-          
             <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/jq/" rel="tag"># 技巧</a>
           
         </div>
       
@@ -439,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/11/17/ACE学习笔记4：任务和主动对象/" rel="next" title="ACE学习笔记4：任务和主动对象">
-                <i class="fa fa-chevron-left"></i> ACE学习笔记4：任务和主动对象
+              <a href="/2017/11/17/Ubuntu安装caffe/" rel="next" title="Ubuntu 安装 Caffe 深度学习框架">
+                <i class="fa fa-chevron-left"></i> Ubuntu 安装 Caffe 深度学习框架
               </a>
             
           </div>
@@ -523,7 +530,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -545,7 +552,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -616,7 +623,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：新建分支"><span class="nav-number">1.</span> <span class="nav-text">第一步：新建分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：提交分支commit"><span class="nav-number">2.</span> <span class="nav-text">第二步：提交分支commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：与主分支保持一致"><span class="nav-number">3.</span> <span class="nav-text">第三步：与主分支保持一致</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：合并到-master分支"><span class="nav-number">4.</span> <span class="nav-text">第四步：合并到 master分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：-推送到远程仓库"><span class="nav-number">5.</span> <span class="nav-text">第五步： 推送到远程仓库</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：新建分支"><span class="nav-number">1.</span> <span class="nav-text">第一步：新建分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：提交分支commit"><span class="nav-number">2.</span> <span class="nav-text">第二步：提交分支commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：与主分支保持一致"><span class="nav-number">3.</span> <span class="nav-text">第三步：与主分支保持一致</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：合并到-master分支"><span class="nav-number">4.</span> <span class="nav-text">第四步：合并到 master分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：-推送到远程仓库"><span class="nav-number">5.</span> <span class="nav-text">第五步： 推送到远程仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fork的代码如何与源保持一致"><span class="nav-number">6.</span> <span class="nav-text">fork的代码如何与源保持一致</span></a></li></ol></div>
             
 
           </div>
