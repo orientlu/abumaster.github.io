@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-03-29T08:29:07.768Z</updated>
+  <updated>2018-04-12T13:20:41.172Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,232 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>高效使用STL-4</title>
+    <link href="http://abumaster.com/2018/04/08/%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-4/"/>
+    <id>http://abumaster.com/2018/04/08/高效使用STL-4/</id>
+    <published>2018-04-08T07:07:38.000Z</published>
+    <updated>2018-04-12T13:20:41.172Z</updated>
+    
+    <content type="html"><![CDATA[<div class="note info"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。</p>
+</div>
+<a id="more"></a>
+<h4 id="条款43：尽量用算法取代循环"><a href="#条款43：尽量用算法取代循环" class="headerlink" title="条款43：尽量用算法取代循环"></a>条款43：尽量用算法取代循环</h4><p>每个算法至少接收一组迭代器来表示容器的区间，如查找最大最小值，查找满足某一条件的元素，这时用内置的一些算法可以解决，不需要手写一些循环，效率更高，即使在算法的内部遍历也是由循环来搞定的。优点包括：  </p>
+<ul>
+<li><strong>效率</strong>：通常算法比循环更高效；  </li>
+<li><strong>正确性</strong>：写循环更容易出错，且代码较算法来的复杂；  </li>
+<li><strong>可维护性</strong>：算法代码简洁，便于维护。  </li>
+</ul>
+<h4 id="条款44：尽量使用成员函数替代同名算法"><a href="#条款44：尽量使用成员函数替代同名算法" class="headerlink" title="条款44：尽量使用成员函数替代同名算法"></a>条款44：尽量使用成员函数替代同名算法</h4><p>出于效率考虑，可以使用容器的成员函数替代同名的算法，成员函数的速度相对较快。  </p>
+<h4 id="条款45：注意-count、find、binary-search、lower-bound、upper-bound和equal-range-的区别"><a href="#条款45：注意-count、find、binary-search、lower-bound、upper-bound和equal-range-的区别" class="headerlink" title="条款45：注意 count、find、binary_search、lower_bound、upper_bound和equal_range 的区别"></a>条款45：注意 <code>count、find、binary_search、lower_bound、upper_bound和equal_range</code> 的区别</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-12/37444869.jpg" alt="">  </p>
+<h4 id="条款46：考虑使用函数对象代替函数作算法的参数"><a href="#条款46：考虑使用函数对象代替函数作算法的参数" class="headerlink" title="条款46：考虑使用函数对象代替函数作算法的参数"></a>条款46：考虑使用函数对象代替函数作算法的参数</h4><p>将函数对象传递给STL算法的效率比传递真的函数高。如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//对容器中数据进行降序排序</span></div><div class="line"><span class="comment">//1.使用函数对象greater</span></div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; v;</div><div class="line">sort(v.begin(), v.end(), greater&lt;<span class="keyword">double</span>&gt;());</div><div class="line"><span class="comment">//2.使用函数</span></div><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">doubleGreater</span><span class="params">(<span class="keyword">double</span> d1, <span class="keyword">double</span> d2)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">return</span> dl &gt; d2;</div><div class="line">&#125;</div><div class="line">sort(v.begin(), v.end(), doubleGreater);</div></pre></td></tr></table></figure></p>
+<p>函数作为参数实际上是传递的函数指针，在每一次调用的时候编译器产生一个间接函数调用，通过指针调用。  </p>
+<h4 id="条款47：避免产生只写代码"><a href="#条款47：避免产生只写代码" class="headerlink" title="条款47：避免产生只写代码"></a>条款47：避免产生只写代码</h4><p>灵感的乍现，让写代码变得容易，但是后期很难从代码中领会其真正所要表达的意思，称之为只写代码。<br>原书中说道：  </p>
+<blockquote>
+<p>代码的读比写更经常，这是软件工程的真理。也就是说软件的维护比开发花费多得多的时间。不能读和理解的软件不能被维护，不能维护的软件几乎没有不值得拥有。你用STL越多，你会感到它越来越舒适，而且你会越来越多的使用嵌套函数调用和即时（on the fly）建立函数对象。这没有什么错的，但永远记住你今天写的代码会被某个人——也可能是你——在未来的某一天读到。为那天做准备吧。</p>
+</blockquote>
+<h4 id="条款48：总是-include适当的头文件"><a href="#条款48：总是-include适当的头文件" class="headerlink" title="条款48：总是#include适当的头文件"></a>条款48：总是<code>#include</code>适当的头文件</h4><p>包含正确的头文件，谨记以下几条：  </p>
+<ul>
+<li>几乎所有的容器都在其同名的头文件中；  </li>
+<li>算法常在 <code>algorithm</code> 头文件中，除了 <code>accumulate inner_product、adjacent_difference和partial_sum</code> 在 <code>numeric</code>；  </li>
+<li>特殊的迭代器在 <code>iterator</code> 中，流迭代器和缓冲迭代器；  </li>
+<li>标准仿函数和仿函数适配器在 <code>functional</code> 头文件中。  </li>
+</ul>
+<h4 id="条款49：学习破解有关STL的编译器诊断信息"><a href="#条款49：学习破解有关STL的编译器诊断信息" class="headerlink" title="条款49：学习破解有关STL的编译器诊断信息"></a>条款49：学习破解有关STL的编译器诊断信息</h4><h4 id="条款50：不断学习"><a href="#条款50：不断学习" class="headerlink" title="条款50：不断学习"></a>条款50：不断学习</h4><p>善于利用网络资源：  </p>
+<ul>
+<li>SGI STL网站: <a href="http://www.sgi.com/tech/stl/">http://www.sgi.com/tech/stl/</a>   </li>
+<li>STLport网站， <a href="http://www.stlport.org/">http://www.stlport.org/</a>   </li>
+<li>Boost网站， <a href="http://www.boost.org/">http://www.boost.org/</a>  或者 <a href="http://boost.sourceforge.net/">http://boost.sourceforge.net/</a> </li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;note info&quot;&gt;&lt;p&gt;英文书籍 &lt;code&gt;Effective STL&lt;/code&gt; 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 &lt;code&gt;C++&lt;/code&gt;顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。&lt;/p&gt;
+&lt;/div&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="STL" scheme="http://abumaster.com/tags/STL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效使用STL-3</title>
+    <link href="http://abumaster.com/2018/04/08/%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-3/"/>
+    <id>http://abumaster.com/2018/04/08/高效使用STL-3/</id>
+    <published>2018-04-08T07:07:12.000Z</published>
+    <updated>2018-04-11T12:15:48.656Z</updated>
+    
+    <content type="html"><![CDATA[<div class="note success"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。</p>
+</div>
+<a id="more"></a>
+<h4 id="条款30：确保目标空间足够大"><a href="#条款30：确保目标空间足够大" class="headerlink" title="条款30：确保目标空间足够大"></a>条款30：确保目标空间足够大</h4><p>使用算法插入时插入的是不存在的空即迭代器的尾部，编译出错。  </p>
+<h4 id="条款31：排序选择"><a href="#条款31：排序选择" class="headerlink" title="条款31：排序选择"></a>条款31：排序选择</h4><p>根据实际的需求选择合适的排序算法：  </p>
+<ul>
+<li>如果你需要在vector、string、deque或数组上进行完全排序，你可以使用 <code>sort</code> 或 <code>stable_sort</code>。  </li>
+<li>如果你有一个vector、string、deque或数组，你只需要排序前n个元素，应该用 <code>partial_sort</code>。  </li>
+<li>如果你有一个vector、string、deque或数组，你需要鉴别出第n个元素或你需要鉴别出最前的n个元素，而不用知道它们的顺序，<code>nth_element</code>是你应该注意和调用的。  </li>
+<li>如果你需要把标准序列容器的元素或数组分隔为满足和不满足某个标准，你大概就要找 <code>partition</code> 或 <code>stable_partition</code>。  </li>
+<li>如果你的数据是在list中，你可以直接使用 <code>partition</code> 和 <code>stable_partition</code>，你可以使用list的 <code>sort</code>来代替 <code>sort</code> 和<code>stable_sort</code>。   </li>
+<li>如果你需要partial_sort或nth_element提供的效果，你就必须间接完成这个任务，但正如我
+在上面勾画的，会有很多选择。  </li>
+</ul>
+<h4 id="条款32：如果真要删除东西，在remove-后加上-erase"><a href="#条款32：如果真要删除东西，在remove-后加上-erase" class="headerlink" title="条款32：如果真要删除东西，在remove 后加上 erase"></a>条款32：如果真要删除东西，在<code>remove</code> 后加上 <code>erase</code></h4><p>STL 算法 <code>remove</code> 不是真正意义上的删除元素，而是遇见一个满足条件的元素，然后将其后的元素向前移动，元素的个数是不变的。而想真正删除，需要使用 <code>erase</code> 函数，将指定迭代器的元素删除。  </p>
+<h4 id="条款33：避免在指针容器上使用-remove"><a href="#条款33：避免在指针容器上使用-remove" class="headerlink" title="条款33：避免在指针容器上使用 remove"></a>条款33：避免在指针容器上使用 <code>remove</code></h4><p>如上条款一样，这个算法不是真正意义上的删除，而是将元素向前移动，在指针容器上使用，可能会导致内存的泄漏。  </p>
+<h4 id="条款34：注意哪个算法需要使用有序空间"><a href="#条款34：注意哪个算法需要使用有序空间" class="headerlink" title="条款34：注意哪个算法需要使用有序空间"></a>条款34：注意哪个算法需要使用有序空间</h4><h4 id="条款35：使用-mismatch-和-lexicographical-compare-实现简单的忽略大小写字符串比较"><a href="#条款35：使用-mismatch-和-lexicographical-compare-实现简单的忽略大小写字符串比较" class="headerlink" title="条款35：使用 mismatch 和 lexicographical_compare 实现简单的忽略大小写字符串比较"></a>条款35：使用 <code>mismatch</code> 和 <code>lexicographical_compare</code> 实现简单的忽略大小写字符串比较</h4><h4 id="条款36：了解-copy-if-的正确实现"><a href="#条款36：了解-copy-if-的正确实现" class="headerlink" title="条款36：了解 copy_if 的正确实现"></a>条款36：了解 <code>copy_if</code> 的正确实现</h4><h4 id="条款37：统计区间"><a href="#条款37：统计区间" class="headerlink" title="条款37：统计区间"></a>条款37：统计区间</h4><p>STL中提供了一些用于统计的算法，如 <code>count</code> 用来统计具有某一值的元素的个数，<code>count_if</code> 用于统计满足某一判别式的元素个数，区间中的最大最小值可以使用 <code>max_element</code> 和 <code>min_element</code> 得到。如果需要对某一区间中的元素定制更加复杂的操作，比如容器中元素求和，乘积和平均，可以使用 <code>accumulate</code> 和 <code>for_each</code> 定制仿函数，对容器进行操作。  </p>
+<h4 id="条款38：把仿函数设计为用于值传递"><a href="#条款38：把仿函数设计为用于值传递" class="headerlink" title="条款38：把仿函数设计为用于值传递"></a>条款38：把仿函数设计为用于值传递</h4><p>在C和CPP中不允许将函数作为参数传递给函数，需要传递一个函数指针作为参数。如：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">///最后一个参数是一个函数指针</div><div class="line">void qsort(void *base, size_t nmemb, size_t size,</div><div class="line">            int (*cmpfcn)(const void*, const void*));</div></pre></td></tr></table></figure></p>
+<h4 id="条款39：用纯函数做判断式"><a href="#条款39：用纯函数做判断式" class="headerlink" title="条款39：用纯函数做判断式"></a>条款39：用纯函数做判断式</h4><h4 id="条款40：使仿函数类可以适配"><a href="#条款40：使仿函数类可以适配" class="headerlink" title="条款40：使仿函数类可以适配"></a>条款40：使仿函数类可以适配</h4><h4 id="条款41：了解使用-ptr-fun-、mem-fun-的原因"><a href="#条款41：了解使用-ptr-fun-、mem-fun-的原因" class="headerlink" title="条款41：了解使用 ptr_fun 、mem_fun 的原因"></a>条款41：了解使用 <code>ptr_fun</code> 、<code>mem_fun</code> 的原因</h4><h4 id="条款42：确定-less-lt-T-gt-表示-operator-lt"><a href="#条款42：确定-less-lt-T-gt-表示-operator-lt" class="headerlink" title="条款42：确定 less&lt;T&gt; 表示 operator&lt;"></a>条款42：确定 <code>less&lt;T&gt;</code> 表示 <code>operator&lt;</code></h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;note success&quot;&gt;&lt;p&gt;英文书籍 &lt;code&gt;Effective STL&lt;/code&gt; 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 &lt;code&gt;C++&lt;/code&gt;顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。&lt;/p&gt;
+&lt;/div&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="STL" scheme="http://abumaster.com/tags/STL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效使用STL-2</title>
+    <link href="http://abumaster.com/2018/04/07/%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-2/"/>
+    <id>http://abumaster.com/2018/04/07/高效使用STL-2/</id>
+    <published>2018-04-07T10:55:12.000Z</published>
+    <updated>2018-04-10T06:40:02.434Z</updated>
+    
+    <content type="html"><![CDATA[<div class="note info"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第二章 <code>vector</code> 和 <code>string</code> 和第三章的关联容器的介绍。</p>
+</div>
+<a id="more"></a>
+<h4 id="条款13：使用-vector-和-string-替代动态分配的数组"><a href="#条款13：使用-vector-和-string-替代动态分配的数组" class="headerlink" title="条款13：使用 vector 和 string 替代动态分配的数组"></a>条款13：使用 <code>vector</code> 和 <code>string</code> 替代动态分配的数组</h4><p><strong>动态申请空间的弊端：</strong>  </p>
+<ul>
+<li>保证 <code>new</code> 和 <code>delete</code> 的成对出现，否则容易造成内存泄漏；  </li>
+<li>保证 <code>delete</code> 的正确使用对象使用 <code>delete</code> ，而数组则要使用 <code>delete []</code> 形式；</li>
+<li>保证 <code>delete</code> 只使用一次，以免发生错误。  </li>
+</ul>
+<p>因此，如果需要使用 <strong>动态分配数组</strong> 形式的数据结构可以考虑使用 <code>vector</code> 或者 <code>string</code> 容器，其有安全的内存管理机制，可以保证不会发生内存泄漏的问题。</p>
+<h4 id="条款14：使用-reserve-来避免不必要的重新分配"><a href="#条款14：使用-reserve-来避免不必要的重新分配" class="headerlink" title="条款14：使用 reserve 来避免不必要的重新分配"></a>条款14：使用 <code>reserve</code> 来避免不必要的重新分配</h4><p>像 <code>vector</code> 这样的容器，其可以最大容纳元素的数量 <code>capacity()</code> 往往要大于当前大小 <code>size()</code> 这保证其不需要插入一个元素就要申请空间，更加高效。然而当我们频繁插入元素的时候，往往是大于所能够容纳的最大元素，这时需要重新分配空间，其步骤如下：  </p>
+<ul>
+<li>分配新的内存空间，一般是当前容量的倍数；   </li>
+<li>将旧空间的元素拷贝到新的空间中；  </li>
+<li>销毁旧空间上的对象；  </li>
+<li>回收旧空间。<br>开销非常大，并且会让迭代器、指针和引用失效。这时为了避免这种不需要的代价，可以预估所需空间一次分配足够大的空间。<br>通常有两个成员函数可以使用：  </li>
+<li><code>resize(size_type n)</code> 通常返回设置的新大小 <code>n</code> ，需要注意的是，这个函数将会在容器中构造新的元素，当 <code>n</code> 大于当前容器大小时，如果小于，则会将尾部的元素销毁，大于最大容量时，会发生重新分配；  </li>
+<li><code>reserve(size_type n)</code> 函数通常设置容器的最大空间和大小为 <code>n</code> ，当 <code>n</code> 大于当前最大容量时才会发生内存的重新配置。<br>因此可以使用 <code>reserve</code> 函数来通过预估使用空间的大小申请足够大的空间，来避免频繁申请配置空间。  </li>
+</ul>
+<h4 id="条款15：小心-string-实现的多样性"><a href="#条款15：小心-string-实现的多样性" class="headerlink" title="条款15：小心 string 实现的多样性"></a>条款15：小心 <code>string</code> 实现的多样性</h4><p><code>string</code> 类型在各个平台下的实现是不同的，如果使用 <code>sizeof(string)</code> 来获得其大小会发现，它的大小为 1 或者 7 倍 <code>char *</code> 。</p>
+<h4 id="条款16：如何将-vector-和-string-的数据传递遗留的-API"><a href="#条款16：如何将-vector-和-string-的数据传递遗留的-API" class="headerlink" title="条款16：如何将 vector 和 string 的数据传递遗留的 API"></a>条款16：如何将 <code>vector</code> 和 <code>string</code> 的数据传递遗留的 API</h4><p>对一些旧的API传递的参数是数组或者指针，当使用 <code>vector</code> 或者 <code>string</code> 作为参数传递时，要发生一定的转变。<br>通常，由于如 <code>vector</code> 容器那样，内存分布是连续的与普通的数组没有两样，可以用首元素的地址当做是数组名称，当然需对容器非空进行判断。一个技巧是，当使用 <code>C</code> 风格的API时，参数是数组的情况下，需要将数据传递给其他容器，可以使用 <code>vector</code> 作为中介，然后用它去初始化其他容器。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 从 C API 中获得数据 传递到其他容器中</span></div><div class="line"><span class="keyword">size_t</span> fillArray(<span class="keyword">double</span> *pArray, <span class="keyword">size_t</span> arraySize); <span class="comment">// C API</span></div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; vd(maxNumDoubles);</div><div class="line">vd.resize(fillArray(&amp;vd[<span class="number">0</span>], vd.size()));</div><div class="line"><span class="built_in">deque</span>&lt;<span class="keyword">double</span>&gt; d(vd.begin(), vd.end()); <span class="comment">// 拷贝数据到deque</span></div><div class="line"><span class="built_in">list</span>&lt;<span class="keyword">double</span>&gt; l(vd.begin(), vd.end()); <span class="comment">// 拷贝数据到list</span></div><div class="line"><span class="built_in">set</span>&lt;<span class="keyword">double</span>&gt; s(vd.begin(), vd.end()); <span class="comment">// 拷贝数据到set</span></div><div class="line"></div><div class="line"><span class="comment">// 将其他容器中的数据传递到 C API 中</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>* pints, <span class="keyword">size_t</span> numInts)</span></span>; <span class="comment">// C API (同上)</span></div><div class="line"><span class="built_in">set</span>&lt;<span class="keyword">int</span>&gt; intSet; <span class="comment">// 保存要传递给API数据的set</span></div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v(intSet.begin(), intSet.end()); <span class="comment">// 拷贝set数据到vector</span></div><div class="line"><span class="keyword">if</span> (!v.empty()) doSomething(&amp;v[<span class="number">0</span>], v.size()); <span class="comment">// 传递数据到API</span></div></pre></td></tr></table></figure></p>
+<h4 id="条款17：使用交换来修整过剩容量"><a href="#条款17：使用交换来修整过剩容量" class="headerlink" title="条款17：使用交换来修整过剩容量"></a>条款17：使用交换来修整过剩容量</h4><p>当使用容器时，插入数据可以使最大容量增加，但是当删除一部分元素时，多余的空间并不会自己归还给系统，需要手动收缩到合适的范围，一个做法是使用 <code>swap</code> 函数，构造一个与原始容器大小相同的临时容器，通过交换将元素填充到原始容器，互换而不会持有多余的空间。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;Contestant&gt;(contestants).swap(contestants);</div></pre></td></tr></table></figure></p>
+<p>在 <code>C++11</code> 后提供了一个函数来调整过剩的空间大小，<code>shrink_to_fit()</code> 将多余的空间归还给系统。  </p>
+<h4 id="条款18：避免使用-vector-lt-bool-gt"><a href="#条款18：避免使用-vector-lt-bool-gt" class="headerlink" title="条款18：避免使用 vector&lt;bool&gt;"></a>条款18：避免使用 <code>vector&lt;bool&gt;</code></h4><p>它不是一个 STL 容器，不保存 bool 类型。<code>vector&lt;bool&gt;</code> 不满足STL容器的必要条件，你最好不要使用它；而<code>deque&lt;bool&gt;</code> 和 <code>bitset</code> 是基本能满足你对 <code>vector&lt;bool&gt;</code> 提供的性能的需要的替代数据结构。  </p>
+<h4 id="条款19：了解相等和等价的区别"><a href="#条款19：了解相等和等价的区别" class="headerlink" title="条款19：了解相等和等价的区别"></a>条款19：了解相等和等价的区别</h4><p>在标准的关联容器中，如<code>set</code>当插入新的元素时，是用等价判断的，而不是相等，通过自定义的比较函数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">!c.key_comp()(x, y) &amp;&amp; !c.key_comp()(y, x) <span class="comment">// 在c的排序顺序中</span></div><div class="line"><span class="comment">// 如果x在y之前它非真，</span></div><div class="line"><span class="comment">// 同时在c的排序顺序中</span></div><div class="line"><span class="comment">// 如果y在x之前它非真</span></div></pre></td></tr></table></figure></p>
+<p>使用等价作为比较的标准，可以避免使用排序和相等两个比较函数造成的问题。  </p>
+<h4 id="条款20：为指针的关联容器指定比较类型"><a href="#条款20：为指针的关联容器指定比较类型" class="headerlink" title="条款20：为指针的关联容器指定比较类型"></a>条款20：为指针的关联容器指定比较类型</h4><p>使用一个 <code>string*</code> 类型的 <code>set</code> 容器的时候，其比较类型默认为比较容器中指针的大小，如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">set</span>&lt;<span class="built_in">string</span>*&gt; ssp; <span class="comment">// ssp = “set of string ptrs”</span></div><div class="line">ssp.insert(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"Anteater"</span>));</div><div class="line">ssp.insert(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"Wombat"</span>));</div><div class="line">ssp.insert(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"Lemur"</span>));</div><div class="line">ssp.insert(<span class="keyword">new</span> <span class="built_in">string</span>(<span class="string">"Penguin"</span>));</div><div class="line"></div><div class="line"><span class="comment">//可以使用以下自定义函数来按字符串的值比较大小，而不是只比较指针的大小</span></div><div class="line"><span class="keyword">struct</span> StringPtrLess: </div><div class="line"><span class="keyword">public</span> binary_function&lt;<span class="keyword">const</span> <span class="built_in">string</span>*, <span class="keyword">const</span> <span class="built_in">string</span>*, <span class="keyword">bool</span>&gt; &#123;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> *ps1, <span class="keyword">const</span> <span class="built_in">string</span> *ps2)</span> <span class="keyword">const</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> *ps1 &lt; *ps2;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h4 id="条款21：永远让比较函数对相等的值返回-false"><a href="#条款21：永远让比较函数对相等的值返回-false" class="headerlink" title="条款21：永远让比较函数对相等的值返回 false"></a>条款21：永远让比较函数对相等的值返回 false</h4><h4 id="条款22：避免原地修改-set-的键值"><a href="#条款22：避免原地修改-set-的键值" class="headerlink" title="条款22：避免原地修改 set 的键值"></a>条款22：避免原地修改 set 的键值</h4><p>set 容器需要保证元素的有序性，任何对于键值的修改都会改变这种有序性，简单来说不要改变容器中影响排序的键值。  </p>
+<h4 id="条款23：考虑有序的-vector-替代关联容器"><a href="#条款23：考虑有序的-vector-替代关联容器" class="headerlink" title="条款23：考虑有序的 vector 替代关联容器"></a>条款23：考虑有序的 vector 替代关联容器</h4><h4 id="条款24：关乎效率的考虑"><a href="#条款24：关乎效率的考虑" class="headerlink" title="条款24：关乎效率的考虑"></a>条款24：关乎效率的考虑</h4><h4 id="条款25：熟悉非标准散列容器"><a href="#条款25：熟悉非标准散列容器" class="headerlink" title="条款25：熟悉非标准散列容器"></a>条款25：熟悉非标准散列容器</h4><h4 id="条款26：使用迭代器"><a href="#条款26：使用迭代器" class="headerlink" title="条款26：使用迭代器"></a>条款26：使用迭代器</h4><p>迭代器和常量迭代器之间的转换关系<br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-10/12775061.jpg" alt=""><br>由图可以看出，迭代器可以隐式转换成常量迭代器，而常量迭代器却不可以转换成非常亮迭代器，一些容器的成员函数接收的是非常量迭代器，只能尽量使用非常量的迭代器。  </p>
+<h4 id="条款27：常量迭代器转换成非常量迭代器"><a href="#条款27：常量迭代器转换成非常量迭代器" class="headerlink" title="条款27：常量迭代器转换成非常量迭代器"></a>条款27：常量迭代器转换成非常量迭代器</h4><p>使用 <code>distance</code> 和 <code>advance</code> 把 <code>const_iterator</code> 转换成 <code>iterator</code> 。为了在容器当前常量迭代器上插入一个元素，需要使其非常量化。通常的做法是，使用一个非常量的迭代器使其移动到常量迭代器的位置。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">typedef deque&lt;int&gt; IntDeque; // 和以前一样</div><div class="line">typedef IntDeque::iterator Iter;        // 非常量迭代器</div><div class="line">typedef IntDeque::const_iterator ConstIter; // 常量迭代器</div><div class="line">IntDeque d;</div><div class="line">ConstIter ci;</div><div class="line">... // 让ci指向d</div><div class="line">Iter i(d.begin()); // 初始化i为d.begin()</div><div class="line">advance(i, distance(i, ci)); // 把i移到指向ci位置</div><div class="line">// （但请留意下面关于为什么</div><div class="line">// 在它编译前要调整的原因）</div></pre></td></tr></table></figure></p>
+<h4 id="条款28：-base-迭代器之间的转换"><a href="#条款28：-base-迭代器之间的转换" class="headerlink" title="条款28： base 迭代器之间的转换"></a>条款28： <code>base</code> 迭代器之间的转换</h4><p><code>base</code> 可以将 <code>reverse_iterator</code> 转换成 <code>iterator</code>，其是如何实现这种转换的呢？  </p>
+<h4 id="条款29：需要一个一个字符输入时考虑使用-istreambuf-iterator"><a href="#条款29：需要一个一个字符输入时考虑使用-istreambuf-iterator" class="headerlink" title="条款29：需要一个一个字符输入时考虑使用 istreambuf_iterator"></a>条款29：需要一个一个字符输入时考虑使用 <code>istreambuf_iterator</code></h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;note info&quot;&gt;&lt;p&gt;英文书籍 &lt;code&gt;Effective STL&lt;/code&gt; 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 &lt;code&gt;C++&lt;/code&gt;顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第二章 &lt;code&gt;vector&lt;/code&gt; 和 &lt;code&gt;string&lt;/code&gt; 和第三章的关联容器的介绍。&lt;/p&gt;
+&lt;/div&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="STL" scheme="http://abumaster.com/tags/STL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>高效使用STL-1</title>
+    <link href="http://abumaster.com/2018/04/06/%E9%AB%98%E6%95%88%E5%AE%9E%E7%94%A8STL-1/"/>
+    <id>http://abumaster.com/2018/04/06/高效实用STL-1/</id>
+    <published>2018-04-06T07:53:39.000Z</published>
+    <updated>2018-04-07T11:00:27.125Z</updated>
+    
+    <content type="html"><![CDATA[<div class="note primary"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第一章容器的介绍。</p>
+</div>
+<a id="more"></a>
+<h4 id="条款1：小心选择容器"><a href="#条款1：小心选择容器" class="headerlink" title="条款1：小心选择容器"></a>条款1：小心选择容器</h4><p><strong>容器的分类：</strong>  </p>
+<ul>
+<li>标准STL序列容器：<code>vector</code>、<code>string</code>、<code>deque</code>和<code>list</code>。  </li>
+<li>标准STL关联容器：<code>map</code>、<code>set</code>和<code>multiset</code>、<code>multimap</code>。  </li>
+<li>非标准序列容器：<code>slist</code>和<code>rope</code>，单向链表和重型字符串。  </li>
+<li>非标准关联容器：包括基于散列表的容器<code>hash_**</code>。  </li>
+<li>标准非STL容器：数组、<code>bitset</code>、<code>stack</code>、<code>queue</code>和<code>priority_queue</code>。  </li>
+</ul>
+<p>容器的选择可以考虑使用场景需要的算法的复杂度高低，如需要在容器的中间频繁插入删除元素，这时需要的容器可能是<code>list</code>，当需要在头尾插入删除元素，那么<code>deque</code>则是一个好的选择。<br>同时，也应该考虑到迭代器的能力，内存布局的兼容能力容器操作复杂度等等。  </p>
+<h4 id="条款2：容器无关代码？"><a href="#条款2：容器无关代码？" class="headerlink" title="条款2：容器无关代码？"></a>条款2：容器无关代码？</h4><p>容器的使用真的与代码无关吗？考虑以下场景，<code>vector</code>和<code>list</code>在使用过程中，迭代器和内存布局是不一样的，因此，两个容器在使用过程中完全是不兼容的，许多方法是特有的，不能同时使用。当代码中的一个容器替换成另一个容器的时候，要考虑旧的代码对新的容器的适用性，保证不出现错误的使用，而导致编译错误。<br>一个比较方便的做法是使用 <code>typedef</code> 自定义迭代器类型。如代码不应这样写：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Widget &#123;...&#125;;</div><div class="line"><span class="built_in">vector</span>&lt;Widget&gt; vw;</div><div class="line">Widget bestWidget;</div><div class="line"><span class="comment">// 给bestWidget一个值</span></div><div class="line"><span class="built_in">vector</span>&lt;Widget&gt;::iterator i = <span class="comment">// 寻找和bestWidget相等的Widget</span></div><div class="line">    find(vw.begin(), vw.end(), bestWidget);</div></pre></td></tr></table></figure></p>
+<p>其中如果更换迭代器的话，需要查找所有的 <code>vector&lt;Widget&gt;</code> 然后改成新的容器，高效的写法是：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Widget &#123; ... &#125;;</div><div class="line"><span class="keyword">typedef</span> <span class="built_in">vector</span>&lt;Widget&gt; WidgetContainer;         <span class="comment">//Widget类型的容器类型</span></div><div class="line"><span class="keyword">typedef</span> WidgetContainer::iterator WCIterator;   <span class="comment">//迭代器</span></div><div class="line">WidgetContainer cw;</div><div class="line">Widget bestWidget;</div><div class="line"><span class="comment">//</span></div><div class="line">WCIterator i = find(cw.begin(), cw.end(), bestWidget);</div></pre></td></tr></table></figure></p>
+<p>这种做法，直接改 <code>typedef</code> 那两行就行。<br>如果不想用 <code>typedef</code> 将使用的容器暴露给用户，那么可以使用 <code>class</code> 将内部使用的容器私有化，只对用户提供统一的调用接口，当根据需求需要改变容器时，对用户代码不必进行过多的更改。  </p>
+<h4 id="条款3：容器内对象的拷贝"><a href="#条款3：容器内对象的拷贝" class="headerlink" title="条款3：容器内对象的拷贝"></a>条款3：容器内对象的拷贝</h4><div class="note info"><p>主旨：使容器内对象拷贝操作的轻量而正确。</p>
+</div>  
+<p>一个好的做法是，将对象数组（容器）改为指针的数组（容器），毕竟指针的拷贝比对象的拷贝要快。</p>
+<h4 id="条款4：用-empty-替换-size-0"><a href="#条款4：用-empty-替换-size-0" class="headerlink" title="条款4：用 empty 替换 size()==0"></a>条款4：用 <code>empty</code> 替换 <code>size()==0</code></h4><p>当判断一个容器中元素是否为空时，通常使用 <code>empty()</code> 它是常数时间的，而用 <code>size()==0</code> 来判断则是线性时间。  </p>
+<h4 id="条款5：使用空间成员函数"><a href="#条款5：使用空间成员函数" class="headerlink" title="条款5：使用空间成员函数"></a>条款5：使用空间成员函数</h4><p>空间成员函数可以操作一个区间内的元素，而不是使用循环来对单个元素进行操作，具体的应用场景为，将容器内的元素用另一个容器中的元素替代，成段拷贝，区间赋值等等如。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">( size_type count, <span class="keyword">const</span> T&amp; value )</span></span>;</div><div class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> InputIt &gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">( InputIt first, InputIt last )</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">assign</span><span class="params">( <span class="built_in">std</span>::<span class="built_in">initializer_list</span>&lt;T&gt; ilist )</span></span>;</div></pre></td></tr></table></figure></p>
+<h4 id="条款6：C-的解析"><a href="#条款6：C-的解析" class="headerlink" title="条款6：C++的解析"></a>条款6：C++的解析</h4><blockquote>
+<p>C++里面的一条通用规则，几乎任何东西都能被分析为函数声明  </p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Widget &#123;...&#125;; <span class="comment">// 假设Widget有默认构造函数</span></div><div class="line"><span class="function">Widget <span class="title">w</span><span class="params">()</span></span>; <span class="comment">// 函数名w，返回一个Widget类型</span></div></pre></td></tr></table></figure>
+<p>造成这种歧义出现的主要原因是，编译器无法知道你是调用构造还是函数声明，当有一个含有<code>int</code>类型的文件，需要从中读出放入<code>list</code>中，有如下代码：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.不正确的写法</span></div><div class="line"><span class="function">ifstream <span class="title">dataFile</span><span class="params">(<span class="string">"ints.dat"</span>)</span></span>;</div><div class="line"><span class="comment">//想用迭代器构造这个list，但实际上却是在声明一个函数</span></div><div class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; data(istream_iterator&lt;<span class="keyword">int</span>&gt;(dataFile), istream_iterator&lt;<span class="keyword">int</span>&gt;());</div><div class="line"></div><div class="line"><span class="comment">//2.正确的写法</span></div><div class="line"><span class="function">ifstream <span class="title">dataFile</span><span class="params">(<span class="string">"ints.dat"</span>)</span></span>;</div><div class="line"><span class="comment">//定义两个迭代器</span></div><div class="line">istream_iterator&lt;<span class="keyword">int</span>&gt; dataBegin(dataFile);</div><div class="line">istream_iterator&lt;<span class="keyword">int</span>&gt; dataEnd;</div><div class="line"><span class="comment">//用迭代器初始化list</span></div><div class="line"><span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; data(dataBegin, dataEnd);</div></pre></td></tr></table></figure></p>
+<h4 id="条款7：销毁容器前记得释放动态申请的空间"><a href="#条款7：销毁容器前记得释放动态申请的空间" class="headerlink" title="条款7：销毁容器前记得释放动态申请的空间"></a>条款7：销毁容器前记得释放动态申请的空间</h4><p>当容器中保存着的是 <code>new</code> 申请到的动态对象时，当作用域失效后，容器自己的空间会由系统回收，但是动态申请的空间不会回收，这时需要手动回收空间。需要注意的是：手动释放以及异常处理。比较好的一种做法是使用智能指针，来智能管理内存空间。  </p>
+<h4 id="条款8：永不建立-auto-ptr-的容器"><a href="#条款8：永不建立-auto-ptr-的容器" class="headerlink" title="条款8：永不建立 auto_ptr 的容器"></a>条款8：永不建立 <code>auto_ptr</code> 的容器</h4><p><code>auto_ptr</code> 的容器（COAPs）是被 <strong>禁止</strong> 的。  </p>
+<h4 id="条款9：删除选项中仔细选择"><a href="#条款9：删除选项中仔细选择" class="headerlink" title="条款9：删除选项中仔细选择"></a>条款9：删除选项中仔细选择</h4><ul>
+<li>去除一个容器中有特定值的所有对象：<br>如果容器是<code>vector</code>、<code>string</code>或<code>deque</code>，使用<code>erase-remove</code>惯用法。
+如果容器是<code>list</code>，使用<code>list::remove</code>。
+如果容器是标准关联容器，使用它的<code>erase</code>成员函数。</li>
+<li>去除一个容器中满足一个特定判定式的所有对象：<br>如果容器是<code>vector</code>、<code>string</code>或<code>deque</code>，使用<code>erase-remove_if</code>惯用法。
+如果容器是<code>list</code>，使用<code>list::remove_if</code>。
+如果容器是标准关联容器，使用<code>remove_copy_if</code>和<code>swap</code>，或写一个循环来遍历容器元素，当你把迭代器传给<code>erase</code>时记得后置递增它。</li>
+<li>在循环内做某些事情（除了删除对象之外）：<br>如果容器是标准序列容器，写一个循环来遍历容器元素，每当调用<code>erase</code>时记得都用它的返回值更新你
+的迭代器。
+如果容器是标准关联容器，写一个循环来遍历容器元素，当你把迭代器传给<code>erase</code>时记得后置递增它。</li>
+</ul>
+<h4 id="条款10：注意分配器的协定和约束"><a href="#条款10：注意分配器的协定和约束" class="headerlink" title="条款10：注意分配器的协定和约束"></a>条款10：注意分配器的协定和约束</h4><h4 id="条款11：理解自定义分配器的正确用法"><a href="#条款11：理解自定义分配器的正确用法" class="headerlink" title="条款11：理解自定义分配器的正确用法"></a>条款11：理解自定义分配器的正确用法</h4><h4 id="条款12：STL容器线程安全性考虑"><a href="#条款12：STL容器线程安全性考虑" class="headerlink" title="条款12：STL容器线程安全性考虑"></a>条款12：STL容器线程安全性考虑</h4><p>多线程环境下对容器的操作如果没有特殊的处理是不安全的，不安全的处理应该包括以下方面：  </p>
+<ul>
+<li>保证多个线程读取容器内容时正确并且不能有写线程</li>
+<li>多线程写时的互斥操作</li>
+</ul>
+<p>为了保证线程安全需要做的是通过 <strong>信号量</strong>、<strong>互斥锁</strong> 等线程同步原语，对容器的操作进行封装，常见的做法：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">//定义一个锁类，构造时加锁，析构时自动释放</div><div class="line">class Lock &#123; // 的类的模板核心；</div><div class="line">public: // 忽略了很多细节</div><div class="line">    Lock(const Containers container): c(container)</div><div class="line">    &#123;</div><div class="line">        getMutexFor(c); //在构造函数获取互斥量</div><div class="line">    &#125;</div><div class="line">    ~Lock()</div><div class="line">    &#123;</div><div class="line">        releaseMutexFor(c); //在析构函数里释放它</div><div class="line">    &#125;</div><div class="line">private:</div><div class="line">    const Container&amp; c;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//使用</div><div class="line">vector&lt;int&gt; v;</div><div class="line">&#123; //建立新代码块；</div><div class="line">    Lock&lt;vector&lt;int&gt; &gt; lock(v); //获取互斥量</div><div class="line">    vector&lt;int&gt;::iterator first5(find(v.begin(), v.end(), 5));</div><div class="line">    if (first5 != v.end()) &#123;</div><div class="line">        *first5 = 0;</div><div class="line">    &#125;</div><div class="line">&#125; //离开作用域，自动释放锁</div></pre></td></tr></table></figure></p>
+<p>这种做法的优势是可以保证加锁和释放锁是成对出现的，同时也可以保证异常出现时可以正确释放锁。因为是局部变量，当作用域消失时就会自动释放。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;note primary&quot;&gt;&lt;p&gt;英文书籍 &lt;code&gt;Effective STL&lt;/code&gt; 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 &lt;code&gt;C++&lt;/code&gt;顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第一章容器的介绍。&lt;/p&gt;
+&lt;/div&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="STL" scheme="http://abumaster.com/tags/STL/"/>
+    
+  </entry>
   
   <entry>
     <title>日志库easyloggingpp使用</title>
@@ -196,9 +422,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="日志库" scheme="http://abumaster.com/tags/%E6%97%A5%E5%BF%97%E5%BA%93/"/>
     
@@ -283,9 +509,59 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
       <category term="Git" scheme="http://abumaster.com/tags/Git/"/>
     
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+  </entry>
+  
+  <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
   </entry>
   
@@ -352,61 +628,11 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记4：任务和主动对象</title>
-    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
-    <published>2017-11-17T03:03:02.000Z</published>
-    <updated>2017-11-27T13:09:10.186Z</updated>
-    
-    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
-<a id="more"></a>
-<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
-<ul>
-<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
-<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
-<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
-</ul>
-<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
-<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
-<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
-</blockquote>
-<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
-<ul>
-<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
-<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
-<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
-</ul>
-<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
-<ul>
-<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
-<li>分发对象。请求队列的排队实例。</li>
-</ul>
-<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -442,11 +668,11 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -486,11 +712,11 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -525,9 +751,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
   </entry>
   
@@ -900,197 +1126,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
     
     
       <category term="随笔" scheme="http://abumaster.com/tags/%E9%9A%8F%E7%AC%94/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>2018秋招-360</title>
-    <link href="http://abumaster.com/2017/08/27/2018%E7%A7%8B%E6%8B%9B-360/"/>
-    <id>http://abumaster.com/2017/08/27/2018秋招-360/</id>
-    <published>2017-08-27T09:09:54.000Z</published>
-    <updated>2017-08-28T09:15:22.257Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>360 2018秋招笔试编程题目解析。</p>
-</blockquote>
-<a id="more"></a>
-<h4 id="卖粉笔问题"><a href="#卖粉笔问题" class="headerlink" title="卖粉笔问题"></a>卖粉笔问题</h4><p>有彩色粉笔<code>n</code>个，白色粉笔<code>m</code>个，<code>a</code>个彩色粉笔和<code>b</code>个白色粉笔打包可以卖<code>x</code>元，<code>c</code>个白色粉笔可以卖<code>y</code>元，<code>d</code>个彩色粉笔可以卖<code>z</code>元，问可以获得的最大收益。  </p>
-<p><strong>解题思路1：</strong><br>首先想到的是动态规划问题，对于有<code>i</code>个彩色粉笔和<code>j</code>个白色粉笔，<code>dp[i][j]</code>表示可以卖到的最大值，那么这个最大值是如何求出的呢？<br>状态转移有以下几种情况：  </p>
-<ul>
-<li>只卖白色，<code>dp[i][j] = dp[i][j-c] + y</code>；  </li>
-<li>只卖彩色，<code>dp[i][j] = dp[i-d][j] + z</code>；  </li>
-<li>组合卖，<code>dp[i][j] = dp[i-a][j-b] + x</code>。<br>取三种情况的最大值，最后<code>dp[n][m]</code>就是所求的结果。<br>分析，双层循环，复杂度的<code>O(N*M)</code>。  </li>
-</ul>
-<p><strong>解题思路2：</strong><br>相对于动态规划要简单许多，要获得最大利润，最终的粉笔肯定有一个组合，假设为<code>x</code>对组合卖掉，那么白色粉笔还剩余<code>m-b*x</code>个，白色粉笔可以最多卖的钱数为<code>(m-b*x)/c * y</code>，同理可以得到彩色的所卖钱数。对于最终组合，其他的组合都不是最优的结果，所以，可以用组合卖的粉笔组数来进行最优解选择。<br>代码如下：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> ans = <span class="number">0</span>;<span class="comment">//最大收益</span></div><div class="line"><span class="keyword">int</span> index = <span class="number">0</span>;<span class="comment">//组合卖的盒数</span></div><div class="line"><span class="keyword">while</span> (index*a &lt;= n &amp;&amp; index*b &lt;= m)<span class="comment">//可以组合来卖</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> temp = index*x;<span class="comment">//组合卖的收益</span></div><div class="line">    temp += ((m - index*b) / c)*y;<span class="comment">//白色粉笔单独卖的收益</span></div><div class="line">    temp += ((n - index*a) / d)*z;<span class="comment">//彩色粉笔单独卖的收益</span></div><div class="line">    ans = (ans &gt; temp) ? ans : temp;<span class="comment">//更新收益最大值</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div></pre></td></tr></table></figure></p>
-<p>复杂度仅为<code>O(n)</code>性能得到了很大的提升。启示：想到最终状态，然后再步步推。  </p>
-<h4 id="统计数组中前面比自己小的数字个数"><a href="#统计数组中前面比自己小的数字个数" class="headerlink" title="统计数组中前面比自己小的数字个数"></a>统计数组中前面比自己小的数字个数</h4><p>类似于这样的题：给定一个整数数组（下标由 <code>0</code> 到 <code>n-1</code>， <code>n</code> 表示数组的规模，取值范围由 0 到10000）。对于数组中的每个 <code>ai</code> 元素，请计算 <code>ai</code> 前的数中比它小的元素的数量。    </p>
-<p><strong>思路1：</strong><br>暴力求解，复杂度太高，无法完全通过。  </p>
-<p><strong>思路2：</strong><br><div class="note info"><p>分析：求ai前的数中比他小的元素数量，即，在<code>ai</code>之前的元素中区间<code>[0, ai-1]</code>的元素数量<br>构建线段树，节点中包含元素出现的次数，所有<code>count&gt;0</code> 的叶子结点表示元素存在；依次更新结点计数，所以后面的元素不影响前面的元素计数。</p>
-</div><br><a href="https://baike.baidu.com/item/%E7%BA%BF%E6%AE%B5%E6%A0%91/10983506?fr=aladdin">线段树</a>是一种数据结构，是一种二叉搜索树，每个叶节点表示一个单元区间。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">namespace</span> XianDuanTree</div><div class="line">&#123;</div><div class="line">    <span class="keyword">class</span> Node<span class="comment">//线段树的节点</span></div><div class="line">    &#123;</div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        <span class="keyword">int</span> start, end, count;</div><div class="line">        Node *left, *right;</div><div class="line">        Node(<span class="keyword">int</span> start, <span class="keyword">int</span> end) :start(start), end(end), count(<span class="number">0</span>), right(<span class="literal">NULL</span>), left(<span class="literal">NULL</span>)</div><div class="line">        &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="comment">//创建线段树，返回根节点</span></div><div class="line">    <span class="function">Node *<span class="title">build</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="comment">//递归创建，返回条件</span></div><div class="line">        <span class="keyword">if</span> (start &gt; end)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Node *root = <span class="keyword">new</span> Node(start, end);</div><div class="line">        <span class="keyword">if</span> (start &lt; end) &#123;</div><div class="line">            <span class="keyword">int</span> mid = (start + end) &gt;&gt; <span class="number">1</span>;</div><div class="line">            root-&gt;left = build(start, mid);</div><div class="line">            root-&gt;right = build(mid + <span class="number">1</span>, end);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> root;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//在线段树中查找区间</span></div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(Node *root, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (start &gt; end || root-&gt;start &gt; end || root-&gt;end &lt; start) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (start &lt;= root-&gt;start &amp;&amp; end &gt;= root-&gt;end) <span class="keyword">return</span> root-&gt;count;<span class="comment">//查找的区间包含root所指区间</span></div><div class="line">        <span class="keyword">int</span> mid = (root-&gt;start + root-&gt;end) &gt;&gt; <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> leftCount = query(root-&gt;left, start, min(mid, end));</div><div class="line">        <span class="keyword">int</span> rightCount = query(root-&gt;right, max(mid, start), end);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> leftCount + rightCount;<span class="comment">//返回左右子树的查找数量</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//像线段树中插入value</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">inset</span><span class="params">(Node *root, <span class="keyword">int</span> value)</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span>;</div><div class="line">        <span class="keyword">if</span> (root-&gt;left == root-&gt;right &amp;&amp; root-&gt;start == value)</div><div class="line">        &#123;</div><div class="line">            root-&gt;count += <span class="number">1</span>;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//递归查找合适的插入位置</span></div><div class="line">        <span class="keyword">int</span> mid = (root-&gt;start + root-&gt;end) &gt;&gt; <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span> (value &lt;= mid)</div><div class="line">        &#123;</div><div class="line">            inset(root-&gt;left, value);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span>&#123;</div><div class="line">            inset(root-&gt;right, value);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//回溯自下而上更新count//右子树不一定存在所以进行判断</span></div><div class="line">        root-&gt;count = root-&gt;left-&gt;count + (root-&gt;right ? root-&gt;right-&gt;count : <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; countSamllerNum()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</div><div class="line">        Node *root = build(<span class="number">0</span>, <span class="number">10005</span>);</div><div class="line">        <span class="keyword">int</span> n,temp;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; n;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</div><div class="line">        &#123;</div><div class="line">            <span class="built_in">cin</span> &gt;&gt; temp;</div><div class="line">            <span class="keyword">int</span> cnt = query(root, temp+<span class="number">1</span>, <span class="number">10005</span>);<span class="comment">//前面比他大的数，区间为[temp+1,maxn]，的数的数量</span></div><div class="line">            vec.push_back(cnt);</div><div class="line">            inset(root, temp);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> x : vec)</div><div class="line">        &#123;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="string">' '</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="keyword">return</span> vec;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="简单数列"><a href="#简单数列" class="headerlink" title="简单数列"></a>简单数列</h4><p>题目描述见图：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-8-28/45707399.jpg" alt=""><br><a href="http://www.cnblogs.com/qscqesze/p/5217014.html">类似的题目地址</a><br>思路：<br>交换0次和交换一次，显然可以直接暴力出来<br>现在考虑交换两次的情况，交换两次之后，答案为<code>s-2*a[i]-2*a[j]+2*b[i]+2*b[j]</code>（s为原来未交换的时候，两个数组的差值。我们把所有的<code>(a[i],a[j])</code>都存起来，为了使两数组之差最小，显然<code>2*(b[i]+b[j])</code>应该找到大于等于<code>(2*(a[i]+a[j])-s)</code>的第一个数然后这个东西直接二分就好了。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">2050</span>;</div><div class="line"><span class="keyword">int</span> a[maxn];</div><div class="line"><span class="keyword">int</span> b[maxn];</div><div class="line">pair&lt;<span class="keyword">long</span> <span class="keyword">long</span> ,pair&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt; &gt;two[maxn*maxn+<span class="number">5</span>];</div><div class="line"><span class="keyword">int</span> tot = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> n;<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;n);</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i]),s+=a[i];</div><div class="line">    <span class="keyword">int</span> m;<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;m);</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</div><div class="line">        <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;b[i]),s-=b[i];</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s2 = <span class="number">1e18</span>;</div><div class="line">    <span class="comment">//交换一次后的结果</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">long</span> <span class="keyword">long</span> cur = <span class="built_in">abs</span>(s + <span class="number">2</span>*b[j] - <span class="number">2</span>*a[i]);</div><div class="line">            <span class="keyword">if</span>(cur&lt;s2)</div><div class="line">            &#123;</div><div class="line">                s2 = cur;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++)</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;=m;j++)</div><div class="line">            two[++tot]=make_pair(<span class="number">2l</span>l*b[i]+<span class="number">2l</span>l*b[j],make_pair(i,j));</div><div class="line">    sort(two+<span class="number">1</span>,two+<span class="number">1</span>+tot);</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> s3 = <span class="number">1e18</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>;j&lt;=n;j++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">long</span> <span class="keyword">long</span> tmp = <span class="number">2l</span>l*a[i]+<span class="number">2l</span>l*a[j]-s;</div><div class="line">            <span class="keyword">int</span> p = lower_bound(two+<span class="number">1</span>,two+<span class="number">1</span>+tot,make_pair(tmp,make_pair(<span class="number">0</span>,<span class="number">0</span>)))-two;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> t=max(<span class="number">1</span>,p<span class="number">-2</span>);t&lt;=min(tot,p+<span class="number">2</span>);t++)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">long</span> <span class="keyword">long</span> cur = <span class="built_in">abs</span>(s+two[t].first<span class="number">-2</span>ll*a[i]<span class="number">-2</span>ll*a[j]);</div><div class="line">                <span class="keyword">if</span>(cur&lt;s3)</div><div class="line">                &#123;</div><div class="line">                    s3 = cur;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> ans = min(min(<span class="built_in">abs</span>(s),<span class="built_in">abs</span>(s2)),<span class="built_in">abs</span>(s3));</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,ans);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;360 2018秋招笔试编程题目解析。&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>2018秋招-今日头条</title>
-    <link href="http://abumaster.com/2017/08/27/2018%E7%A7%8B%E6%8B%9B-%E4%BB%8A%E6%97%A5%E5%A4%B4%E6%9D%A1/"/>
-    <id>http://abumaster.com/2017/08/27/2018秋招-今日头条/</id>
-    <published>2017-08-27T09:09:22.000Z</published>
-    <updated>2017-08-30T07:31:54.244Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>今日头条2018秋招笔试，编程题目笔记。</p>
-</blockquote>
-<a id="more"></a>
-<h4 id="第二题，求区间内最小值和区间元素和之间的乘积最大值"><a href="#第二题，求区间内最小值和区间元素和之间的乘积最大值" class="headerlink" title="第二题，求区间内最小值和区间元素和之间的乘积最大值"></a>第二题，求区间内最小值和区间元素和之间的乘积最大值</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-8-30/36221200.jpg" alt="">  </p>
-<p>暴力解法，不可行。看了网上大神的分析，用 <strong>单调栈</strong> 的方法。<br><strong>单调栈</strong><br>单调栈是一个特殊的栈，栈中的元素大小按照其在栈中的位置，满足一定的单调性。<br>基本思想：<br><a href="http://blog.csdn.net/u013616945/article/details/77508372">参考</a>  </p>
-<ul>
-<li>将数组的每个值作为最小值，找到以此最小值的区间，统计区间和与此值的乘积，假设当前最小值 <code>num[k]</code> ，那么找到最左边小于该值的下标 <code>i</code> ，找到最右边小于该值的值的下标 <code>j</code> ，那么 <code>[i+1, j-1]</code> 是以 <code>num[k]</code> 为最小值所能达到的最大区间，那么计算 <code>Sum(i+1, j-1) * num[k]</code> 。  </li>
-<li>按照上述遍历数组中的每一个值，（单调栈实现），维护一个最大值 <code>maxSum</code> 遍历完数组后，可解。  </li>
-</ul>
-<p>单调栈的实现：栈s<br>数组中元素入栈和出栈的规则如下：  </p>
-<ol>
-<li>s为空，或者当前元素 <code>num[i]</code> 的值大于等于当前栈顶元素，直接将 <code>num[i]</code> 的下标 <code>i</code> 压入栈；</li>
-<li>当s不为空，且当前元素 <code>num[i]</code> 的值小于等于栈顶元素，那么依次从栈中弹出元素，直到 <code>num[i]</code> 大于栈顶元素，并在弹出过程中计算每一个数作为最小值区间的计算结果；  </li>
-<li>如果数组遍历完成，但是栈非空，重复步骤2，直到栈空。  </li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">incr_stack</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;num)</span> </span>&#123;</div><div class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</div><div class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> maxSum = INT_MIN;</div><div class="line">    <span class="keyword">int</span> n = num.size();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;n; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (s.empty() || num[i] &gt;=num[s.top()]) &#123;<span class="comment">//规则1</span></div><div class="line">            s.push(i);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">while</span> (!s.empty() &amp;&amp; num[s.top()] &gt;=num[i]) &#123;<span class="comment">//规则2</span></div><div class="line">                <span class="keyword">int</span> top = s.top();</div><div class="line">                s.pop();</div><div class="line">                <span class="keyword">int</span> tmp=s.empty()? vecSum(num, <span class="number">0</span>, i<span class="number">-1</span>) : vecSum(num, s.top()+ <span class="number">1</span>, i - <span class="number">1</span>);</div><div class="line">                <span class="keyword">int</span> curSum = num[top]*tmp;</div><div class="line">                maxSum = max(curSum, maxSum);</div><div class="line">            &#125;</div><div class="line">            s.push(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (!s.empty()) &#123;<span class="comment">//规则3</span></div><div class="line">        <span class="keyword">int</span> top = s.top();</div><div class="line">        s.pop();</div><div class="line">        <span class="keyword">int</span> tmp=s.empty()? vecSum(num, <span class="number">0</span>, n<span class="number">-1</span>): vecSum(num, s.top()+ <span class="number">1</span>, n - <span class="number">1</span>);</div><div class="line">        <span class="keyword">int</span> curSum =  num[top]*tmp;</div><div class="line">        maxSum = max(curSum, maxSum);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> maxSum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><a href="https://zhuanlan.zhihu.com/p/26465701">扩展题</a><br><div class="note info"><p>给一个数组，返回一个大小相同的数组。返回的数组的第i个位置的值应当是，对于原数组中的第i个元素，至少往右走多少步，才能遇到一个比自己大的元素（如果之后没有比自己大的元素，或者已经是最后一个元素，则在返回数组的对应位置放上-1）。<br><strong>简单的例子：</strong><br>input: 5,3,1,2,4<br>return: -1 3 1 1 -1<br><em>explaination:</em> 对于第0个数字5，之后没有比它更大的数字，因此是-1，对于第1个数字3，需要走3步才能达到4（第一个比3大的元素），对于第2和第3个数字，都只需要走1步，就可以遇到比自己大的元素。对于最后一个数字4，因为之后没有更多的元素，所以是-1。  </p>
-</div></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nextExceed(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;input) &#123;</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; result (input.size(), <span class="number">-1</span>);<span class="comment">//保存结果</span></div><div class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; monoStack;<span class="comment">//单调栈</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; input.size(); ++i) &#123;</div><div class="line">        <span class="comment">//如果栈不空，并且当前元素大于栈顶元素</span></div><div class="line">        <span class="keyword">while</span>(!monoStack.empty() &amp;&amp; input[monoStack.top()] &lt; input[i]) &#123;</div><div class="line">            result[monoStack.top()] = i - monoStack.top();<span class="comment">//求栈顶元素的结果</span></div><div class="line">            monoStack.pop();<span class="comment">//出栈</span></div><div class="line">        &#125;</div><div class="line">        monoStack.push(i);<span class="comment">//当前比栈顶小，压入栈</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<div class="note warning"><p>给定n个非负数，代表直方图的高度，直方图的宽度为1，找到直方图所组成的矩形的最大面积。<br><em>input：</em> 2,1,5,6,2,3<br><em>output:</em> 10<br><em>explaination:</em> 5和6组成的矩形面积为10，返回10。   </p>
-</div>  
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">largestRectangleArea</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &amp;height)</span> </span>&#123;</div><div class="line">            <span class="keyword">int</span> ret = <span class="number">0</span>;</div><div class="line">            height.push_back(<span class="number">0</span>);</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; index;</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; height.size(); i++) &#123;</div><div class="line">                <span class="keyword">while</span>(index.size() &gt; <span class="number">0</span> &amp;&amp; height[index.back()] &gt;= height[i]) &#123;</div><div class="line">                    <span class="keyword">int</span> h = height[index.back()];</div><div class="line">                    index.pop_back();</div><div class="line">                    <span class="keyword">int</span> sidx = index.size() &gt; <span class="number">0</span> ? index.back() : <span class="number">-1</span>;</div><div class="line">                    ret = max(ret, h * (i-sidx<span class="number">-1</span>));</div><div class="line">                &#125;</div><div class="line">                index.push_back(i);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
-<h4 id="第三题，调度"><a href="#第三题，调度" class="headerlink" title="第三题，调度"></a>第三题，调度</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-8-30/66252799.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-8-30/54465329.jpg" alt=""><br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-8-30/34202462.jpg" alt="">  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;今日头条2018秋招笔试，编程题目笔记。&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-      <category term="笔试" scheme="http://abumaster.com/tags/%E7%AC%94%E8%AF%95/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>牛客网校招模拟编程题(1-5)笔记</title>
-    <link href="http://abumaster.com/2017/08/18/%E7%89%9B%E5%AE%A2%E7%BD%91%E6%A0%A1%E6%8B%9B%E6%A8%A1%E6%8B%9F%E7%BC%96%E7%A8%8B%E9%A2%98-1-5-%E7%AC%94%E8%AE%B0/"/>
-    <id>http://abumaster.com/2017/08/18/牛客网校招模拟编程题-1-5-笔记/</id>
-    <published>2017-08-18T06:43:17.000Z</published>
-    <updated>2017-08-22T06:07:25.469Z</updated>
-    
-    <content type="html"><![CDATA[<p>牛客网上的2017年校招全国统一模拟试题的编程题目，比较难的一些题目汇总，做下记录。  </p>
-<a id="more"></a>
-<p><strong>1.猜数字游戏</strong><br><div class="note primary"><p>题目描述：<a href="https://www.nowcoder.com/test/5986669/summary">题目链接</a><br>牛牛和羊羊在玩一个有趣的猜数游戏。在这个游戏中,牛牛玩家选择一个正整数,羊羊根据已给的提示猜这个数字。第i个提示是”Y”或者”N”,表示牛牛选择的数是否是i的倍数。<br>例如,如果提示是”YYNYY”,它表示这个数使1,2,4,5的倍数,但不是3的倍数。<br>注意到一些提示会出现错误。例如: 提示”NYYY”是错误的,因为所有的整数都是1的倍数,所以起始元素肯定不会是”N”。此外,例如”YNNY”的提示也是错误的,因为结果不可能是4的倍数但不是2的倍数。<br>现在给出一个整数n,表示已给的提示的长度。请计算出长度为n的合法的提示的个数。<br>例如 n = 5:<br>合法的提示有:<br>YNNNN YNNNY YNYNN YNYNY YYNNN YYNNY<br>YYNYN YYNYY YYYNN YYYNY YYYYN YYYYY<br>所以输出12  </p>
-</div>  </p>
-<p>合法的条件是存在倍数依赖的数字要么是全为Y要么全为N，分析：  </p>
-<ul>
-<li>第 i 个数是素数（如2,3,5,7…），那么在这一位上是Y或N与前面没有依赖，因此当前位的可能数目sum(i)是前面数目sum(i-1)的2倍；  </li>
-<li>第 i 个数是偶数，但是却不是素数的幂，（如6,10…），那么这一位是Y或N完全取决于它的两个因子，如6取决于2和3,2和3是Y，6一定是Y。因此，sum(i)为sum(i-1)；  </li>
-<li>第 i 个数是素数的幂，（如4,9,8…），它是不能唯一确定的，2取Y，4可以取Y也可以取N，所以对于4，将2,4加入集合取值的组合为NN，YN，YY三种情况，对于8来说，由2,4,8组成，共有NNN，YNN，YYN，YYY四种情况，依次类推就行了，相乘。  </li>
-</ul>
-<p>关键代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">long</span> <span class="keyword">long</span> ans = <span class="number">1</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> cnt = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> (vis[i])<span class="comment">//是倍数直接可以忽略掉不要重复计算</span></div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = i + i; j &lt;= n; j += i)<span class="comment">//倍数</span></div><div class="line">    &#123;</div><div class="line">        vis[j] = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//求i的幂次</span></div><div class="line">    <span class="keyword">long</span> <span class="keyword">long</span> mi = i;</div><div class="line">    <span class="keyword">while</span> (mi &lt;= n)</div><div class="line">    &#123;</div><div class="line">        cnt++;<span class="comment">//记录幂的数目</span></div><div class="line">        mi *= i;</div><div class="line">    &#125;</div><div class="line">    ans = ans * (cnt + <span class="number">1</span>) % MOD;</div><div class="line">&#125;</div><div class="line"><span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div></pre></td></tr></table></figure></p>
-<p><strong>2.庆祝六一</strong><br>题目描述：<br>牛家庄幼儿园为庆祝61儿童节举办庆祝活动,庆祝活动中有一个节目是小朋友们围成一个圆圈跳舞。牛老师挑选出n个小朋友参与跳舞节目,已知每个小朋友的身高h_i。为了让舞蹈看起来和谐，牛老师需要让跳舞的圆圈队形中相邻小朋友的身高差的最大值最小，牛老师犯了难，希望你能帮帮他。<br>如样例所示:<br>当圆圈队伍按照100,98,103,105顺时针排列的时候最大身高差为5，其他排列不会得到更优的解。  </p>
-<p><a href="https://www.nowcoder.com/test/question/done?tid=10037688&amp;qid=104799#summary">分析</a><br>身高差最小，将两个差不多的身高的站一块。
-如 9 8 7 6 6 7 8 9然后9和9再拉手不就可以了吗 ！所以将数据输入一个数组如【8 9 7 6 5 4 3 2】然后排序【2 3 4 5 6 7 8 9】然后遍历数组进入一个队列一个栈 现规定，索引为0,2,4，，，的依次进入队列Q1，索引为1,3,5，，，，的依次进入//栈S1，就形成一个队列2 4 6 8 （队列尾为8）和一个栈3 5 7 9（栈顶为9） 。然后出栈9 7 5 3依次进入队列尾 形成 2 4 6 8 9 7 5 3 就排队成功，2和3拉手就成圈，求每个元素与挨着的距离就可以了。<br>分析2：<br>动态规划，先将所有的小朋友按低到高排序，dp[i] 表示前i个小朋友最优排列的最大身高差，递推公式为： dp[i+1]=max(dp[i],arr[i+1]-arr[i-1])。  </p>
-<p><strong>3.逃离农场</strong><br>题目描述：<br>牛牛在农场饲养了n只奶牛,依次编号为0到n-1, 牛牛的好朋友羊羊帮牛牛照看着农场.有一天羊羊看到农场中逃走了k只奶牛,但是他只会告诉牛牛逃走的k只奶牛的编号之和能被n整除。你现在需要帮牛牛计算有多少种不同的逃走的奶牛群。因为结果可能很大,输出结果对1,000,000,007取模。<br>例如n = 7 k = 4:<br>7只奶牛依次编号为0到6, 逃走了4只<br>编号和为7的有:{0, 1, 2, 4}<br>编号和为14的有:{0, 3, 5, 6}, {1, 2, 5, 6}, {1, 3, 4, 6},{2, 3, 4, 5}<br>4只牛的编号和不会大于18,所以输出5。<br>分析：<br>动态规划，令<code>dp[i][j][s]</code>表示从区间[0,i]中取j个数字，使它们的和与n取模后余数为s，满足这样条件的集合的个数。<br>状态转移方程如下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dp[i][j][s] = (dp[i<span class="number">-1</span>][j][s] + dp[i<span class="number">-1</span>][j<span class="number">-1</span>][(n+s-i)%n]);</div></pre></td></tr></table></figure></p>
-<p>转移的过程就是第i个数取还是不取，如果不取，那么就和方法i-1的个数相同；<br>如果取第i个数的话，那么就需要分两种情况，因为第i个数可能大于s，也有可能小于等于s。<br><em>情况1：</em>若<code>i&lt;=s</code>,此时我们需要从前i-1个数中取j-1个数，使他们的和与n的模为s-i。这样就能保证在加入i时，和模n等于s。<br><em>情况2：</em>如果i&gt;s,那么i-s为负数，注意本题的要求是组成和为n的倍数，因此这种情况下需要将<code>(s-i)%n</code>表示为<code>（s-i+n）%n</code>，因为<code>((s-i+n)%n+i)%n=s</code>。<br>可以压缩空间，减少空间复杂度。代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> modMin=<span class="number">1e9</span>+<span class="number">7</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line">  </span>&#123;</div><div class="line">    <span class="keyword">int</span> dp[<span class="number">55</span>][<span class="number">1005</span>];</div><div class="line">    dp[<span class="number">0</span>][<span class="number">0</span>]=<span class="number">1</span>;</div><div class="line">    <span class="keyword">int</span> n,k;</div><div class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span>&gt;&gt;n&gt;&gt;k)</div><div class="line">      &#123;</div><div class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)</div><div class="line">           &#123;</div><div class="line">              <span class="keyword">for</span>(<span class="keyword">int</span> j=k;j&gt;=<span class="number">1</span>;j--)</div><div class="line">               &#123;</div><div class="line">                  <span class="keyword">for</span>(<span class="keyword">int</span> s=<span class="number">0</span>;s&lt;n;s++)</div><div class="line">                    &#123;</div><div class="line">                       dp[j][s]=(dp[j][s]+dp[j<span class="number">-1</span>][(n+s-i)%n])%modMin;</div><div class="line">                    &#125;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">         <span class="built_in">cout</span>&lt;&lt;dp[k][<span class="number">0</span>]&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">      &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p><strong>4.牛牛的数列</strong><br>题目描述：<br>牛牛现在有一个n个数组成的数列,牛牛现在想取一个连续的子序列,并且这个子序列还必须得满足:最多只改变一个数,就可以使得这个连续的子序列是一个严格上升的子序列,牛牛想知道这个连续子序列最长的长度是多少。<br>输入描述:<br>输入包括两行,第一行包括一个整数n(1 ≤ n ≤ 10^5),即数列的长度;<br>第二行n个整数a_i, 表示数列中的每个数(1 ≤ a_i ≤ 10^9),以空格分割。<br>输出描述:<br>输出一个整数,表示最长的长度。<br>输入例子:<br>6<br>7 2 3 1 5 6<br>输出例子:<br>5<br>分析：<br>动态规划问题，题目中改变一个数字所能达到的严格上升子序列的最大长度，可以假设有两段上升子序列，它们中间可以改变一个数字，使他们连接起来，找到它们之间最长的就行了。<br>因此，设<code>dp1[i]</code>表示i结尾的最长上升子序列的长度，<code>dp2[i]</code>表示以i开始的最长上升子序列长度。分别从前或从后扫描计算即可。<br>然后，扫描数列，对于第i个数，i是第一个数，那么长度为<code>dp2[i+1]+1</code>，如果i为最后一个数，那么长度为<code>dp1[i-1]+1</code>，其他情况，如果i+1的值与i-1之间差值大于1，那么长度为<code>dp2[i+1]+dp1[i-1]+1</code>，如果不大于1只能在前或者在后取一个值了，长度为<code>max(dp2[i+1]+1,dp1[i-1]+1)</code>。<br>代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">100000</span> + <span class="number">5</span>;</div><div class="line"><span class="keyword">int</span> dp[maxn], dp1[maxn];</div><div class="line"><span class="keyword">int</span> data[maxn];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">solution</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; n;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; data[i];</div><div class="line">    &#125;</div><div class="line">    dp[n - <span class="number">1</span>] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">2</span>; i &gt;= <span class="number">0</span>; --i)<span class="comment">//以i开始的上升子序列的长度</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (data[i] &lt; data[i + <span class="number">1</span>])</div><div class="line">            dp[i] = dp[i + <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            dp[i] = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    dp1[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i)<span class="comment">//以i结尾的上升子序列的长度</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (data[i]&gt;data[i - <span class="number">1</span>])</div><div class="line">            dp1[i] = dp1[i - <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            dp1[i] = <span class="number">1</span>;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">int</span> ret = <span class="number">1</span>, m = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">            m = dp[i + <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (i == n - <span class="number">1</span>)</div><div class="line">        &#123;</div><div class="line">            m = dp1[i - <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (data[i - <span class="number">1</span>] + <span class="number">1</span> &lt; data[i + <span class="number">1</span>])</div><div class="line">        &#123;</div><div class="line">            m = dp1[i - <span class="number">1</span>] + dp[i + <span class="number">1</span>] + <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            m = max(dp[i + <span class="number">1</span>] + <span class="number">1</span>, dp1[i - <span class="number">1</span>] + <span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (m &gt; ret)</div><div class="line">            ret = m;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; ret &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>5.创造新世界</strong><br><div class="note default"><p>众所周知计算机代码底层计算都是0和1的计算，牛牛知道这点之后就想使用0和1创造一个新世界！牛牛现在手里有n个0和m个1，给出牛牛可以创造的x种物品，每种物品都由一个01串表示。牛牛想知道当前手中的0和1可以最多创造出多少种物品。<br><em>输入描述</em><br>输入数据包括x+1行：<br>第一行包括三个整数x(2 ≤ x ≤ 20)，n(0 ≤ n ≤ 500)，m(0 ≤ m ≤ 500)，以空格分隔<br>接下来的x行，每行一个01串item[i]，表示第i个物品。每个物品的长度length(1 ≤ length ≤ 50)<br><em>输出描述</em><br>输出一个整数，表示牛牛最多能创造多少种物品  </p>
-</div><br>分析：<br>典型的二维背包问题：<br>对于每件物品,当选择这件物品必须同时付出两种代价；对于每种代价都有一个可付出的最大值（背包容量）。问怎样选择物品可以得到最大的价值。<br>设第i件物品所需的两种代价分别为<code>a[i]</code>和<code>b[i]</code>，两种代价可付出的最大值（两种背包容量）分别为u和v。物品的价值为<code>w[i]</code>。状态转移方程：<br><code>dp[i][u][v] = max(dp[i-1][u][v] , w[i] + dp[i-1][u-a[i]][v-b[i]])</code><br>同样的进行空间压缩，我们可以得到二维数组的状态转移方程，u，v采用倒序，如下：
-<code>dp[u][v] = max(dp[u-a[i]][v-b[i]]+w[i],dp[u][v])</code><br>代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> s_item</div><div class="line">&#123;</div><div class="line">    <span class="built_in">string</span> str;</div><div class="line">    <span class="keyword">int</span> _zero;</div><div class="line">    <span class="keyword">int</span> _one;</div><div class="line">    s_item()&#123; _zero = <span class="number">0</span>; _one = <span class="number">0</span>; str = <span class="string">""</span>; &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">int</span> dp[<span class="number">505</span>][<span class="number">505</span>];</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Solution_CreateWorld</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    s_item item[<span class="number">25</span>];</div><div class="line">    <span class="keyword">int</span> x, n, m;</div><div class="line">    <span class="built_in">cin</span> &gt;&gt; x &gt;&gt; n &gt;&gt; m;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; x; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cin</span> &gt;&gt; item[i].str;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; item[i].str.size(); ++j)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (item[i].str[j] == <span class="string">'0'</span>)</div><div class="line">                ++item[i]._zero;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (item[i].str[j] == <span class="string">'1'</span>)</div><div class="line">                ++item[i]._one;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//初始化数组</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= m; ++j)</div><div class="line">        &#123;</div><div class="line">            dp[i][j] = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; x; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = n; j &gt;= item[i]._zero; --j)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = m; k &gt;= item[i]._one; --k)</div><div class="line">            &#123;</div><div class="line">                dp[j][k] = max(dp[j - item[i]._zero][k - item[i]._one] + <span class="number">1</span>, dp[j][k]);</div><div class="line">                </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; dp[n][m] &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>6.优美的回文串</strong><br><div class="note info"><p>牛牛在书上看到一种字符串叫做回文串,当一个字符串从左到右和从右到左读都是一样的,就称这个字符串为回文串。牛牛又从好朋友羊羊那里了解到一种被称为优美的回文串的字符串,考虑一个长度为N只包含大写字母的字符串,写出它所有长度为M的连续子串(包含所有可能的起始位置的子串,相同的子串也要计入),如果这个字符串至少有K个子串都是回文串,我们就叫这个字符串为优美的回文串。现在给出一个N,牛牛希望你能帮他计算出长度为N的字符串有多少个是优美的回文串(每个位置都可以是’A’~’Z’的一个。)<br><em>输入描述:</em><br>输入数据包括三个整数N, M, K(2 ≤ N ≤ 11, 2 ≤ M ≤ N, 0 ≤ K ≤ 11).<br><em>输出描述:</em><br>输出一个整数,表示所求的字符串个数.<br><em>输入例子:</em><br>2 2 1<br><em>输出例子:</em><br>26 长度为2的字符串,它长度为2的子串只有它自身。长度为2的回文串有”AA”,”BB”,”CC”…”ZZ”,一共26种。  </p>
-</div>
-<a href="http://blog.csdn.net/scruelt/article/details/65940130?locationNum=1&amp;fps=1">参考</a>  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;牛客网上的2017年校招全国统一模拟试题的编程题目，比较难的一些题目汇总，做下记录。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-      <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>libev源码阅读3：定时器</title>
-    <link href="http://abumaster.com/2017/08/01/libev%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB3%EF%BC%9A%E5%AE%9A%E6%97%B6%E5%99%A8/"/>
-    <id>http://abumaster.com/2017/08/01/libev源码阅读3：定时器/</id>
-    <published>2017-08-01T06:51:24.000Z</published>
-    <updated>2017-08-01T13:12:55.814Z</updated>
-    
-    <content type="html"><![CDATA[<p>定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。  </p>
-<a id="more"></a>
-<h4 id="堆的概念"><a href="#堆的概念" class="headerlink" title="堆的概念"></a>堆的概念</h4><p>堆是一种树形结构，分为最大堆和最小堆，分别是根节点是最大元素或最小元素，stl中利用二叉大顶堆实现优先级队列以及堆算法。<br>堆的节点一般存放在数组中，在数组的排列有一定的规律，堆没有节点漏洞，按层依次排列的，如堆是从数组array的索引为1的位置开始排列，那么某个节点位于i的位置，其左孩子位于2i处，右孩子位于2i+1处，父节点位于i/2处（/ 为取整）。从0开始排列，节点i的左右孩子节点的索引分别为2i+1，2i+2，父节点为(i-1)/2 。n叉堆的孩子[ni+1,…,ni+n]<br>对于堆的调整，一般用到向上调整和向下调整两种方式，下面结合代码详细注释。  </p>
-<h4 id="四叉堆"><a href="#四叉堆" class="headerlink" title="四叉堆"></a>四叉堆</h4><p>libev中的四叉堆的根节点索引是3，从3开始依次向后排列，那么i节点的孩子的范围为[4(i-3)+1+3,…,4(i-3)+4+3]，父节点为(i-3-1)/4+3 。<br>堆元素的结构
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//使用缓存的情况下</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123;</div><div class="line">    ev_tstamp at;</div><div class="line">    WT w;</div><div class="line">  &#125; ANHE;</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_w(he)        (he).w     <span class="comment">/* access watcher, read-write */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_at(he)       (he).at    <span class="comment">/* access cached at, read-only */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ANHE_at_cache(he) (he).at = (he).w-&gt;at <span class="comment">/* update at from watcher */</span></span></div></pre></td></tr></table></figure></p>
-<p>堆算法实现如下：<br><strong>downheap 函数：</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> EV_USE_4HEAP <span class="comment">//如果定义了4叉堆</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DHEAP 4</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> HEAP0 (DHEAP - 1) <span class="comment">/* index of first element in heap */</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> HPARENT(k) ((((k) - HEAP0 - 1) / DHEAP) + HEAP0) <span class="comment">//获得k的父节点</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> UPHEAP_DONE(p,k) ((p) == (k)) <span class="comment">//是否更新完成</span></span></div><div class="line"></div><div class="line"><span class="comment">//从根向下调整，N为堆的元素个数，k表示要调整元素的索引</span></div><div class="line"><span class="function">inline_speed <span class="keyword">void</span></div><div class="line"><span class="title">downheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">    ANHE he = heap [k];<span class="comment">//先获得调整</span></div><div class="line">    ANHE *E = heap + N + HEAP0;<span class="comment">//结束的指针</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> (;;)</div><div class="line">    &#123;</div><div class="line">        ev_tstamp minat; <span class="comment">//最小的元素</span></div><div class="line">        ANHE *minpos; <span class="comment">//最小元素的指针</span></div><div class="line">        ANHE *pos = heap + DHEAP * (k - HEAP0) + HEAP0 + <span class="number">1</span>;<span class="comment">//k的第一个孩子的指针</span></div><div class="line"></div><div class="line">        <span class="comment">//查找k的最小孩子</span></div><div class="line">        <span class="keyword">if</span> (expect_true (pos + DHEAP - <span class="number">1</span> &lt; E))<span class="comment">//最后一个孩子没有越界，有四个孩子</span></div><div class="line">        &#123;</div><div class="line">            <span class="comment">//在四个孩子中找最小的</span></div><div class="line">            (minpos = pos + <span class="number">0</span>), (minat = ANHE_at (*minpos));<span class="comment">//设置初值</span></div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">1</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">1</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">2</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">2</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (ANHE_at (pos [<span class="number">3</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">3</span>), (minat = ANHE_at (*minpos));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pos &lt; E)<span class="comment">//有孩子，但是不是4个孩子</span></div><div class="line">        &#123;</div><div class="line">            (minpos = pos + <span class="number">0</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">1</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">1</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">1</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">2</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">2</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">2</span>), (minat = ANHE_at (*minpos));</div><div class="line">            <span class="keyword">if</span> (pos + <span class="number">3</span> &lt; E &amp;&amp; ANHE_at (pos [<span class="number">3</span>]) &lt; minat) </div><div class="line">                (minpos = pos + <span class="number">3</span>), (minat = ANHE_at (*minpos));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="comment">//其他情况，没孩子，不用调整退出循环</span></div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="comment">//当前节点小于最小孩子，已经是最小堆，不用调整退出</span></div><div class="line">        <span class="keyword">if</span> (ANHE_at (he) &lt;= minat)</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="comment">//否则将最小元素调到k的位置</span></div><div class="line">        heap [k] = *minpos;</div><div class="line">        ev_active (ANHE_w (*minpos)) = k;<span class="comment">//将时间监测器设置为索引k</span></div><div class="line"></div><div class="line">        k = minpos - heap;<span class="comment">//设置下一次调整的根节点</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    heap [k] = he;<span class="comment">//将元素填充到k中</span></div><div class="line">    ev_active (ANHE_w (he)) = k;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>如果没有定义四叉堆的宏，那么就是简单的二叉堆的定义和调整。<br><strong>upheap 函数：</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//从k向根调整</span></div><div class="line"><span class="function">inline_speed <span class="keyword">void</span></div><div class="line"><span class="title">upheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">    ANHE he = heap [k];<span class="comment">//先记录k位置的元素</span></div><div class="line">    <span class="comment">//循环调整</span></div><div class="line">    <span class="keyword">for</span> (;;)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> p = HPARENT (k);<span class="comment">//获得k的父节点</span></div><div class="line">        <span class="comment">//是否等于父节点（调整完成）或者父节点的元素小于当前的</span></div><div class="line">        <span class="keyword">if</span> (UPHEAP_DONE (p, k) || ANHE_at (heap [p]) &lt;= ANHE_at (he))</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        heap [k] = heap [p];<span class="comment">//</span></div><div class="line">        ev_active (ANHE_w (heap [k])) = k;</div><div class="line">        k = p;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  heap [k] = he;</div><div class="line">  ev_active (ANHE_w (he)) = k;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>adjust 和 reheap 函数</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* move an element suitably so it is in a correct place */</span></div><div class="line"><span class="function">inline_size <span class="keyword">void</span></div><div class="line"><span class="title">adjustheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N, <span class="keyword">int</span> k)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">if</span> (k &gt; HEAP0 &amp;&amp; ANHE_at (heap [k]) &lt;= ANHE_at (heap [HPARENT (k)]))</div><div class="line">    upheap (heap, k);<span class="comment">//k的元素小于父节点的元素，向上调整</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    downheap (heap, N, k);<span class="comment">//向下调整</span></div><div class="line">&#125;</div><div class="line"><span class="comment">/* rebuild the heap: this function is used only once and executed rarely */</span></div><div class="line"><span class="function">inline_size <span class="keyword">void</span></div><div class="line"><span class="title">reheap</span> <span class="params">(ANHE *heap, <span class="keyword">int</span> N)</span></div><div class="line"></span>&#123;</div><div class="line">  <span class="keyword">int</span> i;</div><div class="line"></div><div class="line">  <span class="comment">/* we don't use floyds algorithm, upheap is simpler and is more cache-efficient */</span></div><div class="line">  <span class="comment">/* also, this is easy to implement and correct for both 2-heaps and 4-heaps */</span></div><div class="line">  <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; ++i)<span class="comment">//直接向上调整，简单高效</span></div><div class="line">    upheap (heap, i + HEAP0);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="超时监视器"><a href="#超时监视器" class="headerlink" title="超时监视器"></a>超时监视器</h4><p><strong>基本数据结构</strong><br>相对时间。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> ev_timer</div><div class="line">&#123;</div><div class="line">    <span class="comment">//EV_WATCHER_TIME (ev_timer)</span></div><div class="line">    <span class="keyword">int</span> active;   </div><div class="line">    <span class="keyword">int</span> pending;  </div><div class="line">    <span class="keyword">int</span> priority;  </div><div class="line">    <span class="keyword">void</span> *data;  </div><div class="line">    <span class="keyword">void</span> (*cb)(<span class="keyword">struct</span> ev_loop *loop, <span class="keyword">struct</span> ev_timer *w, <span class="keyword">int</span> revents);    </div><div class="line">  </div><div class="line">    ev_tstamp at; <span class="comment">//定时器第一次触发的时间点</span></div><div class="line">    ev_tstamp repeat; <span class="comment">/* rw */</span> <span class="comment">//每隔几秒触发一次，0表示只触发一次</span></div><div class="line">&#125; ev_timer;</div></pre></td></tr></table></figure></p>
-<p><strong>初始化超时监视器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化，调用两个宏来初始化成员</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_timer_init(ev,cb,after,repeat) \</div><div class="line">do &#123; ev_init ((ev), (cb)); \</div><div class="line">    ev_timer_set ((ev),(after),(repeat)); \</div><div class="line">    &#125; while (0)</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_init(ev,cb_) do &#123;            \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;active  =   \</div><div class="line">  ((ev_watcher *)(void *)(ev))-&gt;pending = 0;    \</div><div class="line">  ev_set_priority ((ev), 0);            \</div><div class="line">  ev_set_cb ((ev), cb_);            \</div><div class="line">&#125; while (0)</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ev_timer_set(ev,after_,repeat_)      \</div><div class="line">do &#123; ((ev_watcher_time *)(ev))-&gt;at = (after_); \</div><div class="line">    (ev)-&gt;repeat = (repeat_); &#125; while (0)</span></div></pre></td></tr></table></figure></p>
-<p><strong>启动超时器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function">noinline</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="title">ev_timer_start</span> <span class="params">(EV_P_ ev_timer *w)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (expect_false (ev_is_active (w)))</div><div class="line">        <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    ev_at (w) += mn_now;<span class="comment">//设置at时间点，此时间点触发，相对于mn_now，当前日历时间</span></div><div class="line"></div><div class="line">    assert ((<span class="string">"libev: ev_timer_start called with negative timer repeat value"</span>, w-&gt;repeat &gt;= <span class="number">0.</span>));</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">    <span class="comment">//将timer加入到堆中并向上调整，active表示的是堆数组中的下标</span></div><div class="line">    ++timercnt;</div><div class="line">    ev_start (EV_A_ (W)w, timercnt + HEAP0 - <span class="number">1</span>);</div><div class="line">    array_needsize (ANHE, timers, timermax, ev_active (w) + <span class="number">1</span>, EMPTY2);</div><div class="line">    ANHE_w (timers [ev_active (w)]) = (WT)w;</div><div class="line">    ANHE_at_cache (timers [ev_active (w)]);</div><div class="line">    upheap (timers, ev_active (w));</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">    <span class="comment">/*assert (("libev: internal timer heap corruption", timers [ev_active (w)] == (WT)w));*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p><strong>停止计时器</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function">noinline</div><div class="line"><span class="keyword">void</span></div><div class="line"><span class="title">ev_timer_stop</span> <span class="params">(EV_P_ ev_timer *w)</span> EV_THROW</div><div class="line"></span>&#123;</div><div class="line">    clear_pending (EV_A_ (W)w);<span class="comment">//从pending中移除</span></div><div class="line">    <span class="keyword">if</span> (expect_false (!ev_is_active (w)))</div><div class="line">        <span class="keyword">return</span>;</div><div class="line"></div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line"></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> active = ev_active (w);<span class="comment">//获得定时器在堆中的索引</span></div><div class="line">        assert ((<span class="string">"libev: internal timer heap corruption"</span>, ANHE_w (timers [active]) == (WT)w));</div><div class="line">        --timercnt;<span class="comment">//数量减一</span></div><div class="line">        <span class="keyword">if</span> (expect_true (active &lt; timercnt + HEAP0))</div><div class="line">        &#123;</div><div class="line">            timers [active] = timers [timercnt + HEAP0];<span class="comment">//最后一个元素补充上来</span></div><div class="line">            adjustheap (timers, timercnt, active);<span class="comment">//调整</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    ev_at (w) -= mn_now;</div><div class="line">    ev_stop (EV_A_ (W)w);</div><div class="line">    EV_FREQUENT_CHECK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="周期定时器"><a href="#周期定时器" class="headerlink" title="周期定时器"></a>周期定时器</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;定时器作为libev的一个重要监测器，用于超时处理和周期执行任务，通过4叉最小堆管理定时器，据说高效利用CPU缓存。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-      <category term="libev" scheme="http://abumaster.com/tags/libev/"/>
     
   </entry>
   

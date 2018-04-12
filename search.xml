@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[高效使用STL-4]]></title>
+    <url>%2F2018%2F04%2F08%2F%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-4%2F</url>
+    <content type="text"><![CDATA[英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。 条款43：尽量用算法取代循环每个算法至少接收一组迭代器来表示容器的区间，如查找最大最小值，查找满足某一条件的元素，这时用内置的一些算法可以解决，不需要手写一些循环，效率更高，即使在算法的内部遍历也是由循环来搞定的。优点包括： 效率：通常算法比循环更高效； 正确性：写循环更容易出错，且代码较算法来的复杂； 可维护性：算法代码简洁，便于维护。 条款44：尽量使用成员函数替代同名算法出于效率考虑，可以使用容器的成员函数替代同名的算法，成员函数的速度相对较快。 条款45：注意 count、find、binary_search、lower_bound、upper_bound和equal_range 的区别 条款46：考虑使用函数对象代替函数作算法的参数将函数对象传递给STL算法的效率比传递真的函数高。如下代码：12345678910//对容器中数据进行降序排序//1.使用函数对象greatervector&lt;double&gt; v;sort(v.begin(), v.end(), greater&lt;double&gt;());//2.使用函数inline bool doubleGreater(double d1, double d2)&#123; return dl &gt; d2;&#125;sort(v.begin(), v.end(), doubleGreater); 函数作为参数实际上是传递的函数指针，在每一次调用的时候编译器产生一个间接函数调用，通过指针调用。 条款47：避免产生只写代码灵感的乍现，让写代码变得容易，但是后期很难从代码中领会其真正所要表达的意思，称之为只写代码。原书中说道： 代码的读比写更经常，这是软件工程的真理。也就是说软件的维护比开发花费多得多的时间。不能读和理解的软件不能被维护，不能维护的软件几乎没有不值得拥有。你用STL越多，你会感到它越来越舒适，而且你会越来越多的使用嵌套函数调用和即时（on the fly）建立函数对象。这没有什么错的，但永远记住你今天写的代码会被某个人——也可能是你——在未来的某一天读到。为那天做准备吧。 条款48：总是#include适当的头文件包含正确的头文件，谨记以下几条： 几乎所有的容器都在其同名的头文件中； 算法常在 algorithm 头文件中，除了 accumulate inner_product、adjacent_difference和partial_sum 在 numeric； 特殊的迭代器在 iterator 中，流迭代器和缓冲迭代器； 标准仿函数和仿函数适配器在 functional 头文件中。 条款49：学习破解有关STL的编译器诊断信息条款50：不断学习善于利用网络资源： SGI STL网站: http://www.sgi.com/tech/stl/ STLport网站， http://www.stlport.org/ Boost网站， http://www.boost.org/ 或者 http://boost.sourceforge.net/]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[高效使用STL-3]]></title>
+    <url>%2F2018%2F04%2F08%2F%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-3%2F</url>
+    <content type="text"><![CDATA[英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。 条款30：确保目标空间足够大使用算法插入时插入的是不存在的空即迭代器的尾部，编译出错。 条款31：排序选择根据实际的需求选择合适的排序算法： 如果你需要在vector、string、deque或数组上进行完全排序，你可以使用 sort 或 stable_sort。 如果你有一个vector、string、deque或数组，你只需要排序前n个元素，应该用 partial_sort。 如果你有一个vector、string、deque或数组，你需要鉴别出第n个元素或你需要鉴别出最前的n个元素，而不用知道它们的顺序，nth_element是你应该注意和调用的。 如果你需要把标准序列容器的元素或数组分隔为满足和不满足某个标准，你大概就要找 partition 或 stable_partition。 如果你的数据是在list中，你可以直接使用 partition 和 stable_partition，你可以使用list的 sort来代替 sort 和stable_sort。 如果你需要partial_sort或nth_element提供的效果，你就必须间接完成这个任务，但正如我 在上面勾画的，会有很多选择。 条款32：如果真要删除东西，在remove 后加上 eraseSTL 算法 remove 不是真正意义上的删除元素，而是遇见一个满足条件的元素，然后将其后的元素向前移动，元素的个数是不变的。而想真正删除，需要使用 erase 函数，将指定迭代器的元素删除。 条款33：避免在指针容器上使用 remove如上条款一样，这个算法不是真正意义上的删除，而是将元素向前移动，在指针容器上使用，可能会导致内存的泄漏。 条款34：注意哪个算法需要使用有序空间条款35：使用 mismatch 和 lexicographical_compare 实现简单的忽略大小写字符串比较条款36：了解 copy_if 的正确实现条款37：统计区间STL中提供了一些用于统计的算法，如 count 用来统计具有某一值的元素的个数，count_if 用于统计满足某一判别式的元素个数，区间中的最大最小值可以使用 max_element 和 min_element 得到。如果需要对某一区间中的元素定制更加复杂的操作，比如容器中元素求和，乘积和平均，可以使用 accumulate 和 for_each 定制仿函数，对容器进行操作。 条款38：把仿函数设计为用于值传递在C和CPP中不允许将函数作为参数传递给函数，需要传递一个函数指针作为参数。如：123///最后一个参数是一个函数指针void qsort(void *base, size_t nmemb, size_t size, int (*cmpfcn)(const void*, const void*)); 条款39：用纯函数做判断式条款40：使仿函数类可以适配条款41：了解使用 ptr_fun 、mem_fun 的原因条款42：确定 less&lt;T&gt; 表示 operator&lt;]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[高效使用STL-2]]></title>
+    <url>%2F2018%2F04%2F07%2F%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-2%2F</url>
+    <content type="text"><![CDATA[英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第二章 vector 和 string 和第三章的关联容器的介绍。 条款13：使用 vector 和 string 替代动态分配的数组动态申请空间的弊端： 保证 new 和 delete 的成对出现，否则容易造成内存泄漏； 保证 delete 的正确使用对象使用 delete ，而数组则要使用 delete [] 形式； 保证 delete 只使用一次，以免发生错误。 因此，如果需要使用 动态分配数组 形式的数据结构可以考虑使用 vector 或者 string 容器，其有安全的内存管理机制，可以保证不会发生内存泄漏的问题。 条款14：使用 reserve 来避免不必要的重新分配像 vector 这样的容器，其可以最大容纳元素的数量 capacity() 往往要大于当前大小 size() 这保证其不需要插入一个元素就要申请空间，更加高效。然而当我们频繁插入元素的时候，往往是大于所能够容纳的最大元素，这时需要重新分配空间，其步骤如下： 分配新的内存空间，一般是当前容量的倍数； 将旧空间的元素拷贝到新的空间中； 销毁旧空间上的对象； 回收旧空间。开销非常大，并且会让迭代器、指针和引用失效。这时为了避免这种不需要的代价，可以预估所需空间一次分配足够大的空间。通常有两个成员函数可以使用： resize(size_type n) 通常返回设置的新大小 n ，需要注意的是，这个函数将会在容器中构造新的元素，当 n 大于当前容器大小时，如果小于，则会将尾部的元素销毁，大于最大容量时，会发生重新分配； reserve(size_type n) 函数通常设置容器的最大空间和大小为 n ，当 n 大于当前最大容量时才会发生内存的重新配置。因此可以使用 reserve 函数来通过预估使用空间的大小申请足够大的空间，来避免频繁申请配置空间。 条款15：小心 string 实现的多样性string 类型在各个平台下的实现是不同的，如果使用 sizeof(string) 来获得其大小会发现，它的大小为 1 或者 7 倍 char * 。 条款16：如何将 vector 和 string 的数据传递遗留的 API对一些旧的API传递的参数是数组或者指针，当使用 vector 或者 string 作为参数传递时，要发生一定的转变。通常，由于如 vector 容器那样，内存分布是连续的与普通的数组没有两样，可以用首元素的地址当做是数组名称，当然需对容器非空进行判断。一个技巧是，当使用 C 风格的API时，参数是数组的情况下，需要将数据传递给其他容器，可以使用 vector 作为中介，然后用它去初始化其他容器。12345678910111213// 从 C API 中获得数据 传递到其他容器中size_t fillArray(double *pArray, size_t arraySize); // C APIvector&lt;double&gt; vd(maxNumDoubles);vd.resize(fillArray(&amp;vd[0], vd.size()));deque&lt;double&gt; d(vd.begin(), vd.end()); // 拷贝数据到dequelist&lt;double&gt; l(vd.begin(), vd.end()); // 拷贝数据到listset&lt;double&gt; s(vd.begin(), vd.end()); // 拷贝数据到set// 将其他容器中的数据传递到 C API 中void doSomething(const int* pints, size_t numInts); // C API (同上)set&lt;int&gt; intSet; // 保存要传递给API数据的setvector&lt;int&gt; v(intSet.begin(), intSet.end()); // 拷贝set数据到vectorif (!v.empty()) doSomething(&amp;v[0], v.size()); // 传递数据到API 条款17：使用交换来修整过剩容量当使用容器时，插入数据可以使最大容量增加，但是当删除一部分元素时，多余的空间并不会自己归还给系统，需要手动收缩到合适的范围，一个做法是使用 swap 函数，构造一个与原始容器大小相同的临时容器，通过交换将元素填充到原始容器，互换而不会持有多余的空间。1vector&lt;Contestant&gt;(contestants).swap(contestants); 在 C++11 后提供了一个函数来调整过剩的空间大小，shrink_to_fit() 将多余的空间归还给系统。 条款18：避免使用 vector&lt;bool&gt;它不是一个 STL 容器，不保存 bool 类型。vector&lt;bool&gt; 不满足STL容器的必要条件，你最好不要使用它；而deque&lt;bool&gt; 和 bitset 是基本能满足你对 vector&lt;bool&gt; 提供的性能的需要的替代数据结构。 条款19：了解相等和等价的区别在标准的关联容器中，如set当插入新的元素时，是用等价判断的，而不是相等，通过自定义的比较函数。1234!c.key_comp()(x, y) &amp;&amp; !c.key_comp()(y, x) // 在c的排序顺序中// 如果x在y之前它非真，// 同时在c的排序顺序中// 如果y在x之前它非真 使用等价作为比较的标准，可以避免使用排序和相等两个比较函数造成的问题。 条款20：为指针的关联容器指定比较类型使用一个 string* 类型的 set 容器的时候，其比较类型默认为比较容器中指针的大小，如下代码：1234567891011121314set&lt;string*&gt; ssp; // ssp = “set of string ptrs”ssp.insert(new string("Anteater"));ssp.insert(new string("Wombat"));ssp.insert(new string("Lemur"));ssp.insert(new string("Penguin"));//可以使用以下自定义函数来按字符串的值比较大小，而不是只比较指针的大小struct StringPtrLess: public binary_function&lt;const string*, const string*, bool&gt; &#123; bool operator()(const string *ps1, const string *ps2) const &#123; return *ps1 &lt; *ps2; &#125;&#125;; 条款21：永远让比较函数对相等的值返回 false条款22：避免原地修改 set 的键值set 容器需要保证元素的有序性，任何对于键值的修改都会改变这种有序性，简单来说不要改变容器中影响排序的键值。 条款23：考虑有序的 vector 替代关联容器条款24：关乎效率的考虑条款25：熟悉非标准散列容器条款26：使用迭代器迭代器和常量迭代器之间的转换关系由图可以看出，迭代器可以隐式转换成常量迭代器，而常量迭代器却不可以转换成非常亮迭代器，一些容器的成员函数接收的是非常量迭代器，只能尽量使用非常量的迭代器。 条款27：常量迭代器转换成非常量迭代器使用 distance 和 advance 把 const_iterator 转换成 iterator 。为了在容器当前常量迭代器上插入一个元素，需要使其非常量化。通常的做法是，使用一个非常量的迭代器使其移动到常量迭代器的位置。12345678910typedef deque&lt;int&gt; IntDeque; // 和以前一样typedef IntDeque::iterator Iter; // 非常量迭代器typedef IntDeque::const_iterator ConstIter; // 常量迭代器IntDeque d;ConstIter ci;... // 让ci指向dIter i(d.begin()); // 初始化i为d.begin()advance(i, distance(i, ci)); // 把i移到指向ci位置// （但请留意下面关于为什么// 在它编译前要调整的原因） 条款28： base 迭代器之间的转换base 可以将 reverse_iterator 转换成 iterator，其是如何实现这种转换的呢？ 条款29：需要一个一个字符输入时考虑使用 istreambuf_iterator]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[高效使用STL-1]]></title>
+    <url>%2F2018%2F04%2F06%2F%E9%AB%98%E6%95%88%E5%AE%9E%E7%94%A8STL-1%2F</url>
+    <content type="text"><![CDATA[英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第一章容器的介绍。 条款1：小心选择容器容器的分类： 标准STL序列容器：vector、string、deque和list。 标准STL关联容器：map、set和multiset、multimap。 非标准序列容器：slist和rope，单向链表和重型字符串。 非标准关联容器：包括基于散列表的容器hash_**。 标准非STL容器：数组、bitset、stack、queue和priority_queue。 容器的选择可以考虑使用场景需要的算法的复杂度高低，如需要在容器的中间频繁插入删除元素，这时需要的容器可能是list，当需要在头尾插入删除元素，那么deque则是一个好的选择。同时，也应该考虑到迭代器的能力，内存布局的兼容能力容器操作复杂度等等。 条款2：容器无关代码？容器的使用真的与代码无关吗？考虑以下场景，vector和list在使用过程中，迭代器和内存布局是不一样的，因此，两个容器在使用过程中完全是不兼容的，许多方法是特有的，不能同时使用。当代码中的一个容器替换成另一个容器的时候，要考虑旧的代码对新的容器的适用性，保证不出现错误的使用，而导致编译错误。一个比较方便的做法是使用 typedef 自定义迭代器类型。如代码不应这样写： 123456class Widget &#123;...&#125;;vector&lt;Widget&gt; vw;Widget bestWidget;// 给bestWidget一个值vector&lt;Widget&gt;::iterator i = // 寻找和bestWidget相等的Widget find(vw.begin(), vw.end(), bestWidget); 其中如果更换迭代器的话，需要查找所有的 vector&lt;Widget&gt; 然后改成新的容器，高效的写法是：1234567class Widget &#123; ... &#125;;typedef vector&lt;Widget&gt; WidgetContainer; //Widget类型的容器类型typedef WidgetContainer::iterator WCIterator; //迭代器WidgetContainer cw;Widget bestWidget;//WCIterator i = find(cw.begin(), cw.end(), bestWidget); 这种做法，直接改 typedef 那两行就行。如果不想用 typedef 将使用的容器暴露给用户，那么可以使用 class 将内部使用的容器私有化，只对用户提供统一的调用接口，当根据需求需要改变容器时，对用户代码不必进行过多的更改。 条款3：容器内对象的拷贝主旨：使容器内对象拷贝操作的轻量而正确。 一个好的做法是，将对象数组（容器）改为指针的数组（容器），毕竟指针的拷贝比对象的拷贝要快。 条款4：用 empty 替换 size()==0当判断一个容器中元素是否为空时，通常使用 empty() 它是常数时间的，而用 size()==0 来判断则是线性时间。 条款5：使用空间成员函数空间成员函数可以操作一个区间内的元素，而不是使用循环来对单个元素进行操作，具体的应用场景为，将容器内的元素用另一个容器中的元素替代，成段拷贝，区间赋值等等如。1234void assign( size_type count, const T&amp; value );template&lt; class InputIt &gt;void assign( InputIt first, InputIt last );void assign( std::initializer_list&lt;T&gt; ilist ); 条款6：C++的解析 C++里面的一条通用规则，几乎任何东西都能被分析为函数声明 12class Widget &#123;...&#125;; // 假设Widget有默认构造函数Widget w(); // 函数名w，返回一个Widget类型 造成这种歧义出现的主要原因是，编译器无法知道你是调用构造还是函数声明，当有一个含有int类型的文件，需要从中读出放入list中，有如下代码： 123456789101112//1.不正确的写法ifstream dataFile("ints.dat");//想用迭代器构造这个list，但实际上却是在声明一个函数list&lt;int&gt; data(istream_iterator&lt;int&gt;(dataFile), istream_iterator&lt;int&gt;());//2.正确的写法ifstream dataFile("ints.dat");//定义两个迭代器istream_iterator&lt;int&gt; dataBegin(dataFile);istream_iterator&lt;int&gt; dataEnd;//用迭代器初始化listlist&lt;int&gt; data(dataBegin, dataEnd); 条款7：销毁容器前记得释放动态申请的空间当容器中保存着的是 new 申请到的动态对象时，当作用域失效后，容器自己的空间会由系统回收，但是动态申请的空间不会回收，这时需要手动回收空间。需要注意的是：手动释放以及异常处理。比较好的一种做法是使用智能指针，来智能管理内存空间。 条款8：永不建立 auto_ptr 的容器auto_ptr 的容器（COAPs）是被 禁止 的。 条款9：删除选项中仔细选择 去除一个容器中有特定值的所有对象：如果容器是vector、string或deque，使用erase-remove惯用法。 如果容器是list，使用list::remove。 如果容器是标准关联容器，使用它的erase成员函数。 去除一个容器中满足一个特定判定式的所有对象：如果容器是vector、string或deque，使用erase-remove_if惯用法。 如果容器是list，使用list::remove_if。 如果容器是标准关联容器，使用remove_copy_if和swap，或写一个循环来遍历容器元素，当你把迭代器传给erase时记得后置递增它。 在循环内做某些事情（除了删除对象之外）：如果容器是标准序列容器，写一个循环来遍历容器元素，每当调用erase时记得都用它的返回值更新你 的迭代器。 如果容器是标准关联容器，写一个循环来遍历容器元素，当你把迭代器传给erase时记得后置递增它。 条款10：注意分配器的协定和约束条款11：理解自定义分配器的正确用法条款12：STL容器线程安全性考虑多线程环境下对容器的操作如果没有特殊的处理是不安全的，不安全的处理应该包括以下方面： 保证多个线程读取容器内容时正确并且不能有写线程 多线程写时的互斥操作 为了保证线程安全需要做的是通过 信号量、互斥锁 等线程同步原语，对容器的操作进行封装，常见的做法：123456789101112131415161718192021222324//定义一个锁类，构造时加锁，析构时自动释放class Lock &#123; // 的类的模板核心；public: // 忽略了很多细节 Lock(const Containers container): c(container) &#123; getMutexFor(c); //在构造函数获取互斥量 &#125; ~Lock() &#123; releaseMutexFor(c); //在析构函数里释放它 &#125;private: const Container&amp; c;&#125;;//使用vector&lt;int&gt; v;&#123; //建立新代码块； Lock&lt;vector&lt;int&gt; &gt; lock(v); //获取互斥量 vector&lt;int&gt;::iterator first5(find(v.begin(), v.end(), 5)); if (first5 != v.end()) &#123; *first5 = 0; &#125;&#125; //离开作用域，自动释放锁 这种做法的优势是可以保证加锁和释放锁是成对出现的，同时也可以保证异常出现时可以正确释放锁。因为是局部变量，当作用域消失时就会自动释放。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[日志库easyloggingpp使用]]></title>
     <url>%2F2018%2F03%2F28%2F%E6%97%A5%E5%BF%97%E5%BA%93easyloggingpp%E4%BD%BF%E7%94%A8%2F</url>
     <content type="text"><![CDATA[easyloggingpp 是一个只需引用一个头文件的 C++ 日志库，它具有轻量高效、可扩展、线程安全、可嵌入到自己开发模块等等特性。 下载使用 自定义配置 日志级别 使用配置文件 记录日志 基本操作 下载使用从easyloggingpp下载最新的代码，通过 CMake 编译成独立的链接库，或者直接将 easylogging++.h 和 easylogging++.cc 源文件拷贝到自己的项目中，一起编译。官方示例代码：123456789#include "easylogging++.h" //包含头文件INITIALIZE_EASYLOGGINGPP //用宏来表示初始化日志文件int main(int argc, char* argv[]) &#123; LOG(INFO) &lt;&lt; "My first info log using default logger"; return 0;&#125; 然后使用以下命令编译生成可执行文件，日志在控制台中显示，并且在项目目录下有日志文件生成。 1g++ main.cc easylogging++.cc -o prog -std=c++11 自定义配置日志级别它最大的特性就是日志的高度可配置性，通过配置宏参数可以设置日志的级别和格式。以下列出了日志级别分类： Level Description Global 通用日志级别，全局设置时使用 Trace 回溯某个特定事件的信息，比调试日志更有用 Debug | 开发过程中调试应用程序，调试开关要打开 Fatal | 可能导致应用程序中断的非常严重的错误事件 Error | 程序运行过程中的错误信息，程序继续运行 Warning | 程序运行过程中的错误信息 Info | 应用程序当前的运行信息 Verbose | 处理冗长的日志信息 Unknown | 适用分层日志记录，完全关闭日志记录 使用配置文件12345678910111213141516171819202122232425262728293031323334## log_conf.conf 配置文件* GLOBAL: ENABLED = true TO_FILE = true TO_STANDARD_OUTPUT = true FORMAT = "[%level | %datetime] | %msg" FILENAME = "log\\log_%datetime&#123;%Y%M%d&#125;.log" SUBSECOND_PRECISION = 6 PERFORMANCE_TRACKING = true MAX_LOG_FILE_SIZE = 2097152 ## 2MB - Comment starts with two hashe LOG_FLUSH_THRESHOLD = 100 ## Flush after every 100 logs* TRACE: FILENAME = "log\\trace_log_%datetime&#123;%Y%M%d&#125;.log"* DEBUG: FORMAT = "%datetime&#123;%d/%M&#125; %func %msg" FILENAME = "log\\debug_log_%datetime&#123;%Y%M%d&#125;.log"* FATAL: ENABLED = false* ERROR: FILENAME = "log\\error_log_%datetime&#123;%Y%M%d&#125;.log"* WARNING: FILENAME = "log\\warning_log_%datetime&#123;%Y%M%d&#125;.log"* INFO: FILENAME = "log\\info_log_%datetime&#123;%Y%M%d&#125;.log" FORMAT = "[%host : %user] | %msg"* VERBOSE: ENABLED = false 通过构造日志记录器来加载配置文件完成对日志的自定义，使用： 123456789101112131415#include "easylogging++.h"INITIALIZE_EASYLOGGINGPPint main(int argc, const char** argv) &#123; // 加载配置文件，构造一个配置器对象 el::Configurations conf("/path/to/my-conf.conf"); // 重新配置一个单一日志记录器 el::Loggers::reconfigureLogger("default", conf); // 用配置文件配置所有的日志记录器 el::Loggers::reconfigureAllLoggers(conf); // 所有的日志记录器都是从文件中配置完成的，可以使用 return 0;&#125; 日志格式说明符日志的输出格式可以自定义，库中提供了一些说明符来表示不同的含义： 符号 意义 %logger loggger ID %thread thread ID %thread_name 用来获取线程的名称，是使用 el::Helpers::setThreadName(&quot;name1&quot;) 来设置的线程标识名 %level 日志的级别，诸如 DEBUG、INFO、WARNING等 %levshort 日志级别的缩写 %vlevel 使用详细记录，冗长记录级别 %datetime 当前的时间，可以自定义时间的格式 %user 当前运行程序的用户名 %host 运行程序的机器名称 %file 源程序的名称，包含完整的路径信息 %fbase 只有文件的名称 %line 运行到此处的代码行 %func 函数的名称 %loc 函数的名称以及行号 %msg 日志信息 % 转义字符 日期的格式通过上述的符号 %datetime 获取了时间，可以通过自定义的方式来格式化时间，常用的格式符如下： 符号 意义 %d 一月中的几号 %a 简写的星期几 %A 全称星期几 %Y %M %d %H %m %s 年月日时分秒 记录日志基本操作有两种方式来记录日志 12LOG(LEVEL) &lt;&lt; "info"; //第一种：使用默认的日志记录器CLOG(LEVEL, logger ID) &lt;&lt; "info"; //第二种：指定特定的日志记录器，可以自己注册 库中注册的有三种： 默认的日志记录器 ID: dfault ； 性能日志记录器 ID: performance ； 系统日志记录器 ID: syslog 可以使用以下方式注册自己的日志记录器：1234567891011//注册一个ID为business的日志记录器，没有会自动创建el::Logger* businessLogger = el::Loggers::getLogger("business");//businessLogger -&gt;//info(const char*, const T&amp;, const Args&amp;...)//warn(const char*, const T&amp;, const Args&amp;...)//error(const char*, const T&amp;, const Args&amp;...)//debug(const char*, const T&amp;, const Args&amp;...)//fatal(const char*, const T&amp;, const Args&amp;...)//trace(const char*, const T&amp;, const Args&amp;...)//verbose(int vlevel, const char*, const T&amp;, const Args&amp;...)//来记录日志 可以使用 %v 来格式化数据 条件日志记录满足条件后，开始记录日志，不满足条件不会记录，使用如下： 12LOG_IF(condition, LEVEL)CLOG_IF(condition, LEVEL, logger ID) 记录特定次数日志12345LOG_EVERY_N(n, LEVEL)CLOG_EVERY_N(n, LEVEL, logger ID)LOG_AFTER_N(n, LEVEL); //Only logs when we have reached hit counts of nLOG_N_TIMES(n, LEVEL); //Logs n times 源文件 sample 下有使用示例。]]></content>
@@ -8,8 +56,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>日志库</tag>
       </tags>
   </entry>
@@ -32,21 +80,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>Git</tag>
         <tag>技巧</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
-    <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
-    <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
-      <categories>
-        <category>深度学习</category>
-      </categories>
-      <tags>
-        <tag>框架</tag>
-        <tag>C++</tag>
-        <tag>深度学习</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -57,9 +92,22 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
+    <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
+    <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
+      <categories>
+        <category>深度学习</category>
+      </categories>
+      <tags>
         <tag>C++</tag>
+        <tag>框架</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -70,9 +118,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -83,9 +131,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -96,8 +144,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
       </tags>
   </entry>
   <entry>
@@ -206,8 +254,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -220,8 +268,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -234,8 +282,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
         <tag>面试</tag>
       </tags>
@@ -297,8 +345,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -309,8 +357,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -517,8 +565,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -564,8 +612,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>论文</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -599,9 +647,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>
@@ -612,9 +660,9 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>计算机视觉</tag>
         <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>计算机视觉</tag>
       </tags>
   </entry>
   <entry>

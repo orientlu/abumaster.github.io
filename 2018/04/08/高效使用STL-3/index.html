@@ -1,0 +1,975 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="google-site-verification" content="Z2mNnZTxQGvYHVbQlnKmQS4kl_DPmc7ygzUyo5xLIf0" />
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C++,STL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="张国丰" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/19174796-file_1495200018518_1007d.png?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高效使用STL-3">
+<meta property="og:url" content="http://abumaster.com/2018/04/08/高效使用STL-3/index.html">
+<meta property="og:site_name" content="张国丰">
+<meta property="og:description" content="英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。">
+<meta property="og:updated_time" content="2018-04-11T12:15:48.656Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="高效使用STL-3">
+<meta name="twitter:description" content="英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":true},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://abumaster.com/2018/04/08/高效使用STL-3/"/>
+
+
+
+
+
+  <title> 高效使用STL-3 | 张国丰 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=62233777";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">张国丰</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">张国丰的博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2018/04/08/高效使用STL-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                高效使用STL-3
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-08T15:07:12+08:00">
+                2018-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="note success"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。</p>
+</div>
+<a id="more"></a>
+<h4 id="条款30：确保目标空间足够大"><a href="#条款30：确保目标空间足够大" class="headerlink" title="条款30：确保目标空间足够大"></a>条款30：确保目标空间足够大</h4><p>使用算法插入时插入的是不存在的空即迭代器的尾部，编译出错。  </p>
+<h4 id="条款31：排序选择"><a href="#条款31：排序选择" class="headerlink" title="条款31：排序选择"></a>条款31：排序选择</h4><p>根据实际的需求选择合适的排序算法：  </p>
+<ul>
+<li>如果你需要在vector、string、deque或数组上进行完全排序，你可以使用 <code>sort</code> 或 <code>stable_sort</code>。  </li>
+<li>如果你有一个vector、string、deque或数组，你只需要排序前n个元素，应该用 <code>partial_sort</code>。  </li>
+<li>如果你有一个vector、string、deque或数组，你需要鉴别出第n个元素或你需要鉴别出最前的n个元素，而不用知道它们的顺序，<code>nth_element</code>是你应该注意和调用的。  </li>
+<li>如果你需要把标准序列容器的元素或数组分隔为满足和不满足某个标准，你大概就要找 <code>partition</code> 或 <code>stable_partition</code>。  </li>
+<li>如果你的数据是在list中，你可以直接使用 <code>partition</code> 和 <code>stable_partition</code>，你可以使用list的 <code>sort</code>来代替 <code>sort</code> 和<code>stable_sort</code>。   </li>
+<li>如果你需要partial_sort或nth_element提供的效果，你就必须间接完成这个任务，但正如我
+在上面勾画的，会有很多选择。  </li>
+</ul>
+<h4 id="条款32：如果真要删除东西，在remove-后加上-erase"><a href="#条款32：如果真要删除东西，在remove-后加上-erase" class="headerlink" title="条款32：如果真要删除东西，在remove 后加上 erase"></a>条款32：如果真要删除东西，在<code>remove</code> 后加上 <code>erase</code></h4><p>STL 算法 <code>remove</code> 不是真正意义上的删除元素，而是遇见一个满足条件的元素，然后将其后的元素向前移动，元素的个数是不变的。而想真正删除，需要使用 <code>erase</code> 函数，将指定迭代器的元素删除。  </p>
+<h4 id="条款33：避免在指针容器上使用-remove"><a href="#条款33：避免在指针容器上使用-remove" class="headerlink" title="条款33：避免在指针容器上使用 remove"></a>条款33：避免在指针容器上使用 <code>remove</code></h4><p>如上条款一样，这个算法不是真正意义上的删除，而是将元素向前移动，在指针容器上使用，可能会导致内存的泄漏。  </p>
+<h4 id="条款34：注意哪个算法需要使用有序空间"><a href="#条款34：注意哪个算法需要使用有序空间" class="headerlink" title="条款34：注意哪个算法需要使用有序空间"></a>条款34：注意哪个算法需要使用有序空间</h4><h4 id="条款35：使用-mismatch-和-lexicographical-compare-实现简单的忽略大小写字符串比较"><a href="#条款35：使用-mismatch-和-lexicographical-compare-实现简单的忽略大小写字符串比较" class="headerlink" title="条款35：使用 mismatch 和 lexicographical_compare 实现简单的忽略大小写字符串比较"></a>条款35：使用 <code>mismatch</code> 和 <code>lexicographical_compare</code> 实现简单的忽略大小写字符串比较</h4><h4 id="条款36：了解-copy-if-的正确实现"><a href="#条款36：了解-copy-if-的正确实现" class="headerlink" title="条款36：了解 copy_if 的正确实现"></a>条款36：了解 <code>copy_if</code> 的正确实现</h4><h4 id="条款37：统计区间"><a href="#条款37：统计区间" class="headerlink" title="条款37：统计区间"></a>条款37：统计区间</h4><p>STL中提供了一些用于统计的算法，如 <code>count</code> 用来统计具有某一值的元素的个数，<code>count_if</code> 用于统计满足某一判别式的元素个数，区间中的最大最小值可以使用 <code>max_element</code> 和 <code>min_element</code> 得到。如果需要对某一区间中的元素定制更加复杂的操作，比如容器中元素求和，乘积和平均，可以使用 <code>accumulate</code> 和 <code>for_each</code> 定制仿函数，对容器进行操作。  </p>
+<h4 id="条款38：把仿函数设计为用于值传递"><a href="#条款38：把仿函数设计为用于值传递" class="headerlink" title="条款38：把仿函数设计为用于值传递"></a>条款38：把仿函数设计为用于值传递</h4><p>在C和CPP中不允许将函数作为参数传递给函数，需要传递一个函数指针作为参数。如：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">///最后一个参数是一个函数指针</div><div class="line">void qsort(void *base, size_t nmemb, size_t size,</div><div class="line">            int (*cmpfcn)(const void*, const void*));</div></pre></td></tr></table></figure></p>
+<h4 id="条款39：用纯函数做判断式"><a href="#条款39：用纯函数做判断式" class="headerlink" title="条款39：用纯函数做判断式"></a>条款39：用纯函数做判断式</h4><h4 id="条款40：使仿函数类可以适配"><a href="#条款40：使仿函数类可以适配" class="headerlink" title="条款40：使仿函数类可以适配"></a>条款40：使仿函数类可以适配</h4><h4 id="条款41：了解使用-ptr-fun-、mem-fun-的原因"><a href="#条款41：了解使用-ptr-fun-、mem-fun-的原因" class="headerlink" title="条款41：了解使用 ptr_fun 、mem_fun 的原因"></a>条款41：了解使用 <code>ptr_fun</code> 、<code>mem_fun</code> 的原因</h4><h4 id="条款42：确定-less-lt-T-gt-表示-operator-lt"><a href="#条款42：确定-less-lt-T-gt-表示-operator-lt" class="headerlink" title="条款42：确定 less&lt;T&gt; 表示 operator&lt;"></a>条款42：确定 <code>less&lt;T&gt;</code> 表示 <code>operator&lt;</code></h4>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/STL/" rel="tag"># STL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/07/高效使用STL-2/" rel="next" title="高效使用STL-2">
+                <i class="fa fa-chevron-left"></i> 高效使用STL-2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/08/高效使用STL-4/" rel="prev" title="高效使用STL-4">
+                高效使用STL-4 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png"
+               alt="abumaster" />
+          <p class="site-author-name" itemprop="name">abumaster</p>
+           
+              <p class="site-description motion-element" itemprop="description">记录学习生活的点滴</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/abumaster" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/2938537815/profile?topnav=1&wvr=6" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://oo7zsi4t8.bkt.clouddn.com/17-6-1/96363415.jpg" target="_blank" title="QQ">
+                  
+                    <i class="fa fa-fw fa-qq"></i>
+                  
+                  QQ
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#条款30：确保目标空间足够大"><span class="nav-number">1.</span> <span class="nav-text">条款30：确保目标空间足够大</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款31：排序选择"><span class="nav-number">2.</span> <span class="nav-text">条款31：排序选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款32：如果真要删除东西，在remove-后加上-erase"><span class="nav-number">3.</span> <span class="nav-text">条款32：如果真要删除东西，在remove 后加上 erase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款33：避免在指针容器上使用-remove"><span class="nav-number">4.</span> <span class="nav-text">条款33：避免在指针容器上使用 remove</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款34：注意哪个算法需要使用有序空间"><span class="nav-number">5.</span> <span class="nav-text">条款34：注意哪个算法需要使用有序空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款35：使用-mismatch-和-lexicographical-compare-实现简单的忽略大小写字符串比较"><span class="nav-number">6.</span> <span class="nav-text">条款35：使用 mismatch 和 lexicographical_compare 实现简单的忽略大小写字符串比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款36：了解-copy-if-的正确实现"><span class="nav-number">7.</span> <span class="nav-text">条款36：了解 copy_if 的正确实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款37：统计区间"><span class="nav-number">8.</span> <span class="nav-text">条款37：统计区间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款38：把仿函数设计为用于值传递"><span class="nav-number">9.</span> <span class="nav-text">条款38：把仿函数设计为用于值传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款39：用纯函数做判断式"><span class="nav-number">10.</span> <span class="nav-text">条款39：用纯函数做判断式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款40：使仿函数类可以适配"><span class="nav-number">11.</span> <span class="nav-text">条款40：使仿函数类可以适配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款41：了解使用-ptr-fun-、mem-fun-的原因"><span class="nav-number">12.</span> <span class="nav-text">条款41：了解使用 ptr_fun 、mem_fun 的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#条款42：确定-less-lt-T-gt-表示-operator-lt"><span class="nav-number">13.</span> <span class="nav-text">条款42：确定 less<T> 表示 operator<</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">abumaster</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">您是第<span class="busuanzi-value" id="busuanzi_value_site_uv"></span>个小伙伴</span>
+  
+
+  
+    <span class="site-pv">本站总浏览<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次</span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/mathjax/2.4.0/config/TeX-AMS-MML_HTMLorMML.js"></script>
+  
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+  
+
+</body>
+</html>
