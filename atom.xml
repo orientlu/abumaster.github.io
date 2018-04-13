@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-04-12T13:20:41.172Z</updated>
+  <updated>2018-04-13T08:06:26.853Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,50 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MongoDB的使用</title>
+    <link href="http://abumaster.com/2018/04/13/mongoDB%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>http://abumaster.com/2018/04/13/mongoDB的使用/</id>
+    <published>2018-04-13T06:25:47.000Z</published>
+    <updated>2018-04-13T08:06:26.853Z</updated>
+    
+    <content type="html"><![CDATA[<p>MongoDB 是一种非关系数据库，是一种 NoSQL 型数据库，用于应对大数据和分布式系统的数据库，具有高扩展性和分布式，没有复杂的关系模型。MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。将数据存储为一个文档，数据结构由键值对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</p>
+<a id="more"></a>
+<h3 id="MongoDB-简介和安装"><a href="#MongoDB-简介和安装" class="headerlink" title="MongoDB 简介和安装"></a>MongoDB 简介和安装</h3><p>MongoDB 是一种<a href="http://www.runoob.com/mongodb/nosql.html">NoSQL</a>型数据库，使用C++编写，基于分布式文件存储的开源数据库系统。<br><a href="https://www.mongodb.com/download-center#community">官方下载地址</a>。<br>在 Windows 系统环境下，可以下载安装包或者压缩包，解压后在 <code>bin</code> 目录下找到可执行的文件，其中 <code>mongod.exe</code> 是数据库服务，使用时需要打开，<code>mongo.exe</code> 是MongoDB数据库的控制台，命令终端。另外，该目录下还提供了数据库的状态查看和管理小程序。  </p>
+<h4 id="MongoDB-服务器的运行"><a href="#MongoDB-服务器的运行" class="headerlink" title="MongoDB 服务器的运行"></a>MongoDB 服务器的运行</h4><p><strong>有两种方式运行：<em>命令行</em> 和 <em>配置服务</em> </strong><br>第一种方法是从终端运行 MongoDB 服务器，需要指定数据库的存储路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongod.exe --dbpath mydbpath\db</div></pre></td></tr></table></figure></p>
+<p>第二种方法是编写Windows下的服务程序，使MongoDB服务器以服务的形式存在，创建一个 <code>mongodd.cfg</code> 文件，在其中指定日志路径和数据库路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">systemLog:</div><div class="line">    destination: file</div><div class="line">    path: D:\Program Files (x86)\mongodb-win32-x86_64\bin\log\mongod.log</div><div class="line">storage:</div><div class="line">    dbPath: D:\Program Files (x86)\mongodb-win32-x86_64\bin\db</div></pre></td></tr></table></figure></p>
+<p>然后以管理员的身份运行：<code>mongod.exe --config &quot;path\mongod.cfg&quot; --install</code> 安装服务，这时可以在Windows服务中看到一个名为MongoDB的服务，可以手动启动或者使用命令启动和关闭：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">net start MongoDB   <span class="comment"># 启动服务</span></div><div class="line">net stop MongoDB    <span class="comment"># 关闭服务</span></div><div class="line">mongod.exe --remove <span class="comment"># 移除服务</span></div></pre></td></tr></table></figure></p>
+<h4 id="连接-MongoDB-服务器"><a href="#连接-MongoDB-服务器" class="headerlink" title="连接 MongoDB 服务器"></a>连接 MongoDB 服务器</h4><p>使用 <code>mongo</code> 命令进入 MongoDB 后台管理的shell，默认连接到其中的test数据库，可以使用一些简单的JavaScript语句。  </p>
+<h3 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h3><h4 id="创建和删除数据库"><a href="#创建和删除数据库" class="headerlink" title="创建和删除数据库"></a>创建和删除数据库</h4><p>查看所有包含数据的数据库： <code>show dbs</code><br>查看当前使用的数据库： <code>db</code><br>切换和创建数据库 <code>use DB_NAME</code> 不存在会创建
+需要删除某一个数据库，可以先切换到某一个数据库下，然后执行 <code>db.dropDatabase()</code> </p>
+<h4 id="创建和删除集合"><a href="#创建和删除集合" class="headerlink" title="创建和删除集合"></a>创建和删除集合</h4><p>创建的基本语法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.createCollection(name, options)</div></pre></td></tr></table></figure></p>
+<p>name 为名称，options为选项用来指定集合的大小和文档的最大数量。<br>删除集合 <code>db.collection.drop()</code> ，删除前使用 <code>show collections</code> 或者 <code>show tables</code> 查看集合，然后调用具体的集合删除。  </p>
+<h4 id="文档的操作"><a href="#文档的操作" class="headerlink" title="文档的操作"></a>文档的操作</h4><p><strong>插入文档的基本操作</strong>，文档相当于一个json数据结构的文件。插入的语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">db.COLLECTION_NAME.insert(document)</div></pre></td></tr></table></figure></p>
+<p>其中要指定插入到的集合，document是一个json格式如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">        <span class="attr">"title"</span> : <span class="string">"MongoDB 教程"</span>,</div><div class="line">        <span class="attr">"description"</span> : <span class="string">"MongoDB 是一个 Nosql 数据库"</span>,</div><div class="line">        <span class="attr">"by"</span> : <span class="string">"菜鸟教程"</span>,</div><div class="line">        <span class="attr">"url"</span> : <span class="string">"http://www.runoob.com"</span>,</div><div class="line">        <span class="attr">"tags"</span> : [</div><div class="line">                <span class="string">"mongodb"</span>,</div><div class="line">                <span class="string">"database"</span>,</div><div class="line">                <span class="string">"NoSQL"</span></div><div class="line">        ],</div><div class="line">        <span class="attr">"likes"</span> : <span class="number">100</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用 <code>db.col.find()</code> 可以查找插入的文档。  </p>
+<p><strong>更新文档</strong> 通过 <code>update</code> 语句，基本语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">db.collection.update(</div><div class="line">   &lt;query&gt;,     # 类似SQL中where后面的 找到要更改的记录</div><div class="line">   &lt;update&gt;,    # set后面的内容 更改的内容</div><div class="line">   &#123;</div><div class="line">     upsert: &lt;boolean&gt;, #没有修改记录是否插入新的</div><div class="line">     multi: &lt;boolean&gt;, # 插入多条记录</div><div class="line">     writeConcern: &lt;document&gt; #抛出异常级别</div><div class="line">   &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>通过 <code>save()</code> 方法，可以通过传入一个文档替换现有的文档。</p>
+<p><strong>删除文档</strong> 通过 <code>remove</code> 来删除，基本语法为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">db.collection.remove(</div><div class="line">   &lt;query&gt;,</div><div class="line">   &#123;</div><div class="line">     justOne: &lt;boolean&gt;,</div><div class="line">     writeConcern: &lt;document&gt;</div><div class="line">   &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>使用更新的方法 <code>deleteOne()</code> 和 <code>deleteMany()</code> 方法删除文档：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">db.collection.deleteMany(&#123;&#125;)  <span class="comment"># 删除所有的文档</span></div><div class="line">db.collection.deleteMany(&#123;status:<span class="string">"A"</span>&#125;) <span class="comment"># 删除所有status为A的文档</span></div><div class="line">db.collection.deleteOne(&#123;status:<span class="string">"A"</span>&#125;)  <span class="comment"># 删除一条</span></div></pre></td></tr></table></figure></p>
+<p><strong>查询文档</strong> 简单的查询方式一种非结构化和一种结构化的输出方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">db.collection.find(query, projection)</div><div class="line">db.collection.find(query, projection).pretty()</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MongoDB 是一种非关系数据库，是一种 NoSQL 型数据库，用于应对大数据和分布式系统的数据库，具有高扩展性和分布式，没有复杂的关系模型。MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。将数据存储为一个文档，数据结构由键值对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="数据库" scheme="http://abumaster.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="NoSql" scheme="http://abumaster.com/tags/NoSql/"/>
+    
+      <category term="MongoDB" scheme="http://abumaster.com/tags/MongoDB/"/>
+    
+  </entry>
   
   <entry>
     <title>高效使用STL-4</title>
@@ -509,9 +553,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
-    
       <category term="Git" scheme="http://abumaster.com/tags/Git/"/>
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
   </entry>
   
@@ -1097,35 +1141,6 @@ TIME_WAIT：等待足够的时间确保远程TCP接收到连接中断请求的�
       <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
     
       <category term="知识点" scheme="http://abumaster.com/tags/%E7%9F%A5%E8%AF%86%E7%82%B9/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>最后一年</title>
-    <link href="http://abumaster.com/2017/09/01/%E6%9C%80%E5%90%8E%E4%B8%80%E5%B9%B4/"/>
-    <id>http://abumaster.com/2017/09/01/最后一年/</id>
-    <published>2017-09-01T11:45:13.000Z</published>
-    <updated>2017-09-01T12:51:28.528Z</updated>
-    
-    <content type="html"><![CDATA[<div class="note sucess"><p>春未老， 风细柳斜斜。 试上超然台上望， 半壕春水一城花。 烟雨暗千家。<br>寒食后， 酒醒却咨嗟。 休对故人思故国， 且将新火试新茶。 诗酒趁年华。  </p>
-</div>  
-<a id="more"></a>
-<blockquote class="blockquote-center"><p><strong>愿你出走半生，归来仍是少年</strong></p>
-</blockquote>  
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/17-9-1/12545054.jpg" alt=""><br>时间在指尖匆匆流逝，人也变得愈加手足无措，烦躁不安了。焦虑着毕业，焦虑着工作，焦虑着未来的何去何从…再无当年的淡定自若，宠辱不惊了。<br><strong>懒惰</strong>是何时成为了我的习惯，我是何时变得如此懒惰，无论是身体上还是心理上，似乎早已经适应了懒惰，懒得动，懒得想，懒得只想宅在凳子上。这也带来了身体上的变化，体重增加，眼睛近视加深，动不动生病。以前的早睡早起，现在的经常熬夜睡懒觉，这个变化仿佛是不知不觉地形成的。而我也尝到了坏习惯的苦果。我是真的很忙？忙的没有时间锻炼？忙的没有时间睡觉？这一切不过是借口罢了。睡得晚是因为在玩游戏、在看电视，牺牲的大把时间不过是放在娱乐上面罢了，而这种娱乐能让我休息？能活跃我的思维？当然只是来腐蚀着我的思考能力。看所谓的新闻等等，完全是看着新鲜，真的从中收获了多少，思考了多少，不过是看看别人的评论，人云亦云而已；玩游戏，用太多时间，也不过是过眼云烟，就算玩的再好又能如何。<br>所谓的忙，不过是自己找的借口罢了，学海无涯，确实如此，但是学习的过程中离不了 <strong>思考总结</strong>，耗费太多的时间只去学，不去思考是完全没有用的。在过去的一两年时间里，我暴露了太多的缺点。多了几本书，却没能完全消化掉这些知识，其根本原因是很少总结，很少思考，不问为什么，只顾着不断学进去，然后忘掉。这就是为什么花费了大把的时间，却没有成效的原因吧。<br>从小学开始记的日记，到现在也渐渐落下了。记得高三的时候，是那么的忙，每天还要抽出放学后的几分钟记一下今天的心路历程，学习感悟。不曾想，现在有太多的时间可以用，却不写了。那是记日记成了一种繁忙，压力生活的一种放松时间，现在反而成了一种负担，自己想着就是搞笑。可能敲键盘多了，你会忘记自己写字的技能吧。可恨！可恶至极！<br><strong>我已不在是少年</strong>，我已无梦想，甘愿做一平凡人。但愿<code>一席一茶观明月，一花一湖澈是非。今生的一切努力是要朝着花开的方向。</code>  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;div class=&quot;note sucess&quot;&gt;&lt;p&gt;春未老， 风细柳斜斜。 试上超然台上望， 半壕春水一城花。 烟雨暗千家。&lt;br&gt;寒食后， 酒醒却咨嗟。 休对故人思故国， 且将新火试新茶。 诗酒趁年华。  &lt;/p&gt;
-&lt;/div&gt;
-    
-    </summary>
-    
-      <category term="生活" scheme="http://abumaster.com/categories/life/"/>
-    
-    
-      <category term="随笔" scheme="http://abumaster.com/tags/%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[MongoDB的使用]]></title>
+    <url>%2F2018%2F04%2F13%2FmongoDB%E7%9A%84%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[MongoDB 是一种非关系数据库，是一种 NoSQL 型数据库，用于应对大数据和分布式系统的数据库，具有高扩展性和分布式，没有复杂的关系模型。MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。将数据存储为一个文档，数据结构由键值对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。 MongoDB 简介和安装MongoDB 是一种NoSQL型数据库，使用C++编写，基于分布式文件存储的开源数据库系统。官方下载地址。在 Windows 系统环境下，可以下载安装包或者压缩包，解压后在 bin 目录下找到可执行的文件，其中 mongod.exe 是数据库服务，使用时需要打开，mongo.exe 是MongoDB数据库的控制台，命令终端。另外，该目录下还提供了数据库的状态查看和管理小程序。 MongoDB 服务器的运行有两种方式运行：命令行 和 配置服务 第一种方法是从终端运行 MongoDB 服务器，需要指定数据库的存储路径：1mongod.exe --dbpath mydbpath\db 第二种方法是编写Windows下的服务程序，使MongoDB服务器以服务的形式存在，创建一个 mongodd.cfg 文件，在其中指定日志路径和数据库路径：12345systemLog: destination: file path: D:\Program Files (x86)\mongodb-win32-x86_64\bin\log\mongod.logstorage: dbPath: D:\Program Files (x86)\mongodb-win32-x86_64\bin\db 然后以管理员的身份运行：mongod.exe --config &quot;path\mongod.cfg&quot; --install 安装服务，这时可以在Windows服务中看到一个名为MongoDB的服务，可以手动启动或者使用命令启动和关闭：123net start MongoDB # 启动服务net stop MongoDB # 关闭服务mongod.exe --remove # 移除服务 连接 MongoDB 服务器使用 mongo 命令进入 MongoDB 后台管理的shell，默认连接到其中的test数据库，可以使用一些简单的JavaScript语句。 数据库操作创建和删除数据库查看所有包含数据的数据库： show dbs查看当前使用的数据库： db切换和创建数据库 use DB_NAME 不存在会创建 需要删除某一个数据库，可以先切换到某一个数据库下，然后执行 db.dropDatabase() 创建和删除集合创建的基本语法：1db.createCollection(name, options) name 为名称，options为选项用来指定集合的大小和文档的最大数量。删除集合 db.collection.drop() ，删除前使用 show collections 或者 show tables 查看集合，然后调用具体的集合删除。 文档的操作插入文档的基本操作，文档相当于一个json数据结构的文件。插入的语法为：1db.COLLECTION_NAME.insert(document) 其中要指定插入到的集合，document是一个json格式如下：123456789101112&#123; "title" : "MongoDB 教程", "description" : "MongoDB 是一个 Nosql 数据库", "by" : "菜鸟教程", "url" : "http://www.runoob.com", "tags" : [ "mongodb", "database", "NoSQL" ], "likes" : 100&#125; 使用 db.col.find() 可以查找插入的文档。 更新文档 通过 update 语句，基本语法为：123456789db.collection.update( &lt;query&gt;, # 类似SQL中where后面的 找到要更改的记录 &lt;update&gt;, # set后面的内容 更改的内容 &#123; upsert: &lt;boolean&gt;, #没有修改记录是否插入新的 multi: &lt;boolean&gt;, # 插入多条记录 writeConcern: &lt;document&gt; #抛出异常级别 &#125;) 通过 save() 方法，可以通过传入一个文档替换现有的文档。 删除文档 通过 remove 来删除，基本语法为：1234567db.collection.remove( &lt;query&gt;, &#123; justOne: &lt;boolean&gt;, writeConcern: &lt;document&gt; &#125;) 使用更新的方法 deleteOne() 和 deleteMany() 方法删除文档： 123db.collection.deleteMany(&#123;&#125;) # 删除所有的文档db.collection.deleteMany(&#123;status:"A"&#125;) # 删除所有status为A的文档db.collection.deleteOne(&#123;status:"A"&#125;) # 删除一条 查询文档 简单的查询方式一种非结构化和一种结构化的输出方式：12db.collection.find(query, projection)db.collection.find(query, projection).pretty()]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>NoSql</tag>
+        <tag>MongoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[高效使用STL-4]]></title>
     <url>%2F2018%2F04%2F08%2F%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-4%2F</url>
     <content type="text"><![CDATA[英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。 条款43：尽量用算法取代循环每个算法至少接收一组迭代器来表示容器的区间，如查找最大最小值，查找满足某一条件的元素，这时用内置的一些算法可以解决，不需要手写一些循环，效率更高，即使在算法的内部遍历也是由循环来搞定的。优点包括： 效率：通常算法比循环更高效； 正确性：写循环更容易出错，且代码较算法来的复杂； 可维护性：算法代码简洁，便于维护。 条款44：尽量使用成员函数替代同名算法出于效率考虑，可以使用容器的成员函数替代同名的算法，成员函数的速度相对较快。 条款45：注意 count、find、binary_search、lower_bound、upper_bound和equal_range 的区别 条款46：考虑使用函数对象代替函数作算法的参数将函数对象传递给STL算法的效率比传递真的函数高。如下代码：12345678910//对容器中数据进行降序排序//1.使用函数对象greatervector&lt;double&gt; v;sort(v.begin(), v.end(), greater&lt;double&gt;());//2.使用函数inline bool doubleGreater(double d1, double d2)&#123; return dl &gt; d2;&#125;sort(v.begin(), v.end(), doubleGreater); 函数作为参数实际上是传递的函数指针，在每一次调用的时候编译器产生一个间接函数调用，通过指针调用。 条款47：避免产生只写代码灵感的乍现，让写代码变得容易，但是后期很难从代码中领会其真正所要表达的意思，称之为只写代码。原书中说道： 代码的读比写更经常，这是软件工程的真理。也就是说软件的维护比开发花费多得多的时间。不能读和理解的软件不能被维护，不能维护的软件几乎没有不值得拥有。你用STL越多，你会感到它越来越舒适，而且你会越来越多的使用嵌套函数调用和即时（on the fly）建立函数对象。这没有什么错的，但永远记住你今天写的代码会被某个人——也可能是你——在未来的某一天读到。为那天做准备吧。 条款48：总是#include适当的头文件包含正确的头文件，谨记以下几条： 几乎所有的容器都在其同名的头文件中； 算法常在 algorithm 头文件中，除了 accumulate inner_product、adjacent_difference和partial_sum 在 numeric； 特殊的迭代器在 iterator 中，流迭代器和缓冲迭代器； 标准仿函数和仿函数适配器在 functional 头文件中。 条款49：学习破解有关STL的编译器诊断信息条款50：不断学习善于利用网络资源： SGI STL网站: http://www.sgi.com/tech/stl/ STLport网站， http://www.stlport.org/ Boost网站， http://www.boost.org/ 或者 http://boost.sourceforge.net/]]></content>
@@ -80,8 +92,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>技巧</tag>
         <tag>Git</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
