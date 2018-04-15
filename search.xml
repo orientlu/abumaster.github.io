@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[vcpkg：vc++ 的包管理器]]></title>
+    <url>%2F2018%2F04%2F15%2Fvcpkg%EF%BC%9Avc-%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[vcpkg 是一个Windows下vc++的第三方库管理工具，提供了第三方库的快速安装和配置，为Windows下C++开发提供了一种有效的工具。 vcpkg 可以在Windows上安装C、C++第三方的库。通常Windows下使用第三方库时，没有在Linux下使用方便，需要自己下源码编译，并在项目中加入库和头文件的目录，十分麻烦，并且vc++的版本不同也可能出现库的不兼容问题，而vcpkg可以很好的解决这个问题。可以使用简单的几条命令安装第三方库，使用时只需要包含头文件，不再需要配置头文件目录和链接库的目录。 安装需求： Windows 10,8 或 7； vs2017或vs2015 update3； Git 2.10.x 以上； Cmake 3.10 以上。 简单使用：1.安装从Microsoft的Github仓库找到vcpkg的仓库，clone到本地1git clone https://github.com/Microsoft/vcpkg.git 进入根目录下运行一下命令安装：12.\bootstrap-vcpkg.bat #生成vcpkg.exe.\vcpkg integrate install #连接到用户集成中 然后，安装的库直接可以在自己的项目中使用，只需要包含头文件。 2.安装第三方库常用的几个命令：123vcpkg list # 列出安装的第三方库vcpkg search xxxlib # 查找可以安装的库vcpkg install xxxlib # 安装xxxlib库 安装完第三方库后，可以加入头文件，直接编译使用，不再需要繁琐的目录配置。 3.高级应用打包第三方库，当无法搜到需要的库的时候，可以自己通过源码打包，配置，然后安装到本地。暂时没用到，用到时详细参考文档。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>技巧</tag>
+        <tag>包管理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[MongoDB的使用]]></title>
     <url>%2F2018%2F04%2F13%2FmongoDB%E7%9A%84%E4%BD%BF%E7%94%A8%2F</url>
     <content type="text"><![CDATA[MongoDB 是一种非关系数据库，是一种 NoSQL 型数据库，用于应对大数据和分布式系统的数据库，具有高扩展性和分布式，没有复杂的关系模型。MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。将数据存储为一个文档，数据结构由键值对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。 MongoDB 简介和安装MongoDB 是一种NoSQL型数据库，使用C++编写，基于分布式文件存储的开源数据库系统。官方下载地址。在 Windows 系统环境下，可以下载安装包或者压缩包，解压后在 bin 目录下找到可执行的文件，其中 mongod.exe 是数据库服务，使用时需要打开，mongo.exe 是MongoDB数据库的控制台，命令终端。另外，该目录下还提供了数据库的状态查看和管理小程序。 MongoDB 服务器的运行有两种方式运行：命令行 和 配置服务 第一种方法是从终端运行 MongoDB 服务器，需要指定数据库的存储路径：1mongod.exe --dbpath mydbpath\db 第二种方法是编写Windows下的服务程序，使MongoDB服务器以服务的形式存在，创建一个 mongodd.cfg 文件，在其中指定日志路径和数据库路径：12345systemLog: destination: file path: D:\Program Files (x86)\mongodb-win32-x86_64\bin\log\mongod.logstorage: dbPath: D:\Program Files (x86)\mongodb-win32-x86_64\bin\db 然后以管理员的身份运行：mongod.exe --config &quot;path\mongod.cfg&quot; --install 安装服务，这时可以在Windows服务中看到一个名为MongoDB的服务，可以手动启动或者使用命令启动和关闭：123net start MongoDB # 启动服务net stop MongoDB # 关闭服务mongod.exe --remove # 移除服务 连接 MongoDB 服务器使用 mongo 命令进入 MongoDB 后台管理的shell，默认连接到其中的test数据库，可以使用一些简单的JavaScript语句。 数据库操作创建和删除数据库查看所有包含数据的数据库： show dbs查看当前使用的数据库： db切换和创建数据库 use DB_NAME 不存在会创建 需要删除某一个数据库，可以先切换到某一个数据库下，然后执行 db.dropDatabase() 创建和删除集合创建的基本语法：1db.createCollection(name, options) name 为名称，options为选项用来指定集合的大小和文档的最大数量。删除集合 db.collection.drop() ，删除前使用 show collections 或者 show tables 查看集合，然后调用具体的集合删除。 文档的操作插入文档的基本操作，文档相当于一个json数据结构的文件。插入的语法为：1db.COLLECTION_NAME.insert(document) 其中要指定插入到的集合，document是一个json格式如下：123456789101112&#123; "title" : "MongoDB 教程", "description" : "MongoDB 是一个 Nosql 数据库", "by" : "菜鸟教程", "url" : "http://www.runoob.com", "tags" : [ "mongodb", "database", "NoSQL" ], "likes" : 100&#125; 使用 db.col.find() 可以查找插入的文档。 更新文档 通过 update 语句，基本语法为：123456789db.collection.update( &lt;query&gt;, # 类似SQL中where后面的 找到要更改的记录 &lt;update&gt;, # set后面的内容 更改的内容 &#123; upsert: &lt;boolean&gt;, #没有修改记录是否插入新的 multi: &lt;boolean&gt;, # 插入多条记录 writeConcern: &lt;document&gt; #抛出异常级别 &#125;) 通过 save() 方法，可以通过传入一个文档替换现有的文档。 删除文档 通过 remove 来删除，基本语法为：1234567db.collection.remove( &lt;query&gt;, &#123; justOne: &lt;boolean&gt;, writeConcern: &lt;document&gt; &#125;) 使用更新的方法 deleteOne() 和 deleteMany() 方法删除文档： 123db.collection.deleteMany(&#123;&#125;) # 删除所有的文档db.collection.deleteMany(&#123;status:"A"&#125;) # 删除所有status为A的文档db.collection.deleteOne(&#123;status:"A"&#125;) # 删除一条 查询文档 简单的查询方式一种非结构化和一种结构化的输出方式：12db.collection.find(query, projection)db.collection.find(query, projection).pretty()]]></content>
@@ -68,8 +81,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
         <tag>日志库</tag>
       </tags>
   </entry>
@@ -97,19 +110,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[ACE学习笔记4：任务和主动对象]]></title>
-    <url>%2F2017%2F11%2F17%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1%2F</url>
-    <content type="text"><![CDATA[主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 主动对象。 任务。 任务的简单使用要创建任务和主动对象，要从 ACE_Task 中派生一个任务子类，然后必须进行以下的工作： 实现初始化和终止方法：open() 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，close() 则是终止方法； 调用启动方法：主动对象实例化必须调用 activate() 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数； 实现任务专有的处理方法：主动对象启动后，各个线程在 svc() 中启动，必须定义此方法。 任务间的通信 每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 getq() 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。使用：假设任务A和任务B之间通信，A-&gt;B 发送消息。首先，定义一个 ACE_Message_Block 类型的消息块*mb，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 B-&gt;putq(mb) 向底层消息管道中压入一个消息快；然后B中用 getq(mb) 获取消息队列中的消息。实现两个任务之间的通信。 主动对象 主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。 ACE主动对象模式实现至少涉及3个类模块: 提供多线程池 ACE_Task_Base 或者 ACE_Task 或者 ACE_Thread_Manager ； 提供请求排队的 ACE_Activation_Queue，其内部维护了 ACE_Message_Queue 的 message_block 消息指针队列； 提供了 ACE_Activation_Queue 队列操作实例的 ACE_Method_Request ，ACE_Method_Request是command模式，最低消耗仅为实现其内部的call方法。 ACE主动对象实现需要依赖以上3个模块，至少构建2个类: 分发器，负责将请求参数排队，并提供数个执行线程。 分发对象。请求队列的排队实例。 ACE 主动对象参考]]></content>
-      <categories>
-        <category>编程</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>框架</tag>
-        <tag>ACE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Ubuntu 安装 Caffe 深度学习框架]]></title>
     <url>%2F2017%2F11%2F17%2FUbuntu%E5%AE%89%E8%A3%85caffe%2F</url>
     <content type="text"><![CDATA[详细介绍了Ubuntu系统下安装caffe深度学习框架的过程。 Ubuntu14.04 + Caffe CPU版1.安装依赖项包括了Caffe使用的第三方库 123sudo apt-get install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler sudo apt-get install --no-install-recommends libboost-all-devsudo apt-get install libatlas-base-dev 2.安装python环境使用Anaconda集成的python环境，其中打包了python的很多包，用conda管理python包是一个很好的选择。 3.安装OpenCV 从网上下载安装脚本 1git clone https://github.com/jayrambhia/Install-OpenCV 进入其中的 Ubuntu 目录下执行： 123sudo sh ./dependencies.shcd 2.4sudo sh opencv2_4_10.sh 注意：虚拟机环境下CPU核数的限制会发生卡顿死机，要将 opencv_2_4_10.sh 中的一条命令 make -j 改为 make 即可。 4.caffe的配置 从github上下载caffe源码； 拷贝根目录下的 config 文件 1cp Makefile.config.example Makefile.config 配置其中的信息，使用cpu，注释掉 cuda的目录等，主要注意如果使用python层，要配置python的相关路径， 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293## Refer to http://caffe.berkeleyvision.org/installation.html# Contributions simplifying and improving our build system are welcome!# cuDNN acceleration switch (uncomment to build with cuDNN).# USE_CUDNN := 1# CPU-only switch (uncomment to build without GPU support).CPU_ONLY := 1# To customize your choice of compiler, uncomment and set the following.# N.B. the default for Linux is g++ and the default for OSX is clang++# CUSTOM_CXX := g++# CUDA directory contains bin/ and lib/ directories that we need.# CUDA_DIR := /usr/local/cuda# On Ubuntu 14.04, if cuda tools are installed via# "sudo apt-get install nvidia-cuda-toolkit" then use this instead:# CUDA_DIR := /usr# CUDA architecture setting: going with all of them.# For CUDA &lt; 6.0, comment the *_50 lines for compatibility.#CUDA_ARCH := -gencode arch=compute_20,code=sm_20 \# -gencode arch=compute_20,code=sm_21 \# -gencode arch=compute_30,code=sm_30 \# -gencode arch=compute_35,code=sm_35 \# -gencode arch=compute_50,code=sm_50 \# -gencode arch=compute_50,code=compute_50## BLAS choice:# atlas for ATLAS (default)# mkl for MKL# open for OpenBlasBLAS := atlas# Custom (MKL/ATLAS/OpenBLAS) include and lib directories.# Leave commented to accept the defaults for your choice of BLAS# (which should work)!# BLAS_INCLUDE := /path/to/your/blas# BLAS_LIB := /path/to/your/blas# Homebrew puts openblas in a directory that is not on the standard search path# BLAS_INCLUDE := $(shell brew --prefix openblas)/include# BLAS_LIB := $(shell brew --prefix openblas)/lib# This is required only if you will compile the matlab interface.# MATLAB directory should contain the mex binary in /bin.# MATLAB_DIR := /usr/local# MATLAB_DIR := /Applications/MATLAB_R2012b.app# NOTE: this is required only if you will compile the python interface.# We need to be able to find Python.h and numpy/arrayobject.h.#PYTHON_INCLUDE := /usr/include/python2.7 \# /usr/lib/python2.7/dist-packages/numpy/core/include# Anaconda Python distribution is quite popular. Include path:# Verify anaconda location, sometimes it's in root. ANACONDA_HOME := $(HOME)/anaconda2 PYTHON_INCLUDE := $(ANACONDA_HOME)/include \ $(ANACONDA_HOME)/include/python2.7 \ $(ANACONDA_HOME)/lib/python2.7/site-packages/numpy/core/include \# We need to be able to find libpythonX.X.so or .dylib.# PYTHON_LIB := /usr/lib PYTHON_LIB := $(ANACONDA_HOME)/lib# Homebrew installs numpy in a non standard path (keg only)# PYTHON_INCLUDE += $(dir $(shell python -c 'import numpy.core; print(numpy.core.__file__)'))/include# PYTHON_LIB += $(shell brew --prefix numpy)/lib# Uncomment to support layers written in Python (will link against Python libs)WITH_PYTHON_LAYER := 1# Whatever else you find you need goes here.INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/includeLIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib# If Homebrew is installed at a non standard location (for example your home directory) and you use it for general dependencies# INCLUDE_DIRS += $(shell brew --prefix)/include# LIBRARY_DIRS += $(shell brew --prefix)/lib# Uncomment to use `pkg-config` to specify OpenCV library paths.# (Usually not necessary -- OpenCV libraries are normally installed in one of the above $LIBRARY_DIRS.)# USE_PKG_CONFIG := 1BUILD_DIR := buildDISTRIBUTE_DIR := distribute# Uncomment for debugging. Does not work on OSX due to https://github.com/BVLC/caffe/issues/171# DEBUG := 1# The ID of the GPU that 'make runtest' will use to run unit tests.#TEST_GPUID := 0# enable pretty build (comment to see full commands)Q ?= @ 5.安装caffe编译安装caffe 1234make all make test make runtest make pycaffe 出错记录 Cannot build caffe with anaconda. Error: while loading shared libraries: libhdf5_hl.so.10 不能找到hdf5链接库，由于使用的是Anaconda发行版的python，所以要将其链接库目录加入到链接库中，具体命令为： 12export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:&#123;anaconda_dir&#125;/libsource ~/.bashrc 使用python接口是出错提示没有protobuf模块，解决方法，使用conda install protobuf安装最新的protobuf python模块，exportPYTHONPATH=/home/zero/Documents/caffe-master/python:$PYTHONPATH。 Ubuntu14.04 + Caffe GPU版参考1.安装GPU驱动程序和工具包驱动程序也可以在安装CUDA过程中安装，NVIDIA官网注册下载CUDAV8.0或者CUDA7.5工具包，安装。再下载cudnn v5.0，一般这个版本比较主流不会在安装一些变种caffe版本时出错。2.安装cudnn下载过，解压，将头文件放入到指定文件夹下1234tar -zxvf cudnn-7.5-linux-x64-v5.0-ga.tgz cd cuda sudo cp lib/lib* /usr/local/cuda/lib64/ sudo cp include/cudnn.h /usr/local/cuda/include/ 更新链接信息12345cd /usr/local/cuda/lib64/sudo chmod +r libcudnn.so.5.0.5sudo ln -sf libcudnn.so.5.0.5 libcudnn.so.5sudo ln -sf libcudnn.so.5 libcudnn.sosudo ldconfig 添加cuda环境变量 1234sudo vim /etc/profilePATH = /usr/local/cuda/bin:$PATHexport PATHsource /etc/profile #使环境变量生效 添加lib库路径,在 /etc/ld.so.conf.d/ 加入文件 cuda.conf，内容为 12/usr/local/cuda/lib64 sudo ldconfig #使路径生效 接下来的caffe安装与CPU版本一样。]]></content>
@@ -117,9 +117,22 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
         <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ACE学习笔记4：任务和主动对象]]></title>
+    <url>%2F2017%2F11%2F17%2FACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1%2F</url>
+    <content type="text"><![CDATA[主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 主动对象。 任务。 任务的简单使用要创建任务和主动对象，要从 ACE_Task 中派生一个任务子类，然后必须进行以下的工作： 实现初始化和终止方法：open() 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，close() 则是终止方法； 调用启动方法：主动对象实例化必须调用 activate() 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数； 实现任务专有的处理方法：主动对象启动后，各个线程在 svc() 中启动，必须定义此方法。 任务间的通信 每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 getq() 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。使用：假设任务A和任务B之间通信，A-&gt;B 发送消息。首先，定义一个 ACE_Message_Block 类型的消息块*mb，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 B-&gt;putq(mb) 向底层消息管道中压入一个消息快；然后B中用 getq(mb) 获取消息队列中的消息。实现两个任务之间的通信。 主动对象 主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。 ACE主动对象模式实现至少涉及3个类模块: 提供多线程池 ACE_Task_Base 或者 ACE_Task 或者 ACE_Thread_Manager ； 提供请求排队的 ACE_Activation_Queue，其内部维护了 ACE_Message_Queue 的 message_block 消息指针队列； 提供了 ACE_Activation_Queue 队列操作实例的 ACE_Method_Request ，ACE_Method_Request是command模式，最低消耗仅为实现其内部的call方法。 ACE主动对象实现需要依赖以上3个模块，至少构建2个类: 分发器，负责将请求参数排队，并提供数个执行线程。 分发对象。请求队列的排队实例。 ACE 主动对象参考]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>框架</tag>
+        <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -130,9 +143,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -143,9 +156,9 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -156,8 +169,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>框架</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -266,8 +279,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -280,8 +293,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -294,8 +307,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>C++</tag>
+        <tag>编程</tag>
         <tag>算法</tag>
         <tag>面试</tag>
       </tags>
