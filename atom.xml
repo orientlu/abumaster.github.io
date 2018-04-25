@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-04-15T09:25:23.666Z</updated>
+  <updated>2018-04-25T06:49:36.357Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,185 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>设计模式简介</title>
+    <link href="http://abumaster.com/2018/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/"/>
+    <id>http://abumaster.com/2018/04/24/设计模式简介/</id>
+    <published>2018-04-24T02:34:40.000Z</published>
+    <updated>2018-04-25T06:49:36.357Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>设计模式</strong>（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。使用设计模式的目的：为了代码可重用性、让代码更容易被他人理解、保证代码可靠性。阅读开源书籍<a href="https://github.com/me115/design_patterns">图说设计模式</a>的总结。</p>
+<a id="more"></a>
+<h2 id="创建型模式"><a href="#创建型模式" class="headerlink" title="创建型模式"></a>创建型模式</h2><h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p><strong>适用场景：</strong><br>一个工厂Factory中生产不同种类的产品ProductA和ProductB，然后他们继承一个抽象基类，使用这些产品时，通过工厂提供的一个接口，根据参数返回对应的产品对象，而隔离具体的产品。<br>工厂类负责创建的对象比较少：由于创建的对象较少，不会造成工厂方法中的业务逻辑太过复杂。<br>客户端只知道传入工厂类的参数，对于如何创建对象不关心：客户端既不需要关心创建细节，甚至连类名都不需要记住，只需要知道类型所对应的参数。<br><strong>模式结构：</strong><br>简单工厂模式包含以下角色  </p>
+<ul>
+<li>Factory： 工厂角色<br>负责创建内部所有实例的逻辑  </li>
+<li>Product： 抽象产品角色<br>抽象基类，负责所有具体类的公共接口和描述  </li>
+<li>ConcreteProduct： 具体产品角色<br>具体的产品子类  </li>
+</ul>
+<p><strong>实例</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="comment">//抽象基类</span></div><div class="line"><span class="keyword">class</span> Product</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    Product()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"abstract product construct"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>= <span class="number">0</span>;<span class="comment">//纯虚函数 接口</span></div><div class="line">    <span class="keyword">virtual</span> ~Product()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"abstract product deconstruct"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 产品A</span></div><div class="line"><span class="keyword">class</span> ProductA :<span class="keyword">public</span> Product</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    ProductA()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"产品A的构造函数\n"</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Product A ...\n"</span>;</div><div class="line">    &#125;</div><div class="line">    ~ProductA()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"产品B的析构函数\n"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 产品B</span></div><div class="line"><span class="keyword">class</span> ProductB :<span class="keyword">public</span> Product</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    ProductB()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"产品B的构造函数\n"</span>;</div><div class="line">    &#125;</div><div class="line">    ~ProductB()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"产品B的析构函数\n"</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"这是产品B\n"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 工厂</span></div><div class="line"><span class="keyword">class</span> Factory</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function">Product* <span class="title">creatProduct</span><span class="params">(<span class="built_in">string</span> productname)</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (productname == <span class="string">"A"</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductA();</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (productname == <span class="string">"B"</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ProductB();</div><div class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// 用于测试</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">MY_TEST</span><span class="params">(<span class="built_in">string</span> name)</span></div><div class="line"></span>&#123;</div><div class="line">    Factory factory;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"---------TEST product = "</span> &lt;&lt; name &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    Product * product = factory.creatProduct(name);</div><div class="line">    <span class="keyword">if</span> (product == <span class="literal">NULL</span>) &#123; </div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"no the product\n"</span>; </div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"---------END TEST PASS ---------\n"</span>;</div><div class="line">        <span class="keyword">return</span>; </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span></div><div class="line">        product-&gt;print();</div><div class="line">    <span class="keyword">delete</span> product;</div><div class="line">    product = <span class="literal">NULL</span>;</div><div class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"---------END TEST PASS ---------\n"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    MY_TEST(<span class="string">"A"</span>);</div><div class="line">    MY_TEST(<span class="string">"B"</span>);</div><div class="line">    MY_TEST(<span class="string">"err"</span>);</div><div class="line"></div><div class="line">    system(<span class="string">"pause"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p><em>具体的产品由具体的工厂生产，而不是一个工厂生产多样产品。</em><br>工厂方法模式(Factory Method Pattern)又称为工厂模式，也叫虚拟构造器(Virtual Constructor)模式或者多态工厂(Polymorphic Factory)模式，它属于类创建型模式。在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。<br>是对简单工厂模式的一种改进，所有的产品不再由单一的工厂创建，而是从一个抽象工厂中继承生产某一产品的工厂，增加新的产品的时候不用修改工厂角色，只需要从抽象工厂中派生一个具体的工厂子类。<br><strong>适用情况：</strong>   </p>
+<ul>
+<li>一个类不知道它所需要的对象的类：在工厂方法模式中，客户端不需要知道具体产品类的类名，只需要知道所对应的工厂即可，具体的产品对象由具体工厂类创建；客户端需要知道创建具体产品的工厂类。  </li>
+<li>一个类通过其子类来指定创建哪个对象：在工厂方法模式中，对于抽象工厂类只需要提供一个创建产品的接口，而由其子类来确定具体要创建的对象，利用面向对象的多态性和里氏代换原则，在程序运行时，子类对象将覆盖父类对象，从而使得系统更容易扩展。  </li>
+<li>将创建对象的任务委托给多个工厂子类中的某一个，客户端在使用时可以无须关心是哪一个工厂子类创建产品子类，需要时再动态指定，可将具体工厂类的类名存储在配置文件或数据库中。  </li>
+</ul>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>抽象工厂模式(Abstract Factory Pattern)：提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。<br><img src="https://design-patterns.readthedocs.io/zh_CN/latest/_images/AbatractFactory.jpg" alt="">  </p>
+<ul>
+<li>抽象工厂模式提供一个创建一系列相关或相互依赖对象的接口，而无须指定它们具体的类。抽象工厂模式又称为Kit模式，属于对象创建型模式。  </li>
+<li>抽象工厂模式包含四个角色：抽象工厂用于声明生成抽象产品的方法；具体工厂实现了抽象工厂声明的生成抽象产品的方法，生成一组具体产品，这些产品构成了一个产品族，每一个产品都位于某个产品等级结构中；抽象产品为每种产品声明接口，在抽象产品中定义了产品的抽象业务方法；具体产品定义具体工厂生产的具体产品对象，实现抽象产品接口中定义的业务方法。  </li>
+<li>抽象工厂模式是所有形式的工厂模式中最为抽象和最具一般性的一种形态。抽象工厂模式与工厂方法模式最大的区别在于，工厂方法模式针对的是一个产品等级结构，而抽象工厂模式则需要面对多个产品等级结构。  </li>
+<li>抽象工厂模式的主要优点是隔离了具体类的生成，使得客户并不需要知道什么被创建，而且每次可以通过具体工厂类创建一个产品族中的多个对象，增加或者替换产品族比较方便，增加新的具体工厂和产品族很方便；主要缺点在于增加新的产品等级结构很复杂，需要修改抽象工厂和所有的具体工厂类，对“开闭原则”的支持呈现倾斜性。  </li>
+<li>抽象工厂模式适用情况包括：一个系统不应当依赖于产品类实例如何被创建、组合和表达的细节；系统中有多于一个的产品族，而每次只使用其中某一产品族；属于同一个产品族的产品将在一起使用；系统提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现。  </li>
+</ul>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><p><strong>建造者模式（Builder Pattern）</strong> 将一个复杂对象的构建和表示分离，使得同样的构建过程可以创建不同的表示。一步一步创建一个复杂对象，允许用户只通过指定复杂对象的类型和内容就可以创建他们，不需要知道内部具体的创建细节。属于对象创建型模式。  </p>
+<p><strong>优点：</strong>  </p>
+<ul>
+<li>在建造者模式中， 客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象。  </li>
+<li>每一个具体建造者都相对独立，而与其他的具体建造者无关，因此可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象 。  </li>
+<li>可以更加精细地控制产品的创建过程 。将复杂产品的创建步骤分解在不同的方法中，使得创建过程更加清晰，也更方便使用程序来控制创建过程。  </li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。  </li>
+</ul>
+<p><strong>缺点：</strong>  </p>
+<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制。  </li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大。  </li>
+</ul>
+<h3 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h3><p>系统运行过程中保持一个实例是非常重要的，比如日志记录。单例模式(Singleton Pattern)：单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。<br>单利模式保证某一个类只有一个实例，并且这个实例是自行创建的，并且向整个系统提供这个实例。  </p>
+<ul>
+<li>单例类的构造函数私有  </li>
+<li>提供一个自身的静态私有成员变量  </li>
+<li>提供一个公有的静态工厂方法  </li>
+</ul>
+<h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><h3 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h3><h3 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h3><h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h2 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h2><h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><h3 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h3><h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><h3 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h3><h3 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;设计模式&lt;/strong&gt;（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。使用设计模式的目的：为了代码可重用性、让代码更容易被他人理解、保证代码可靠性。阅读开源书籍&lt;a href=&quot;https://github.com/me115/design_patterns&quot;&gt;图说设计模式&lt;/a&gt;的总结。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="设计模式" scheme="http://abumaster.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Boost学习01</title>
+    <link href="http://abumaster.com/2018/04/20/Boost%E5%AD%A6%E4%B9%A001/"/>
+    <id>http://abumaster.com/2018/04/20/Boost学习01/</id>
+    <published>2018-04-20T03:33:50.000Z</published>
+    <updated>2018-04-25T08:51:38.274Z</updated>
+    
+    <content type="html"><![CDATA[<p>介绍Boost.Asio的特性和使用。  </p>
+<a id="more"></a>
+<h4 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h4><p>Boost.Asio 是使用 Proactor 设计模式实现的，设计模式如下图所示：<br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-20/77149905.jpg" alt="Proactor pattern"><br><strong>各个模块介绍：</strong>  </p>
+<ul>
+<li>Asynchronous Operation 异步操作<br>定义异步操作，比如在套接字上的异步读写  </li>
+</ul>
+<ul>
+<li>Asynchronous Operation Processor 异步操作处理器<br>执行异步操作，并把操作完成的事件放入完成事件队列中</li>
+<li>Completion Event Queue 完成事件队列<br>缓冲着完成事件队列，等待被异步事件分离器调用</li>
+<li>Completion Hander 完成函数<br>用来处理异步操作返回的结果，是函数对象，回调函数</li>
+<li>Asynchronous Event Demultiplexer 异步事件分离器<br>阻塞等待完成事件队列，并将完成事件返回给调用者</li>
+<li>Proactor 前摄器<br>调用异步事件分离器</li>
+<li>Initiator 初始化<br>开始异步操作，分发回调函数</li>
+</ul>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><h4 id="基本技能"><a href="#基本技能" class="headerlink" title="基本技能"></a>基本技能</h4><p><strong>使用定时器观察同步和异步</strong><br>首先包含头文件 <code>boost/asio.hpp</code> ，然后定义一个核心IO操作对象 <code>boost::asio::io_context io;</code> 将一个定时器绑定到IO对象上 <code>boost::asio::steady_timer t(io, boost::asio::chrono::seconds(5));</code> 。同步io只需要调用 <code>t.wait()</code> 会等待5s的时间才执行下面的内容。如果是非同步io需要提供一个回调函数，不影响接下来行的执行，调用<code>t.async_wait(&amp;hander);</code> 异步执行回调函数，接下来等待函数的结束，接下来的行继续执行使用 <code>io.run()</code> 阻塞等待回调函数执行结束。  </p>
+<p><strong>绑定参数</strong><br>为了使用asio实现重复定时器，需要更改回调函数定时器的到期时间，然后启动新的异步等待。
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">#include &lt;boost/asio.hpp&gt;</div><div class="line">#include &lt;boost/bind.hpp&gt;</div><div class="line"></div><div class="line">//传入定时器对象和控制结束的计数</div><div class="line">void MyPrint(const boost::system::error_code&amp;,</div><div class="line">    boost::asio::steady_timer*t, int *count)</div><div class="line">&#123;</div><div class="line">    if (*count &lt; 5)</div><div class="line">    &#123;</div><div class="line">        std::cout &lt;&lt; *count &lt;&lt; std::endl;</div><div class="line">        ++(*count);</div><div class="line">        t-&gt;expires_at(t-&gt;expiry() + boost::asio::chrono::seconds(1));//定时器的到期时间往后推迟1s</div><div class="line">        t-&gt;async_wait(boost::bind(MyPrint, boost::asio::placeholders::error, t, count));//重新开始一个异步等待</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">    boost::asio::io_context io;</div><div class="line">    boost::asio::steady_timer t(io, boost::asio::chrono::seconds(1));</div><div class="line">    int count = 0;</div><div class="line">    </div><div class="line">    t.async_wait(boost::bind(MyPrint, boost::asio::placeholders::error, &amp;t, &amp;count));</div><div class="line">    std::cout &lt;&lt; "start...\n";</div><div class="line">    io.run();</div><div class="line">    </div><div class="line">    std::cout &lt;&lt; "Final count is " &lt;&lt; count &lt;&lt; std::endl;</div><div class="line">    </div><div class="line">    std::system("pause");</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>使用类的成员函数作为回调函数的句柄</strong><br>主函数更加简洁<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/************************************************************************/</span></div><div class="line"><span class="comment">/* 成员函数作为回调函数的句柄                                           */</span></div><div class="line"><span class="comment">/************************************************************************/</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/asio.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/bind.hpp&gt;</span></span></div><div class="line"></div><div class="line"><span class="comment">//定义一个类，用io对象构造</span></div><div class="line"><span class="keyword">class</span> printer</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="comment">//构造函数 初始化定时器，并且异步等待</span></div><div class="line">    printer(boost::asio::io_context&amp; io)</div><div class="line">        :m_timer(io,boost::asio::chrono::seconds(<span class="number">1</span>)),m_count(<span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        m_timer.async_wait(boost::bind(&amp;printer::myprint, <span class="keyword">this</span>));</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"start sync wait...\n"</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//析构函数</span></div><div class="line">    ~printer()</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Finaly the count is "</span> &lt;&lt; m_count &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//成员函数，用于更新定时器和重新绑定异步事件</span></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">myprint</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (m_count &lt; <span class="number">5</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"now count is "</span> &lt;&lt; m_count++ &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line"></div><div class="line">            <span class="comment">//定时器的到期时间延长1s</span></div><div class="line">            m_timer.expires_at(m_timer.expiry() + boost::asio::chrono::seconds(<span class="number">1</span>));</div><div class="line">            <span class="comment">//重置异步等待</span></div><div class="line">            m_timer.async_wait(boost::bind(&amp;printer::myprint, <span class="keyword">this</span>));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    boost::asio::steady_timer m_timer;</div><div class="line">    <span class="keyword">int</span> m_count;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    boost::asio::io_context io;</div><div class="line">    <span class="function">printer <span class="title">p</span><span class="params">(io)</span></span>;<span class="comment">//用io对象构造一个打印对象</span></div><div class="line">    io.run();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"end\n"</span>;</div><div class="line"></div><div class="line">    <span class="built_in">std</span>::system(<span class="string">"pause"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>多线程环境下的同步处理</strong><br>使用 <code>io_context::strand</code> 类来同步多线程程序中的回调处理函数。如果处理需要很长的时间响应，或者考虑在多处理器上进行扩展，可以使用多线程，将处理函数同步化，共享访问。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">#include &lt;boost/asio.hpp&gt;</div><div class="line">#include &lt;boost/thread/thread.hpp&gt;</div><div class="line">#include &lt;boost/bind.hpp&gt;</div><div class="line"></div><div class="line">//定义一个类，不同进程共享一个类的对象，分别对一个对象进行操作</div><div class="line">class printer</div><div class="line">&#123;</div><div class="line">public:</div><div class="line">    printer(boost::asio::io_context&amp; io)</div><div class="line">        : strand_(io),</div><div class="line">        timer1_(io, boost::asio::chrono::seconds(1)),</div><div class="line">        timer2_(io, boost::asio::chrono::seconds(1)),</div><div class="line">        count_(0)</div><div class="line">    &#123;</div><div class="line">        //绑定到一个io_context::strand对象上，由此对象分发其中的函数句柄</div><div class="line">        //保证了不会同时执行</div><div class="line">        timer1_.async_wait(boost::asio::bind_executor(strand_,</div><div class="line">            boost::bind(&amp;printer::print1, this)));</div><div class="line"></div><div class="line">        timer2_.async_wait(boost::asio::bind_executor(strand_,</div><div class="line">            boost::bind(&amp;printer::print2, this)));</div><div class="line">    &#125;</div><div class="line">    ~printer()</div><div class="line">    &#123;</div><div class="line">        std::cout &lt;&lt; "Final count is " &lt;&lt; count_ &lt;&lt; std::endl;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    void print1()</div><div class="line">    &#123;</div><div class="line">        if (count_ &lt; 10)</div><div class="line">        &#123;</div><div class="line">            std::cout &lt;&lt;boost::this_thread::get_id() &lt;&lt;" Timer 1: " &lt;&lt; count_ &lt;&lt; std::endl;</div><div class="line">            ++count_;</div><div class="line"></div><div class="line">            timer1_.expires_at(timer1_.expiry() + boost::asio::chrono::seconds(1));</div><div class="line"></div><div class="line">            timer1_.async_wait(boost::asio::bind_executor(strand_,</div><div class="line">                boost::bind(&amp;printer::print1, this)));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    void print2()</div><div class="line">    &#123;</div><div class="line">        if (count_ &lt; 10)</div><div class="line">        &#123;</div><div class="line">            std::cout &lt;&lt;boost::this_thread::get_id()&lt;&lt; " Timer 2: " &lt;&lt; count_ &lt;&lt; std::endl;</div><div class="line">            ++count_;</div><div class="line"></div><div class="line">            timer2_.expires_at(timer2_.expiry() + boost::asio::chrono::seconds(1));</div><div class="line"></div><div class="line">            timer2_.async_wait(boost::asio::bind_executor(strand_,</div><div class="line">                boost::bind(&amp;printer::print2, this)));</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">private:</div><div class="line">    boost::asio::io_context::strand strand_;</div><div class="line">    boost::asio::steady_timer timer1_;</div><div class="line">    boost::asio::steady_timer timer2_;</div><div class="line">    int count_;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">    boost::asio::io_context io;</div><div class="line">    printer p(io);</div><div class="line">    std::cout &lt;&lt; "main thread id :" &lt;&lt; boost::this_thread::get_id() &lt;&lt; std::endl;</div><div class="line">    boost::thread t(boost::bind(&amp;boost::asio::io_context::run, &amp;io));</div><div class="line">    std::cout &lt;&lt; "child thread id: " &lt;&lt; t.get_id() &lt;&lt; std::endl;</div><div class="line">    io.run();</div><div class="line">    t.join();</div><div class="line"></div><div class="line">    std:system("pause");</div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="Sockets-编程"><a href="#Sockets-编程" class="headerlink" title="Sockets 编程"></a>Sockets 编程</h4><h5 id="同步-TCP-服务器和客户端"><a href="#同步-TCP-服务器和客户端" class="headerlink" title="同步 TCP 服务器和客户端"></a>同步 TCP 服务器和客户端</h5><p>以 <strong>daytime</strong> 服务器为例，占据13端口，获取服务器当前时间，返回给客户端程序的服务。<br>使用 Boost.Asio TCP daytime server 的设计过程：<br>使用头文件和命名空间<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/asio.hpp&gt;       //包含头文件</span></span></div><div class="line"><span class="keyword">using</span> boost::asio::ip::tcp;     <span class="comment">//使用tcp传输协议</span></div></pre></td></tr></table></figure></p>
+<p>创建一个acceptor接收器，用于接收客户端的连接请求<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">boost::asio::io_context io_context;</div><div class="line">tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v4(), 13));</div><div class="line"></div><div class="line">//也可以使用以下的初始化过程</div><div class="line">tcp::acceptor acceptor(io_context);</div><div class="line">tcp::endpoint endpoint(tcp::v4(),13);</div><div class="line">acceptor.open(endpoint.protocol());</div><div class="line">acceptor.set_option(tcp::acceptor::reuse_address(true));</div><div class="line">acceptor.bind(endpoint);</div><div class="line">acceptor.listen();</div><div class="line"></div><div class="line">//可以看出，创建的acceptor对象，相当于调用了标准套接字中的bind和listen</div></pre></td></tr></table></figure></p>
+<p>接收连接请求并处理
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tcp::<span class="function">socket <span class="title">socket</span><span class="params">(io_context)</span></span>;             <span class="comment">//连接套接字</span></div><div class="line">acceptor.accept(socket);                    <span class="comment">//阻塞于此，等待客户端的连接</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> message = make_daytime_string();</div><div class="line">boost::system::error_code ignored_error;</div><div class="line">boost::asio::write(socket, boost::asio::buffer(message), ignored_error);</div></pre></td></tr></table></figure></p>
+<p><strong>客户端程序</strong><br>连接服务器，获得连接套接字，然后从连接套接字中读取或写入信息。<br>使用 <code>tcp::resolver</code> 解析服务的端点信息 <code>endpoint</code> ，然后调用 <code>connect(socket,endpoint)</code> 与服务器建立连接，调用 <code>socket.read_some(...)</code> 读取一定长度的信息。  </p>
+<h5 id="异步-TCP-服务器"><a href="#异步-TCP-服务器" class="headerlink" title="异步 TCP 服务器"></a>异步 TCP 服务器</h5><p><strong>首先</strong>，创建一个服务器对象，用于接收来自客户端的连接请求，为构造函数提供一个 <code>io_context</code> 对象，用于提供IO服务，然后运行 <code>io_context.run()</code> 代表你执行异步io操作。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">boost::asio::io_context io_context;</div><div class="line"><span class="function">tcp_server <span class="title">server</span><span class="params">(io_context)</span></span>;</div><div class="line">io_context.run();</div></pre></td></tr></table></figure></p>
+<p><strong><code>tcp_server</code></strong>类，构造函数使它在13端口开始监听连接的到来：
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tcp_server(boost::asio::io_context&amp; io_context)</div><div class="line">    : acceptor_(io_context, tcp::endpoint(tcp::v4(), <span class="number">13</span>))</div><div class="line">  &#123;</div><div class="line">    start_accept();</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>start_accept()函数用于创建一个套接字，并且异步等待接收一个连接
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">start_accept</span><span class="params">()</span></div><div class="line"></span>&#123;</div><div class="line">    tcp_connection::pointer new_connection =</div><div class="line">      tcp_connection::create(acceptor_.get_executor().context());</div><div class="line"></div><div class="line">    acceptor_.async_accept(new_connection-&gt;socket(),</div><div class="line">        boost::bind(&amp;tcp_server::handle_accept, <span class="keyword">this</span>, new_connection,</div><div class="line">          boost::asio::placeholders::error));</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">handle_accept</span><span class="params">(tcp_connection::pointer new_connection,</div><div class="line">  <span class="keyword">const</span> boost::system::error_code&amp; error)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span> (!error)</div><div class="line">    &#123;</div><div class="line">      new_connection-&gt;start();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    start_accept();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后是tcp连接类，获取连接的套接字，并向连接套接字中写入信息。
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> tcp_connection</div><div class="line">  : <span class="keyword">public</span> boost::enable_shared_from_this&lt;tcp_connection&gt;</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">  <span class="keyword">typedef</span> boost::<span class="built_in">shared_ptr</span>&lt;tcp_connection&gt; pointer;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">static</span> pointer <span class="title">create</span><span class="params">(boost::asio::io_context&amp; io_context)</span></div><div class="line">  </span>&#123;</div><div class="line">    <span class="keyword">return</span> pointer(<span class="keyword">new</span> tcp_connection(io_context));</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  tcp::<span class="function">socket&amp; <span class="title">socket</span><span class="params">()</span></div><div class="line">  </span>&#123;</div><div class="line">    <span class="keyword">return</span> socket_;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></div><div class="line">  </span>&#123;</div><div class="line">    message_ = make_daytime_string();</div><div class="line"></div><div class="line">    boost::asio::async_write(socket_, boost::asio::buffer(message_),</div><div class="line">        boost::bind(&amp;tcp_connection::handle_write, shared_from_this(),</div><div class="line">          boost::asio::placeholders::error,</div><div class="line">          boost::asio::placeholders::bytes_transferred));</div><div class="line">  &#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span>:</div><div class="line">  tcp_connection(boost::asio::io_context&amp; io_context)</div><div class="line">    : socket_(io_context)</div><div class="line">  &#123;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">handle_write</span><span class="params">(<span class="keyword">const</span> boost::system::error_code&amp; <span class="comment">/*error*/</span>,</div><div class="line">      <span class="keyword">size_t</span> <span class="comment">/*bytes_transferred*/</span>)</span></div><div class="line">  </span>&#123;</div><div class="line">  &#125;</div><div class="line">  tcp::socket socket_;</div><div class="line">  <span class="built_in">std</span>::<span class="built_in">string</span> message_;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;介绍Boost.Asio的特性和使用。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="Boost" scheme="http://abumaster.com/tags/Boost/"/>
+    
+      <category term="Asio" scheme="http://abumaster.com/tags/Asio/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深刻理解Reactor和Proactor</title>
+    <link href="http://abumaster.com/2018/04/19/%E6%B7%B1%E5%88%BB%E7%90%86%E8%A7%A3Reactor%E5%92%8CProactor/"/>
+    <id>http://abumaster.com/2018/04/19/深刻理解Reactor和Proactor/</id>
+    <published>2018-04-19T09:07:28.000Z</published>
+    <updated>2018-04-20T03:26:44.859Z</updated>
+    
+    <content type="html"><![CDATA[<p>对两种 I/O 多路复用的模式 Reactor 和 Proactor 进行介绍。</p>
+<a id="more"></a>
+<p><a href="http://www.cnblogs.com/dawen/archive/2011/05/18/2050358.html">参考链接1</a><br><a href="https://www.zhihu.com/question/26943938">参考链接2</a>  </p>
+<p>I/O 多路复用是为了应对高并发情况下对于客户端连接服务器请求时出现的一种技术，不用为每个连接开一个线程或者进程监听连接套接字读写数据，而是使用单个进程监听所有的套接字，当可以读写时通知开始进行 I/O 操作。多路复用机制通常依赖一个 <strong>事件多路分离器（Event Demultiplexer）</strong> ，将来自事件源的 I/O 事件分离出来，并分发到对应的 read/write 事件处理器（Event Handler）上。开发人员需要注册需要处理的事件及其回调函数，事件分离器负责将事件分发到对应的回调函数上，与事件分离器相关的模式是 <strong>Reactor</strong> 采用同步IO， <strong>Proactor</strong>采用的是异步IO。  </p>
+<p><em>Reactor</em> 模式，事件分离器等待文件描述符或套接字读写就绪，然后将事件分发给对应的事件处理器（回调函数），然后由回调函数进行读写操作。<br><em>Proactor</em> 模式，事件分离器捕获IO操作完成事件，然后传递给对应的事件处理器。  </p>
+<p>两种模式下的读操作过程：<br><strong>Reactor 模式实现读：</strong>  </p>
+<ul>
+<li>注册读就绪事件和对应的事件处理器  </li>
+<li>事件分离器等待事件  </li>
+<li>事件到来，激活分离器，分离器将事件分发到对应的事件处理器上  </li>
+<li>事件处理器完成实际的读操作，处理读到的数据，注册新事件，返还控制权</li>
+</ul>
+<p><strong>Proactor 模式实现读：</strong>  </p>
+<ul>
+<li>处理器发起异步读操作（OS支持），处理器无视IO就绪状态，只关注完成事件  </li>
+<li>事件分离器等待 <em>操作完成事件</em>  </li>
+<li>在分离器等待过程中，操作系统 <em>利用并行的内核线程执行实际的读操作</em>，并将结果数据存入用户自定义缓冲区，最后通知事件分离器读操作完成  </li>
+<li>事件分离器呼唤事件处理器  </li>
+<li>事件处理器处理用户自定义缓冲区中的数据，然后启动一个新的异步操作，并将控制权返回事件分离器  </li>
+</ul>
+<p>两者之间一个重要的不同点就是：前者发起回调函数时表示IO可以操作，后者发起回调时表示IO已经完成了。Reactor框架中用户定义的操作是在实际操作之前调用的。比如你定义了操作是要向一个SOCKET写数据，那么当该SOCKET可以接收数据的时候，你的操作就会被调用；而Proactor框架中用户定义的操作是在实际操作之后调用的。比如你定义了一个操作要显示从SOCKET中读入的数据，那么当读操作完成以后，你的操作才会被调用。一个异步IO，一个是同步IO。  </p>
+<p>使用 Reactor 的库和应用有：<br>libev、libevent、libuv、Nginx…<br>使用 Proactor 的库和应用有：<br>Booost.Asio、IOCP、ACE…  </p>
+<p><a href="https://www.zhihu.com/question/26393784">关于异步和同步</a><br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-20/55538714.jpg" alt=""><br>图片来自知乎</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对两种 I/O 多路复用的模式 Reactor 和 Proactor 进行介绍。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="设计模式" scheme="http://abumaster.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>vcpkg：vc++ 的包管理器</title>
     <link href="http://abumaster.com/2018/04/15/vcpkg%EF%BC%9Avc-%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/"/>
     <id>http://abumaster.com/2018/04/15/vcpkg：vc-的包管理器/</id>
     <published>2018-04-15T07:22:32.000Z</published>
-    <updated>2018-04-15T09:25:23.666Z</updated>
+    <updated>2018-04-16T06:49:39.889Z</updated>
     
     <content type="html"><![CDATA[<p><a href=""><strong>vcpkg</strong></a> 是一个Windows下vc++的第三方库管理工具，提供了第三方库的快速安装和配置，为Windows下C++开发提供了一种有效的工具。  </p>
 <a id="more"></a>
@@ -38,7 +212,7 @@
 <p>进入根目录下运行一下命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">.\bootstrap-vcpkg.bat       #生成vcpkg.exe</div><div class="line">.\vcpkg integrate install   #连接到用户集成中</div></pre></td></tr></table></figure></p>
 <p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/8337753.jpg" alt=""><br>然后，安装的库直接可以在自己的项目中使用，只需要包含头文件。  </p>
 <p><strong>2.安装第三方库</strong><br>常用的几个命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vcpkg list                  <span class="comment"># 列出安装的第三方库</span></div><div class="line">vcpkg search xxxlib         <span class="comment"># 查找可以安装的库</span></div><div class="line">vcpkg install xxxlib        <span class="comment"># 安装xxxlib库</span></div></pre></td></tr></table></figure></p>
-<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/11870040.jpg" alt=""><br>安装完第三方库后，可以加入头文件，直接编译使用，不再需要繁琐的目录配置。  </p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/11870040.jpg" alt=""><br>安装完第三方库后，可以加入头文件，直接编译使用，不再需要繁琐的目录配置。<br><strong>注意</strong>：安装第三方库的时候，可能会出现库的编译错误<code>BUILD_FAILD</code>，可能是因为没有安装英文版本的VS语言包，安装过后问题解决。</p>
 <p><strong>3.高级应用</strong><br><a href="https://github.com/Microsoft/vcpkg/blob/master/docs/examples/packaging-zlib.md">打包第三方库</a>，当无法搜到需要的库的时候，可以自己通过源码打包，配置，然后安装到本地。暂时没用到，用到时详细参考文档。  </p>
 ]]></content>
     
@@ -604,6 +778,56 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
   </entry>
   
   <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ubuntu 安装 Caffe 深度学习框架</title>
     <link href="http://abumaster.com/2017/11/17/Ubuntu%E5%AE%89%E8%A3%85caffe/"/>
     <id>http://abumaster.com/2017/11/17/Ubuntu安装caffe/</id>
@@ -671,56 +895,6 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记4：任务和主动对象</title>
-    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
-    <published>2017-11-17T03:03:02.000Z</published>
-    <updated>2017-11-27T13:09:10.186Z</updated>
-    
-    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
-<a id="more"></a>
-<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
-<ul>
-<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
-<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
-<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
-</ul>
-<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
-<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
-<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
-</blockquote>
-<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
-<ul>
-<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
-<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
-<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
-</ul>
-<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
-<ul>
-<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
-<li>分发对象。请求队列的排队实例。</li>
-</ul>
-<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -961,113 +1135,6 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="uml" scheme="http://abumaster.com/tags/uml/"/>
     
       <category term="软件设计" scheme="http://abumaster.com/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一面攒人品-趋势科技</title>
-    <link href="http://abumaster.com/2017/09/19/%E4%B8%80%E9%9D%A2%E6%94%92%E4%BA%BA%E5%93%81-%E8%B6%8B%E5%8A%BF%E7%A7%91%E6%8A%80/"/>
-    <id>http://abumaster.com/2017/09/19/一面攒人品-趋势科技/</id>
-    <published>2017-09-19T11:16:01.000Z</published>
-    <updated>2017-09-20T09:14:32.366Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote>
-<p>趋势科技面试题目汇总，不是太难，面试官人很好，基础还是很薄弱的，好多东西都忘了。</p>
-</blockquote>
-<a id="more"></a>
-<p><strong>1.知道迭代器吗，迭代器失效</strong><br>我回答了迭代器是一个指针，vector在插入和删除会引起迭代器的失效，记得在stl源码剖析中看到过，但是没有系统的回答出来。<br>标准回答：<br>vector在进行插入和删除操作后会使部分或者全部的迭代器失效，因为vector是顺序存储的，当容量不够时会删除原有的旧空间，然后将元素拷贝到新的空间中，导致所有的原空间上的迭代器失败。删除操作后，指向删除点的迭代器和其后的迭代器全部失效。<br>deque容器在首部尾部插入迭代器不会失效，首部和尾部删除元素会使删除元素的迭代器失效，在中间删除元素会使所有的迭代器失效。<br>list很少失效，只有删除的元素的迭代器失效。  </p>
-<p><strong>2.删除容器中值为2的元素</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = vec.begin(); it != vec.end();)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (*it == <span class="number">2</span>)</div><div class="line">        &#123;</div><div class="line">            it = vec.erase(it);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            ++it;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<p><strong>3.进程同步，共享存储在一个进程失效后，会如何回收</strong><br><a href="http://blog.chinaunix.net/uid-26833883-id-3230564.html">共享内存</a><br>共享内存的介绍：共享内存是一种高效的进程间通信，直接读写内存是一种高效的数据拷贝；内核中专门开辟一块内存区，进程直接映射到自己的私有地址空间中，直接读取不需要拷贝，所以更加高效；多个进程共享这块内存，所以需要一种同步机制。<br>流程：  </p>
-<ul>
-<li>创建或者打开共享存储；  </li>
-<li>映射共享内存，将指定的内存映射到进程地址空间便于访问；  </li>
-<li>撤销共享内存的映射；  </li>
-<li>删除共享内存对象。<br>控制共享内存：  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span></span>;</div><div class="line"><span class="comment">//shmid 共享内存标识</span></div><div class="line"><span class="comment">//cmd :IPC_STAT 得到共享内存的状态；IPC_SET 改变共享内存的状态；IPC_RMID 删除共享内存</span></div><div class="line"><span class="comment">//buf  是一个结构体指针。IPC_STAT的时候，取得的状态放在这个结构体中。如果要改变共享内存的状态，用这个结构体指定；</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>IPC_RMID命令实际上不从内核删除一个段，而是仅仅把这个段标记为删除，实际的删除发生最后一个进程离开这个共享段时。<br>当cmd为IPC_RMID时，第三个参数应为NULL。呵呵，大部分我们都是这样做,用这个函数删除共享内存。  </p>
-<p><strong>4.程序崩溃</strong><br>一种方法，程序崩溃一般通过COREDUMP文件进行调试，在windows下面这部分需要自己在程序中添加代码，网上有源代码，添加到程序中即可。程序崩溃是点击COREDUMP文件，运行VS2010即可快速定位。  </p>
-<p>另外一种方法，没有COREDUMP时，先运行程序，然后在VS2010中，把工程附加到进程，注意工程中运行涉及的所有文件必须是VS2010最新代码编译的。这种情况下，VS2010工程中不需要打断点，当程序运行出现崩溃时，自动跳转VS2010的代码中。这种情况非常适合服务器程序，尤其是崩溃发生的条件不清楚，无法再现的情况。尤其服务器运行几天后，崩溃，这种情况非常有用。  </p>
-<p><strong>5.sql数据库加锁</strong><br><a href="http://blog.csdn.net/gz2008gz/article/details/5398529">数据库加锁</a><br>处理多用户并发访问的方法是加锁。锁是防止其他事务访问指定的资源控制、实现并发控制的一种主要手段。当一个用户锁住数据库中的某个对象时，其他用户就不能再访问该对象。加锁对并发访问的影响体现在锁的粒度上。为了控制锁定的资源，应该首先了解系统的空间管理。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;趋势科技面试题目汇总，不是太难，面试官人很好，基础还是很薄弱的，好多东西都忘了。&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
-    
-    
-      <category term="面试" scheme="http://abumaster.com/tags/%E9%9D%A2%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>硬币找零问题—动态规划</title>
-    <link href="http://abumaster.com/2017/09/15/%E7%A1%AC%E5%B8%81%E6%89%BE%E9%9B%B6%E9%97%AE%E9%A2%98%E2%80%94%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    <id>http://abumaster.com/2017/09/15/硬币找零问题—动态规划/</id>
-    <published>2017-09-15T00:32:53.000Z</published>
-    <updated>2017-09-15T04:00:01.663Z</updated>
-    
-    <content type="html"><![CDATA[<p>硬币找零问题主要分为求最少硬币找零和最多组合数找零，一个是求用最少的硬币来达到目标，一个是达到目标的组合数。<br><a id="more"></a></p>
-<h4 id="最少硬币找零问题"><a href="#最少硬币找零问题" class="headerlink" title="最少硬币找零问题"></a>最少硬币找零问题</h4><p><strong>问题描述</strong><br>给不同面值的硬币若干种（每种硬币个数无限多），用这若干种硬币组合为某种面额的钱，使用的硬币的个数最少。<br><strong>分析</strong>
-贪心策略往往不是最优的。这时用到动态规划，假设硬币面值为<code>{v1,v2,v3,...,vn}</code>，纸币金额为<code>sum</code>，可以假设<code>dp[i]</code>表示面值为i的纸币所需的最少硬币个数，然后对于每个i遍历所有的硬币数目，更新最小值。如何转移？对于第i面值的纸币，遍历每个硬币，如果当前硬币的值小于，则可以分解为子问题，+1，更新最小值。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">coinsUsed[<span class="number">0</span>]=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> cents = <span class="number">1</span>; cents &lt;= money; cents++) &#123;  </div><div class="line">    <span class="comment">// 当用最小币值的硬币找零时，所需硬币数量最多  </span></div><div class="line">    <span class="keyword">int</span> minCoins = cents;  </div><div class="line"></div><div class="line">    <span class="comment">// 遍历每一种面值的硬币，看是否可作为找零的其中之一  </span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> kind = <span class="number">0</span>; kind &lt; valueKinds; kind++) &#123;               </div><div class="line">        <span class="comment">// 若当前面值的硬币小于当前的cents则分解问题并查表  </span></div><div class="line">        <span class="keyword">if</span> (values[kind] &lt;= cents) &#123;  </div><div class="line">            <span class="keyword">int</span> temp = coinsUsed[cents - values[kind]] + <span class="number">1</span>;  </div><div class="line">            <span class="keyword">if</span> (temp &lt; minCoins) &#123;  </div><div class="line">                minCoins = temp;  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">&#125;  </div><div class="line"><span class="comment">// 保存最小硬币数  </span></div><div class="line">coinsUsed[cents] = minCoins;</div></pre></td></tr></table></figure></p>
-<h4 id="硬币面值组合问题"><a href="#硬币面值组合问题" class="headerlink" title="硬币面值组合问题"></a>硬币面值组合问题</h4><p><strong>问题描述</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">假设我们有8种不同面值的硬币｛1，2，5，10，20，50，100，200｝，用这些硬币组合够成一个给定的数值n。例如n=200，那么一种可能的组合方式为 200 = 3 * 1 + 1＊2 + 1＊5 + 2＊20 + 1 * 50 + 1 * 100. 问总过有多少种可能的组合方式？</div></pre></td></tr></table></figure></p>
-<p><a href="http://www.cnblogs.com/python27/archive/2013/09/05/3303721.html">参考</a><br>定义 <code>dp[i][m]</code>表示前i种硬币构成m的组合数，对于第i个硬币可以用<code>{0,1,...,m/coins[i]}</code>个。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dp[i][sum] = dp[i-1][sum - 0*Vm] + dp[i-1][sum - 1*Vm]+ dp[i-1][sum - 2*Vm] + ... + dp[i-1][sum - K*Vm]; 其中K = sum / Vm</div></pre></td></tr></table></figure></p>
-<p>关键代码
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= ncoins; ++i)<span class="comment">//硬币种类数</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= sum; ++j)<span class="comment">//兑换的面值</span></div><div class="line">        &#123;</div><div class="line">            dp[i][j] = <span class="number">0</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= j / arr[i - <span class="number">1</span>]; ++k)</div><div class="line">            &#123;</div><div class="line">                dp[i][j] += dp[i - <span class="number">1</span>][j - k*arr[i - <span class="number">1</span>]];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<h4 id="限制级的找零"><a href="#限制级的找零" class="headerlink" title="限制级的找零"></a>限制级的找零</h4><p>找零问题，限制硬币的个数，硬币的面值，如腾讯2018秋招的笔试题大意为：拥有硬币面值为<code>2^k</code>，数量各为两个，求拼凑出num的硬币组合数，如拼凑出6的组合数为：<code>{4,2},{4,1,1},{2,2,1,1}</code>，拥有的硬币面值为1,2,4,8,16,…各位2个。<br>与第一个问题类似，只不过限定了硬币用的个数k，以及硬币的面值，所以根据给定的兑换金额可以确定硬币的面值序列，每个面值最多用2个，然后问题就简单了，代码如下：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//兑换sum元的组合数</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">LimitCoinsComb</span><span class="params">(<span class="keyword">int</span> sum)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">//硬币的面值为：1,2,4,8,16...2^k 各位2个</span></div><div class="line">    <span class="keyword">int</span> n = <span class="built_in">log</span>(sum) / <span class="built_in">log</span>(<span class="number">2</span>);</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; coins;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> temp = <span class="built_in">pow</span>(<span class="number">2</span>, i);</div><div class="line">        coins.push_back(temp);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n + <span class="number">2</span>);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n + <span class="number">1</span>; ++i)</div><div class="line">    &#123;</div><div class="line">        dp[i].resize(sum + <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//初始化，sum==0时只有一种组合，其它初始为0中组合</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n + <span class="number">2</span>; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= sum; ++j)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (j == <span class="number">0</span>) dp[i][j] = <span class="number">1</span>;</div><div class="line">            <span class="keyword">else</span> dp[i][j] = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n + <span class="number">1</span>; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= sum; ++j)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= min(j / coins[i - <span class="number">1</span>], <span class="number">2</span>); ++k)<span class="comment">//最多用2个或者j/coins[i]个，最小值</span></div><div class="line">            &#123;</div><div class="line">                dp[i][j] += dp[i<span class="number">-1</span>][j - k*coins[i - <span class="number">1</span>]];<span class="comment">//递推公式</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> dp[n+<span class="number">1</span>][sum];<span class="comment">//返回结果</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;硬币找零问题主要分为求最少硬币找零和最多组合数找零，一个是求用最少的硬币来达到目标，一个是达到目标的组合数。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
-    
-      <category term="动态规划" scheme="http://abumaster.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>常见算法模板</title>
-    <link href="http://abumaster.com/2017/09/06/%E5%B8%B8%E8%A7%81%E7%AE%97%E6%B3%95%E6%A8%A1%E6%9D%BF/"/>
-    <id>http://abumaster.com/2017/09/06/常见算法模板/</id>
-    <published>2017-09-06T13:12:25.000Z</published>
-    <updated>2017-09-15T06:43:57.848Z</updated>
-    
-    <content type="html"><![CDATA[<p>常见的算法模板，如并查集、字典树等。
-<a id="more"></a></p>
-<h4 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h4><p><strong>定义</strong>：并查集是一种树型结构，又叫“不相交集合”，保持了一组不相交的动态集合，每个集合有一个代表标识着集合，通常用根节点表示。<br><strong>三种基本操作</strong><br>1.初始化 <code>Make_Set(x)</code> ，建立一个新的集合，集合中只有一个元素x，因此x代表整个集合，要求集合不相交，因此x不会出现在其他集合中。<br>2.查找代表 <code>Find_Set(x)</code> 查找可以代表x的集合的代表，返回x所在集合的根节点；<br>3.合并集合 <code>Union(x, y)</code> 合并x和y代表的集合，查找两个集合的根节点，相同则不必合并，不同则需要合并。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//建立一个新的集合，每一个子节点就是一个数，本身就是他的根节点</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Make_Set</span><span class="params">(<span class="keyword">int</span> x)</span></div><div class="line"></span>&#123;</div><div class="line">    father[x] = x;</div><div class="line">    R[x] = <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//通过递归向上查找根节点，回溯时改变当前节点的父节点，直接指向根节点。</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">Find_Set</span><span class="params">(<span class="keyword">int</span> x)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">if</span>(x != father[x])</div><div class="line">        father[x] = Find_set(father[x]);</div><div class="line">    <span class="keyword">return</span> father[x];</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//将根节点设置为-1的非递归方法</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">Find_Set2</span><span class="params">(<span class="keyword">int</span> x)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> y = x;</div><div class="line">    <span class="keyword">while</span>(y!= <span class="number">-1</span>)</div><div class="line">        y = father[y];</div><div class="line">    <span class="keyword">return</span> y;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//两个集合的合并算法</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> GrandX = Find_set(x);</div><div class="line">    <span class="keyword">int</span> GrandY = Find_set(y);</div><div class="line"></div><div class="line">    <span class="keyword">if</span>(GrandX == GrandY)</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    <span class="keyword">if</span>(R[GrandX] &lt; R[GrandY])</div><div class="line">        father[GrandX] = GrandY;</div><div class="line">    <span class="keyword">else</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span>(R[GrandX] == R[GrandY])</div><div class="line">            R[GrandX]++;</div><div class="line">        father[GrandY] = GrandX;    </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="字典树"><a href="#字典树" class="headerlink" title="字典树"></a>字典树</h4><p><a href="http://www.cnblogs.com/tanky_woo/archive/2010/09/24/1833717.html">字典树</a>又称 <em>单词查找树</em>，Trie树，是一种树形结构，是一种哈希树的变种。典型应用是用于统计，排序和保存大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。它的优点是：利用字符串的公共前缀来节约存储空间，最大限度地减少无谓的字符串比较，查询效率比哈希表高。<br>类似于字典，将一个字符串对应到一棵树上，第一个字母为第一层，第二个字母为第二层，依次向下走。<br>数据结构：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX 26</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> Trie   </div><div class="line">&#123;   </div><div class="line">    Trie *next[MAX];<span class="comment">//元素的个数，小写字母26个</span></div><div class="line">    <span class="keyword">int</span> v;   <span class="comment">//根据需要变化</span></div><div class="line">&#125;;   </div><div class="line"> </div><div class="line">Trie *root;</div></pre></td></tr></table></figure></p>
-<p>支持的操作：<br>创建字典树，动态分配空间，对于给定的字符串中的每一个字符，查找树对应的层，如果为空，那么申请一个新的节点，下一个指针为空，如果存在值加1，指向下一层。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">createTrie</span><span class="params">(<span class="keyword">char</span> *str)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(str);</div><div class="line">    Trie *p = root, *q;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> id = str[i]-<span class="string">'0'</span>;</div><div class="line">        <span class="keyword">if</span>(p-&gt;next[id] == <span class="literal">NULL</span>)</div><div class="line">        &#123;</div><div class="line">            q = (Trie *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Trie));</div><div class="line">            q-&gt;v = <span class="number">1</span>;    <span class="comment">//初始v==1</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;MAX; ++j)</div><div class="line">                q-&gt;next[j] = <span class="literal">NULL</span>;</div><div class="line">            p-&gt;next[id] = q;</div><div class="line">            p = p-&gt;next[id];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            p-&gt;next[id]-&gt;v++;</div><div class="line">            p = p-&gt;next[id];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    p-&gt;v = <span class="number">-1</span>;   <span class="comment">//若为结尾，则将v改成-1表示</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>查找一段字符串是否是其中的一个前缀字符串，按层次搜索，如果从中间的某一层没有查到，那么查找失败返回0，成功放回-1。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">findTrie</span><span class="params">(<span class="keyword">char</span> *str)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(str);</div><div class="line">    Trie *p = root;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> id = str[i]-<span class="string">'a'</span>;</div><div class="line">        p = p-&gt;next[id];</div><div class="line">        <span class="keyword">if</span>(p == <span class="literal">NULL</span>)   <span class="comment">//若为空集，表示不存以此为前缀的串</span></div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span>(p-&gt;v == <span class="number">-1</span>)   <span class="comment">//字符集中已有串是此串的前缀</span></div><div class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;   <span class="comment">//此串是字符集中某串的前缀</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;常见的算法模板，如并查集、字典树等。
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="编程" scheme="http://abumaster.com/tags/%E7%BC%96%E7%A8%8B/"/>
-    
-      <category term="算法" scheme="http://abumaster.com/tags/algorithm/"/>
     
   </entry>
   
