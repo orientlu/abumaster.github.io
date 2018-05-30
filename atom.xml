@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-05-08T07:39:55.269Z</updated>
+  <updated>2018-05-25T11:41:11.141Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,50 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>&#39;去看墙外的世界&#39;</title>
+    <title>优秀架构师必须掌握的架构思维（转）</title>
+    <link href="http://abumaster.com/2018/05/25/%E4%BC%98%E7%A7%80%E6%9E%B6%E6%9E%84%E5%B8%88%E5%BF%85%E9%A1%BB%E6%8E%8C%E6%8F%A1%E7%9A%84%E6%9E%B6%E6%9E%84%E6%80%9D%E7%BB%B4%EF%BC%88%E8%BD%AC%EF%BC%89/"/>
+    <id>http://abumaster.com/2018/05/25/优秀架构师必须掌握的架构思维（转）/</id>
+    <published>2018-05-25T09:02:05.000Z</published>
+    <updated>2018-05-25T11:41:11.141Z</updated>
+    
+    <content type="html"><![CDATA[<p>架构的本质是管理复杂性，<strong>抽象</strong>、<strong>分层</strong>、<strong>分治</strong> 和 <strong>演化</strong> 思维是我们工程师/架构师应对和管理复杂性的四种最基本武器。<a href="http://www.infoq.com/cn/articles/architecture-thought?utm_source=tuicool&amp;utm_medium=referral">原文地址</a>。</p>
+<a id="more"></a>
+<h4 id="抽象思维"><a href="#抽象思维" class="headerlink" title="抽象思维"></a>抽象思维</h4><p><strong>对某种事物进行简化描述或表示的过程，只关注要素而忽略具体的细节</strong>。<br>在系统架构和设计中，抽象帮助我们从大处着眼（get our mind about big picture），隐藏细节（temporarily hide details）。抽象能力的强弱，直接决定我们所能解决问题的复杂性和规模大小。<br>关于抽象层次的跳跃性，开发过程应该保证代码的抽象层次一致性，保证代码清晰明了。如在电商处理订单过程中，需要的流程如下：  </p>
+<ul>
+<li>更新库存信息；  </li>
+<li>打折计算；  </li>
+<li>支付卡校验；  </li>
+<li>支付；  </li>
+<li>送货。<br>上述流程处于同一个抽象层次上，在编写代码的时候，不应该出现一些细节性的问题，如在支付卡校验过程中，出现调用某一银行卡的支付api，这是不正确的，应该调用一个抽象的支付api，而不是细节。  </li>
+</ul>
+<h4 id="分层思维"><a href="#分层思维" class="headerlink" title="分层思维"></a>分层思维</h4><p>分层抽象，系统分为若干层次化的模块，每一个层次负责解决一个问题，下层向上层提供服务，一些层次贯穿所有层，被称为共享层。常见的分层模式有TCP/IP协议，操作系统等。  </p>
+<h4 id="分治思维"><a href="#分治思维" class="headerlink" title="分治思维"></a>分治思维</h4><p>分而治之也是一种应对和管理复杂性的一般性方法，一次无法解决的大问题，划分成多个子问题，然后将子问题划分为更小的子问题，直到分解成可解的小问题集合，将这些解组合拼接成子问题的解，在以次拼成原问题的解。<br>面试时为了考察候选人的分治思维，我经常会面一个分治题：给你一台8G内存/500G磁盘空间的普通电脑，如何对一个100G的大文件进行排序？假定文件中都是字符串记录，一行约100个字符。<br>这是一个典型的分治问题，100G的大文件肯定无法一次加载到内存直接排序，所以需要先切分成若干小问题来解决。那么8G内存的计算机一次大概能排多大的数据量，可以在有限的时间内排完呢？也就是100G的大文件要怎么切法，切成多少份比较合适？这个是考察候选人的时间空间复杂度估算能力，需要一定的计算机组织和算法功底，也需要一定实战经验和sense。实际上8G内存的话，操作系统要用掉一部分，如果用Java开发排序程序，大致JVM可用2~4G内存，基于一般的经验值，一次排1G左右的数据应该没有问题（我实际在计算机上干过1G数据的排序，是OK的）。所以100G的文件需要先切分成100份，每份1G，这样每个子文件可以直接加载到内存进行排序。对于1G数据量的字符串排序，采用Java里头提供的快速排序算法是比较合适的。<br>好，经过有限时间的排序（取决于计算机性能，快的一天内能排完），假定100个1G的文件都已经排好了，相当于现在硬盘上有100个已经排好序的文件，但是我们最终需要的是一个排好序的文件，下面该怎么做？这个时候我们需要把已经解决的子问题组合起来，合并成我们需要的最终结果文件。这个时候该采用什么算法呢？这里考察候选人对外排序和归并排序算法的掌握程度，我们可以将100个排好序的文件进行两两归并排序，这样不断重复，我们就会得到50个排好序的文件，每个大小是2G。然后再两两归并，不断重复，直到最后两个文件归并成目标文件，这个文件就是100G并且是排好序的。因为是外排序+归并排序，每次只需要读取当前索引指向的文件记录到内存，进行比较，小的那个输出到目标文件，内存占用极少。另外，上面的算法是两路归并，也可以采用多路归并，甚至是采用堆排序进行优化，但是总体分治思路没有变化。<br>总体上这是一个非常好的面试题，除了考察候选人的分治思维之外，还考察对各种排序算法（快排，外排序，归并排序，堆排序）的理解，计算的时间空间复杂度估算，计算机的内外存特性和组织，文件操作等等。实际上能完全回答清楚这个问题的候选人极少，如果有幸被我面到一个，我会如获至宝，因为这个人有成长为优秀架构师的潜质。<br>另外，递归也是一种特殊的分治技术，掌握递归技术的开发人员，相当于掌握了一种强大的编程武器，可以解决一些一般开发人员无法解决的问题。比方说最近我的团队在研发一款新的服务框架，其中包括契约解析器(parser)，代码生产器(code generator)，序列化器(serializer)等组件，里头大量需要用到递归的思维和技术，没有这个思维的开发人员就干不了这个事情。所以我在面试候选人的时候，一般都会出递归相关的编程题，考察候选人的递归思维。  </p>
+<h4 id="演化思维"><a href="#演化思维" class="headerlink" title="演化思维"></a>演化思维</h4><p>设计开发之初，无法对全局业务进行掌握，并且随着业务量的增加和业务的变更，设计架构需要根据业务需求不断演化。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;架构的本质是管理复杂性，&lt;strong&gt;抽象&lt;/strong&gt;、&lt;strong&gt;分层&lt;/strong&gt;、&lt;strong&gt;分治&lt;/strong&gt; 和 &lt;strong&gt;演化&lt;/strong&gt; 思维是我们工程师/架构师应对和管理复杂性的四种最基本武器。&lt;a href=&quot;http://www.infoq.com/cn/articles/architecture-thought?utm_source=tuicool&amp;amp;utm_medium=referral&quot;&gt;原文地址&lt;/a&gt;。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="架构" scheme="http://abumaster.com/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+      <category term="思维" scheme="http://abumaster.com/tags/%E6%80%9D%E7%BB%B4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>去看墙外的世界</title>
     <link href="http://abumaster.com/2018/05/08/%E5%8E%BB%E7%9C%8B%E5%A2%99%E5%A4%96%E7%9A%84%E4%B8%96%E7%95%8C/"/>
     <id>http://abumaster.com/2018/05/08/去看墙外的世界/</id>
     <published>2018-05-08T06:33:45.000Z</published>
-    <updated>2018-05-08T07:39:55.269Z</updated>
+    <updated>2018-05-30T11:57:36.123Z</updated>
     
     <content type="html"><![CDATA[<p>前一段时间使用非常方便的Chrome翻墙插件 <strong>快速安全通道</strong> 不再可以免费使用，VIP价格挺高的，决定使用国外vps作为代理搭建翻墙服务器，折腾。  </p>
 <a id="more"></a>
@@ -823,6 +862,56 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
   </entry>
   
   <entry>
+    <title>ACE学习笔记4：任务和主动对象</title>
+    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
+    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
+    <published>2017-11-17T03:03:02.000Z</published>
+    <updated>2017-11-27T13:09:10.186Z</updated>
+    
+    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
+<a id="more"></a>
+<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
+<ul>
+<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
+<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
+<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
+</ul>
+<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
+<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
+<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
+</blockquote>
+<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
+<ul>
+<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
+<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
+<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
+</ul>
+<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
+<ul>
+<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
+<li>分发对象。请求队列的排队实例。</li>
+</ul>
+<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
+    
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Ubuntu 安装 Caffe 深度学习框架</title>
     <link href="http://abumaster.com/2017/11/17/Ubuntu%E5%AE%89%E8%A3%85caffe/"/>
     <id>http://abumaster.com/2017/11/17/Ubuntu安装caffe/</id>
@@ -894,56 +983,6 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
   </entry>
   
   <entry>
-    <title>ACE学习笔记4：任务和主动对象</title>
-    <link href="http://abumaster.com/2017/11/17/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%EF%BC%9A%E4%BB%BB%E5%8A%A1%E5%92%8C%E4%B8%BB%E5%8A%A8%E5%AF%B9%E8%B1%A1/"/>
-    <id>http://abumaster.com/2017/11/17/ACE学习笔记4：任务和主动对象/</id>
-    <published>2017-11-17T03:03:02.000Z</published>
-    <updated>2017-11-27T13:09:10.186Z</updated>
-    
-    <content type="html"><![CDATA[<p>主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 <em>主动对象</em>。  任务。  </p>
-<a id="more"></a>
-<h4 id="任务的简单使用"><a href="#任务的简单使用" class="headerlink" title="任务的简单使用"></a>任务的简单使用</h4><p>要创建任务和主动对象，要从 <code>ACE_Task</code> 中派生一个任务子类，然后必须进行以下的工作：  </p>
-<ul>
-<li><strong>实现初始化和终止方法</strong>：<code>open()</code> 方法实现专属任务的初始化代码，连接控制块、锁以及内存资源，<code>close()</code> 则是终止方法；  </li>
-<li><strong>调用启动方法</strong>：主动对象实例化必须调用 <code>activate()</code> 方法，要在主动对象中创建的线程数目及其他的一些信息作为参数传递给此函数；  </li>
-<li><strong>实现任务专有的处理方法</strong>：主动对象启动后，各个线程在 <code>svc()</code> 中启动，必须定义此方法。  </li>
-</ul>
-<p><strong>任务间的通信</strong>  每个任务底层都有一个消息队列，通常被用作任务间进行通信的一种方式。当一个任务想要与其他任务进行通信的时候会将消息放入与之谈话的消息队列中，通过调用 <code>getq()</code> 函数来获取消息，没有消息则进行睡眠，有消息到达时会自动唤醒并处理此消息。<br>使用：假设任务A和任务B之间通信，<code>A-&gt;B</code> 发送消息。首先，定义一个 <code>ACE_Message_Block</code> 类型的消息块<code>*mb</code>，可以是单一的类型，也可以是数据结构，然后，在A中通过调用 <code>B-&gt;putq(mb)</code> 向底层消息管道中压入一个消息快；然后B中用 <code>getq(mb)</code> 获取消息队列中的消息。实现两个任务之间的通信。  </p>
-<h4 id="主动对象"><a href="#主动对象" class="headerlink" title="主动对象"></a>主动对象</h4><blockquote>
-<p>主动对象模式用于降低方法执行和方法调用之间的耦合。该模式描述了另外一种更为透明的任务间通信方法。<br>传统上，所有的对象都是被动的代码段，对象中的代码是在对它发出方法调用的线程中执行的，当方法被调用时，调用线程将阻塞，直至调用结束。而主动对象却不一样。这些对象具有自己的命令执行线程，主动对象的方法将在自己的执行线程中执行，不会阻塞调用方法。</p>
-</blockquote>
-<p><strong>ACE主动对象模式实现至少涉及3个类模块:</strong>  </p>
-<ul>
-<li>提供多线程池 <code>ACE_Task_Base</code> 或者 <code>ACE_Task</code> 或者 <code>ACE_Thread_Manager</code> ；  </li>
-<li>提供请求排队的 <code>ACE_Activation_Queue</code>，其内部维护了 <code>ACE_Message_Queue</code> 的 <code>message_block</code> 消息指针队列；  </li>
-<li>提供了 <code>ACE_Activation_Queue</code> 队列操作实例的 <code>ACE_Method_Request</code> ，<code>ACE_Method_Request</code>是command模式，最低消耗仅为实现其内部的call方法。  </li>
-</ul>
-<p><strong>ACE主动对象实现需要依赖以上3个模块，至少构建2个类:</strong></p>
-<ul>
-<li>分发器，负责将请求参数排队，并提供数个执行线程。</li>
-<li>分发对象。请求队列的排队实例。</li>
-</ul>
-<p><a href="https://www.cnblogs.com/TianFang/archive/2006/12/11/589168.html">ACE 主动对象参考</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;主动对象区别于被动对象，被动对象的方法代码是在调用线程中执行的。主动对象持有自己的线程用于执行自己的方法。在对象中封装一个或一组线程的对象，称为 &lt;em&gt;主动对象&lt;/em&gt;。  任务。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-  </entry>
-  
-  <entry>
     <title>ACE学习笔记3：线程管理</title>
     <link href="http://abumaster.com/2017/11/07/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%EF%BC%9A%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/"/>
     <id>http://abumaster.com/2017/11/07/ACE学习笔记3：线程管理/</id>
@@ -977,9 +1016,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -1021,9 +1060,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
+    
+      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   
@@ -1100,43 +1139,6 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     
     
       <category term="其他" scheme="http://abumaster.com/tags/%E5%85%B6%E4%BB%96/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>curl库的使用</title>
-    <link href="http://abumaster.com/2017/10/20/curl%E5%BA%93%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
-    <id>http://abumaster.com/2017/10/20/curl库的使用/</id>
-    <published>2017-10-20T10:28:11.000Z</published>
-    <updated>2017-10-21T12:32:50.194Z</updated>
-    
-    <content type="html"><![CDATA[<p><em>curl</em>是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。<em>libcurl</em>是一种开发库，支持多种协议多个平台的文件传输库。<a href="https://curl.haxx.se/libcurl/">libcurl</a>。方便网络应用的开发。  </p>
-<a id="more"></a>
-<h4 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h4><p>从上述的<a href="https://curl.haxx.se/libcurl/">官网</a>下载源码，Linux平台<code>configure</code>和<code>make</code>就行了。说一下在 Windows 平台下的编译使用。<br>打开源码目录下的<code>winbuild</code>文件夹，按照<code>BUILD.WINDOWS.txt</code>文档中提供的编译信息，然后利用vs提供的命令行工具进行编译生成<code>.lib</code>或<code>.dll</code>文件。<br>使用，将lib文件和头文件加入到自己的工程中，然后添加预编译定义<code>CURL_STATICLIB</code>，或者在<code>curl.h</code>文件中添加一行宏定义<code>#define CURL_STATICLIB</code>。然后就可以编译使用了。  </p>
-<h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><p>1.<code>CURLcode curl_global_init(long flags);</code><br>描述：用于全局初始化，清理之前，只能被调用一次，如果在函数<code>curl_easy_init</code>前没有显示调用，则lcurl库会自动调用，所以多线程中应在主线程中显示调用此函数来初始化。初始化参数包括：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CURL_GLOBAL_ALL                      <span class="comment">//初始化所有的可能的调用。</span></div><div class="line">CURL_GLOBAL_SSL                      <span class="comment">//初始化支持 安全套接字层。</span></div><div class="line">CURL_GLOBAL_WIN32            <span class="comment">//初始化win32套接字库。</span></div><div class="line">CURL_GLOBAL_NOTHING         <span class="comment">//没有额外的初始化。</span></div></pre></td></tr></table></figure></p>
-<p>2.<code>void curl_global_cleanup(void);</code><br>与上述初始化函数类似，在结束使用的时候，调用此函数进行清理工作，这个函数仍然不是线程安全的，因此多线程环境下保证在主线程中调用一次来完成清理工作。  </p>
-<p>3.<code>CURL *curl_easy_init( );</code><br>初始化一个<code>CURL</code>指针，类似文件指针那样，意味着一个会话的开始。  </p>
-<p>4.<code>void curl_easy_cleanup(CURL *handle);</code><br>调用此函数来释放初始化的指针，完成清理工作。  </p>
-<p>5.<code>char *curl_version( );</code><br>描述当前库的版本信息。  </p>
-<p>6.<code>CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);</code><br>重要的一个函数，设置选项。告知程序要有何种行为。第一个参数表示初始化获得指针，第二个参数表示选项，第三个参数可以是函数指针、对象指针或者是一个long型变量，主要依赖第二个参数。<br>选项：<br><code>CURLOPT_URL</code> 设置访问URL；<br><code>CURLOPT_WRITEFUNCTION，CURLOPT_WRITEDATA</code> 写数据，<br>回调函数原型为：<code>size_t function( void *ptr, size_t size, size_t nmemb, void *stream);</code> 函数将在libcurl接收到数据后被调用，因此函数多做数据保存的功能，如处理下载文件。 <code>CURLOPT_WRITEDATA</code>  用于表明 <code>CURLOPT_WRITEFUNCTION</code> 函数中的stream指针的来源。<br>如果你没有通过 <code>CURLOPT_WRITEFUNCTION</code> 属性给easy handle设置回调函数，libcurl会提供一个默认的回调函数，它只是简单的将接收到的数据打印到标准输出。你也可以通过 <code>CURLOPT_WRITEDATA</code> 属性给默认回调函数传递一个已经打开的文件指针，用于将数据输出到文件里。<br><code>CURLOPT_HEADERFUNCTION，CURLOPT_HEADERDATA</code> 回调函数原型为 <code>size_t function( void *ptr, size_t size,size_t nmemb, void *stream);</code> libcurl一旦接收到http 头部数据后将调用该函数。<code>CURLOPT_WRITEDATA</code>  传递指针给libcurl，该指针表明 <code>CURLOPT_HEADERFUNCTION</code> 函数的stream指针的来源。<br><code>CURLOPT_READFUNCTION CURLOPT_READDATA</code> libCurl需要读取数据传递给远程主机时将调用 <code>CURLOPT_READFUNCTION</code> 指定的函数，函数原型是：<code>size_t function(void *ptr, size_t size, size_t nmemb,void *stream)</code> 。<br><code>CURLOPT_NOPROGRESS，CURLOPT_PROGRESSFUNCTION，CURLOPT_PROGRESSDATA</code><br>跟数据传输进度相关的参数。<code>CURLOPT_PROGRESSFUNCTION</code> 指定的函数正常情况下每秒被libcurl调用一次，为了使 <code>CURLOPT_PROGRESSFUNCTION</code>被调用，<code>CURLOPT_NOPROGRESS</code> 必须被设置为false，<code>CURLOPT_PROGRESSDATA</code> 指定的参数将作为 <code>CURLOPT_PROGRESSFUNCTION</code> 指定函数的第一个参数。<br><code>CURLOPT_FOLLOWLOCATION</code> 设置重定位URL。<br><code>CURLOPT_RANGE: CURLOPT_RESUME_FROM:</code> 断点重传相关设置。<code>CURLOPT_RANGE</code> 指定<code>char *</code>参数传递给libcurl，用于指明http域的RANGE头域，例如：表示头500个字节：bytes=0-499。<code>CURLOPT_RESUME_FROM</code> 传递一个long参数给libcurl，指定你希望开始传递的偏移量。<br>7.<code>CURLcode curl_easy_perform(CURL *handle);</code><br>让前面设置过选型的程序运行起来。参数为指针。返回值为0表示成功，非零表示错误，可以调用<code>const char *curl_easy_strerror(CURLcode errornum )</code>函数来获取错误信息。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;em&gt;curl&lt;/em&gt;是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。&lt;em&gt;libcurl&lt;/em&gt;是一种开发库，支持多种协议多个平台的文件传输库。&lt;a href=&quot;https://curl.haxx.se/libcurl/&quot;&gt;libcurl&lt;/a&gt;。方便网络应用的开发。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
-    
-      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
-    
-      <category term="网络" scheme="http://abumaster.com/tags/%E7%BD%91%E7%BB%9C/"/>
     
   </entry>
   
