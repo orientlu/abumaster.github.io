@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-06-09T12:41:09.825Z</updated>
+  <updated>2018-06-18T15:16:56.916Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -14,6 +14,214 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux命令行练习</title>
+    <link href="http://abumaster.com/2018/06/15/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%83%E4%B9%A0/"/>
+    <id>http://abumaster.com/2018/06/15/Linux命令行练习/</id>
+    <published>2018-06-15T08:29:33.000Z</published>
+    <updated>2018-06-18T15:16:56.916Z</updated>
+    
+    <content type="html"><![CDATA[<p>Linux 下命令行练习，旨在熟悉Linux下的命令，以及常用的工具。题目来源一个好玩的网站，<a href="https://cmdchallenge.com/">cmdchallenge</a>，以挑战的形式对各种命令进行练习。  </p>
+<a id="more"></a>
+<h1 id="主要界面"><a href="#主要界面" class="headerlink" title="主要界面"></a>主要界面</h1><p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-15/99270386.jpg" alt=""><br>当在题目下，输入正确的命令，并得出正确的结果时，会进入下一条命令，根据要求，用相关的命令，得到符合要求的结果。  </p>
+<h1 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h1><p><strong>grep</strong> 是一个全面按照正则表达式，搜索匹配文本的工具，把匹配的行打印出来。<br>使用：<code>grep [opetion]... pattern [FILE]...</code>，options如下：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 上下文显示控制：</span></div><div class="line">-A &lt;显示行数&gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</div><div class="line">-B &lt;显示的行数&gt; 除了显示符合要求的样式那一行外，并显示该行之前的内容。</div><div class="line">-C &lt;显示上下文行数&gt;  除了显示符合范本样式的那一列之外，并显示该行之前后的几行内容。</div><div class="line">--color 用颜色标记符合条件的匹配项</div><div class="line"></div><div class="line"><span class="comment"># 输出控制：</span></div><div class="line">-c 输出匹配的行数。</div><div class="line">-m &lt;NUM&gt; 输出匹配的NUM个结果。</div><div class="line">-b 在结果前加上，匹配项所在的字符偏移量。</div><div class="line">-n 在输出结果上加上行号。</div><div class="line">-H 输出结果前面加上文件名。</div><div class="line">-h 不输出文件名。</div><div class="line">-o 只输出完全匹配的内容。</div><div class="line"><span class="_">-a</span> 将二进制文件当做文本文件处理。</div><div class="line">-I 忽略二进制文件。</div><div class="line"><span class="_">-d</span>, --directories=ACTION  how to handle directories;ACTION is <span class="string">'read'</span>, <span class="string">'recurse'</span>, or <span class="string">'skip'</span></div><div class="line">-r -R 递归文件夹。</div><div class="line">-L 输出不匹配的文件名。</div><div class="line"><span class="_">-l</span> 只输出包含匹配的文件名。</div><div class="line">-q 不显示任何信息。</div><div class="line">-Z 输出的文件名后加上 0 bytes。</div><div class="line"></div><div class="line"><span class="comment"># 正则表达式</span></div><div class="line"><span class="_">-e</span>&lt;范本样式&gt; 指定字符串作为查找文件内容的范本样式。</div><div class="line">-E 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</div><div class="line"><span class="_">-f</span>&lt;范本文件&gt; 从文件中获得匹配样式，其中每一行为一个样式</div><div class="line">-F 将范本样式视为固定字符串的列表。</div><div class="line">-G 将范本样式视为普通的表示法来使用。</div><div class="line">-i 忽略字符大小写的差别。</div><div class="line">-v 反转查找。</div><div class="line">-w 只显示全字符合的匹配项。</div><div class="line">-x 只显示全行符合的匹配项。</div></pre></td></tr></table></figure></p>
+<p><strong>举个栗子：</strong><br>Windows 下使用 <code>tasklist</code> 命令，将进程信息保存到一个文件中，以此来测试 <code>grep</code> 的各个命令。<br><strong>1.简单的输出上下文相关的行</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/44782426.jpg" alt=""><br><strong>2.输出控制</strong><br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/41090895.jpg" alt=""><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#   -m5   表示输出匹配结果的5行</span></div><div class="line"><span class="comment">#   -b    表示输出匹配结果的偏移量</span></div><div class="line"><span class="comment">#   -n    输出匹配结果所在的行号</span></div><div class="line"><span class="comment">#   -H    输出结果前加上文件名</span></div><div class="line"><span class="comment">#   -o    输出完全匹配的信息，而不是整行内容</span></div><div class="line"><span class="comment">#   -a    将二进制文件当做文本来处理</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/96928073.jpg" alt=""><br>正则表达式的应用。正则表达式的基本标识符。  </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>$</code></td>
+<td>匹配输入字符结束的位置</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>*</code></td>
+<td>匹配前面的子表达式零次或多次</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>+</code></td>
+<td>匹配前面的子表达式一次或多次</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>.</code></td>
+<td>匹配单个字符</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>[</code></td>
+<td>标识一个中括号表达式的开始</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>?</code></td>
+<td>匹配前面的字表达式零次或一次</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>\</code></td>
+<td>转义字符，如果要匹配有特殊含义的字符，需要加上进行转义</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>^</code></td>
+<td>匹配输入字符的开始位置，当出现在中括号中时，则表示不接受任何表达式</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>{</code></td>
+<td>标记限定表达式的开始</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>这是竖线</code></td>
+<td>指定在两项之中进行一个选择</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>\&lt;</code></td>
+<td>表示词首</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>\&gt;</code></td>
+<td>表示词尾</td>
+</tr>
+</tbody>
+</table>
+<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><p><strong>1.extract_ip_address</strong><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Extract all IP addresses from files</span></div><div class="line"><span class="comment"># that start with "access.log" printing one</span></div><div class="line"><span class="comment"># IP address per line.</span></div><div class="line">grep -r -o ^[0-9.]*</div></pre></td></tr></table></figure></p>
+<h1 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h1><p><strong>sed</strong> 是一种流编辑器，它是文本处理中非常中的工具，能够完美的配合正则表达式使用，功能不同凡响。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。<br><strong>sed 命令格式</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sed [options] &apos;command&apos; file(s)</div><div class="line">sed [options] -f scripfile file(s)</div></pre></td></tr></table></figure></p>
+<p><strong>sed 的选项</strong>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="_">-e</span> &lt;script&gt;或--expression=&lt;script&gt;：以选项中的指定的script来处理输入的文本文件；</div><div class="line"><span class="_">-f</span> &lt;script文件&gt;或--file=&lt;script文件&gt;：以选项中指定的script文件来处理输入的文本文件；</div><div class="line">-h 或 --help：显示帮助；</div><div class="line">-n 或 --quiet或--silent：仅显示script处理后的结果；</div><div class="line">-V 或--version：显示版本信息；</div><div class="line">-b 二进制模式打开文件；</div><div class="line">-E 或 -r 在脚本中使用扩展的正则表达式</div><div class="line">-u 或 --unbuffered </div><div class="line">-i 在原文件中编辑</div></pre></td></tr></table></figure></p>
+<p><strong>sed 命令：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">a\  在当前行下面插入文本</div><div class="line">i\  在当前行上面插入文本</div><div class="line">c\  把选定的行改为新的文本</div><div class="line"></div><div class="line">d   删除，删除选择的行</div><div class="line">D   删除模块的第一行</div><div class="line">s   替换指定的字符</div><div class="line">h   拷贝模板块的内容到内存中的缓冲区。</div><div class="line">H   追加模板块的内容到内存中的缓冲区。</div><div class="line">g   替换一行中的所有匹配到的内容。</div><div class="line">G   获得内存缓冲区的内容，并追加到当前模板块文本的后面。</div><div class="line">l   列表不能打印字符的清单。</div><div class="line">n   读取下一个输入行，用下一个命令处理新的行而不是用第一个命令。</div><div class="line">N   追加下一个输入行到模板块后面并在二者间嵌入一个新行，改变当前行号码。</div><div class="line">p   打印模板块的行。</div><div class="line">P   打印模板块的第一行。</div><div class="line">q   退出Sed。</div><div class="line">b   lable 分支到脚本中带有标记的地方，如果分支不存在则分支到脚本的末尾。</div><div class="line">r   file 从file中读行。</div><div class="line">t   label if分支，从最后一行开始，条件一旦满足或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。</div><div class="line">T   label 错误分支，从最后一行开始，一旦发生错误或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。</div><div class="line">w   file 写并追加模板块到file末尾。  </div><div class="line">W   file 写并追加模板块的第一行到file末尾。  </div><div class="line">!   表示后面的命令对所有没有被选定的行发生作用。  </div><div class="line">=   打印当前行号码。  </div><div class="line">#   把注释扩展到下一个换行符以前。</div></pre></td></tr></table></figure></p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p><strong>1.替换文本中的字符串</strong><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">'s/hello/world/'</span> file</div><div class="line"><span class="comment"># 显示发生更改的行</span></div><div class="line">sed -n <span class="string">'s/test/TEST/p'</span> file</div><div class="line"><span class="comment"># 在源文件中更改 /g对符合条件全部替换</span></div><div class="line">sed -i <span class="string">'s/hello/world/g'</span> file</div><div class="line"><span class="comment"># 从第N处匹配开始替换使用 /Ng</span></div><div class="line"><span class="built_in">echo</span> hhhhhhhh | sed <span class="string">'s/h/H/3g'</span> <span class="comment"># 从第三个h开始替换</span></div></pre></td></tr></table></figure></p>
+<p><strong>2.删除文本中信息</strong>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 删除空白行</span></div><div class="line">sed <span class="string">'/^$/d'</span> file</div><div class="line"><span class="comment"># 删除文件的第二行</span></div><div class="line">sed <span class="string">'2d'</span> file</div><div class="line"><span class="comment"># 删除文件第二行到末尾</span></div><div class="line">sed <span class="string">'2,$d'</span> file</div><div class="line"><span class="comment"># 删除文件最后一行</span></div><div class="line">sed <span class="string">'$d'</span> file</div><div class="line"><span class="comment"># 删除所有 test开头的行</span></div><div class="line">sed <span class="string">'/^test/d'</span> file</div></pre></td></tr></table></figure></p>
+<h1 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h1><p>用于显示指定文件中末尾的几行内容，如果表示字符或行数的N数值之后有<code>+</code>时，则表示从N行开始，到文件尾。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-c [+]NUM 输出结尾的NUM个字节数，+NUM 表示输出从NUM字节开始到文件尾的信息，可以在其后加上单位，如k，kB，K，MB；</div><div class="line">-n [+]NUM 输出最后NUM行的信息，+NUM 表示从NUM行开始到结尾的数据输出；</div><div class="line">-v 显示文件头信息</div><div class="line">-q 不显示文件头信息</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/93310029.jpg" alt="">  </p>
+<h1 id="head"><a href="#head" class="headerlink" title="head"></a>head</h1><p>用于显示给定文件的前几行，默认10行，用途与<code>tail</code>正好相反，用管道结合起来可以显示文件中间的几行。用法<code>head 选项 参数</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-n&lt;数字&gt;：指定显示头部内容的行数；</div><div class="line">-c&lt;字符数&gt;：指定显示头部内容的字符数；</div><div class="line">-v：总是显示文件名的头信息；</div><div class="line">-q：不显示文件名的头信息。</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/49603155.jpg" alt="">  </p>
+<p>结合<code>tail</code>显示中间的文件<code>cat file1.md | tail -n +10 | head 10</code>，输出10行开始到19行结束。</p>
+<h1 id="wc"><a href="#wc" class="headerlink" title="wc"></a>wc</h1><p>字符字节统计命令，利用wc指令我们可以计算文件的Byte数、字数或是列数。
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-c或--bytes或——chars：只显示Bytes数；</div><div class="line">-m 统计字符数目</div><div class="line"><span class="_">-l</span> lines：只显示列数；</div><div class="line">-w words：只显示字数。</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-17/72464158.jpg" alt="">  </p>
+<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a>tr</h1><p><code>tr</code> 命令，对来自标准输入的字符进行替换、删除和压缩处理，将一组字符变成另一组字符。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">-c或--complerment：取代所有不属于第一字符集的字符；</div><div class="line"><span class="_">-d</span>或--delete：删除所有属于第一字符集的字符；</div><div class="line"><span class="_">-s</span>或--squeeze-repeats：把连续重复的字符以单独一个字符表示；</div><div class="line">-t或--truncate-set1：先删除第一字符集较第二字符集多出的字符。</div><div class="line"><span class="comment"># 字符集1：指定要转换或删除的原字符集。当执行转换操作时，必须使用参数“字符集2”指定转换的目标字符集。但执行删除操作时，不需要参数“字符集2”；</span></div><div class="line"><span class="comment"># 字符集2：指定要转换成的目标字符集。</span></div></pre></td></tr></table></figure></p>
+<p><strong>tr 可以使用的字符类：</strong><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[:alnum:]：字母和数字</div><div class="line">[:alpha:]：字母</div><div class="line">[:cntrl:]：控制（非打印）字符</div><div class="line">[:digit:]：数字</div><div class="line">[:graph:]：图形字符</div><div class="line">[:lower:]：小写字母</div><div class="line">[:<span class="built_in">print</span>:]：可打印字符</div><div class="line">[:punct:]：标点符号</div><div class="line">[:space:]：空白字符</div><div class="line">[:upper:]：大写字母</div><div class="line">[:xdigit:]：十六进制字符</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-18/90763520.jpg" alt="">  </p>
+<h1 id="seq"><a href="#seq" class="headerlink" title="seq"></a>seq</h1><blockquote>
+<p>用来输出某一个数到另一个数之间的所有整数序列</p>
+</blockquote>
+<p>主要参数：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 用法</span></div><div class="line">seq [选项]... 尾数</div><div class="line">seq [选项]... 首数 尾数</div><div class="line">seq [选项]... 首数 增量 尾数</div><div class="line"></div><div class="line"><span class="comment"># 选项</span></div><div class="line"><span class="_">-f</span>, --format=格式        使用<span class="built_in">printf</span> 样式的浮点格式</div><div class="line"><span class="_">-s</span>, --separator=字符串   使用指定字符串分隔数字（默认使用：\n）</div><div class="line">-w, --equal-width        在列前添加0 使得宽度相同 不能和<span class="_">-f</span>同时使用</div></pre></td></tr></table></figure></p>
+<p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-18/9882993.jpg" alt="">  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Linux 下命令行练习，旨在熟悉Linux下的命令，以及常用的工具。题目来源一个好玩的网站，&lt;a href=&quot;https://cmdchallenge.com/&quot;&gt;cmdchallenge&lt;/a&gt;，以挑战的形式对各种命令进行练习。  &lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="cmd" scheme="http://abumaster.com/tags/cmd/"/>
+    
+      <category term="linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>工具集</title>
+    <link href="http://abumaster.com/2018/06/13/%E5%B7%A5%E5%85%B7%E9%9B%86/"/>
+    <id>http://abumaster.com/2018/06/13/工具集/</id>
+    <published>2018-06-13T12:57:58.000Z</published>
+    <updated>2018-06-13T13:38:20.128Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>提高效率工具集汇总，备忘，装机必备。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="Windows-高效工具集合"><a href="#Windows-高效工具集合" class="headerlink" title="Windows 高效工具集合"></a>Windows 高效工具集合</h3><h4 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h4><p><strong>C++</strong>：  </p>
+<ul>
+<li>宇宙最强IDE <strong>visual studio 2015</strong>，<a href="https://msdn.itellyou.cn/">下载</a>，专业版的密钥<code>HMGNV-WCYXV-X7G9W-YCX63-B98R2</code>，网上可以随处找到。 </li>
+<li>开源跨平台 Qt ，<a href="http://download.qt.io/archive/qt/">下载列表</a>，可以选择 <em>MinGW</em> 或者 <em>vc</em> 作为编译器。</li>
+<li>gVim sublime txt 3 with MinGW <a href="https://keelii.github.io/2016/06/13/awsome-window-vimrc/">配置好看的界面</a>。</li>
+<li>文本编辑器  <ul>
+<li><a href="http://www.sublimetextcn.com/3/">sublimetext3</a>  </li>
+<li><a href="https://code.visualstudio.com/">vscode</a> </li>
+<li><a href="https://ivarptr.github.io/yu-writer.site/">yuwrite</a></li>
+</ul>
+</li>
+<li>Windows C++开发依赖工具包管理 <a href="https://github.com/Microsoft/vcpkg">vcpkg.exe</a></li>
+<li>帮助文档  <a href="https://zealdocs.org/">Zeal</a></li>
+</ul>
+<p><strong>Python</strong>：  </p>
+<ul>
+<li>Python 工具包 <a href="https://repo.continuum.io/archive/">Anaconda3</a></li>
+<li>IDE JetBrains PyCharm 太卡了，改用 vscode 或者 sublime text3 配置Python开发环境。</li>
+</ul>
+<p><strong>JavaScript相关</strong>：  </p>
+<ul>
+<li><a href="https://nodejs.org/zh-cn/">node.js</a> Windows版</li>
+<li>好玩的前端框架:<ul>
+<li><a href="&quot;https://alibaba.github.io/ice&quot;">ICE</a></li>
+<li>react</li>
+</ul>
+</li>
+</ul>
+<p><strong>版本控制</strong>：</p>
+<ul>
+<li>git cmd </li>
+<li>github Windows版</li>
+<li>好用的终端 cmder</li>
+</ul>
+<p><strong>数据库</strong>：</p>
+<ul>
+<li>MySQL Redis MongoDB sqlite</li>
+<li>数据库可视化 Navicat</li>
+</ul>
+<h4 id="办公"><a href="#办公" class="headerlink" title="办公"></a>办公</h4><p><strong>文档处理</strong>：</p>
+<ul>
+<li>office 2015</li>
+<li>Visio 2015</li>
+<li>极速PDF阅读器</li>
+<li>officebox 万彩办公</li>
+<li>Endnote 文献管理</li>
+<li>iSlide PPT插件</li>
+</ul>
+<p><strong>小工具</strong>: </p>
+<ul>
+<li>快速启动小工具 launchy 和 cerebro</li>
+<li>快速截图工具 Snipaster</li>
+</ul>
+<p><strong>下载</strong>: </p>
+<ul>
+<li>FDM</li>
+</ul>
+<h4 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网"></a>科学上网</h4><ul>
+<li>搬瓦工 购买国外服务器，并且创建sserver</li>
+<li>Shadowsocks 登录sserver</li>
+<li>Chrome 好用插件集合</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;提高效率工具集汇总，备忘，装机必备。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="其他" scheme="http://abumaster.com/categories/other/"/>
+    
+    
+      <category term="工具" scheme="http://abumaster.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="效率" scheme="http://abumaster.com/tags/%E6%95%88%E7%8E%87/"/>
+    
+  </entry>
   
   <entry>
     <title>Feature Pyramid Networks for Object Detection</title>
@@ -46,9 +254,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
       <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
+    
+      <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
     
       <category term="CV" scheme="http://abumaster.com/tags/CV/"/>
     
@@ -894,9 +1102,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
-    
       <category term="Git" scheme="http://abumaster.com/tags/Git/"/>
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
     
   </entry>
   
@@ -944,9 +1152,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
   </entry>
   
@@ -1055,90 +1263,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     
       <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记2：内存分配</title>
-    <link href="http://abumaster.com/2017/11/06/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02%EF%BC%9A%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/"/>
-    <id>http://abumaster.com/2017/11/06/ACE学习笔记2：内存分配/</id>
-    <published>2017-11-06T12:00:14.000Z</published>
-    <updated>2017-11-06T14:16:34.625Z</updated>
-    
-    <content type="html"><![CDATA[<p>一个成熟的框架或软件，都会有一个丰富的内存管理类，用于方便高效地管理内存。如STL中的内存池、Nginx中的内存池，通过预先从堆中申请空间，使用的时候可以从空闲存储中取（只是移动指针），避免频繁调用api和操作符从堆中申请释放空间，更有效率。ACE 中提供了两种不同的类用于管理内存（从堆中申请的内存或进程间共享的内存）。根据不同的开发应用选择合适的内存管理方案。  </p>
-<a id="more"></a>
-<h4 id="概况"><a href="#概况" class="headerlink" title="概况"></a>概况</h4><p>ACE 提供了两组不同的类进行内存管理：  </p>
-<ul>
-<li>基于 <code>ACE_Allocator</code> 类，用于局部的动态内存分配，使用动态绑定和策略模式来提供灵活性和扩展性；  </li>
-<li>基于 <code>ACE_Malloc</code> 模板类，用于局部动态内存管理类和共享内存类，通过C++模板和外部多态性为内存分配提供灵活性。   </li>
-</ul>
-<h4 id="分配器（ACE-Allocator）"><a href="#分配器（ACE-Allocator）" class="headerlink" title="分配器（ACE_Allocator）"></a>分配器（ACE_Allocator）</h4><p>分配器用于动态内存管理，提供了若干不同策略的分配器，提供相同的功能但是具有不同的特性。不同策略的分配器及其特性的描述：  </p>
-<ul>
-<li><code>ACE_Allocator</code> ACE 中的分配器类的接口类。这些类使用继承和动态绑定来提供灵活性。  </li>
-<li><code>ACE_Static_Allocator</code> 该分配器管理固定大小的内存。每当收到分配内存的请求时，它就移动内部指针、以返回内存块。它还假定内存一旦被分配，就再也不会被释放。  </li>
-<li><code>ACE_Cached_Allocator</code> 使用内存池预先分配一定大小的内存块，连成空闲链表，内存的申请和释放只是取和放内存块。  </li>
-<li><code>ACE_New_Allocator</code> 封装了C++中的 <code>new</code> 和 <code>delete</code> 运算符。  </li>
-</ul>
-<p><strong>使用：</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Malloc.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Log_Msg.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Thread_Mutex.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Malloc_T.h"</span></span></div><div class="line"></div><div class="line"><span class="comment">//分配 1k 大小的内存块，内存块简单的为char</span></div><div class="line"><span class="comment">//也可以用合适的结构和类</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> MEMORY_BLOCK[<span class="number">1024</span>];</div><div class="line"><span class="keyword">typedef</span> ACE_Cached_Allocator&lt;MEMORY_BLOCK, ACE_SYNCH_MUTEX&gt; Allocator;</div><div class="line"><span class="keyword">class</span> MessageManager</div><div class="line">&#123;</div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    MessageManager(<span class="keyword">int</span> n_blocks) :allocator_(n_blocks), message_count_(<span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        msg_array_ = <span class="keyword">new</span> <span class="keyword">char</span> *[n_blocks];</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">allocate_msg</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *msg)</span></div><div class="line">    </span>&#123;</div><div class="line">        msg_array_[message_count_] = (<span class="keyword">char</span>*)allocator_.<span class="built_in">malloc</span>(ACE_OS::<span class="built_in">strlen</span>(msg) + <span class="number">1</span>);</div><div class="line">        ACE_OS::<span class="built_in">strcpy</span>(msg_array_[message_count_], msg);</div><div class="line">        ++message_count_;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">free_all_msg</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; message_count_; ++i)</div><div class="line">            allocator_.<span class="built_in">free</span>(msg_array_[i]);</div><div class="line"></div><div class="line">        message_count_ = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">display_all_msg</span><span class="params">()</span></div><div class="line">    </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; message_count_; ++i)</div><div class="line">            <span class="built_in">printf</span>(<span class="string">"msg: %s\n"</span>, msg_array_[i]);</div><div class="line">    &#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="keyword">char</span> **msg_array_;</div><div class="line">    Allocator allocator_;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">int</span> message_count_;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">int</span> n;</div><div class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</div><div class="line">    <span class="keyword">char</span> *message = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">100</span>];</div><div class="line">    <span class="function">MessageManager <span class="title">manage</span><span class="params">(n)</span></span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">sprintf</span>(message, <span class="string">"msg id %d, hello"</span>, i);</div><div class="line">        manage.allocate_msg(message);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    manage.display_all_msg();</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="ACE-Malloc"><a href="#ACE-Malloc" class="headerlink" title="ACE_Malloc"></a>ACE_Malloc</h4><p>ACE_Malloc 模板类进行内存管理，有两个模板参数，一个是内存池，另一个是锁。应用有自己的空闲内存表，当内存不够用时，则向底层内存池申请，释放时不会释放给内存池，而是连接到自己的空闲链表中，所以内存只会增大不会减小，可以调用<code>remove()</code>方法将内存还给系统。<br>使用：<br>首先选定内存池和锁机制实例化一个<code>ACE_Malloc</code>模板，生成一个分配器。用该分配器实例化一个对象，这就是应用中可以使用的分配器。可用的内存池：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Local_Memory_Pool.h"</span> <span class="comment">//使用c++的new和delete创建的局部内存池，不可进程间共享</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/MMAP_Memory_Pool.h"</span> <span class="comment">//mmap创建的内存池，可以进程间共享</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Sbrk_Memory_Pool.h"</span> <span class="comment">//sbrk调用创建的内存池</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Shared_Memory_Pool.h"</span> <span class="comment">//shmget调用创建</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Pagefile_Memory_Pool.h"</span></span></div></pre></td></tr></table></figure></p>
-<p>例子<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Shared_Memory_MM.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Malloc.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ace/Malloc_T.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DATA_SIZE 100</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MESSAGE1 <span class="meta-string">"Hiya over there client process"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MESSAGE2 <span class="meta-string">"Did you hear me the first time?"</span></span></div><div class="line">LPCTSTR poolname=<span class="string">"My_Pool"</span>;</div><div class="line"><span class="keyword">typedef</span> ACE_Malloc&lt;ACE_SHARED_MEMORY_POOL,ACE_Null_Mutex&gt; Malloc_Allocator;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">server</span> <span class="params">(<span class="keyword">void</span>)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">//Create the memory allocator passing it the shared memory</span></div><div class="line">    <span class="comment">//pool that you want to use</span></div><div class="line">    <span class="function">Malloc_Allocator <span class="title">shm_allocator</span><span class="params">(poolname)</span></span>;</div><div class="line">    <span class="comment">//Create a message, allocate memory for it and bind it with</span></div><div class="line">    <span class="comment">//a name so that the client can the find it in the memory</span></div><div class="line">    <span class="comment">//pool</span></div><div class="line">    <span class="keyword">char</span>* Message1=(<span class="keyword">char</span>*)shm_allocator.<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(MESSAGE1));</div><div class="line">    ACE_OS::<span class="built_in">strcpy</span>(Message1,MESSAGE1);</div><div class="line">    shm_allocator.bind(<span class="string">"FirstMessage"</span>,Message1);</div><div class="line">    ACE_DEBUG((LM_DEBUG,<span class="string">"&lt;&lt;%s\n"</span>,Message1));</div><div class="line">    <span class="comment">//How about a second message</span></div><div class="line">    <span class="keyword">char</span>* Message2=(<span class="keyword">char</span>*)shm_allocator.<span class="built_in">malloc</span>(<span class="built_in">strlen</span>(MESSAGE2));</div><div class="line">    ACE_OS::<span class="built_in">strcpy</span>(Message2,MESSAGE2);</div><div class="line">    shm_allocator.bind(<span class="string">"SecondMessage"</span>,Message2);</div><div class="line">    ACE_DEBUG((LM_DEBUG,<span class="string">"&lt;&lt;%s\n"</span>,Message2));</div><div class="line">    <span class="comment">//Set the Server to go to sleep for a while so that the client has</span></div><div class="line">    <span class="comment">//a chance to do its stuff</span></div><div class="line">    ACE_DEBUG((LM_DEBUG,</div><div class="line">    <span class="string">"Server done writing.. going to sleep zzz..\n\n\n"</span>));</div><div class="line">    ACE_OS::sleep(<span class="number">2</span>);</div><div class="line">    <span class="comment">//Get rid of all resources allocated by the server. In other</span></div><div class="line">    <span class="comment">//words get rid of the shared memory pool that had been</span></div><div class="line">    <span class="comment">//previously allocated</span></div><div class="line">    shm_allocator.remove();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">client</span><span class="params">(<span class="keyword">void</span>)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="comment">//Create a memory allocator. Be sure that the client passes</span></div><div class="line">    <span class="comment">// in the "right" name here so that both the client and the</span></div><div class="line">    <span class="comment">//server use the same memory pool. We wouldn’t want them to</span></div><div class="line">    <span class="comment">// BOTH create different underlying pools.</span></div><div class="line">    <span class="function">Malloc_Allocator <span class="title">shm_allocator</span><span class="params">(poolname)</span></span>;</div><div class="line">    <span class="comment">//Get that first message. Notice that the find is looking up the</span></div><div class="line">    <span class="comment">//memory based on the "name" that was bound to it by the server.</span></div><div class="line">    <span class="keyword">void</span> *Message1;</div><div class="line">    <span class="keyword">if</span>(shm_allocator.find(<span class="string">"FirstMessage"</span>,Message1)==<span class="number">-1</span>)</div><div class="line">    &#123;</div><div class="line">        ACE_ERROR((LM_ERROR,</div><div class="line">                <span class="string">"Client: Problem cant find data that server has sent\n"</span>));</div><div class="line">        ACE_OS::<span class="built_in">exit</span>(<span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    ACE_OS::<span class="built_in">printf</span>(<span class="string">"&gt;&gt;%s\n"</span>,(<span class="keyword">char</span>*) Message1);</div><div class="line">    ACE_OS::fflush(<span class="built_in">stdout</span>);</div><div class="line">    <span class="comment">//Lets get that second message now.</span></div><div class="line">    <span class="keyword">void</span> *Message2;</div><div class="line">    <span class="keyword">if</span>(shm_allocator.find(<span class="string">"SecondMessage"</span>,Message2)==<span class="number">-1</span>)</div><div class="line">    &#123;</div><div class="line">        ACE_ERROR((LM_ERROR,</div><div class="line">                <span class="string">"Client: Problem cant find data that server has sent\n"</span>));</div><div class="line">        ACE_OS::<span class="built_in">exit</span>(<span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">    ACE_OS::<span class="built_in">printf</span>(<span class="string">"&gt;&gt;%s\n"</span>,(<span class="keyword">char</span>*)Message2);</div><div class="line">    ACE_OS::fflush(<span class="built_in">stdout</span>);</div><div class="line">    ACE_DEBUG((LM_DEBUG,<span class="string">"Client done reading! BYE NOW\n"</span>));</div><div class="line">    ACE_OS::fflush(<span class="built_in">stdout</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span>, <span class="keyword">char</span> *[])</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">switch</span> (ACE_OS::fork ())</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">case</span> <span class="number">-1</span>:</div><div class="line">            ACE_ERROR_RETURN ((LM_ERROR, <span class="string">"%p\n"</span>, <span class="string">"fork"</span>), <span class="number">1</span>);</div><div class="line">        <span class="keyword">case</span> <span class="number">0</span>:</div><div class="line">        <span class="comment">// Make sure the server starts up first.</span></div><div class="line">            ACE_OS::sleep (<span class="number">1</span>);</div><div class="line">            client ();</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            server ();</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Windows　平台下将上述代码中改为<code>typedef ACE_Malloc&lt;ACE_MMAP_MEMORY_POOL, ACE_Null_Mutex&gt; Malloc_Allocator;</code> ，并且，不能用fork来创建子进程，需要分两个程序来测试。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一个成熟的框架或软件，都会有一个丰富的内存管理类，用于方便高效地管理内存。如STL中的内存池、Nginx中的内存池，通过预先从堆中申请空间，使用的时候可以从空闲存储中取（只是移动指针），避免频繁调用api和操作符从堆中申请释放空间，更有效率。ACE 中提供了两种不同的类用于管理内存（从堆中申请的内存或进程间共享的内存）。根据不同的开发应用选择合适的内存管理方案。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记-1</title>
-    <link href="http://abumaster.com/2017/11/04/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/"/>
-    <id>http://abumaster.com/2017/11/04/ACE学习笔记-1/</id>
-    <published>2017-11-04T06:48:01.000Z</published>
-    <updated>2017-11-04T07:11:37.308Z</updated>
-    
-    <content type="html"><![CDATA[<p><strong>ACE</strong> (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 <em>中间件</em> 提供了众多功能和特性。第一章安装。<br><a id="more"></a></p>
-<ul>
-<li><p><strong>平台</strong><br>Windows 10 + vs2013 + ACE6.4.0  </p>
-</li>
-<li><p>下载  <a href="http://download.dre.vanderbilt.edu/">地址</a>。解压得到文件夹 <code>ACE_wrappers</code>，其中包含了源文件以及工程文件；  </p>
-</li>
-<li><p>目录下有 <code>ACE-INSTALL.html</code> 包含了安装指导，在ace文件夹下新建一个 <code>config.h</code> 文件，其中添加头文件和宏定义</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_HAS_STANDARD_CPP_LIBRARY 1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"config-win32.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_NO_INLINE</span></div></pre></td></tr></table></figure>
-</li>
-<li><p>打开 <code>ace_vc12.sln</code> 解决方案，根据情况编译 Debug 或者 Release 版本的ace库，编译完成后在 <code>ACE_wrappers/lib</code> 下生成了 <code>lib</code> 和 <code>dll</code> 。  </p>
-</li>
-<li>使用，新建工程可以将头文件目录以及库目录添加到工程中。  </li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;ACE&lt;/strong&gt; (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 &lt;em&gt;中间件&lt;/em&gt; 提供了众多功能和特性。第一章安装。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
     
   </entry>
   

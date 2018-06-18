@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Linux命令行练习]]></title>
+    <url>%2F2018%2F06%2F15%2FLinux%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%83%E4%B9%A0%2F</url>
+    <content type="text"><![CDATA[Linux 下命令行练习，旨在熟悉Linux下的命令，以及常用的工具。题目来源一个好玩的网站，cmdchallenge，以挑战的形式对各种命令进行练习。 主要界面当在题目下，输入正确的命令，并得出正确的结果时，会进入下一条命令，根据要求，用相关的命令，得到符合要求的结果。 grepgrep 是一个全面按照正则表达式，搜索匹配文本的工具，把匹配的行打印出来。使用：grep [opetion]... pattern [FILE]...，options如下： 123456789101112131415161718192021222324252627282930313233# 上下文显示控制：-A &lt;显示行数&gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。-B &lt;显示的行数&gt; 除了显示符合要求的样式那一行外，并显示该行之前的内容。-C &lt;显示上下文行数&gt; 除了显示符合范本样式的那一列之外，并显示该行之前后的几行内容。--color 用颜色标记符合条件的匹配项# 输出控制：-c 输出匹配的行数。-m &lt;NUM&gt; 输出匹配的NUM个结果。-b 在结果前加上，匹配项所在的字符偏移量。-n 在输出结果上加上行号。-H 输出结果前面加上文件名。-h 不输出文件名。-o 只输出完全匹配的内容。-a 将二进制文件当做文本文件处理。-I 忽略二进制文件。-d, --directories=ACTION how to handle directories;ACTION is 'read', 'recurse', or 'skip'-r -R 递归文件夹。-L 输出不匹配的文件名。-l 只输出包含匹配的文件名。-q 不显示任何信息。-Z 输出的文件名后加上 0 bytes。# 正则表达式-e&lt;范本样式&gt; 指定字符串作为查找文件内容的范本样式。-E 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。-f&lt;范本文件&gt; 从文件中获得匹配样式，其中每一行为一个样式-F 将范本样式视为固定字符串的列表。-G 将范本样式视为普通的表示法来使用。-i 忽略字符大小写的差别。-v 反转查找。-w 只显示全字符合的匹配项。-x 只显示全行符合的匹配项。 举个栗子：Windows 下使用 tasklist 命令，将进程信息保存到一个文件中，以此来测试 grep 的各个命令。1.简单的输出上下文相关的行2.输出控制123456# -m5 表示输出匹配结果的5行# -b 表示输出匹配结果的偏移量# -n 输出匹配结果所在的行号# -H 输出结果前加上文件名# -o 输出完全匹配的信息，而不是整行内容# -a 将二进制文件当做文本来处理 正则表达式的应用。正则表达式的基本标识符。 字符 说明 $ 匹配输入字符结束的位置 * 匹配前面的子表达式零次或多次 + 匹配前面的子表达式一次或多次 . 匹配单个字符 [ 标识一个中括号表达式的开始 ? 匹配前面的字表达式零次或一次 \ 转义字符，如果要匹配有特殊含义的字符，需要加上进行转义 ^ 匹配输入字符的开始位置，当出现在中括号中时，则表示不接受任何表达式 { 标记限定表达式的开始 这是竖线 指定在两项之中进行一个选择 \&lt; 表示词首 \&gt; 表示词尾 练习题1.extract_ip_address1234# Extract all IP addresses from files# that start with "access.log" printing one# IP address per line.grep -r -o ^[0-9.]* sedsed 是一种流编辑器，它是文本处理中非常中的工具，能够完美的配合正则表达式使用，功能不同凡响。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”（pattern space），接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有 改变，除非你使用重定向存储输出。Sed主要用来自动编辑一个或多个文件；简化对文件的反复操作；编写转换程序等。sed 命令格式12sed [options] &apos;command&apos; file(s)sed [options] -f scripfile file(s) sed 的选项 123456789-e &lt;script&gt;或--expression=&lt;script&gt;：以选项中的指定的script来处理输入的文本文件；-f &lt;script文件&gt;或--file=&lt;script文件&gt;：以选项中指定的script文件来处理输入的文本文件；-h 或 --help：显示帮助；-n 或 --quiet或--silent：仅显示script处理后的结果；-V 或--version：显示版本信息；-b 二进制模式打开文件；-E 或 -r 在脚本中使用扩展的正则表达式-u 或 --unbuffered -i 在原文件中编辑 sed 命令：1234567891011121314151617181920212223242526a\ 在当前行下面插入文本i\ 在当前行上面插入文本c\ 把选定的行改为新的文本d 删除，删除选择的行D 删除模块的第一行s 替换指定的字符h 拷贝模板块的内容到内存中的缓冲区。H 追加模板块的内容到内存中的缓冲区。g 替换一行中的所有匹配到的内容。G 获得内存缓冲区的内容，并追加到当前模板块文本的后面。l 列表不能打印字符的清单。n 读取下一个输入行，用下一个命令处理新的行而不是用第一个命令。N 追加下一个输入行到模板块后面并在二者间嵌入一个新行，改变当前行号码。p 打印模板块的行。P 打印模板块的第一行。q 退出Sed。b lable 分支到脚本中带有标记的地方，如果分支不存在则分支到脚本的末尾。r file 从file中读行。t label if分支，从最后一行开始，条件一旦满足或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。T label 错误分支，从最后一行开始，一旦发生错误或者T，t命令，将导致分支到带有标号的命令处，或者到脚本的末尾。w file 写并追加模板块到file末尾。 W file 写并追加模板块的第一行到file末尾。 ! 表示后面的命令对所有没有被选定的行发生作用。 = 打印当前行号码。 # 把注释扩展到下一个换行符以前。 练习1.替换文本中的字符串1234567sed 's/hello/world/' file# 显示发生更改的行sed -n 's/test/TEST/p' file# 在源文件中更改 /g对符合条件全部替换sed -i 's/hello/world/g' file# 从第N处匹配开始替换使用 /Ngecho hhhhhhhh | sed 's/h/H/3g' # 从第三个h开始替换 2.删除文本中信息 12345678910# 删除空白行sed '/^$/d' file# 删除文件的第二行sed '2d' file# 删除文件第二行到末尾sed '2,$d' file# 删除文件最后一行sed '$d' file# 删除所有 test开头的行sed '/^test/d' file tail用于显示指定文件中末尾的几行内容，如果表示字符或行数的N数值之后有+时，则表示从N行开始，到文件尾。1234-c [+]NUM 输出结尾的NUM个字节数，+NUM 表示输出从NUM字节开始到文件尾的信息，可以在其后加上单位，如k，kB，K，MB；-n [+]NUM 输出最后NUM行的信息，+NUM 表示从NUM行开始到结尾的数据输出；-v 显示文件头信息-q 不显示文件头信息 head用于显示给定文件的前几行，默认10行，用途与tail正好相反，用管道结合起来可以显示文件中间的几行。用法head 选项 参数1234-n&lt;数字&gt;：指定显示头部内容的行数；-c&lt;字符数&gt;：指定显示头部内容的字符数；-v：总是显示文件名的头信息；-q：不显示文件名的头信息。 结合tail显示中间的文件cat file1.md | tail -n +10 | head 10，输出10行开始到19行结束。 wc字符字节统计命令，利用wc指令我们可以计算文件的Byte数、字数或是列数。 1234-c或--bytes或——chars：只显示Bytes数；-m 统计字符数目-l lines：只显示列数；-w words：只显示字数。 trtr 命令，对来自标准输入的字符进行替换、删除和压缩处理，将一组字符变成另一组字符。123456-c或--complerment：取代所有不属于第一字符集的字符；-d或--delete：删除所有属于第一字符集的字符；-s或--squeeze-repeats：把连续重复的字符以单独一个字符表示；-t或--truncate-set1：先删除第一字符集较第二字符集多出的字符。# 字符集1：指定要转换或删除的原字符集。当执行转换操作时，必须使用参数“字符集2”指定转换的目标字符集。但执行删除操作时，不需要参数“字符集2”；# 字符集2：指定要转换成的目标字符集。 tr 可以使用的字符类：1234567891011[:alnum:]：字母和数字[:alpha:]：字母[:cntrl:]：控制（非打印）字符[:digit:]：数字[:graph:]：图形字符[:lower:]：小写字母[:print:]：可打印字符[:punct:]：标点符号[:space:]：空白字符[:upper:]：大写字母[:xdigit:]：十六进制字符 seq 用来输出某一个数到另一个数之间的所有整数序列 主要参数： 123456789# 用法seq [选项]... 尾数seq [选项]... 首数 尾数seq [选项]... 首数 增量 尾数# 选项-f, --format=格式 使用printf 样式的浮点格式-s, --separator=字符串 使用指定字符串分隔数字（默认使用：\n）-w, --equal-width 在列前添加0 使得宽度相同 不能和-f同时使用]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>技巧</tag>
+        <tag>cmd</tag>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[工具集]]></title>
+    <url>%2F2018%2F06%2F13%2F%E5%B7%A5%E5%85%B7%E9%9B%86%2F</url>
+    <content type="text"><![CDATA[提高效率工具集汇总，备忘，装机必备。 Windows 高效工具集合编程C++： 宇宙最强IDE visual studio 2015，下载，专业版的密钥HMGNV-WCYXV-X7G9W-YCX63-B98R2，网上可以随处找到。 开源跨平台 Qt ，下载列表，可以选择 MinGW 或者 vc 作为编译器。 gVim sublime txt 3 with MinGW 配置好看的界面。 文本编辑器 sublimetext3 vscode yuwrite Windows C++开发依赖工具包管理 vcpkg.exe 帮助文档 Zeal Python： Python 工具包 Anaconda3 IDE JetBrains PyCharm 太卡了，改用 vscode 或者 sublime text3 配置Python开发环境。 JavaScript相关： node.js Windows版 好玩的前端框架: ICE react 版本控制： git cmd github Windows版 好用的终端 cmder 数据库： MySQL Redis MongoDB sqlite 数据库可视化 Navicat 办公文档处理： office 2015 Visio 2015 极速PDF阅读器 officebox 万彩办公 Endnote 文献管理 iSlide PPT插件 小工具: 快速启动小工具 launchy 和 cerebro 快速截图工具 Snipaster 下载: FDM 科学上网 搬瓦工 购买国外服务器，并且创建sserver Shadowsocks 登录sserver Chrome 好用插件集合]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>工具</tag>
+        <tag>效率</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Feature Pyramid Networks for Object Detection]]></title>
     <url>%2F2018%2F06%2F09%2FDetection%2F</url>
     <content type="text"><![CDATA[用于物体检测的特征金字塔网络，由 FAIR 发表。特征金字塔是识别系统中检测不同尺度大小目标的基础组件，最近的基于深度学习的物体监测器中，避免使用金字塔表示，一个原因是对内存和计算敏感。本文使用固有的多尺度和金字塔形的卷积网络，构建特征金字塔，尽可能减少了额外的代价。一个自顶向下的有侧边连接的网络模型，用于为各个尺度构建高层次语义特征图。作为一个模块嵌入到其他物体检测模型中，有着很好的实验结果，为多尺度物体检测提供了一种解决方案。 背景多尺度物体的检测是计算机视觉任务中一个基本的挑战。 第一种，将原始图像缩放为不同的尺度，分别提取出特征图，进行预测； 第二种，单一的图像放入网络中，输出预测结果； 第三种，单张图像放入网络中，对不同层次，预测； 第四种，从不同层次中提取出特征图，构建成金字塔型的特征图，并预测。 特征金字塔网络本文提出了一种结构 Feature Pyramid Network（FPN） ，如下： Bottom-up pathway，自下而上的路径，与传统的卷积网络类似，分层次获得图像特征组合，特征图逐层缩小，而特征图的数量在增加，每一个层次被称为一个阶段，同时也是一个金字塔层次级别。 Top-down pathway and lateral connections，自顶下下的路径，通过上采样获得更大的分辨率特征图，很粗糙，但是从高层金字塔层次获得的语义更强。通过横向连接去优化这个分割图，横向连接将两条路径上，大小相同的特征图连接，自底向上的特征图包含了低层次的语义。]]></content>
@@ -8,8 +33,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>CV</tag>
       </tags>
   </entry>
@@ -182,8 +207,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>技巧</tag>
         <tag>Git</tag>
+        <tag>技巧</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +220,8 @@
       </categories>
       <tags>
         <tag>框架</tag>
-        <tag>ACE</tag>
         <tag>C++</tag>
+        <tag>ACE</tag>
       </tags>
   </entry>
   <entry>
@@ -221,8 +246,8 @@
       </categories>
       <tags>
         <tag>框架</tag>
-        <tag>ACE</tag>
         <tag>C++</tag>
+        <tag>ACE</tag>
       </tags>
   </entry>
   <entry>
@@ -234,8 +259,8 @@
       </categories>
       <tags>
         <tag>框架</tag>
-        <tag>ACE</tag>
         <tag>C++</tag>
+        <tag>ACE</tag>
       </tags>
   </entry>
   <entry>
@@ -749,8 +774,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -762,8 +787,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -823,8 +848,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -847,8 +872,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -903,8 +928,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -937,8 +962,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -949,8 +974,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -973,8 +998,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
