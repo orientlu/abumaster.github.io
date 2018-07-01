@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abumaster.com/"/>
-  <updated>2018-06-18T15:16:56.916Z</updated>
+  <updated>2018-07-01T13:48:17.807Z</updated>
   <id>http://abumaster.com/</id>
   
   <author>
@@ -16,11 +16,47 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>安装 Ubuntu server 版本</title>
+    <link href="http://abumaster.com/2018/06/26/%E5%AE%89%E8%A3%85Ubuntu-server%E7%89%88%E6%9C%AC/"/>
+    <id>http://abumaster.com/2018/06/26/安装Ubuntu-server版本/</id>
+    <published>2018-06-26T13:17:45.000Z</published>
+    <updated>2018-07-01T13:48:17.807Z</updated>
+    
+    <content type="html"><![CDATA[<p>从同学那里得到了一个免费的显卡坏掉的戴尔笔记本，所以装一个 Ubuntu server 玩一下。安装 Ubuntu server 版本与安装桌面版的有一些不同，同样在物理机上安装与在虚拟机中安装也不同，记录一些在安装过程中出现的问题。</p>
+<a id="more"></a>
+<h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><p>1.从 <a href="https://www.ubuntu.com/download/alternative-downloads">Ubuntu 官网</a> 上下载对应的服务器版本。<br>2.制作U盘启动器，用 UltraISO 将ISO刻录到U盘中，作为启动盘。<br>3.开机boot用U盘启动。<br>4.一路选择安装。  </p>
+<p><strong>事情当然不会这么容易了，安装过程中出现了很多问题。</strong>  </p>
+<h1 id="问题出现和解决"><a href="#问题出现和解决" class="headerlink" title="问题出现和解决"></a>问题出现和解决</h1><h2 id="光盘无法读取"><a href="#光盘无法读取" class="headerlink" title="光盘无法读取"></a>光盘无法读取</h2><p>安装过程出现 CD-ROM 读取失败，这种情况。首先，我们制作好了 U盘启动盘，也要把Ubuntu的iso镜像拷贝到U盘的根目录下。然后，再一次重新开始安装。出现错误，退出打开命令行工具。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ls /dev/sd* #显示出所有的硬件设备，一般u盘就是dev/sdb 那么u盘上的分区就是dev/sdb1</div><div class="line">#创建一个空目录，将U盘分区挂载到这个空目录上</div><div class="line">mkdir ubt</div><div class="line">mount /dev/sdb1 /ubt</div><div class="line"># 然后将其中的Ubuntu ISO镜像挂载到cdrom上</div><div class="line">mount /ubt/ubuntu-xxx.iso /cdrom</div><div class="line">exit</div></pre></td></tr></table></figure></p>
+<h2 id="无线网络设置"><a href="#无线网络设置" class="headerlink" title="无线网络设置"></a>无线网络设置</h2><p>使用到的工具 <code>wpasupplicant</code> ，一般高版本的Linux集成了这个工具。<br>生成无线路由密钥。这一步就是根据你无线网络的SSID和密码，来生成WLAN需要的配置文件。命令如下：
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#wpa_passphrase 无线网络SSID 无线网络密码 &gt; 配置文件名</span></div><div class="line"><span class="comment">#wpa_passphraseTP-LINK 123456 &gt; /etc/wpa_config.conf</span></div></pre></td></tr></table></figure></p>
+<p>设置无线网络。编辑 <code>/etc/network/interfaces</code> 文件，将wlan添加到其中：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">auto wlan0</div><div class="line">iface wlan0 inet dhcp</div><div class="line">wpa-conf /etc/wpa_config.conf</div></pre></td></tr></table></figure></p>
+<p>一般人的都是<code>eth0</code>，和<code>wlan0</code>，但在Ubuntu Server 16.04里面变成了<code>enp4s0</code> 和 <code>wlp5s0</code>，所以还需要查看网卡的名称，有时 <code>wlan0</code>这个名称是不对的，所以使用 <code>ip addr</code> 查看网卡的名称，进行替换。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;从同学那里得到了一个免费的显卡坏掉的戴尔笔记本，所以装一个 Ubuntu server 玩一下。安装 Ubuntu server 版本与安装桌面版的有一些不同，同样在物理机上安装与在虚拟机中安装也不同，记录一些在安装过程中出现的问题。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://abumaster.com/categories/linux/"/>
+    
+    
+      <category term="技巧" scheme="http://abumaster.com/tags/jq/"/>
+    
+      <category term="Linux" scheme="http://abumaster.com/tags/linux/"/>
+    
+      <category term="其他" scheme="http://abumaster.com/tags/%E5%85%B6%E4%BB%96/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux命令行练习</title>
     <link href="http://abumaster.com/2018/06/15/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BB%83%E4%B9%A0/"/>
     <id>http://abumaster.com/2018/06/15/Linux命令行练习/</id>
     <published>2018-06-15T08:29:33.000Z</published>
-    <updated>2018-06-18T15:16:56.916Z</updated>
+    <updated>2018-06-26T14:59:59.065Z</updated>
     
     <content type="html"><![CDATA[<p>Linux 下命令行练习，旨在熟悉Linux下的命令，以及常用的工具。题目来源一个好玩的网站，<a href="https://cmdchallenge.com/">cmdchallenge</a>，以挑战的形式对各种命令进行练习。  </p>
 <a id="more"></a>
@@ -228,7 +264,7 @@
     <link href="http://abumaster.com/2018/06/09/Detection/"/>
     <id>http://abumaster.com/2018/06/09/Detection/</id>
     <published>2018-06-09T01:26:26.000Z</published>
-    <updated>2018-06-09T12:41:09.825Z</updated>
+    <updated>2018-06-09T12:41:09.826Z</updated>
     
     <content type="html"><![CDATA[<p>用于物体检测的特征金字塔网络，由 FAIR 发表。特征金字塔是识别系统中检测不同尺度大小目标的基础组件，最近的基于深度学习的物体监测器中，避免使用金字塔表示，一个原因是对内存和计算敏感。本文使用固有的多尺度和金字塔形的卷积网络，构建特征金字塔，尽可能减少了额外的代价。一个自顶向下的有侧边连接的网络模型，用于为各个尺度构建高层次语义特征图。作为一个模块嵌入到其他物体检测模型中，有着很好的实验结果，为多尺度物体检测提供了一种解决方案。<br><a id="more"></a></p>
 <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>多尺度物体的检测是计算机视觉任务中一个基本的挑战。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-6-9/27376237.jpg" alt="几种方式对比">  </p>
@@ -254,9 +290,9 @@
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
-    
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
+    
+      <category term="论文" scheme="http://abumaster.com/tags/lunwen/"/>
     
       <category term="CV" scheme="http://abumaster.com/tags/CV/"/>
     
@@ -267,7 +303,7 @@
     <link href="http://abumaster.com/2018/05/25/%E4%BC%98%E7%A7%80%E6%9E%B6%E6%9E%84%E5%B8%88%E5%BF%85%E9%A1%BB%E6%8E%8C%E6%8F%A1%E7%9A%84%E6%9E%B6%E6%9E%84%E6%80%9D%E7%BB%B4%EF%BC%88%E8%BD%AC%EF%BC%89/"/>
     <id>http://abumaster.com/2018/05/25/优秀架构师必须掌握的架构思维（转）/</id>
     <published>2018-05-25T09:02:05.000Z</published>
-    <updated>2018-05-25T11:41:11.141Z</updated>
+    <updated>2018-05-25T11:41:11.142Z</updated>
     
     <content type="html"><![CDATA[<p>架构的本质是管理复杂性，<strong>抽象</strong>、<strong>分层</strong>、<strong>分治</strong> 和 <strong>演化</strong> 思维是我们工程师/架构师应对和管理复杂性的四种最基本武器。<a href="http://www.infoq.com/cn/articles/architecture-thought?utm_source=tuicool&amp;utm_medium=referral">原文地址</a>。</p>
 <a id="more"></a>
@@ -306,7 +342,7 @@
     <link href="http://abumaster.com/2018/05/08/%E5%8E%BB%E7%9C%8B%E5%A2%99%E5%A4%96%E7%9A%84%E4%B8%96%E7%95%8C/"/>
     <id>http://abumaster.com/2018/05/08/去看墙外的世界/</id>
     <published>2018-05-08T06:33:45.000Z</published>
-    <updated>2018-05-30T11:57:36.123Z</updated>
+    <updated>2018-05-30T11:57:36.124Z</updated>
     
     <content type="html"><![CDATA[<p>前一段时间使用非常方便的Chrome翻墙插件 <strong>快速安全通道</strong> 不再可以免费使用，VIP价格挺高的，决定使用国外vps作为代理搭建翻墙服务器，折腾。  </p>
 <a id="more"></a>
@@ -351,7 +387,7 @@
     <link href="http://abumaster.com/2018/04/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/"/>
     <id>http://abumaster.com/2018/04/24/设计模式简介/</id>
     <published>2018-04-24T02:34:40.000Z</published>
-    <updated>2018-04-25T06:49:36.357Z</updated>
+    <updated>2018-04-25T06:49:36.358Z</updated>
     
     <content type="html"><![CDATA[<p><strong>设计模式</strong>（Design Pattern）是一套被反复使用、多数人知晓的、经过分类的、代码设计经验的总结。使用设计模式的目的：为了代码可重用性、让代码更容易被他人理解、保证代码可靠性。阅读开源书籍<a href="https://github.com/me115/design_patterns">图说设计模式</a>的总结。</p>
 <a id="more"></a>
@@ -525,7 +561,7 @@
     <link href="http://abumaster.com/2018/04/15/vcpkg%EF%BC%9Avc-%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/"/>
     <id>http://abumaster.com/2018/04/15/vcpkg：vc-的包管理器/</id>
     <published>2018-04-15T07:22:32.000Z</published>
-    <updated>2018-04-16T06:49:39.889Z</updated>
+    <updated>2018-04-16T06:49:39.890Z</updated>
     
     <content type="html"><![CDATA[<p><a href=""><strong>vcpkg</strong></a> 是一个Windows下vc++的第三方库管理工具，提供了第三方库的快速安装和配置，为Windows下C++开发提供了一种有效的工具。  </p>
 <a id="more"></a>
@@ -569,7 +605,7 @@
     <link href="http://abumaster.com/2018/04/13/mongoDB%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
     <id>http://abumaster.com/2018/04/13/mongoDB的使用/</id>
     <published>2018-04-13T06:25:47.000Z</published>
-    <updated>2018-04-13T08:06:26.853Z</updated>
+    <updated>2018-04-13T08:06:26.854Z</updated>
     
     <content type="html"><![CDATA[<p>MongoDB 是一种非关系数据库，是一种 NoSQL 型数据库，用于应对大数据和分布式系统的数据库，具有高扩展性和分布式，没有复杂的关系模型。MongoDB 旨在为WEB应用提供可扩展的高性能数据存储解决方案。将数据存储为一个文档，数据结构由键值对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</p>
 <a id="more"></a>
@@ -668,7 +704,7 @@
     <link href="http://abumaster.com/2018/04/08/%E9%AB%98%E6%95%88%E4%BD%BF%E7%94%A8STL-3/"/>
     <id>http://abumaster.com/2018/04/08/高效使用STL-3/</id>
     <published>2018-04-08T07:07:12.000Z</published>
-    <updated>2018-04-11T12:15:48.656Z</updated>
+    <updated>2018-04-11T12:15:48.657Z</updated>
     
     <content type="html"><![CDATA[<div class="note success"><p>英文书籍 <code>Effective STL</code> 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 <code>C++</code>顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，主要第五章算法和第六章仿函数的介绍。</p>
 </div>
@@ -1015,9 +1051,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="日志库" scheme="http://abumaster.com/tags/%E6%97%A5%E5%BF%97%E5%BA%93/"/>
     
@@ -1028,7 +1064,7 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     <link href="http://abumaster.com/2018/03/18/cpr%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
     <id>http://abumaster.com/2018/03/18/cpr阅读笔记/</id>
     <published>2018-03-18T13:15:22.000Z</published>
-    <updated>2018-03-24T08:18:10.224Z</updated>
+    <updated>2018-03-24T08:18:10.225Z</updated>
     
     <content type="html"><![CDATA[<p><strong><a href="https://github.com/whoshuu/cpr">C++ Request: Curl for prople request</a></strong> 是一个将<a href="https://github.com/curl/curl">curl</a>用 C++11 标准封装过之后的版本，使得发送网络请求更加方便，本文对源码阅读到库的编译使用做一个详细的总结，对一些 C++ 11 的新标准做一个回顾。  </p>
 <a id="more"></a>
@@ -1070,7 +1106,7 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
     <link href="http://abumaster.com/2018/03/08/Git-%E4%BD%BF%E7%94%A8%E7%AC%94%E8%AE%B0/"/>
     <id>http://abumaster.com/2018/03/08/Git-使用笔记/</id>
     <published>2018-03-08T11:31:17.000Z</published>
-    <updated>2018-03-28T08:55:43.789Z</updated>
+    <updated>2018-03-28T08:55:43.790Z</updated>
     
     <content type="html"><![CDATA[<p>Git 使用简单总结。
 <a id="more"></a></p>
@@ -1150,9 +1186,9 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
@@ -1221,51 +1257,11 @@ Unknown |   适用分层日志记录，完全关闭日志记录</p>
       <category term="深度学习" scheme="http://abumaster.com/categories/deeplearning/"/>
     
     
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
       <category term="C++" scheme="http://abumaster.com/tags/C/"/>
+    
+      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
     
       <category term="深度学习" scheme="http://abumaster.com/tags/deeplearn/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ACE学习笔记3：线程管理</title>
-    <link href="http://abumaster.com/2017/11/07/ACE%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03%EF%BC%9A%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/"/>
-    <id>http://abumaster.com/2017/11/07/ACE学习笔记3：线程管理/</id>
-    <published>2017-11-07T05:20:10.000Z</published>
-    <updated>2017-11-10T06:55:19.590Z</updated>
-    
-    <content type="html"><![CDATA[<p>不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 <code>ACE_Thread</code> 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。  </p>
-<a id="more"></a>
-<h4 id="创建和取消线程"><a href="#创建和取消线程" class="headerlink" title="创建和取消线程"></a>创建和取消线程</h4><p>ACE_Thread 对 OS 的线程函数进行简单的封装，提供了一组与平台无关的接口。<br>头文件：<code>ace/Thread.h</code><br>线程标识：<code>ACE_thread_t</code>，线程句柄：<code>ACE_hthread_t</code><br>提供的函数：<code>ACE_Thread::spawn_n</code> 或 <code>ACE_Thread::spawn</code> 可以用 <code>ACE_Thread::join()</code> 函数等待线程的结束<br>与普通的创建线程过程无异。  </p>
-<h4 id="ACE-同步原语"><a href="#ACE-同步原语" class="headerlink" title="ACE 同步原语"></a>ACE 同步原语</h4><h5 id="ACE-Lock-类属"><a href="#ACE-Lock-类属" class="headerlink" title="ACE Lock 类属"></a>ACE Lock 类属</h5><p>其中包含了一些锁类机制：互斥锁、信号量、读写锁、令牌。<br><code>ACE_Mutex</code> 封装互斥机制的包装类，用于简单有效地对共享资源访问的序列化，可用于线程和进程之间的同步。<br><code>ACE_Thread_Mutex</code> 和 <code>ACE_Process_Mutex</code> 用于线程和进程之间同步，可以替换。<br><code>ACE_RW_Mutex</code> 封装读写的包装类，分别对读写获取锁。<br><code>ACE_Semaphore</code> 实现计数信号量。<br><code>ACE_Token</code> 提供递归互斥体，一个获取锁的，可以多次获取不发生阻塞。<br><code>ACE_Lock</code> 定义锁定接口的接口类，是一个纯虚类。<br><code>ACE_Lock_Adapter</code> 基于模板的适配类，用于将前面的锁类型适配到纯虚类上。  </p>
-<h5 id="ACE-守卫类属"><a href="#ACE-守卫类属" class="headerlink" title="ACE 守卫类属"></a>ACE 守卫类属</h5><p>用于自动获取和释放锁，守卫类的对象定义一个代码块，进入时获取，退出时释放。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">worker</span><span class="params">(<span class="keyword">void</span> *arguments)</span></div><div class="line"></span>&#123;</div><div class="line">    Args *arg = (Args*)arguments;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arg-&gt;iterations_; ++i)</div><div class="line">    &#123;</div><div class="line">        ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) trying to get a hold of this iteration\n"</span>));</div><div class="line">        <span class="comment">//关键段</span></div><div class="line">        ACE_Guard&lt;ACE_Thread_Mutex&gt; quard(arg-&gt;mutex_);</div><div class="line">        &#123;</div><div class="line">            ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) this iteration is %d\n"</span>, i));</div><div class="line">            ACE_OS::sleep(<span class="number">2</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h5 id="ACE-条件类属"><a href="#ACE-条件类属" class="headerlink" title="ACE 条件类属"></a>ACE 条件类属</h5><p>条件变量原语的包装类，特定条件满足后线程才能继续进行。<br>使用条件变量的步骤：  </p>
-<ul>
-<li>获取全局资源的锁；  </li>
-<li>检查条件；  </li>
-<li>如果条件满足执行，不满足调用 <code>wait()</code> 等待未来条件满足；  </li>
-<li>当另一个线程在此全局资源上进行操作时，向其他测试条件的线程发送信号；  </li>
-<li>线程醒来后，测试条件是否为真。  </li>
-</ul>
-<h4 id="线程管理类"><a href="#线程管理类" class="headerlink" title="线程管理类"></a>线程管理类</h4><p>使用 <code>ACE_THREAD_MANAGER</code> 进行线程管理。简单的 <code>ACE_Thread</code> 包装类用于创建和销毁线程，功能有限。 <code>ACE_Thread_Manager</code> 提供了它全部的功能，并能成组创建销毁线程，提供了丰富的管理功能，对一组线程进行管理。  </p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 &lt;code&gt;ACE_Thread&lt;/code&gt; 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。  &lt;/p&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="http://abumaster.com/categories/programming/"/>
-    
-    
-      <category term="框架" scheme="http://abumaster.com/tags/frame/"/>
-    
-      <category term="C++" scheme="http://abumaster.com/tags/C/"/>
-    
-      <category term="ACE" scheme="http://abumaster.com/tags/ACE/"/>
     
   </entry>
   
