@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, abumaster" />
+  <meta name="keywords" content="Python," />
 
 
 
@@ -90,16 +90,20 @@
 
 
 
-<meta name="description" content="记录学习生活的点滴">
-<meta property="og:type" content="website">
-<meta property="og:title" content="张国丰">
-<meta property="og:url" content="http://abumaster.com/tags/linux/index.html">
+<meta name="description" content="Anaconda和conda创建虚拟Python环境，解决不同项目对于Python 版本的要求不同的问题。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="conda创建Python虚拟环境">
+<meta property="og:url" content="http://abumaster.com/2018/10/07/conda创建Python虚拟环境/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="记录学习生活的点滴">
+<meta property="og:description" content="Anaconda和conda创建虚拟Python环境，解决不同项目对于Python 版本的要求不同的问题。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/18-10-7/34764981.jpg">
+<meta property="og:updated_time" content="2018-10-07T13:52:29.904Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张国丰">
-<meta name="twitter:description" content="记录学习生活的点滴">
+<meta name="twitter:title" content="conda创建Python虚拟环境">
+<meta name="twitter:description" content="Anaconda和conda创建虚拟Python环境，解决不同项目对于Python 版本的要求不同的问题。">
+<meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/18-10-7/34764981.jpg">
 
 
 
@@ -127,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://abumaster.com/tags/linux/"/>
+  <link rel="canonical" href="http://abumaster.com/2018/10/07/conda创建Python虚拟环境/"/>
 
 
 
 
 
-  <title> 标签: linux | 张国丰 </title>
+  <title> conda创建Python虚拟环境 | 张国丰 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -167,7 +171,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -285,46 +289,191 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        linux
-        <small>标签</small>
-      </h2>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://abumaster.com/2018/10/07/conda创建Python虚拟环境/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="abumaster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-19/15779981-file_1495202313789_1353d.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="张国丰">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                conda创建Python虚拟环境
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-07T21:16:02+08:00">
+                2018-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>Anaconda和conda创建虚拟Python环境，解决不同项目对于Python 版本的要求不同的问题。</p>
+<a id="more"></a>
+<p>在本机上安装Anaconda，Python科学计算包，Windows下，有 <em>Navigator</em> 可以直接创建和管理包。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/18-10-7/34764981.jpg" alt=""><br>很方便。<br>现在使用 <strong>conda</strong> 命令，创建和切换虚拟环境。<br><strong>conda常用的命令：</strong>  </p>
+<ul>
+<li><code>conda -V</code> 查看版本信息；  </li>
+<li><code>conda -h</code> 查看帮助信息；  </li>
+<li><code>conda list</code> 列出当前环境下可用的Python包；  </li>
+<li><code>conda create -n &lt;envname&gt; python=x.x</code> 创建Python版本为x.x的虚拟环境；  </li>
+<li><code>conda env list</code> 列出存在的Python虚拟环境；  </li>
+<li><code>conda install -n &lt;envname&gt; &lt;package&gt;</code> 为指定的虚拟环境安装指定的包；  </li>
+<li><code>conda remove --name &lt;envname&gt; &lt;package&gt;</code> 移除指定虚拟环境中的包；  </li>
+<li><code>conda remove -n &lt;envname&gt; --all</code> 删除虚拟环境。    </li>
+</ul>
+<p><strong>激活和关闭虚拟环境:</strong>  </p>
+<ul>
+<li>Linux上开启：source activate envname  </li>
+<li>Linux上关闭：source deactivate  </li>
+<li>Windows上开启：activate envname  </li>
+<li>Windows上关闭：deactivate  </li>
+</ul>
 
-      <h1 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2018/06/15/Linux命令行练习/" itemprop="url">
-              
-                <span itemprop="name">Linux命令行练习</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h1>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-06-15T16:29:33+08:00"
-              content="2018-06-15" >
-          06-15
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/07/CentOS7关闭防火墙/" rel="next" title="CentOS7关闭防火墙">
+                <i class="fa fa-chevron-left"></i> CentOS7关闭防火墙
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
           
           </div>
@@ -332,6 +481,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -573,6 +726,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 

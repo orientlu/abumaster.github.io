@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[conda创建Python虚拟环境]]></title>
+    <url>%2F2018%2F10%2F07%2Fconda%E5%88%9B%E5%BB%BAPython%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%2F</url>
+    <content type="text"><![CDATA[Anaconda和conda创建虚拟Python环境，解决不同项目对于Python 版本的要求不同的问题。 在本机上安装Anaconda，Python科学计算包，Windows下，有 Navigator 可以直接创建和管理包。很方便。现在使用 conda 命令，创建和切换虚拟环境。conda常用的命令： conda -V 查看版本信息； conda -h 查看帮助信息； conda list 列出当前环境下可用的Python包； conda create -n &lt;envname&gt; python=x.x 创建Python版本为x.x的虚拟环境； conda env list 列出存在的Python虚拟环境； conda install -n &lt;envname&gt; &lt;package&gt; 为指定的虚拟环境安装指定的包； conda remove --name &lt;envname&gt; &lt;package&gt; 移除指定虚拟环境中的包； conda remove -n &lt;envname&gt; --all 删除虚拟环境。 激活和关闭虚拟环境: Linux上开启：source activate envname Linux上关闭：source deactivate Windows上开启：activate envname Windows上关闭：deactivate]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[CentOS7关闭防火墙]]></title>
     <url>%2F2018%2F10%2F07%2FCentOS7%E5%85%B3%E9%97%AD%E9%98%B2%E7%81%AB%E5%A2%99%2F</url>
     <content type="text"><![CDATA[CentOS 7.X默认使用的是firewall作为防火墙，如果你想用CentOS主机做一个服务器和其他主机交互，socket通信什么或者要访问主机的资源，不把默认防火墙关掉是不行的。 关闭默认的 firewall123systemctl stop firewalld.service #停止firewallsystemctl disable firewalld.service #禁止firewall开机启动firewall-cmd --state #查看默认防火墙状态（关闭后显示notrunning，开启后显示running） 开启 iptables123yum -y install iptables-services #安装iptablessystemctl enable iptables #设置开机自启systemctl enable iptables.service #两个都执行]]></content>
@@ -81,8 +92,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>CV</tag>
       </tags>
   </entry>
@@ -231,8 +242,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>日志库</tag>
       </tags>
   </entry>
@@ -267,8 +278,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
         <tag>深度学习</tag>
       </tags>
   </entry>
@@ -280,9 +291,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -293,9 +304,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -306,9 +317,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>C++</tag>
         <tag>框架</tag>
         <tag>ACE</tag>
-        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -319,8 +330,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>框架</tag>
         <tag>C++</tag>
+        <tag>框架</tag>
       </tags>
   </entry>
   <entry>
@@ -429,8 +440,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -443,8 +454,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>笔试</tag>
         <tag>算法</tag>
       </tags>
@@ -457,8 +468,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>编程</tag>
+        <tag>C++</tag>
         <tag>算法</tag>
         <tag>面试</tag>
       </tags>
@@ -822,8 +833,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -835,8 +846,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
         <tag>计算机视觉</tag>
       </tags>
   </entry>
@@ -896,8 +907,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -920,8 +931,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -976,8 +987,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -1010,8 +1021,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -1022,8 +1033,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -1046,8 +1057,8 @@
         <category>深度学习</category>
       </categories>
       <tags>
-        <tag>深度学习</tag>
         <tag>论文</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
