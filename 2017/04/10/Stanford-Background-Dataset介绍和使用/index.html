@@ -90,32 +90,19 @@
 
 
 
-<meta name="description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
-
-images文件夹包含了715张图像；  
-
-hor">
+<meta name="description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。  images文件夹包含了715张图像；    hor">
+<meta name="keywords" content="深度学习,dataset">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Stanford Background Dataset介绍和使用">
 <meta property="og:url" content="http://abumaster.com/2017/04/10/Stanford-Background-Dataset介绍和使用/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
-
-images文件夹包含了715张图像；  
-
-hor">
+<meta property="og:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。  images文件夹包含了715张图像；    hor">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png">
 <meta property="og:updated_time" content="2017-04-11T00:58:07.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stanford Background Dataset介绍和使用">
-<meta name="twitter:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL
-VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。
-
-images文件夹包含了715张图像；  
-
-hor">
+<meta name="twitter:description" content="Stanford Background Dataset是一个从各个数据库（LabelMe, MSRC, PASCAL VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, grass, water, building, mountain, foreground object共八大类的图像。  images文件夹包含了715张图像；    hor">
 <meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-4-11/35996483-file_1491872210006_c82e.png">
 
 
@@ -421,7 +408,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
 <li><p>labels/*.layers.txt    表示不同图像区域的整数矩阵。  </p>
 </li>
 </ul>
-<p><strong>读取图像和分割图像</strong><br>1.首先读取标签文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">vector&lt;char&gt; vec;//保存像素标记</div><div class="line">void readlabel(string labelname)</div><div class="line">&#123;</div><div class="line">	ifstream infile(labelname.c_str(), std::ios::in);</div><div class="line">	char line[1024] = &#123; 0 &#125;;</div><div class="line">	while (infile.getline(line, sizeof(line)))</div><div class="line">	&#123;</div><div class="line">		stringstream word(line);</div><div class="line">		char ch;</div><div class="line">		while (word &gt;&gt; ch)</div><div class="line">		&#123;</div><div class="line">			vec.push_back(ch);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>读取图像和分割图像</strong><br>1.首先读取标签文件<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">char</span>&gt; vec;<span class="comment">//保存像素标记</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readlabel</span><span class="params">(<span class="built_in">string</span> labelname)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ifstream infile(labelname.c_str(), std::ios::in);</span><br><span class="line">	<span class="keyword">char</span> line[<span class="number">1024</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="keyword">while</span> (infile.getline(line, <span class="keyword">sizeof</span>(line)))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function"><span class="built_in">stringstream</span> <span class="title">word</span><span class="params">(line)</span></span>;</span><br><span class="line">		<span class="keyword">char</span> ch;</span><br><span class="line">		<span class="keyword">while</span> (word &gt;&gt; ch)</span><br><span class="line">		&#123;</span><br><span class="line">			vec.push_back(ch);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>2.显示分割图像，根据语义标签，设置不同的颜色以区别  </p>
 <pre><code class="c++"><span class="comment">//显示分割图像</span>
     <span class="function">Mat <span class="title">colorim</span><span class="params">(im.rows, im.cols, CV_8UC3)</span></span>;
@@ -602,7 +589,7 @@ VOC, Geometric Context）中精选出715张室外图像分为sky, tree, road, gr
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

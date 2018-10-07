@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。">
+<meta name="keywords" content="C++,STL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高效使用STL-4">
 <meta property="og:url" content="http://abumaster.com/2018/04/08/高效使用STL-4/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="英文书籍 Effective STL 阅读笔记，该书提出了使用标准模板库的 50 条建议。是由 C++顶级技术开发专家 Scott Meyers 著，也是 《Effective C++》和《More Effective C++》的作者，使用STL编程。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/18-4-12/37444869.jpg">
 <meta property="og:updated_time" content="2018-04-12T13:20:41.172Z">
 <meta name="twitter:card" content="summary">
@@ -402,7 +404,7 @@
 </ul>
 <h4 id="条款44：尽量使用成员函数替代同名算法"><a href="#条款44：尽量使用成员函数替代同名算法" class="headerlink" title="条款44：尽量使用成员函数替代同名算法"></a>条款44：尽量使用成员函数替代同名算法</h4><p>出于效率考虑，可以使用容器的成员函数替代同名的算法，成员函数的速度相对较快。  </p>
 <h4 id="条款45：注意-count、find、binary-search、lower-bound、upper-bound和equal-range-的区别"><a href="#条款45：注意-count、find、binary-search、lower-bound、upper-bound和equal-range-的区别" class="headerlink" title="条款45：注意 count、find、binary_search、lower_bound、upper_bound和equal_range 的区别"></a>条款45：注意 <code>count、find、binary_search、lower_bound、upper_bound和equal_range</code> 的区别</h4><p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-12/37444869.jpg" alt="">  </p>
-<h4 id="条款46：考虑使用函数对象代替函数作算法的参数"><a href="#条款46：考虑使用函数对象代替函数作算法的参数" class="headerlink" title="条款46：考虑使用函数对象代替函数作算法的参数"></a>条款46：考虑使用函数对象代替函数作算法的参数</h4><p>将函数对象传递给STL算法的效率比传递真的函数高。如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//对容器中数据进行降序排序</span></div><div class="line"><span class="comment">//1.使用函数对象greater</span></div><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; v;</div><div class="line">sort(v.begin(), v.end(), greater&lt;<span class="keyword">double</span>&gt;());</div><div class="line"><span class="comment">//2.使用函数</span></div><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">doubleGreater</span><span class="params">(<span class="keyword">double</span> d1, <span class="keyword">double</span> d2)</span></div><div class="line"></span>&#123;</div><div class="line">    <span class="keyword">return</span> dl &gt; d2;</div><div class="line">&#125;</div><div class="line">sort(v.begin(), v.end(), doubleGreater);</div></pre></td></tr></table></figure></p>
+<h4 id="条款46：考虑使用函数对象代替函数作算法的参数"><a href="#条款46：考虑使用函数对象代替函数作算法的参数" class="headerlink" title="条款46：考虑使用函数对象代替函数作算法的参数"></a>条款46：考虑使用函数对象代替函数作算法的参数</h4><p>将函数对象传递给STL算法的效率比传递真的函数高。如下代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对容器中数据进行降序排序</span></span><br><span class="line"><span class="comment">//1.使用函数对象greater</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; v;</span><br><span class="line">sort(v.begin(), v.end(), greater&lt;<span class="keyword">double</span>&gt;());</span><br><span class="line"><span class="comment">//2.使用函数</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">doubleGreater</span><span class="params">(<span class="keyword">double</span> d1, <span class="keyword">double</span> d2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> dl &gt; d2;</span><br><span class="line">&#125;</span><br><span class="line">sort(v.begin(), v.end(), doubleGreater);</span><br></pre></td></tr></table></figure></p>
 <p>函数作为参数实际上是传递的函数指针，在每一次调用的时候编译器产生一个间接函数调用，通过指针调用。  </p>
 <h4 id="条款47：避免产生只写代码"><a href="#条款47：避免产生只写代码" class="headerlink" title="条款47：避免产生只写代码"></a>条款47：避免产生只写代码</h4><p>灵感的乍现，让写代码变得容易，但是后期很难从代码中领会其真正所要表达的意思，称之为只写代码。<br>原书中说道：  </p>
 <blockquote>
@@ -543,7 +545,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

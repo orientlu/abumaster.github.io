@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+<meta name="keywords" content="技巧">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux配置OpenCV">
 <meta property="og:url" content="http://abumaster.com/2017/04/03/Linux配置OpenCV/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="源码安装OpenCV从OpenCV官网下载，最新版的OpenCV（opencv-3.2.0）。解压文件，得到文件夹（opencv-3.2.0），并进入；进行源码编译：">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-04-03T12:11:57.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux配置OpenCV">
@@ -390,7 +392,7 @@
 
       
         <p><strong>源码安装OpenCV</strong><br>从<a href="http://opencv.org/">OpenCV官网</a>下载，最新版的OpenCV（opencv-3.2.0）。<br>解压文件，得到文件夹（opencv-3.2.0），并进入；<br>进行源码编译：<br><a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mkdir release  </div><div class="line">cd release  </div><div class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..  </div><div class="line">make  </div><div class="line">sudo make install</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir release  </span><br><span class="line">cd release  </span><br><span class="line">cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..  </span><br><span class="line">make  </span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
 <p><strong>配置依赖库</strong><br>安装完成后，编译完成，运行时会出现找不到依赖库的情况如：<br><code>error while loading shared libraries: libopencv_core.so.2.4: cannot open shared object file: No such file or directory</code><br>这是因为没有把共享库放在加载器可以找到的位置，解决方法：<br>首先定位到Opencv动态库所在的目录，一般在<code>/usr/local/lib/</code>或者<code>/usr/lib/x86_64-linux-gun/</code>中，在<code>/etc/ld.so.conf.d/</code>目录下创建一个opencv.conf的文件，并把上述的路径写入文件，然后执行<code>sudo ldconfig -v</code><br><strong>编译</strong><br><strong>1.第一种方式</strong><br><code>g++ DisplayImage.cpp -o DisplayImage &#39;pkg-config opencv --cflags --libs&#39;</code><br>在上面的编译命令中我们其实用到了一个工具“pkg-config”，它主要有以下几个功能：</p>
 <ul>
 <li><p>检查库的版本号。如果所需要的库的版本不满足要求，它会打印出错误信息，避免链接错误版本的库文件。  </p>
@@ -402,7 +404,7 @@
 <li><p>自动加入所依赖的其它库的设置</p>
 </li>
 </ul>
-<p><strong>2.cmake工具</strong><br>CMake工具，需要一个CMakeLists.txt文件，然后输入命令<code>cmake .</code>会生成Makefile文件，然后make就行了。<br>CMakeLists.txt文件书写（opencv源码中带的例子example_cmake文件夹）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># CMakeLists.txt</div><div class="line"># 必须的信息</div><div class="line">cmake_minimum_required(VERSION 2.8)</div><div class="line"></div><div class="line"># 工程的名称</div><div class="line">project(opencv_example_project)</div><div class="line"></div><div class="line"># 查找opencv的包</div><div class="line">find_package(OpenCV REQUIRED)</div><div class="line"></div><div class="line"># 打印库的状态信息</div><div class="line">message(STATUS &quot;OpenCV library status:&quot;)</div><div class="line">message(STATUS &quot;    version: $&#123;OpenCV_VERSION&#125;&quot;)</div><div class="line">message(STATUS &quot;    libraries: $&#123;OpenCV_LIBS&#125;&quot;)</div><div class="line">message(STATUS &quot;    include path: $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</div><div class="line"></div><div class="line">if(CMAKE_VERSION VERSION_LESS &quot;2.8.11&quot;)</div><div class="line">  # Add OpenCV headers location to your include paths</div><div class="line">  include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</div><div class="line">endif()</div><div class="line"></div><div class="line"># 生成的目标以及源文件</div><div class="line">add_executable(opencv_example example.cpp)</div><div class="line"></div><div class="line"># 程序与opencv动态库连接</div><div class="line">target_link_libraries(opencv_example $&#123;OpenCV_LIBS&#125;)</div></pre></td></tr></table></figure></p>
+<p><strong>2.cmake工具</strong><br>CMake工具，需要一个CMakeLists.txt文件，然后输入命令<code>cmake .</code>会生成Makefile文件，然后make就行了。<br>CMakeLists.txt文件书写（opencv源码中带的例子example_cmake文件夹）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"># CMakeLists.txt</span><br><span class="line"># 必须的信息</span><br><span class="line">cmake_minimum_required(VERSION 2.8)</span><br><span class="line"></span><br><span class="line"># 工程的名称</span><br><span class="line">project(opencv_example_project)</span><br><span class="line"></span><br><span class="line"># 查找opencv的包</span><br><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line"></span><br><span class="line"># 打印库的状态信息</span><br><span class="line">message(STATUS &quot;OpenCV library status:&quot;)</span><br><span class="line">message(STATUS &quot;    version: $&#123;OpenCV_VERSION&#125;&quot;)</span><br><span class="line">message(STATUS &quot;    libraries: $&#123;OpenCV_LIBS&#125;&quot;)</span><br><span class="line">message(STATUS &quot;    include path: $&#123;OpenCV_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line"></span><br><span class="line">if(CMAKE_VERSION VERSION_LESS &quot;2.8.11&quot;)</span><br><span class="line">  # Add OpenCV headers location to your include paths</span><br><span class="line">  include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line"># 生成的目标以及源文件</span><br><span class="line">add_executable(opencv_example example.cpp)</span><br><span class="line"></span><br><span class="line"># 程序与opencv动态库连接</span><br><span class="line">target_link_libraries(opencv_example $&#123;OpenCV_LIBS&#125;)</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -514,7 +516,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

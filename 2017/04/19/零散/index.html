@@ -90,21 +90,20 @@
 
 
 
-<meta name="description" content="VMware虚拟机在Windows下错误
-出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
+<meta name="description" content="VMware虚拟机在Windows下错误 出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
+<meta name="keywords" content="技巧">
 <meta property="og:type" content="article">
 <meta property="og:title" content="零散">
 <meta property="og:url" content="http://abumaster.com/2017/04/19/零散/index.html">
 <meta property="og:site_name" content="张国丰">
-<meta property="og:description" content="VMware虚拟机在Windows下错误
-出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
+<meta property="og:description" content="VMware虚拟机在Windows下错误 出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png">
 <meta property="og:updated_time" content="2017-05-19T14:03:42.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="零散">
-<meta name="twitter:description" content="VMware虚拟机在Windows下错误
-出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
+<meta name="twitter:description" content="VMware虚拟机在Windows下错误 出现如下错误：VMware Workstation and Device/Credential Guard are not compatible">
 <meta name="twitter:image" content="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png">
 
 
@@ -399,13 +398,13 @@
 <p>出现如下错误：VMware Workstation and Device/Credential Guard are not compatible</p>
 </blockquote>
 <a id="more"></a>
-<p>Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！<br><strong>解决方案：</strong><br>1.关闭hyper-v服务<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png" alt=""><br>如图，关闭红色框内的功能。<br>2.增加开机启动选项<br><a href="http://stackoverflow.com/questions/39858200/vmware-workstation-and-device-credential-guard-are-not-compatible/41968105#41968105">stackoverflow 问题回答</a>在CMD管理员身份运行，注意不能用PowerShell。编辑bcd。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /copy &#123;current&#125; /d &quot;No Hyper-V&quot; </div><div class="line">The entry was successfully copied to &#123;ff-23-113-824e-5c5144ea&#125;. </div><div class="line"></div><div class="line">C:\&gt;bcdedit /set &#123;ff-23-113-824e-5c5144ea&#125; hypervisorlaunchtype off </div><div class="line">The operation completed successfully.</div></pre></td></tr></table></figure></p>
+<p>Windows的虚拟化技术Hyper-v和VMware的虚拟化技术不兼容的问题！<br><strong>解决方案：</strong><br>1.关闭hyper-v服务<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/57980487-file_1494663243567_46cf.png" alt=""><br>如图，关闭红色框内的功能。<br>2.增加开机启动选项<br><a href="http://stackoverflow.com/questions/39858200/vmware-workstation-and-device-credential-guard-are-not-compatible/41968105#41968105">stackoverflow 问题回答</a>在CMD管理员身份运行，注意不能用PowerShell。编辑bcd。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;bcdedit /copy &#123;current&#125; /d &quot;No Hyper-V&quot; </span><br><span class="line">The entry was successfully copied to &#123;ff-23-113-824e-5c5144ea&#125;. </span><br><span class="line"></span><br><span class="line">C:\&gt;bcdedit /set &#123;ff-23-113-824e-5c5144ea&#125; hypervisorlaunchtype off </span><br><span class="line">The operation completed successfully.</span><br></pre></td></tr></table></figure></p>
 <p>重启经过一段时间配置，开机启动项出现了两个选项：</p>
 <ul>
 <li>Windows 10  </li>
 <li>No Hyper-V  </li>
 </ul>
-<p><em>删除开启启动项：</em><br>在CMD中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C:\&gt;bcdedit /v</div><div class="line">列出了开机启动项，删除对应的选项即可。</div><div class="line">C:\&gt;bcdedit /delete &#123;ff-23-113-824e-5c5144ea&#125;</div></pre></td></tr></table></figure></p>
+<p><em>删除开启启动项：</em><br>在CMD中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;bcdedit /v</span><br><span class="line">列出了开机启动项，删除对应的选项即可。</span><br><span class="line">C:\&gt;bcdedit /delete &#123;ff-23-113-824e-5c5144ea&#125;</span><br></pre></td></tr></table></figure></p>
 <p>另一种，在系统配置中直接配置引导项。<br><img src="http://oo7zsi4t8.bkt.clouddn.com/17-5-13/2502438-file_1494663696605_e059.png" alt="">  </p>
 <p>图像分类：
 Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Simonyan K, Zisserman A. Very deep convolutional networks for large-scale image recognition[J]. arXiv preprint arXiv:1409.1556, 2014.<br>Papandreou G, Kokkinos I, Savalle P A. Modeling local and global deformations in deep learning: Epitomic convolution, multiple instance learning, and sliding window detection[C]//Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2015: 390-399.  </p>
@@ -535,7 +534,7 @@ Girshick R, Donahue J, Darrell T, et al. Rich feature hierarchies for accurate o
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

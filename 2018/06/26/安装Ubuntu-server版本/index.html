@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="技巧,Linux,其他," />
+  <meta name="keywords" content="Linux,技巧,其他," />
 
 
 
@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="从同学那里得到了一个免费的显卡坏掉的戴尔笔记本，所以装一个 Ubuntu server 玩一下。安装 Ubuntu server 版本与安装桌面版的有一些不同，同样在物理机上安装与在虚拟机中安装也不同，记录一些在安装过程中出现的问题。">
+<meta name="keywords" content="Linux,技巧,其他">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安装 Ubuntu server 版本">
 <meta property="og:url" content="http://abumaster.com/2018/06/26/安装Ubuntu-server版本/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="从同学那里得到了一个免费的显卡坏掉的戴尔笔记本，所以装一个 Ubuntu server 玩一下。安装 Ubuntu server 版本与安装桌面版的有一些不同，同样在物理机上安装与在虚拟机中安装也不同，记录一些在安装过程中出现的问题。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-07-01T13:48:17.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安装 Ubuntu server 版本">
@@ -393,11 +395,11 @@
 <a id="more"></a>
 <h1 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h1><p>1.从 <a href="https://www.ubuntu.com/download/alternative-downloads">Ubuntu 官网</a> 上下载对应的服务器版本。<br>2.制作U盘启动器，用 UltraISO 将ISO刻录到U盘中，作为启动盘。<br>3.开机boot用U盘启动。<br>4.一路选择安装。  </p>
 <p><strong>事情当然不会这么容易了，安装过程中出现了很多问题。</strong>  </p>
-<h1 id="问题出现和解决"><a href="#问题出现和解决" class="headerlink" title="问题出现和解决"></a>问题出现和解决</h1><h2 id="光盘无法读取"><a href="#光盘无法读取" class="headerlink" title="光盘无法读取"></a>光盘无法读取</h2><p>安装过程出现 CD-ROM 读取失败，这种情况。首先，我们制作好了 U盘启动盘，也要把Ubuntu的iso镜像拷贝到U盘的根目录下。然后，再一次重新开始安装。出现错误，退出打开命令行工具。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ls /dev/sd* #显示出所有的硬件设备，一般u盘就是dev/sdb 那么u盘上的分区就是dev/sdb1</div><div class="line">#创建一个空目录，将U盘分区挂载到这个空目录上</div><div class="line">mkdir ubt</div><div class="line">mount /dev/sdb1 /ubt</div><div class="line"># 然后将其中的Ubuntu ISO镜像挂载到cdrom上</div><div class="line">mount /ubt/ubuntu-xxx.iso /cdrom</div><div class="line">exit</div></pre></td></tr></table></figure></p>
+<h1 id="问题出现和解决"><a href="#问题出现和解决" class="headerlink" title="问题出现和解决"></a>问题出现和解决</h1><h2 id="光盘无法读取"><a href="#光盘无法读取" class="headerlink" title="光盘无法读取"></a>光盘无法读取</h2><p>安装过程出现 CD-ROM 读取失败，这种情况。首先，我们制作好了 U盘启动盘，也要把Ubuntu的iso镜像拷贝到U盘的根目录下。然后，再一次重新开始安装。出现错误，退出打开命令行工具。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ls /dev/sd* #显示出所有的硬件设备，一般u盘就是dev/sdb 那么u盘上的分区就是dev/sdb1</span><br><span class="line">#创建一个空目录，将U盘分区挂载到这个空目录上</span><br><span class="line">mkdir ubt</span><br><span class="line">mount /dev/sdb1 /ubt</span><br><span class="line"># 然后将其中的Ubuntu ISO镜像挂载到cdrom上</span><br><span class="line">mount /ubt/ubuntu-xxx.iso /cdrom</span><br><span class="line">exit</span><br></pre></td></tr></table></figure></p>
 <h2 id="无线网络设置"><a href="#无线网络设置" class="headerlink" title="无线网络设置"></a>无线网络设置</h2><p>使用到的工具 <code>wpasupplicant</code> ，一般高版本的Linux集成了这个工具。<br>生成无线路由密钥。这一步就是根据你无线网络的SSID和密码，来生成WLAN需要的配置文件。命令如下：
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#wpa_passphrase 无线网络SSID 无线网络密码 &gt; 配置文件名</span></div><div class="line"><span class="comment">#wpa_passphraseTP-LINK 123456 &gt; /etc/wpa_config.conf</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#wpa_passphrase 无线网络SSID 无线网络密码 &gt; 配置文件名</span></span><br><span class="line"><span class="comment">#wpa_passphraseTP-LINK 123456 &gt; /etc/wpa_config.conf</span></span><br></pre></td></tr></table></figure></p>
 <p>设置无线网络。编辑 <code>/etc/network/interfaces</code> 文件，将wlan添加到其中：
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">auto wlan0</div><div class="line">iface wlan0 inet dhcp</div><div class="line">wpa-conf /etc/wpa_config.conf</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto wlan0</span><br><span class="line">iface wlan0 inet dhcp</span><br><span class="line">wpa-conf /etc/wpa_config.conf</span><br></pre></td></tr></table></figure></p>
 <p>一般人的都是<code>eth0</code>，和<code>wlan0</code>，但在Ubuntu Server 16.04里面变成了<code>enp4s0</code> 和 <code>wlp5s0</code>，所以还需要查看网卡的名称，有时 <code>wlan0</code>这个名称是不对的，所以使用 <code>ip addr</code> 查看网卡的名称，进行替换。</p>
 
       
@@ -422,9 +424,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/jq/" rel="tag"># 技巧</a>
-          
             <a href="/tags/linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/jq/" rel="tag"># 技巧</a>
           
             <a href="/tags/其他/" rel="tag"># 其他</a>
           
@@ -523,7 +525,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

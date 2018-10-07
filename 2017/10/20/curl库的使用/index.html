@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C++,技巧,Linux,网络," />
+  <meta name="keywords" content="C++,Linux,技巧,网络," />
 
 
 
@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="curl是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。libcurl是一种开发库，支持多种协议多个平台的文件传输库。libcurl。方便网络应用的开发。">
+<meta name="keywords" content="C++,Linux,技巧,网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="curl库的使用">
 <meta property="og:url" content="http://abumaster.com/2017/10/20/curl库的使用/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="curl是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。libcurl是一种开发库，支持多种协议多个平台的文件传输库。libcurl。方便网络应用的开发。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-10-21T12:32:50.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="curl库的使用">
@@ -392,7 +394,7 @@
         <p><em>curl</em>是利用URL语法在命令行下工作的一种文件传输工具。支持文件的上传和下载，可以应用到多个平台，支持各种传输协议。<em>libcurl</em>是一种开发库，支持多种协议多个平台的文件传输库。<a href="https://curl.haxx.se/libcurl/">libcurl</a>。方便网络应用的开发。  </p>
 <a id="more"></a>
 <h4 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h4><p>从上述的<a href="https://curl.haxx.se/libcurl/">官网</a>下载源码，Linux平台<code>configure</code>和<code>make</code>就行了。说一下在 Windows 平台下的编译使用。<br>打开源码目录下的<code>winbuild</code>文件夹，按照<code>BUILD.WINDOWS.txt</code>文档中提供的编译信息，然后利用vs提供的命令行工具进行编译生成<code>.lib</code>或<code>.dll</code>文件。<br>使用，将lib文件和头文件加入到自己的工程中，然后添加预编译定义<code>CURL_STATICLIB</code>，或者在<code>curl.h</code>文件中添加一行宏定义<code>#define CURL_STATICLIB</code>。然后就可以编译使用了。  </p>
-<h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><p>1.<code>CURLcode curl_global_init(long flags);</code><br>描述：用于全局初始化，清理之前，只能被调用一次，如果在函数<code>curl_easy_init</code>前没有显示调用，则lcurl库会自动调用，所以多线程中应在主线程中显示调用此函数来初始化。初始化参数包括：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">CURL_GLOBAL_ALL                      <span class="comment">//初始化所有的可能的调用。</span></div><div class="line">CURL_GLOBAL_SSL                      <span class="comment">//初始化支持 安全套接字层。</span></div><div class="line">CURL_GLOBAL_WIN32            <span class="comment">//初始化win32套接字库。</span></div><div class="line">CURL_GLOBAL_NOTHING         <span class="comment">//没有额外的初始化。</span></div></pre></td></tr></table></figure></p>
+<h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><p>1.<code>CURLcode curl_global_init(long flags);</code><br>描述：用于全局初始化，清理之前，只能被调用一次，如果在函数<code>curl_easy_init</code>前没有显示调用，则lcurl库会自动调用，所以多线程中应在主线程中显示调用此函数来初始化。初始化参数包括：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CURL_GLOBAL_ALL                      <span class="comment">//初始化所有的可能的调用。</span></span><br><span class="line">CURL_GLOBAL_SSL                      <span class="comment">//初始化支持 安全套接字层。</span></span><br><span class="line">CURL_GLOBAL_WIN32            <span class="comment">//初始化win32套接字库。</span></span><br><span class="line">CURL_GLOBAL_NOTHING         <span class="comment">//没有额外的初始化。</span></span><br></pre></td></tr></table></figure></p>
 <p>2.<code>void curl_global_cleanup(void);</code><br>与上述初始化函数类似，在结束使用的时候，调用此函数进行清理工作，这个函数仍然不是线程安全的，因此多线程环境下保证在主线程中调用一次来完成清理工作。  </p>
 <p>3.<code>CURL *curl_easy_init( );</code><br>初始化一个<code>CURL</code>指针，类似文件指针那样，意味着一个会话的开始。  </p>
 <p>4.<code>void curl_easy_cleanup(CURL *handle);</code><br>调用此函数来释放初始化的指针，完成清理工作。  </p>
@@ -423,9 +425,9 @@
           
             <a href="/tags/C/" rel="tag"># C++</a>
           
-            <a href="/tags/jq/" rel="tag"># 技巧</a>
-          
             <a href="/tags/linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/jq/" rel="tag"># 技巧</a>
           
             <a href="/tags/网络/" rel="tag"># 网络</a>
           
@@ -524,7 +526,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

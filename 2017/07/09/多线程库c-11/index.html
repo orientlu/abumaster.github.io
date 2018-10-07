@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。">
+<meta name="keywords" content="C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="多线程库c++11">
 <meta property="og:url" content="http://abumaster.com/2017/07/09/多线程库c-11/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-07-10T13:48:30.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="多线程库c++11">
@@ -391,7 +393,7 @@
       
         <p>C++ 11 标准中的多线程库，包含了封装的thread类以及用于同步的mutex、atomic和条件变量。<br><a id="more"></a></p>
 <h4 id="thread类"><a href="#thread类" class="headerlink" title="thread类"></a>thread类</h4><p>使用包含头文件<thread>，std::thread。<br><strong>构造函数</strong><br>常用的构造函数：
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> Fn, <span class="keyword">class</span>... Args&gt;</div><div class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">thread</span> <span class="params">(Fn&amp;&amp; fn, Args&amp;&amp;... args)</span></span>;</div></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> Fn, <span class="keyword">class</span>... Args&gt;</span><br><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">thread</span> <span class="params">(Fn&amp;&amp; fn, Args&amp;&amp;... args)</span></span>;</span><br></pre></td></tr></table></figure></p>
 <p>第一个参数指定了线程执行函数，第二个可选的线程函数所需的参数。<br>为了控制线程同步，可以设置原子变量atomic类型的全局变量；或者传入一个原子变量参数的引用；或者使用一个成员变量。<a href="http://www.cplusplus.com/reference/thread/thread/thread/">例子</a>，参见cplusplus网站。<br>赋值运算符，可以直接移动分配，不拷贝。<br><strong>等待和独立运行</strong><br>创建线程后可以调用<code>join</code>来阻塞等待线程的结束，同样也提供了一个函数<code>joinable</code>来测试线程是否可以被join，如果想让线程独立于主线程后台运行可以调用<code>detach</code>，使线程分离出去在后台运行，这是测试能否被join则返回的是false，同样主线程也不能调用join来等待线程的结束。<br><strong>this_thread 类</strong><br>表示当前进程，提供了一组函数。  </p>
 <ul>
 <li><code>get_id</code> 返回一个<code>thread::id</code>类型，标识了当前线程的id。  </li>
@@ -519,7 +521,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

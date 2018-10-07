@@ -72,7 +72,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="框架,C++,ACE," />
+  <meta name="keywords" content="框架,ACE,C++," />
 
 
 
@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 ACE_Thread 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。">
+<meta name="keywords" content="框架,ACE,C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ACE学习笔记3：线程管理">
 <meta property="og:url" content="http://abumaster.com/2017/11/07/ACE学习笔记3：线程管理/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="不同平台下，有着若干不同的线程管理接口，提供了近乎相同的功能，但是API却相差很大，而 ACE_Thread 提供了对不同平台API接口的封装，可以在不同的平台下创建，挂起，销毁线程，做到平台无关性，另外还提供了一套同步和管理机制。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-10T06:55:19.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ACE学习笔记3：线程管理">
@@ -393,7 +395,7 @@
 <a id="more"></a>
 <h4 id="创建和取消线程"><a href="#创建和取消线程" class="headerlink" title="创建和取消线程"></a>创建和取消线程</h4><p>ACE_Thread 对 OS 的线程函数进行简单的封装，提供了一组与平台无关的接口。<br>头文件：<code>ace/Thread.h</code><br>线程标识：<code>ACE_thread_t</code>，线程句柄：<code>ACE_hthread_t</code><br>提供的函数：<code>ACE_Thread::spawn_n</code> 或 <code>ACE_Thread::spawn</code> 可以用 <code>ACE_Thread::join()</code> 函数等待线程的结束<br>与普通的创建线程过程无异。  </p>
 <h4 id="ACE-同步原语"><a href="#ACE-同步原语" class="headerlink" title="ACE 同步原语"></a>ACE 同步原语</h4><h5 id="ACE-Lock-类属"><a href="#ACE-Lock-类属" class="headerlink" title="ACE Lock 类属"></a>ACE Lock 类属</h5><p>其中包含了一些锁类机制：互斥锁、信号量、读写锁、令牌。<br><code>ACE_Mutex</code> 封装互斥机制的包装类，用于简单有效地对共享资源访问的序列化，可用于线程和进程之间的同步。<br><code>ACE_Thread_Mutex</code> 和 <code>ACE_Process_Mutex</code> 用于线程和进程之间同步，可以替换。<br><code>ACE_RW_Mutex</code> 封装读写的包装类，分别对读写获取锁。<br><code>ACE_Semaphore</code> 实现计数信号量。<br><code>ACE_Token</code> 提供递归互斥体，一个获取锁的，可以多次获取不发生阻塞。<br><code>ACE_Lock</code> 定义锁定接口的接口类，是一个纯虚类。<br><code>ACE_Lock_Adapter</code> 基于模板的适配类，用于将前面的锁类型适配到纯虚类上。  </p>
-<h5 id="ACE-守卫类属"><a href="#ACE-守卫类属" class="headerlink" title="ACE 守卫类属"></a>ACE 守卫类属</h5><p>用于自动获取和释放锁，守卫类的对象定义一个代码块，进入时获取，退出时释放。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">worker</span><span class="params">(<span class="keyword">void</span> *arguments)</span></div><div class="line"></span>&#123;</div><div class="line">    Args *arg = (Args*)arguments;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arg-&gt;iterations_; ++i)</div><div class="line">    &#123;</div><div class="line">        ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) trying to get a hold of this iteration\n"</span>));</div><div class="line">        <span class="comment">//关键段</span></div><div class="line">        ACE_Guard&lt;ACE_Thread_Mutex&gt; quard(arg-&gt;mutex_);</div><div class="line">        &#123;</div><div class="line">            ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) this iteration is %d\n"</span>, i));</div><div class="line">            ACE_OS::sleep(<span class="number">2</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="ACE-守卫类属"><a href="#ACE-守卫类属" class="headerlink" title="ACE 守卫类属"></a>ACE 守卫类属</h5><p>用于自动获取和释放锁，守卫类的对象定义一个代码块，进入时获取，退出时释放。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">worker</span><span class="params">(<span class="keyword">void</span> *arguments)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Args *arg = (Args*)arguments;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arg-&gt;iterations_; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) trying to get a hold of this iteration\n"</span>));</span><br><span class="line">        <span class="comment">//关键段</span></span><br><span class="line">        ACE_Guard&lt;ACE_Thread_Mutex&gt; quard(arg-&gt;mutex_);</span><br><span class="line">        &#123;</span><br><span class="line">            ACE_DEBUG((LM_DEBUG, <span class="string">"(%t) this iteration is %d\n"</span>, i));</span><br><span class="line">            ACE_OS::sleep(<span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h5 id="ACE-条件类属"><a href="#ACE-条件类属" class="headerlink" title="ACE 条件类属"></a>ACE 条件类属</h5><p>条件变量原语的包装类，特定条件满足后线程才能继续进行。<br>使用条件变量的步骤：  </p>
 <ul>
 <li>获取全局资源的锁；  </li>
@@ -428,9 +430,9 @@
           
             <a href="/tags/frame/" rel="tag"># 框架</a>
           
-            <a href="/tags/C/" rel="tag"># C++</a>
-          
             <a href="/tags/ACE/" rel="tag"># ACE</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -527,7 +529,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

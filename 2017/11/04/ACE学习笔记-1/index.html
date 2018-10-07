@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="ACE (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 中间件 提供了众多功能和特性。第一章安装。">
+<meta name="keywords" content="框架,C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ACE学习笔记-1">
 <meta property="og:url" content="http://abumaster.com/2017/11/04/ACE学习笔记-1/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="ACE (Adaptive Communication Environment) 自适配通信环境，一个高效的、跨平台的、稳定的C++网络 中间件 提供了众多功能和特性。第一章安装。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-11-04T07:11:37.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ACE学习笔记-1">
@@ -396,7 +398,7 @@
 <li><p>下载  <a href="http://download.dre.vanderbilt.edu/">地址</a>。解压得到文件夹 <code>ACE_wrappers</code>，其中包含了源文件以及工程文件；  </p>
 </li>
 <li><p>目录下有 <code>ACE-INSTALL.html</code> 包含了安装指导，在ace文件夹下新建一个 <code>config.h</code> 文件，其中添加头文件和宏定义</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_HAS_STANDARD_CPP_LIBRARY 1</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"config-win32.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_NO_INLINE</span></div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_HAS_STANDARD_CPP_LIBRARY 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"config-win32.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACE_NO_INLINE</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>打开 <code>ace_vc12.sln</code> 解决方案，根据情况编译 Debug 或者 Release 版本的ace库，编译完成后在 <code>ACE_wrappers/lib</code> 下生成了 <code>lib</code> 和 <code>dll</code> 。  </p>
 </li>
@@ -515,7 +517,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

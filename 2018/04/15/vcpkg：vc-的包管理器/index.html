@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="vcpkg 是一个Windows下vc++的第三方库管理工具，提供了第三方库的快速安装和配置，为Windows下C++开发提供了一种有效的工具。">
+<meta name="keywords" content="C++,技巧,包管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vcpkg：vc++ 的包管理器">
 <meta property="og:url" content="http://abumaster.com/2018/04/15/vcpkg：vc-的包管理器/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="vcpkg 是一个Windows下vc++的第三方库管理工具，提供了第三方库的快速安装和配置，为Windows下C++开发提供了一种有效的工具。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/8337753.jpg">
 <meta property="og:image" content="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/11870040.jpg">
 <meta property="og:updated_time" content="2018-04-16T06:49:39.890Z">
@@ -404,10 +406,10 @@
 <li>Cmake 3.10 以上。  </li>
 </ul>
 <hr>
-<p><strong>简单使用：</strong><br><strong>1.安装</strong><br>从Microsoft的Github仓库找到vcpkg的仓库，clone到本地<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/Microsoft/vcpkg.git</div></pre></td></tr></table></figure></p>
-<p>进入根目录下运行一下命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">.\bootstrap-vcpkg.bat       #生成vcpkg.exe</div><div class="line">.\vcpkg integrate install   #连接到用户集成中</div></pre></td></tr></table></figure></p>
+<p><strong>简单使用：</strong><br><strong>1.安装</strong><br>从Microsoft的Github仓库找到vcpkg的仓库，clone到本地<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/Microsoft/vcpkg.git</span><br></pre></td></tr></table></figure></p>
+<p>进入根目录下运行一下命令安装：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.\bootstrap-vcpkg.bat       #生成vcpkg.exe</span><br><span class="line">.\vcpkg integrate install   #连接到用户集成中</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/8337753.jpg" alt=""><br>然后，安装的库直接可以在自己的项目中使用，只需要包含头文件。  </p>
-<p><strong>2.安装第三方库</strong><br>常用的几个命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vcpkg list                  <span class="comment"># 列出安装的第三方库</span></div><div class="line">vcpkg search xxxlib         <span class="comment"># 查找可以安装的库</span></div><div class="line">vcpkg install xxxlib        <span class="comment"># 安装xxxlib库</span></div></pre></td></tr></table></figure></p>
+<p><strong>2.安装第三方库</strong><br>常用的几个命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vcpkg list                  <span class="comment"># 列出安装的第三方库</span></span><br><span class="line">vcpkg search xxxlib         <span class="comment"># 查找可以安装的库</span></span><br><span class="line">vcpkg install xxxlib        <span class="comment"># 安装xxxlib库</span></span><br></pre></td></tr></table></figure></p>
 <p><img src="http://oo7zsi4t8.bkt.clouddn.com/18-4-15/11870040.jpg" alt=""><br>安装完第三方库后，可以加入头文件，直接编译使用，不再需要繁琐的目录配置。<br><strong>注意</strong>：安装第三方库的时候，可能会出现库的编译错误<code>BUILD_FAILD</code>，可能是因为没有安装英文版本的VS语言包，安装过后问题解决。</p>
 <p><strong>3.高级应用</strong><br><a href="https://github.com/Microsoft/vcpkg/blob/master/docs/examples/packaging-zlib.md">打包第三方库</a>，当无法搜到需要的库的时候，可以自己通过源码打包，配置，然后安装到本地。暂时没用到，用到时详细参考文档。  </p>
 
@@ -525,7 +527,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

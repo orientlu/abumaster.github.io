@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。">
+<meta name="keywords" content="编程,Linux,c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UNIX环境高级编程-标准IO库">
 <meta property="og:url" content="http://abumaster.com/2017/05/18/UNIX环境高级编程-标准IO库/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Unix环境高级编程读书笔记，第5章 标准I/O库。引入流的概念，并引入缓冲，减少read和write的调用次数。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-05-18T02:11:33.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX环境高级编程-标准IO库">
@@ -432,14 +434,14 @@
 <li>无缓冲，标准出错流，stderr，错误信息及时显示出来。  </li>
 </ul>
 <p>对于一个打开的流，设置更改缓冲区。
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setvbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf, <span class="keyword">int</span> mode, <span class="keyword">size_t</span> size)</span></span>;</div><div class="line"><span class="comment">/* 	mode 参数：</div><div class="line">	_IOFBF 全缓冲；_IOLBF 行缓冲；_IONBF 不带缓冲</div><div class="line"> */</span></div><div class="line"><span class="comment">//强制冲洗流</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *fp)</span></span>;</div></pre></td></tr></table></figure></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setvbuf</span><span class="params">(FILE *<span class="keyword">restrict</span> fp, <span class="keyword">char</span> *<span class="keyword">restrict</span> buf, <span class="keyword">int</span> mode, <span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="comment">/* 	mode 参数：</span></span><br><span class="line"><span class="comment">	_IOFBF 全缓冲；_IOLBF 行缓冲；_IONBF 不带缓冲</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//强制冲洗流</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *fp)</span></span>;</span><br></pre></td></tr></table></figure></p>
 <p><strong>3.操作</strong><br><strong>打开关闭流</strong><br>打开关闭标准I/O流，如上表的函数所示。<br><strong>读写流</strong><br>打开了流，有三种类型的方式进行读写操作：  </p>
 <ul>
 <li>每次一个字符的I/O;  </li>
 <li>每次一行的I/O;  </li>
 <li>直接I/O。  </li>
 </ul>
-<p>每个流在FILE对象上维持了两个标志：出错标志，文件结束标志。<br><code>gets</code> 和<code>fgets</code>，不推荐使用前者，因为不能指定缓冲区大小，容易造成缓冲区溢出，另外，<code>gets</code>不保留换行符。<br><strong>4.临时文件</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">char</span>* <span class="title">tmpnam</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span>;<span class="comment">//指向唯一路径的指针</span></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">tmpfile</span><span class="params">(<span class="keyword">void</span>)</span></span>; <span class="comment">//返回文件指针</span></div></pre></td></tr></table></figure></p>
+<p>每个流在FILE对象上维持了两个标志：出错标志，文件结束标志。<br><code>gets</code> 和<code>fgets</code>，不推荐使用前者，因为不能指定缓冲区大小，容易造成缓冲区溢出，另外，<code>gets</code>不保留换行符。<br><strong>4.临时文件</strong><br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">tmpnam</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span>;<span class="comment">//指向唯一路径的指针</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">tmpfile</span><span class="params">(<span class="keyword">void</span>)</span></span>; <span class="comment">//返回文件指针</span></span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -555,7 +557,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="趋势科技面试题目汇总，不是太难，面试官人很好，基础还是很薄弱的，好多东西都忘了。">
+<meta name="keywords" content="面试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一面攒人品-趋势科技">
 <meta property="og:url" content="http://abumaster.com/2017/09/19/一面攒人品-趋势科技/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="趋势科技面试题目汇总，不是太难，面试官人很好，基础还是很薄弱的，好多东西都忘了。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-09-20T09:14:32.367Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一面攒人品-趋势科技">
@@ -394,13 +396,13 @@
 </blockquote>
 <a id="more"></a>
 <p><strong>1.知道迭代器吗，迭代器失效</strong><br>我回答了迭代器是一个指针，vector在插入和删除会引起迭代器的失效，记得在stl源码剖析中看到过，但是没有系统的回答出来。<br>标准回答：<br>vector在进行插入和删除操作后会使部分或者全部的迭代器失效，因为vector是顺序存储的，当容量不够时会删除原有的旧空间，然后将元素拷贝到新的空间中，导致所有的原空间上的迭代器失败。删除操作后，指向删除点的迭代器和其后的迭代器全部失效。<br>deque容器在首部尾部插入迭代器不会失效，首部和尾部删除元素会使删除元素的迭代器失效，在中间删除元素会使所有的迭代器失效。<br>list很少失效，只有删除的元素的迭代器失效。  </p>
-<p><strong>2.删除容器中值为2的元素</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = vec.begin(); it != vec.end();)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (*it == <span class="number">2</span>)</div><div class="line">        &#123;</div><div class="line">            it = vec.erase(it);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            ++it;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2.删除容器中值为2的元素</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> it = vec.begin(); it != vec.end();)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (*it == <span class="number">2</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            it = vec.erase(it);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            ++it;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>3.进程同步，共享存储在一个进程失效后，会如何回收</strong><br><a href="http://blog.chinaunix.net/uid-26833883-id-3230564.html">共享内存</a><br>共享内存的介绍：共享内存是一种高效的进程间通信，直接读写内存是一种高效的数据拷贝；内核中专门开辟一块内存区，进程直接映射到自己的私有地址空间中，直接读取不需要拷贝，所以更加高效；多个进程共享这块内存，所以需要一种同步机制。<br>流程：  </p>
 <ul>
 <li>创建或者打开共享存储；  </li>
 <li>映射共享内存，将指定的内存映射到进程地址空间便于访问；  </li>
 <li>撤销共享内存的映射；  </li>
-<li>删除共享内存对象。<br>控制共享内存：  <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span></span>;</div><div class="line"><span class="comment">//shmid 共享内存标识</span></div><div class="line"><span class="comment">//cmd :IPC_STAT 得到共享内存的状态；IPC_SET 改变共享内存的状态；IPC_RMID 删除共享内存</span></div><div class="line"><span class="comment">//buf  是一个结构体指针。IPC_STAT的时候，取得的状态放在这个结构体中。如果要改变共享内存的状态，用这个结构体指定；</span></div></pre></td></tr></table></figure>
+<li>删除共享内存对象。<br>控制共享内存：  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, <span class="keyword">struct</span> shmid_ds *buf)</span></span>;</span><br><span class="line"><span class="comment">//shmid 共享内存标识</span></span><br><span class="line"><span class="comment">//cmd :IPC_STAT 得到共享内存的状态；IPC_SET 改变共享内存的状态；IPC_RMID 删除共享内存</span></span><br><span class="line"><span class="comment">//buf  是一个结构体指针。IPC_STAT的时候，取得的状态放在这个结构体中。如果要改变共享内存的状态，用这个结构体指定；</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>IPC_RMID命令实际上不从内核删除一个段，而是仅仅把这个段标记为删除，实际的删除发生最后一个进程离开这个共享段时。<br>当cmd为IPC_RMID时，第三个参数应为NULL。呵呵，大部分我们都是这样做,用这个函数删除共享内存。  </p>
@@ -518,7 +520,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

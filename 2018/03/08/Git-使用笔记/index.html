@@ -91,11 +91,13 @@
 
 
 <meta name="description" content="Git 使用简单总结。">
+<meta name="keywords" content="技巧,Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git 使用笔记">
 <meta property="og:url" content="http://abumaster.com/2018/03/08/Git-使用笔记/index.html">
 <meta property="og:site_name" content="张国丰">
 <meta property="og:description" content="Git 使用简单总结。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-03-28T08:55:43.790Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 使用笔记">
@@ -391,14 +393,14 @@
       
         <p>Git 使用简单总结。
 <a id="more"></a></p>
-<h4 id="第一步：新建分支"><a href="#第一步：新建分支" class="headerlink" title="第一步：新建分支"></a>第一步：新建分支</h4><p>代码库中有一个主分支 <code>master</code> ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 <code>master</code> 分支，需要更新时向主分支合并开发分支。<br>Git创建开发分支 <code>devvelop</code> 的命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 获取 master 的最新代码</span></div><div class="line">git checkout master</div><div class="line">git pull</div><div class="line"><span class="comment"># 为 master 创建一个名为 develop 的分支</span></div><div class="line">git checkout -b develop master</div></pre></td></tr></table></figure></p>
-<h4 id="第二步：提交分支commit"><a href="#第二步：提交分支commit" class="headerlink" title="第二步：提交分支commit"></a>第二步：提交分支commit</h4><p>分支在修改后，需要提交到本地仓库，和远程仓库中。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 将修改的文件加入</span></div><div class="line">git add .</div><div class="line"><span class="comment"># 查看文件变化状态</span></div><div class="line">git status</div><div class="line"><span class="comment"># 提交修改</span></div><div class="line">git commit -m<span class="string">'message'</span></div></pre></td></tr></table></figure></p>
-<h4 id="第三步：与主分支保持一致"><a href="#第三步：与主分支保持一致" class="headerlink" title="第三步：与主分支保持一致"></a>第三步：与主分支保持一致</h4><p>开发过程中需要与主分支的代码保持一致，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git fetch origin</div><div class="line">git rebase origin/master</div></pre></td></tr></table></figure></p>
+<h4 id="第一步：新建分支"><a href="#第一步：新建分支" class="headerlink" title="第一步：新建分支"></a>第一步：新建分支</h4><p>代码库中有一个主分支 <code>master</code> ，用于保存稳定的版本，自动随仓库建立的，默认在此分支上开发。日常的开发要在一个开发分支上进行，不直接修改 <code>master</code> 分支，需要更新时向主分支合并开发分支。<br>Git创建开发分支 <code>devvelop</code> 的命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取 master 的最新代码</span></span><br><span class="line">git checkout master</span><br><span class="line">git pull</span><br><span class="line"><span class="comment"># 为 master 创建一个名为 develop 的分支</span></span><br><span class="line">git checkout -b develop master</span><br></pre></td></tr></table></figure></p>
+<h4 id="第二步：提交分支commit"><a href="#第二步：提交分支commit" class="headerlink" title="第二步：提交分支commit"></a>第二步：提交分支commit</h4><p>分支在修改后，需要提交到本地仓库，和远程仓库中。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将修改的文件加入</span></span><br><span class="line">git add .</span><br><span class="line"><span class="comment"># 查看文件变化状态</span></span><br><span class="line">git status</span><br><span class="line"><span class="comment"># 提交修改</span></span><br><span class="line">git commit -m<span class="string">'message'</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="第三步：与主分支保持一致"><a href="#第三步：与主分支保持一致" class="headerlink" title="第三步：与主分支保持一致"></a>第三步：与主分支保持一致</h4><p>开发过程中需要与主分支的代码保持一致，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git rebase origin/master</span><br></pre></td></tr></table></figure></p>
 <h4 id="第四步：合并到-master分支"><a href="#第四步：合并到-master分支" class="headerlink" title="第四步：合并到 master分支"></a>第四步：合并到 master分支</h4><p>当 <code>develop</code> 分支测试没有问题后，合并到 <code>master</code> 中，命令：
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先切换到 master 分支中</span></div><div class="line">git checkout master</div><div class="line"><span class="comment"># 对 develop 分支进行合并</span></div><div class="line">git merge --no-ff develop</div></pre></td></tr></table></figure></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先切换到 master 分支中</span></span><br><span class="line">git checkout master</span><br><span class="line"><span class="comment"># 对 develop 分支进行合并</span></span><br><span class="line">git merge --no-ff develop</span><br></pre></td></tr></table></figure></p>
 <p>合并的参数 <code>--no-ff</code> 是在 <code>master</code> 分支中生成一个新节点，将 <code>develop</code> 分支连接到前一个节点和新生成的节点之间。  </p>
-<h4 id="第五步：-推送到远程仓库"><a href="#第五步：-推送到远程仓库" class="headerlink" title="第五步： 推送到远程仓库"></a>第五步： 推送到远程仓库</h4><p><strong>两种情况：</strong><br><strong>自己的仓库：</strong>如果在<code>master</code>分支上合并开发分支后，可以直接推送<code>master</code>到远程仓库中，命令如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push --force origin master</div></pre></td></tr></table></figure></p>
-<p><strong>fork的别人的仓库：</strong>在 <code>develop</code> 分支上进行修改后，没有在 <code>master</code> 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push --force origin develop-myfeature</div></pre></td></tr></table></figure></p>
+<h4 id="第五步：-推送到远程仓库"><a href="#第五步：-推送到远程仓库" class="headerlink" title="第五步： 推送到远程仓库"></a>第五步： 推送到远程仓库</h4><p><strong>两种情况：</strong><br><strong>自己的仓库：</strong>如果在<code>master</code>分支上合并开发分支后，可以直接推送<code>master</code>到远程仓库中，命令如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin master</span><br></pre></td></tr></table></figure></p>
+<p><strong>fork的别人的仓库：</strong>在 <code>develop</code> 分支上进行修改后，没有在 <code>master</code> 上进行合并，需要向主分支提交一个新的分支，表明自己的修改状况，向主分支发送合并的请求，命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin develop-myfeature</span><br></pre></td></tr></table></figure></p>
 <p>提交代码到远程仓库中后，发起 <code>Pull Request</code> 到 <code>master</code> ，请求别人确认合并到 <code>master</code>。  </p>
 <p><a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html">参考链接</a></p>
 <h4 id="fork的代码如何与源保持一致"><a href="#fork的代码如何与源保持一致" class="headerlink" title="fork的代码如何与源保持一致"></a>fork的代码如何与源保持一致</h4><p>从别人仓库中 <code>forke</code> 的一个项目并 <code>clone</code> 到本地进行开发，当源仓库的代码发生更新时，也需要用到最新的代码，一个思路是从源仓库拉取最新的代码到本地，然后合并本地仓库，最后推送到远程自己的仓库中。  </p>
@@ -530,7 +532,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">88</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
